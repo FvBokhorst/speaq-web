@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Playfair_Display, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import ContentProtection from "./components/ContentProtection";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -47,7 +48,10 @@ export default function RootLayout({
       lang="en"
       className={`${playfair.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="min-h-screen antialiased">{children}</body>
+      <body className="min-h-screen antialiased select-none">
+        <ContentProtection />
+        {children}
+      </body>
     </html>
   );
 }
