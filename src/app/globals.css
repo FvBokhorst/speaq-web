@@ -146,38 +146,104 @@ html.light {
   --color-bg-card: #FFFFFF;
   --color-bg-elevated: #F8FAFC;
 
-  --color-text-primary: #08090D;
+  --color-text-primary: #0F172A;
   --color-text-secondary: #475569;
   --color-text-muted: #64748B;
 
+  --color-freedom-white: #0F172A;
   --color-quantum-dark: #0D9488;
 }
 
 html.light body {
-  background: var(--color-bg-deep);
-  color: var(--color-text-primary);
+  background: #FAFBFC;
+  color: #0F172A;
 }
 
-html.light .bg-bg-card,
-html.light [class*="bg-bg-card"] {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+/* Force all backgrounds in light mode */
+html.light section,
+html.light div[class*="bg-bg-deep"],
+html.light div[class*="bg-bg-surface"] {
+  background-color: #FAFBFC !important;
 }
 
-html.light .border-subtle,
+html.light div[class*="bg-bg-card"],
+html.light .bg-bg-card {
+  background-color: #FFFFFF !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+html.light div[class*="bg-bg-elevated"] {
+  background-color: #F1F5F9 !important;
+}
+
+/* Force all text colors in light mode */
+html.light h1, html.light h2, html.light h3, html.light h4,
+html.light p[class*="text-text-primary"],
+html.light span[class*="text-text-primary"],
+html.light div[class*="text-text-primary"] {
+  color: #0F172A !important;
+}
+
+html.light p[class*="text-text-secondary"],
+html.light span[class*="text-text-secondary"] {
+  color: #475569 !important;
+}
+
+html.light p[class*="text-text-muted"],
+html.light span[class*="text-text-muted"] {
+  color: #64748B !important;
+}
+
+/* SVG text in hero - make SPEA dark in light mode */
+html.light svg text[fill="currentColor"],
+html.light .text-text-primary {
+  color: #0F172A !important;
+  fill: #0F172A !important;
+}
+
+/* Borders lighter in light mode */
 html.light [class*="border-[rgba(100,116,139"] {
-  border-color: rgba(100, 116, 139, 0.25);
+  border-color: rgba(100, 116, 139, 0.2) !important;
 }
 
+html.light .border-subtle {
+  border-color: rgba(100, 116, 139, 0.2);
+}
+
+/* Section labels stay teal */
 html.light .section-label {
   color: var(--color-quantum-teal);
 }
 
-/* Light mode SVG text fills */
+/* Cards in light mode - white with shadow */
+html.light .card-hover:hover {
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
+  border-color: rgba(212, 168, 83, 0.3);
+}
+
+/* Download + language sections - force light bg */
+html.light section[class*="bg-bg"] {
+  background-color: #FAFBFC !important;
+}
+
+/* Q glow subtle in light mode */
 html.light .q-letter-glow {
-  filter: none;
+  filter: drop-shadow(0 0 8px rgba(212, 168, 83, 0.3));
+  animation: none;
 }
 
 html.light .q-glow-circle {
   animation: none;
   opacity: 0.4;
+}
+
+/* Language buttons in light mode */
+html.light button[class*="bg-bg-card"] {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+}
+
+/* Footer in light mode */
+html.light footer {
+  background-color: #F1F5F9 !important;
 }
