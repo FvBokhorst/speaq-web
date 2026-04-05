@@ -138,3 +138,46 @@ body {
 .border-subtle {
   border-color: rgba(100, 116, 139, 0.15);
 }
+
+/* ===== LIGHT MODE ===== */
+html.light {
+  --color-bg-deep: #FAFBFC;
+  --color-bg-surface: #F1F5F9;
+  --color-bg-card: #FFFFFF;
+  --color-bg-elevated: #F8FAFC;
+
+  --color-text-primary: #08090D;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748B;
+
+  --color-quantum-dark: #0D9488;
+}
+
+html.light body {
+  background: var(--color-bg-deep);
+  color: var(--color-text-primary);
+}
+
+html.light .bg-bg-card,
+html.light [class*="bg-bg-card"] {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+html.light .border-subtle,
+html.light [class*="border-[rgba(100,116,139"] {
+  border-color: rgba(100, 116, 139, 0.25);
+}
+
+html.light .section-label {
+  color: var(--color-quantum-teal);
+}
+
+/* Light mode SVG text fills */
+html.light .q-letter-glow {
+  filter: none;
+}
+
+html.light .q-glow-circle {
+  animation: none;
+  opacity: 0.4;
+}

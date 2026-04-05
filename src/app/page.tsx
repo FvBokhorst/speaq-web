@@ -1,8 +1,87 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { t, Lang, languages } from "@/lib/i18n";
+import LanguageSwitcher from "./components/LanguageSwitcher";
+import ThemeToggle from "./components/ThemeToggle";
+
 export default function Home() {
+  const [lang, setLang] = useState<Lang>("en");
+
+  useEffect(() => {
+    const stored = localStorage.getItem("speaq-lang") as Lang | null;
+    if (stored && languages.some((l) => l.code === stored)) {
+      setLang(stored);
+    }
+  }, []);
+
+  function changeLang(l: Lang) {
+    setLang(l);
+    localStorage.setItem("speaq-lang", l);
+  }
+
+  const securityLayers = [
+    {
+      layer: "6",
+      nameKey: "security.l6.name",
+      tech: "QRNG",
+      descKey: "security.l6.desc",
+      color: "text-voice-gold",
+    },
+    {
+      layer: "5",
+      nameKey: "security.l5.name",
+      tech: "Kyber-768",
+      descKey: "security.l5.desc",
+      color: "text-voice-warm",
+    },
+    {
+      layer: "4",
+      nameKey: "security.l4.name",
+      tech: "HMAC-SHA256",
+      descKey: "security.l4.desc",
+      color: "text-voice-light",
+    },
+    {
+      layer: "3",
+      nameKey: "security.l3.name",
+      tech: "AES-256 + Double Ratchet",
+      descKey: "security.l3.desc",
+      color: "text-quantum-teal",
+    },
+    {
+      layer: "2",
+      nameKey: "security.l2.name",
+      tech: "Sealed Sender",
+      descKey: "security.l2.desc",
+      color: "text-quantum-teal",
+    },
+    {
+      layer: "1",
+      nameKey: "security.l1.name",
+      tech: "Obfuscation + Mesh",
+      descKey: "security.l1.desc",
+      color: "text-quantum-dark",
+    },
+  ];
+
   return (
     <main>
+      {/* ===== NAV BAR ===== */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-bg-deep/80 backdrop-blur-md border-b border-[rgba(100,116,139,0.1)]">
+        <div className="max-w-[1100px] mx-auto px-6 h-14 flex items-center justify-between">
+          <span className="font-[family-name:var(--font-playfair)] text-lg font-medium text-text-primary">
+            SPEA<span className="text-voice-gold">Q</span>
+          </span>
+          <div className="flex items-center gap-3">
+            <LanguageSwitcher currentLang={lang} onChangeLang={changeLang} />
+            <ThemeToggle />
+          </div>
+        </div>
+      </nav>
+
       {/* ===== HERO (100vh) ===== */}
-      <section className="relative min-h-screen flex items-center justify-center text-center overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center text-center overflow-hidden pt-14">
         {/* Radial gradient background */}
         <div className="absolute inset-0 pointer-events-none">
           <div
@@ -28,8 +107,9 @@ export default function Home() {
                 fontFamily="'Playfair Display',serif"
                 fontSize="96"
                 fontWeight="700"
-                fill="#F1F5F9"
+                fill="currentColor"
                 letterSpacing="-2"
+                className="text-text-primary"
               >
                 S
               </text>
@@ -39,8 +119,9 @@ export default function Home() {
                 fontFamily="'Playfair Display',serif"
                 fontSize="96"
                 fontWeight="700"
-                fill="#F1F5F9"
+                fill="currentColor"
                 letterSpacing="-2"
+                className="text-text-primary"
               >
                 P
               </text>
@@ -50,8 +131,9 @@ export default function Home() {
                 fontFamily="'Playfair Display',serif"
                 fontSize="96"
                 fontWeight="700"
-                fill="#F1F5F9"
+                fill="currentColor"
                 letterSpacing="-2"
+                className="text-text-primary"
               >
                 E
               </text>
@@ -61,8 +143,9 @@ export default function Home() {
                 fontFamily="'Playfair Display',serif"
                 fontSize="96"
                 fontWeight="700"
-                fill="#F1F5F9"
+                fill="currentColor"
                 letterSpacing="-2"
+                className="text-text-primary"
               >
                 A
               </text>
@@ -107,12 +190,12 @@ export default function Home() {
 
           {/* Tagline */}
           <p className="font-[family-name:var(--font-jetbrains)] text-sm tracking-[0.35em] uppercase text-text-muted mt-8">
-            SPEAQ Freely.
+            {t("hero.tagline", lang)}
           </p>
 
           {/* Subtitle */}
           <p className="font-[family-name:var(--font-playfair)] text-lg md:text-[22px] text-text-secondary italic max-w-[600px] mx-auto mt-6 leading-relaxed">
-            The right to be heard, protected by technology no one can break.
+            {t("hero.subtitle", lang)}
           </p>
 
           {/* CTA Buttons */}
@@ -121,23 +204,23 @@ export default function Home() {
               href="#download"
               className="inline-flex items-center justify-center h-12 px-8 rounded-full bg-voice-gold text-bg-deep font-medium text-sm tracking-wide transition-all hover:brightness-110"
             >
-              Download App
+              {t("hero.cta1", lang)}
             </a>
             <a
               href="#download"
               className="inline-flex items-center justify-center h-12 px-8 rounded-full border border-text-muted/30 text-text-primary font-medium text-sm tracking-wide transition-all hover:border-voice-gold/50 hover:text-voice-gold"
             >
-              Open Web App
+              {t("hero.cta2", lang)}
             </a>
           </div>
 
           {/* Bottom stats */}
           <div className="mt-16 flex items-center justify-center gap-6 text-text-muted text-xs font-[family-name:var(--font-jetbrains)] tracking-wider">
-            <span>9 Languages</span>
+            <span>{t("stats.languages", lang)}</span>
             <span className="w-px h-3 bg-text-muted/30" />
-            <span>Quantum Encrypted</span>
+            <span>{t("stats.encrypted", lang)}</span>
             <span className="w-px h-3 bg-text-muted/30" />
-            <span>Zero Knowledge</span>
+            <span>{t("stats.zeroknowledge", lang)}</span>
           </div>
         </div>
       </section>
@@ -145,14 +228,13 @@ export default function Home() {
       {/* ===== FEATURES (6 cards) ===== */}
       <section className="py-24 md:py-32 bg-bg-surface" id="features">
         <div className="max-w-[1100px] mx-auto px-6 md:px-12">
-          <span className="section-label block mb-3">01 - Features</span>
+          <span className="section-label block mb-3">{t("features.label", lang)}</span>
           <h2 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl font-medium tracking-tight leading-tight mb-4">
-            Everything you need.<br />
-            Nothing they can read.
+            {t("features.title1", lang)}<br />
+            {t("features.title2", lang)}
           </h2>
           <p className="text-text-secondary text-[17px] max-w-[640px] leading-relaxed mb-16">
-            The most secure communication and freedom platform in the world. No
-            government, no corporation, no one can read your messages.
+            {t("features.desc", lang)}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -165,11 +247,10 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="font-[family-name:var(--font-playfair)] text-xl font-medium mb-2">
-                Quantum Chat
+                {t("feature.chat.title", lang)}
               </h3>
               <p className="text-text-secondary text-[15px] leading-relaxed">
-                End-to-end encrypted messaging with quantum-resistant
-                cryptography. Your words, your eyes only.
+                {t("feature.chat.desc", lang)}
               </p>
             </div>
 
@@ -182,11 +263,10 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="font-[family-name:var(--font-playfair)] text-xl font-medium mb-2">
-                Quantum Call
+                {t("feature.call.title", lang)}
               </h3>
               <p className="text-text-secondary text-[15px] leading-relaxed">
-                Voice and video calls, fully peer-to-peer. No server ever hears
-                your conversation.
+                {t("feature.call.desc", lang)}
               </p>
             </div>
 
@@ -200,11 +280,10 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="font-[family-name:var(--font-playfair)] text-xl font-medium mb-2">
-                Quantum Pay
+                {t("feature.pay.title", lang)}
               </h3>
               <p className="text-text-secondary text-[15px] leading-relaxed">
-                Q-Credits backed by gold. Send value instantly, zero fees between
-                users worldwide.
+                {t("feature.pay.desc", lang)}
               </p>
             </div>
 
@@ -218,11 +297,10 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="font-[family-name:var(--font-playfair)] text-xl font-medium mb-2">
-                Quantum Vault
+                {t("feature.vault.title", lang)}
               </h3>
               <p className="text-text-secondary text-[15px] leading-relaxed">
-                Plausible deniability. Hidden vaults within vaults. Even under
-                pressure, your secrets stay hidden.
+                {t("feature.vault.desc", lang)}
               </p>
             </div>
 
@@ -236,11 +314,10 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="font-[family-name:var(--font-playfair)] text-xl font-medium mb-2">
-                Witness Mode
+                {t("feature.witness.title", lang)}
               </h3>
               <p className="text-text-secondary text-[15px] leading-relaxed">
-                Tamper-proof evidence collection. Record, timestamp, and
-                cryptographically seal what matters.
+                {t("feature.witness.desc", lang)}
               </p>
             </div>
 
@@ -255,11 +332,10 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="font-[family-name:var(--font-playfair)] text-xl font-medium mb-2">
-                Mine & Earn
+                {t("feature.mine.title", lang)}
               </h3>
               <p className="text-text-secondary text-[15px] leading-relaxed">
-                Proof of Contribution mining. Earn 2-5 QC per day by helping the
-                network grow stronger.
+                {t("feature.mine.desc", lang)}
               </p>
             </div>
           </div>
@@ -269,60 +345,16 @@ export default function Home() {
       {/* ===== SECURITY ===== */}
       <section className="py-24 md:py-32" id="security">
         <div className="max-w-[1100px] mx-auto px-6 md:px-12">
-          <span className="section-label block mb-3">02 - Security</span>
+          <span className="section-label block mb-3">{t("security.label", lang)}</span>
           <h2 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl font-medium tracking-tight leading-tight mb-4">
-            6 layers of protection
+            {t("security.title", lang)}
           </h2>
           <p className="text-text-secondary text-[17px] max-w-[640px] leading-relaxed mb-16">
-            Quantum-resistant encryption protects everything you send, store, and
-            earn.
+            {t("security.desc", lang)}
           </p>
 
           <div className="space-y-0">
-            {[
-              {
-                layer: "6",
-                name: "Random",
-                tech: "QRNG",
-                desc: "Quantum random number generation. True randomness from quantum noise, not algorithms.",
-                color: "text-voice-gold",
-              },
-              {
-                layer: "5",
-                name: "Key Exchange",
-                tech: "Kyber-768",
-                desc: "Lattice-based key encapsulation. Post-quantum secure against both classical and quantum computers.",
-                color: "text-voice-warm",
-              },
-              {
-                layer: "4",
-                name: "Signing",
-                tech: "HMAC-SHA256",
-                desc: "Digital signatures verify message integrity and authenticity. Nothing tampered, nothing forged.",
-                color: "text-voice-light",
-              },
-              {
-                layer: "3",
-                name: "Encryption",
-                tech: "AES-256 + Double Ratchet",
-                desc: "Military-grade encryption with forward secrecy. Each message has its own key.",
-                color: "text-quantum-teal",
-              },
-              {
-                layer: "2",
-                name: "Privacy",
-                tech: "Sealed Sender",
-                desc: "Zero-knowledge relay. The server cannot see who is talking to whom.",
-                color: "text-quantum-teal",
-              },
-              {
-                layer: "1",
-                name: "Transport",
-                tech: "Obfuscation + Mesh",
-                desc: "Traffic obfuscation, meek bridges, and mesh networking. Invisible to censors.",
-                color: "text-quantum-dark",
-              },
-            ].map((item) => (
+            {securityLayers.map((item) => (
               <div
                 key={item.layer}
                 className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 md:gap-12 py-10 border-t border-[rgba(100,116,139,0.15)] layer-animate"
@@ -335,7 +367,7 @@ export default function Home() {
                   </div>
                   <div>
                     <p className="font-[family-name:var(--font-playfair)] text-lg font-medium">
-                      {item.name}
+                      {t(item.nameKey, lang)}
                     </p>
                     <p className="font-[family-name:var(--font-jetbrains)] text-xs text-text-muted">
                       {item.tech}
@@ -343,7 +375,7 @@ export default function Home() {
                   </div>
                 </div>
                 <p className="text-text-secondary text-[15px] leading-relaxed self-center">
-                  {item.desc}
+                  {t(item.descKey, lang)}
                 </p>
               </div>
             ))}
@@ -362,24 +394,24 @@ export default function Home() {
           }}
         />
         <div className="relative z-10 max-w-[1100px] mx-auto px-6 md:px-12">
-          <span className="section-label block mb-3">03 - Zero Knowledge</span>
+          <span className="section-label block mb-3">{t("zk.label", lang)}</span>
           <h2 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl font-medium tracking-tight leading-tight mb-4">
-            What SPEAQ knows about you
+            {t("zk.title", lang)}
           </h2>
 
           <p className="font-[family-name:var(--font-playfair)] text-5xl md:text-7xl font-medium text-voice-gold mt-12 mb-12">
-            Nothing.
+            {t("zk.nothing", lang)}
           </p>
 
           <div className="space-y-4 text-text-secondary text-lg leading-relaxed max-w-xl">
-            <p>No email. No phone number. No real name.</p>
-            <p>No message content. No call records.</p>
-            <p>No wallet balances. No browsing history.</p>
+            <p>{t("zk.line1", lang)}</p>
+            <p>{t("zk.line2", lang)}</p>
+            <p>{t("zk.line3", lang)}</p>
             <p className="text-text-primary font-medium pt-4">
-              Everything stays on your device.
+              {t("zk.device", lang)}
             </p>
             <p className="text-text-muted">
-              The server sees only encrypted noise.
+              {t("zk.noise", lang)}
             </p>
           </div>
         </div>
@@ -388,10 +420,10 @@ export default function Home() {
       {/* ===== Q-CREDITS ===== */}
       <section className="py-24 md:py-32">
         <div className="max-w-[1100px] mx-auto px-6 md:px-12">
-          <span className="section-label block mb-3">04 - Q-Credits</span>
+          <span className="section-label block mb-3">{t("qc.label", lang)}</span>
           <h2 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl font-medium tracking-tight leading-tight mb-4">
-            A currency backed by gold,<br />
-            not by governments.
+            {t("qc.title1", lang)}<br />
+            {t("qc.title2", lang)}
           </h2>
 
           <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -452,13 +484,13 @@ export default function Home() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-6">
                   <p className="font-[family-name:var(--font-jetbrains)] text-xs text-text-muted uppercase tracking-wider mb-2">
-                    Max Supply
+                    {t("qc.maxsupply", lang)}
                   </p>
                   <p className="font-[family-name:var(--font-playfair)] text-2xl font-medium">
                     21,000,000 QC
                   </p>
                   <p className="text-text-muted text-sm mt-1">
-                    Fixed forever
+                    {t("qc.fixed", lang)}
                   </p>
                 </div>
                 <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-6">
@@ -469,27 +501,25 @@ export default function Home() {
                     1 QC = 100M Sparks
                   </p>
                   <p className="text-text-muted text-sm mt-1">
-                    Smallest unit
+                    {t("qc.smallest", lang)}
                   </p>
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <h3 className="font-[family-name:var(--font-playfair)] text-lg font-medium mb-2">
-                    Mine by Contributing
+                    {t("qc.mine.title", lang)}
                   </h3>
                   <p className="text-text-secondary text-[15px] leading-relaxed">
-                    Earn 2-5 QC/day by helping the network. Relay messages, share
-                    bandwidth, verify transactions.
+                    {t("qc.mine.desc", lang)}
                   </p>
                 </div>
                 <div>
                   <h3 className="font-[family-name:var(--font-playfair)] text-lg font-medium mb-2">
-                    Send Instantly
+                    {t("qc.send.title", lang)}
                   </h3>
                   <p className="text-text-secondary text-[15px] leading-relaxed">
-                    Zero fees between users worldwide. No banks, no borders, no
-                    delays.
+                    {t("qc.send.desc", lang)}
                   </p>
                 </div>
               </div>
@@ -501,68 +531,68 @@ export default function Home() {
       {/* ===== DOWNLOAD ===== */}
       <section className="py-24 md:py-32 bg-bg-surface" id="download">
         <div className="max-w-[1100px] mx-auto px-6 md:px-12">
-          <span className="section-label block mb-3">05 - Get SPEAQ</span>
+          <span className="section-label block mb-3">{t("download.label", lang)}</span>
           <h2 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl font-medium tracking-tight leading-tight mb-16">
-            Download or open in browser
+            {t("download.title", lang)}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* iOS */}
             <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 text-center transition-all hover:border-voice-gold/30">
-              <div className="w-12 h-12 mx-auto mb-5 text-text-primary">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z" />
-                  <path d="M16.5 7.5C15.5 6.5 14 6 12.5 6c-2.5 0-4.5 2-4.5 5s1.5 5 4 5c1.5 0 2.5-.5 3-1" />
+              <div className="w-12 h-12 mx-auto mb-5 text-text-primary flex items-center justify-center">
+                {/* Apple SVG icon */}
+                <svg className="w-10 h-10" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
                 </svg>
               </div>
               <h3 className="font-[family-name:var(--font-playfair)] text-xl font-medium mb-2">
-                iOS
+                {t("download.ios", lang)}
               </h3>
               <p className="text-text-muted text-sm mb-6">
-                App Store
+                {t("download.appstore", lang)}
               </p>
               <span className="inline-flex items-center justify-center h-10 px-6 rounded-full bg-voice-gold text-bg-deep font-medium text-sm">
-                Coming Soon
+                {t("download.comingsoon", lang)}
               </span>
             </div>
 
             {/* Android */}
             <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 text-center transition-all hover:border-voice-gold/30">
-              <div className="w-12 h-12 mx-auto mb-5 text-text-primary">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 16V8a7 7 0 0 1 14 0v8" />
-                  <path d="M3 16h18v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2z" />
-                  <path d="M8 2l2 3M16 2l-2 3" />
+              <div className="w-12 h-12 mx-auto mb-5 flex items-center justify-center">
+                {/* Android SVG icon */}
+                <svg className="w-10 h-10" viewBox="0 0 24 24" fill="#3DDC84" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48C13.85 1.23 12.95 1 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31C6.97 3.26 6 5.01 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z" />
                 </svg>
               </div>
               <h3 className="font-[family-name:var(--font-playfair)] text-xl font-medium mb-2">
-                Android
+                {t("download.android", lang)}
               </h3>
               <p className="text-text-muted text-sm mb-6">
-                Play Store & direct APK
+                {t("download.playstore", lang)}
               </p>
               <span className="inline-flex items-center justify-center h-10 px-6 rounded-full bg-voice-gold text-bg-deep font-medium text-sm">
-                Coming Soon
+                {t("download.comingsoon", lang)}
               </span>
             </div>
 
             {/* Web App */}
             <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 text-center transition-all hover:border-voice-gold/30">
-              <div className="w-12 h-12 mx-auto mb-5 text-text-primary">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <div className="w-12 h-12 mx-auto mb-5 text-text-primary flex items-center justify-center">
+                {/* Globe SVG icon */}
+                <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10" />
                   <line x1="2" y1="12" x2="22" y2="12" />
                   <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
                 </svg>
               </div>
               <h3 className="font-[family-name:var(--font-playfair)] text-xl font-medium mb-2">
-                Web App
+                {t("download.webapp", lang)}
               </h3>
               <p className="text-text-muted text-sm mb-6">
-                PWA - works on any device
+                {t("download.pwa", lang)}
               </p>
               <span className="inline-flex items-center justify-center h-10 px-6 rounded-full bg-voice-gold text-bg-deep font-medium text-sm">
-                Coming Soon
+                {t("download.comingsoon", lang)}
               </span>
             </div>
           </div>
@@ -570,7 +600,7 @@ export default function Home() {
           <div className="mt-10 text-center">
             <p className="text-text-muted text-sm">
               <span className="font-[family-name:var(--font-jetbrains)]">PWA:</span>{" "}
-              Open thespeaq.com on your phone and tap &quot;Add to Home Screen&quot;
+              {t("download.pwa.hint", lang)}
             </p>
           </div>
         </div>
@@ -579,31 +609,26 @@ export default function Home() {
       {/* ===== LANGUAGES ===== */}
       <section className="py-24 md:py-32">
         <div className="max-w-[1100px] mx-auto px-6 md:px-12 text-center">
-          <span className="section-label block mb-3">06 - Languages</span>
+          <span className="section-label block mb-3">{t("languages.label", lang)}</span>
           <h2 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl font-medium tracking-tight leading-tight mb-16">
-            Available in 9 languages
+            {t("languages.title", lang)}
           </h2>
 
           <div className="flex flex-wrap items-center justify-center gap-3">
-            {[
-              { code: "EN", name: "English" },
-              { code: "NL", name: "Nederlands" },
-              { code: "FR", name: "Francais" },
-              { code: "ES", name: "Espanol" },
-              { code: "RU", name: "Russkij" },
-              { code: "DE", name: "Deutsch" },
-              { code: "SL", name: "Slovenscina" },
-              { code: "LG", name: "Oluganda" },
-              { code: "SW", name: "Kiswahili" },
-            ].map((lang) => (
+            {languages.map((l) => (
               <button
-                key={lang.code}
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-bg-card border border-[rgba(100,116,139,0.15)] text-text-primary text-sm transition-all hover:border-voice-gold/30 hover:text-voice-gold"
+                key={l.code}
+                onClick={() => changeLang(l.code)}
+                className={`inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-bg-card border text-sm transition-all ${
+                  l.code === lang
+                    ? "border-voice-gold text-voice-gold"
+                    : "border-[rgba(100,116,139,0.15)] text-text-primary hover:border-voice-gold/30 hover:text-voice-gold"
+                }`}
               >
                 <span className="font-[family-name:var(--font-jetbrains)] text-xs text-text-muted">
-                  {lang.code}
+                  {l.label}
                 </span>
-                <span>{lang.name}</span>
+                <span>{l.name}</span>
               </button>
             ))}
           </div>
@@ -614,7 +639,7 @@ export default function Home() {
       <footer className="py-16 border-t border-[rgba(100,116,139,0.15)]">
         <div className="max-w-[1100px] mx-auto px-6 md:px-12 text-center">
           <p className="font-[family-name:var(--font-playfair)] text-2xl font-medium text-text-primary mb-2">
-            SPEA<span className="text-voice-gold">Q</span> Freely.
+            SPEA<span className="text-voice-gold">Q</span> {t("footer.tagline", lang)}
           </p>
           <p className="text-text-muted text-sm mb-8">thespeaq.com</p>
 
@@ -623,14 +648,14 @@ export default function Home() {
               href="/privacy"
               className="hover:text-voice-gold transition-colors"
             >
-              Privacy Policy
+              {t("footer.privacy", lang)}
             </a>
           </div>
 
           <p className="text-text-muted text-xs mb-1">
-            Built by Plexaris Technology Consulting
+            {t("footer.built", lang)}
           </p>
-          <p className="text-text-muted text-xs">The Netherlands</p>
+          <p className="text-text-muted text-xs">{t("footer.country", lang)}</p>
           <p className="text-text-muted text-xs mt-4">
             &copy; 2026 SPEAQ. All rights reserved.
           </p>
