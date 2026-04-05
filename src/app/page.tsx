@@ -95,11 +95,11 @@ export default function Home() {
 
         <div className="relative z-10 px-6 max-w-3xl mx-auto">
           {/* SPEAQ Logo SVG */}
-          <div className="mb-10">
+          <div className="mb-10 flex justify-center">
             <svg
-              viewBox="0 0 480 120"
+              viewBox="-15 0 420 120"
               xmlns="http://www.w3.org/2000/svg"
-              className="w-[420px] max-w-[90vw] mx-auto"
+              className="w-[360px] max-w-[85vw]"
             >
               <text
                 x="20"
