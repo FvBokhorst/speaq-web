@@ -45,6 +45,7 @@ export default function ScrollReveal({ children, delay = 0, className = "", glow
         transform: "translateY(80px)",
         transition: "opacity 0.9s ease-out, transform 0.9s ease-out, box-shadow 0.9s ease-out",
         background: "transparent",
+        height: "100%",
       }}
     >
       {children}

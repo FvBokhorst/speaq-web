@@ -241,7 +241,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Card 1: Quantum Chat */}
             <ScrollReveal delay={100}>
-            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover">
+            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover h-full">
               <div className="absolute top-0 left-0 w-1 h-full bg-voice-gold rounded-l-2xl" />
               <div className="w-10 h-10 mb-5 text-voice-gold">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -259,7 +259,7 @@ export default function Home() {
             </ScrollReveal>
             {/* Card 2: Quantum Call */}
             <ScrollReveal delay={200}>
-            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover">
+            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover h-full">
               <div className="absolute top-0 left-0 w-1 h-full bg-voice-gold rounded-l-2xl" />
               <div className="w-10 h-10 mb-5 text-voice-gold">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -277,7 +277,7 @@ export default function Home() {
             </ScrollReveal>
             {/* Card 3: Quantum Pay */}
             <ScrollReveal delay={300}>
-            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover">
+            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover h-full">
               <div className="absolute top-0 left-0 w-1 h-full bg-voice-gold rounded-l-2xl" />
               <div className="w-10 h-10 mb-5 text-voice-gold">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -296,7 +296,7 @@ export default function Home() {
             </ScrollReveal>
             {/* Card 4: Quantum Vault */}
             <ScrollReveal delay={400}>
-            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover">
+            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover h-full">
               <div className="absolute top-0 left-0 w-1 h-full bg-quantum-teal rounded-l-2xl" />
               <div className="w-10 h-10 mb-5 text-quantum-teal">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -315,7 +315,7 @@ export default function Home() {
             </ScrollReveal>
             {/* Card 5: Witness Mode */}
             <ScrollReveal delay={500}>
-            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover">
+            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover h-full">
               <div className="absolute top-0 left-0 w-1 h-full bg-quantum-teal rounded-l-2xl" />
               <div className="w-10 h-10 mb-5 text-quantum-teal">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -334,7 +334,7 @@ export default function Home() {
             </ScrollReveal>
             {/* Card 6: Mine & Earn */}
             <ScrollReveal delay={600}>
-            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover">
+            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover h-full">
               <div className="absolute top-0 left-0 w-1 h-full bg-quantum-teal rounded-l-2xl" />
               <div className="w-10 h-10 mb-5 text-quantum-teal">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
