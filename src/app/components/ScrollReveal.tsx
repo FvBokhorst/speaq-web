@@ -6,9 +6,10 @@ interface Props {
   children: ReactNode;
   delay?: number;
   className?: string;
+  glow?: boolean;
 }
 
-export default function ScrollReveal({ children, delay = 0, className = "" }: Props) {
+export default function ScrollReveal({ children, delay = 0, className = "", glow = true }: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -21,17 +22,19 @@ export default function ScrollReveal({ children, delay = 0, className = "" }: Pr
           setTimeout(() => {
             el.style.opacity = "1";
             el.style.transform = "translateY(0)";
-            el.style.boxShadow = "0 0 40px rgba(212, 168, 83, 0.12)";
+            if (glow) {
+              el.style.boxShadow = "0 0 40px rgba(212, 168, 83, 0.1)";
+            }
           }, delay);
           observer.unobserve(el);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.05 }
     );
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, [delay]);
+  }, [delay, glow]);
 
   return (
     <div
@@ -39,8 +42,9 @@ export default function ScrollReveal({ children, delay = 0, className = "" }: Pr
       className={className}
       style={{
         opacity: 0,
-        transform: "translateY(100px)",
-        transition: "opacity 0.8s ease-out, transform 0.8s ease-out, box-shadow 0.8s ease-out",
+        transform: "translateY(80px)",
+        transition: "opacity 0.9s ease-out, transform 0.9s ease-out, box-shadow 0.9s ease-out",
+        background: "transparent",
       }}
     >
       {children}

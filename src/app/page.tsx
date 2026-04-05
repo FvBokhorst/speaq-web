@@ -356,8 +356,8 @@ export default function Home() {
       </section>
 
       {/* ===== SECURITY ===== */}
-      <ScrollReveal><section className="py-24 md:py-32" id="security">
-        <div className="max-w-[1100px] mx-auto px-6 md:px-12">
+      <section className="py-24 md:py-32" id="security">
+        <ScrollReveal><div className="max-w-[1100px] mx-auto px-6 md:px-12">
           <span className="section-label block mb-3">{t("security.label", lang)}</span>
           <h2 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl font-medium tracking-tight leading-tight mb-4">
             {t("security.title", lang)}
@@ -393,11 +393,11 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </div>
-      </section></ScrollReveal>
+        </div></ScrollReveal>
+      </section>
 
       {/* ===== ZERO KNOWLEDGE ===== */}
-      <ScrollReveal delay={100}><section className="py-24 md:py-32 bg-bg-surface relative overflow-hidden">
+      <section className="py-24 md:py-32 bg-bg-surface relative overflow-hidden">
         {/* Teal glow */}
         <div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none"
@@ -406,7 +406,7 @@ export default function Home() {
               "radial-gradient(circle, rgba(45,212,191,0.06) 0%, transparent 70%)",
           }}
         />
-        <div className="relative z-10 max-w-[1100px] mx-auto px-6 md:px-12">
+        <ScrollReveal><div className="relative z-10 max-w-[1100px] mx-auto px-6 md:px-12">
           <span className="section-label block mb-3">{t("zk.label", lang)}</span>
           <h2 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl font-medium tracking-tight leading-tight mb-4">
             {t("zk.title", lang)}
@@ -427,12 +427,12 @@ export default function Home() {
               {t("zk.noise", lang)}
             </p>
           </div>
-        </div>
-      </section></ScrollReveal>
+        </div></ScrollReveal>
+      </section>
 
       {/* ===== Q-CREDITS ===== */}
-      <ScrollReveal delay={100}><section className="py-24 md:py-32">
-        <div className="max-w-[1100px] mx-auto px-6 md:px-12">
+      <section className="py-24 md:py-32">
+        <ScrollReveal delay={100}><div className="max-w-[1100px] mx-auto px-6 md:px-12">
           <span className="section-label block mb-3">{t("qc.label", lang)}</span>
           <h2 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl font-medium tracking-tight leading-tight mb-4">
             {t("qc.title1", lang)}<br />
@@ -538,12 +538,12 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </div>
-      </section></ScrollReveal>
+        </div></ScrollReveal>
+      </section>
 
       {/* ===== DOWNLOAD ===== */}
-      <ScrollReveal delay={100}><section className="py-24 md:py-32 bg-bg-surface" id="download">
-        <div className="max-w-[1100px] mx-auto px-6 md:px-12">
+      <section className="py-24 md:py-32 bg-bg-surface" id="download">
+        <ScrollReveal delay={100}><div className="max-w-[1100px] mx-auto px-6 md:px-12">
           <span className="section-label block mb-3">{t("download.label", lang)}</span>
           <h2 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl font-medium tracking-tight leading-tight mb-16">
             {t("download.title", lang)}
@@ -616,12 +616,12 @@ export default function Home() {
               {t("download.pwa.hint", lang)}
             </p>
           </div>
-        </div>
-      </section></ScrollReveal>
+        </div></ScrollReveal>
+      </section>
 
       {/* ===== LANGUAGES ===== */}
-      <ScrollReveal delay={100}><section className="py-24 md:py-32">
-        <div className="max-w-[1100px] mx-auto px-6 md:px-12 text-center">
+      <section className="py-24 md:py-32">
+        <ScrollReveal delay={100}><div className="max-w-[1100px] mx-auto px-6 md:px-12 text-center">
           <span className="section-label block mb-3">{t("languages.label", lang)}</span>
           <h2 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl font-medium tracking-tight leading-tight mb-16">
             {t("languages.title", lang)}
@@ -645,8 +645,8 @@ export default function Home() {
               </button>
             ))}
           </div>
-        </div>
-      </section></ScrollReveal>
+        </div></ScrollReveal>
+      </section>
 
       {/* ===== FOOTER ===== */}
       <footer className="py-16 border-t border-[rgba(100,116,139,0.15)]">
