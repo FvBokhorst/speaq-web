@@ -1,26 +1,66 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg-deep: #08090D;
+  --color-bg-surface: #0E1017;
+  --color-bg-card: #141620;
+  --color-bg-elevated: #1A1D2B;
+
+  --color-voice-gold: #D4A853;
+  --color-voice-warm: #E8C47A;
+  --color-voice-light: #F5DFA6;
+
+  --color-quantum-teal: #2DD4BF;
+  --color-quantum-dark: #0F766E;
+
+  --color-text-primary: #F1F5F9;
+  --color-text-secondary: #94A3B8;
+  --color-text-muted: #64748B;
+
+  --color-freedom-white: #FAFBFC;
+  --color-resistance-red: #E24B4A;
+
+  --font-heading: "Playfair Display", serif;
+  --font-body: "DM Sans", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg-deep);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+}
+
+/* Q Glow Animation */
+@keyframes q-glow {
+  0%, 100% {
+    opacity: 0.2;
+    filter: drop-shadow(0 0 0px rgba(212, 168, 83, 0));
+  }
+  50% {
+    opacity: 0.45;
+    filter: drop-shadow(0 0 12px rgba(212, 168, 83, 0.3));
+  }
+}
+
+.q-glow-circle {
+  animation: q-glow 3s ease-in-out infinite;
+}
+
+/* Section label style */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-quantum-teal);
+}
+
+/* Border subtle as a utility */
+.border-subtle {
+  border-color: rgba(100, 116, 139, 0.15);
 }
