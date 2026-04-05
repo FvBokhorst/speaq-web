@@ -241,7 +241,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Card 1: Quantum Chat */}
             <ScrollReveal delay={100}>
-            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover h-full">
+            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover">
               <div className="absolute top-0 left-0 w-1 h-full bg-voice-gold rounded-l-2xl" />
               <div className="w-10 h-10 mb-5 text-voice-gold">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -259,7 +259,7 @@ export default function Home() {
             </ScrollReveal>
             {/* Card 2: Quantum Call */}
             <ScrollReveal delay={200}>
-            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover h-full">
+            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover">
               <div className="absolute top-0 left-0 w-1 h-full bg-voice-gold rounded-l-2xl" />
               <div className="w-10 h-10 mb-5 text-voice-gold">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -277,7 +277,7 @@ export default function Home() {
             </ScrollReveal>
             {/* Card 3: Quantum Pay */}
             <ScrollReveal delay={300}>
-            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover h-full">
+            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover">
               <div className="absolute top-0 left-0 w-1 h-full bg-voice-gold rounded-l-2xl" />
               <div className="w-10 h-10 mb-5 text-voice-gold">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -296,7 +296,7 @@ export default function Home() {
             </ScrollReveal>
             {/* Card 4: Quantum Vault */}
             <ScrollReveal delay={400}>
-            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover h-full">
+            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover">
               <div className="absolute top-0 left-0 w-1 h-full bg-quantum-teal rounded-l-2xl" />
               <div className="w-10 h-10 mb-5 text-quantum-teal">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -315,7 +315,7 @@ export default function Home() {
             </ScrollReveal>
             {/* Card 5: Witness Mode */}
             <ScrollReveal delay={500}>
-            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover h-full">
+            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover">
               <div className="absolute top-0 left-0 w-1 h-full bg-quantum-teal rounded-l-2xl" />
               <div className="w-10 h-10 mb-5 text-quantum-teal">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -334,7 +334,7 @@ export default function Home() {
             </ScrollReveal>
             {/* Card 6: Mine & Earn */}
             <ScrollReveal delay={600}>
-            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover h-full">
+            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover">
               <div className="absolute top-0 left-0 w-1 h-full bg-quantum-teal rounded-l-2xl" />
               <div className="w-10 h-10 mb-5 text-quantum-teal">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -396,6 +396,7 @@ export default function Home() {
         </div></ScrollReveal>
       </section>
 
+
       {/* ===== ZERO KNOWLEDGE ===== */}
       <section className="py-24 md:py-32 bg-bg-surface relative overflow-hidden">
         {/* Teal glow */}
@@ -406,7 +407,7 @@ export default function Home() {
               "radial-gradient(circle, rgba(45,212,191,0.06) 0%, transparent 70%)",
           }}
         />
-        <ScrollReveal><div className="relative z-10 max-w-[1100px] mx-auto px-6 md:px-12">
+        <ScrollReveal delay={100}><div className="relative z-10 max-w-[1100px] mx-auto px-6 md:px-12">
           <span className="section-label block mb-3">{t("zk.label", lang)}</span>
           <h2 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl font-medium tracking-tight leading-tight mb-4">
             {t("zk.title", lang)}
@@ -494,8 +495,8 @@ export default function Home() {
                   1 QC = 0.01 gram gold
                 </p>
               </div>
-              <ScrollReveal delay={200}><div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-6 card-hover">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-6">
                   <p className="font-[family-name:var(--font-jetbrains)] text-xs text-text-muted uppercase tracking-wider mb-2">
                     {t("qc.maxsupply", lang)}
                   </p>
@@ -506,7 +507,7 @@ export default function Home() {
                     {t("qc.fixed", lang)}
                   </p>
                 </div>
-                <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-6 card-hover">
+                <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-6">
                   <p className="font-[family-name:var(--font-jetbrains)] text-xs text-text-muted uppercase tracking-wider mb-2">
                     Sparks
                   </p>
@@ -517,8 +518,8 @@ export default function Home() {
                     {t("qc.smallest", lang)}
                   </p>
                 </div>
-              </div></ScrollReveal>
-              <ScrollReveal delay={300}><div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <h3 className="font-[family-name:var(--font-playfair)] text-lg font-medium mb-2">
                     {t("qc.mine.title", lang)}
@@ -535,7 +536,7 @@ export default function Home() {
                     {t("qc.send.desc", lang)}
                   </p>
                 </div>
-              </div></ScrollReveal>
+              </div>
             </div>
           </div>
         </div></ScrollReveal>
@@ -551,7 +552,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* iOS */}
-            <ScrollReveal delay={100}><div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 text-center card-hover h-full">
+            <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 text-center transition-all hover:border-voice-gold/30">
               <div className="w-12 h-12 mx-auto mb-5 text-text-primary flex items-center justify-center">
                 {/* Apple SVG icon */}
                 <svg className="w-10 h-10" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
@@ -567,10 +568,10 @@ export default function Home() {
               <span className="inline-flex items-center justify-center h-10 px-6 rounded-full bg-voice-gold text-bg-deep font-medium text-sm">
                 {t("download.comingsoon", lang)}
               </span>
-            </div></ScrollReveal>
+            </div>
 
             {/* Android */}
-            <ScrollReveal delay={200}><div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 text-center card-hover h-full">
+            <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 text-center transition-all hover:border-voice-gold/30">
               <div className="w-12 h-12 mx-auto mb-5 flex items-center justify-center">
                 {/* Android SVG icon */}
                 <svg className="w-10 h-10" viewBox="0 0 24 24" fill="#3DDC84" xmlns="http://www.w3.org/2000/svg">
@@ -586,10 +587,10 @@ export default function Home() {
               <span className="inline-flex items-center justify-center h-10 px-6 rounded-full bg-voice-gold text-bg-deep font-medium text-sm">
                 {t("download.comingsoon", lang)}
               </span>
-            </div></ScrollReveal>
+            </div>
 
             {/* Web App */}
-            <ScrollReveal delay={300}><div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 text-center card-hover h-full">
+            <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 text-center transition-all hover:border-voice-gold/30">
               <div className="w-12 h-12 mx-auto mb-5 text-text-primary flex items-center justify-center">
                 {/* Globe SVG icon */}
                 <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -607,7 +608,7 @@ export default function Home() {
               <span className="inline-flex items-center justify-center h-10 px-6 rounded-full bg-voice-gold text-bg-deep font-medium text-sm">
                 {t("download.comingsoon", lang)}
               </span>
-            </div></ScrollReveal>
+            </div>
           </div>
 
           <div className="mt-10 text-center">
