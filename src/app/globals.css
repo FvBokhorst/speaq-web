@@ -68,11 +68,13 @@ body {
 @keyframes card-rise {
   0% {
     opacity: 0;
-    transform: translateY(40px);
+    transform: translateY(80px);
+    box-shadow: none;
   }
   100% {
     opacity: 1;
     transform: translateY(0);
+    box-shadow: 0 0 30px rgba(212, 168, 83, 0.1);
   }
 }
 
@@ -118,9 +120,9 @@ body {
 }
 
 .card-hover:hover {
-  transform: translateY(-6px);
-  border-color: rgba(212, 168, 83, 0.3);
-  box-shadow: 0 12px 32px rgba(212, 168, 83, 0.08);
+  transform: translateY(-12px);
+  border-color: rgba(212, 168, 83, 0.4);
+  box-shadow: 0 16px 48px rgba(212, 168, 83, 0.15), 0 0 20px rgba(212, 168, 83, 0.08);
 }
 
 /* Section label style */
