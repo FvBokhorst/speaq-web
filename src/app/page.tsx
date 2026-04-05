@@ -74,6 +74,7 @@ export default function Home() {
                 fontWeight="700"
                 fill="#D4A853"
                 letterSpacing="-2"
+                className="q-letter-glow"
               >
                 Q
               </text>
@@ -156,7 +157,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Card 1: Quantum Chat */}
-            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 transition-all hover:border-[rgba(100,116,139,0.3)]">
+            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-animate card-hover">
               <div className="absolute top-0 left-0 w-1 h-full bg-voice-gold rounded-l-2xl" />
               <div className="w-10 h-10 mb-5 text-voice-gold">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -173,7 +174,7 @@ export default function Home() {
             </div>
 
             {/* Card 2: Quantum Call */}
-            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 transition-all hover:border-[rgba(100,116,139,0.3)]">
+            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-animate card-hover">
               <div className="absolute top-0 left-0 w-1 h-full bg-voice-gold rounded-l-2xl" />
               <div className="w-10 h-10 mb-5 text-voice-gold">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -190,7 +191,7 @@ export default function Home() {
             </div>
 
             {/* Card 3: Quantum Pay */}
-            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 transition-all hover:border-[rgba(100,116,139,0.3)]">
+            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-animate card-hover">
               <div className="absolute top-0 left-0 w-1 h-full bg-voice-gold rounded-l-2xl" />
               <div className="w-10 h-10 mb-5 text-voice-gold">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -208,7 +209,7 @@ export default function Home() {
             </div>
 
             {/* Card 4: Quantum Vault */}
-            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 transition-all hover:border-[rgba(100,116,139,0.3)]">
+            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-animate card-hover">
               <div className="absolute top-0 left-0 w-1 h-full bg-quantum-teal rounded-l-2xl" />
               <div className="w-10 h-10 mb-5 text-quantum-teal">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -226,7 +227,7 @@ export default function Home() {
             </div>
 
             {/* Card 5: Witness Mode */}
-            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 transition-all hover:border-[rgba(100,116,139,0.3)]">
+            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-animate card-hover">
               <div className="absolute top-0 left-0 w-1 h-full bg-quantum-teal rounded-l-2xl" />
               <div className="w-10 h-10 mb-5 text-quantum-teal">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -244,7 +245,7 @@ export default function Home() {
             </div>
 
             {/* Card 6: Mine & Earn */}
-            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 transition-all hover:border-[rgba(100,116,139,0.3)]">
+            <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-animate card-hover">
               <div className="absolute top-0 left-0 w-1 h-full bg-quantum-teal rounded-l-2xl" />
               <div className="w-10 h-10 mb-5 text-quantum-teal">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -324,7 +325,7 @@ export default function Home() {
             ].map((item) => (
               <div
                 key={item.layer}
-                className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 md:gap-12 py-10 border-t border-[rgba(100,116,139,0.15)]"
+                className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 md:gap-12 py-10 border-t border-[rgba(100,116,139,0.15)] layer-animate"
               >
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-xl bg-bg-card border border-[rgba(100,116,139,0.15)] flex items-center justify-center">
