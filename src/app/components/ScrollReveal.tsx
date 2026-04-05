@@ -23,7 +23,7 @@ export default function ScrollReveal({ children, delay = 0, className = "", glow
             el.style.opacity = "1";
             el.style.transform = "translateY(0)";
             if (glow) {
-              el.style.boxShadow = "0 0 40px rgba(212, 168, 83, 0.1)";
+              el.style.boxShadow = "0 0 50px rgba(212, 168, 83, 0.15), 0 0 100px rgba(212, 168, 83, 0.05)";
             }
           }, delay);
           observer.unobserve(el);

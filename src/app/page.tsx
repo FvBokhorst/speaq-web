@@ -494,8 +494,8 @@ export default function Home() {
                   1 QC = 0.01 gram gold
                 </p>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-6">
+              <ScrollReveal delay={200}><div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-6 card-hover">
                   <p className="font-[family-name:var(--font-jetbrains)] text-xs text-text-muted uppercase tracking-wider mb-2">
                     {t("qc.maxsupply", lang)}
                   </p>
@@ -506,7 +506,7 @@ export default function Home() {
                     {t("qc.fixed", lang)}
                   </p>
                 </div>
-                <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-6">
+                <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-6 card-hover">
                   <p className="font-[family-name:var(--font-jetbrains)] text-xs text-text-muted uppercase tracking-wider mb-2">
                     Sparks
                   </p>
@@ -517,8 +517,8 @@ export default function Home() {
                     {t("qc.smallest", lang)}
                   </p>
                 </div>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              </div></ScrollReveal>
+              <ScrollReveal delay={300}><div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <h3 className="font-[family-name:var(--font-playfair)] text-lg font-medium mb-2">
                     {t("qc.mine.title", lang)}
@@ -535,7 +535,7 @@ export default function Home() {
                     {t("qc.send.desc", lang)}
                   </p>
                 </div>
-              </div>
+              </div></ScrollReveal>
             </div>
           </div>
         </div></ScrollReveal>
@@ -551,7 +551,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* iOS */}
-            <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 text-center transition-all hover:border-voice-gold/30">
+            <ScrollReveal delay={100}><div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 text-center card-hover h-full">
               <div className="w-12 h-12 mx-auto mb-5 text-text-primary flex items-center justify-center">
                 {/* Apple SVG icon */}
                 <svg className="w-10 h-10" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
@@ -567,10 +567,10 @@ export default function Home() {
               <span className="inline-flex items-center justify-center h-10 px-6 rounded-full bg-voice-gold text-bg-deep font-medium text-sm">
                 {t("download.comingsoon", lang)}
               </span>
-            </div>
+            </div></ScrollReveal>
 
             {/* Android */}
-            <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 text-center transition-all hover:border-voice-gold/30">
+            <ScrollReveal delay={200}><div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 text-center card-hover h-full">
               <div className="w-12 h-12 mx-auto mb-5 flex items-center justify-center">
                 {/* Android SVG icon */}
                 <svg className="w-10 h-10" viewBox="0 0 24 24" fill="#3DDC84" xmlns="http://www.w3.org/2000/svg">
@@ -586,10 +586,10 @@ export default function Home() {
               <span className="inline-flex items-center justify-center h-10 px-6 rounded-full bg-voice-gold text-bg-deep font-medium text-sm">
                 {t("download.comingsoon", lang)}
               </span>
-            </div>
+            </div></ScrollReveal>
 
             {/* Web App */}
-            <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 text-center transition-all hover:border-voice-gold/30">
+            <ScrollReveal delay={300}><div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 text-center card-hover h-full">
               <div className="w-12 h-12 mx-auto mb-5 text-text-primary flex items-center justify-center">
                 {/* Globe SVG icon */}
                 <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -607,7 +607,7 @@ export default function Home() {
               <span className="inline-flex items-center justify-center h-10 px-6 rounded-full bg-voice-gold text-bg-deep font-medium text-sm">
                 {t("download.comingsoon", lang)}
               </span>
-            </div>
+            </div></ScrollReveal>
           </div>
 
           <div className="mt-10 text-center">
