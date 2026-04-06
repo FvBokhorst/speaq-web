@@ -2,7 +2,7 @@
   "name": "SPEAQ",
   "short_name": "SPEAQ",
   "description": "SPEAQ Freely. Quantum-encrypted communication.",
-  "start_url": "/",
+  "start_url": "/app",
   "display": "standalone",
   "background_color": "#08090D",
   "theme_color": "#D4A853",

@@ -1,19 +1,22 @@
-# SPEAQ Website Update - Todo
+# SPEAQ PWA Chat Application - Build Plan
 
 ## Tasks
-- [x] Create `src/lib/i18n.ts` with all 9 language translations
-- [x] Create `src/app/components/LanguageSwitcher.tsx`
-- [x] Create `src/app/components/ThemeToggle.tsx`
-- [x] Update `src/app/globals.css` with light mode overrides
-- [x] Update `src/app/page.tsx` - make client component, add i18n, SVG icons, nav bar with controls
-- [x] `npm run build` - passed with zero errors
-- [x] Git add, commit, push
-- [x] Deploy to Cloud Run
 
-## Review
-All 3 changes implemented:
-1. **i18n**: Full translations for 9 languages (EN, NL, FR, ES, RU, DE, SL, LG, SW). LanguageSwitcher dropdown in nav bar. Language buttons in the Languages section also switch language. Stored in localStorage.
-2. **Download SVGs**: Apple logo (white fill), Android robot (green #3DDC84 fill), Globe (stroke icon) -- all inline SVGs, no emoji.
-3. **Dark/Light mode**: ThemeToggle with Sun/Moon SVGs in nav bar. html.light class overrides all theme CSS variables. Stored in localStorage. Default is dark.
+- [ ] 1. Create `src/app/app/crypto.ts` -- AES-256-GCM encryption via SubtleCrypto
+- [ ] 2. Create `src/app/app/page.tsx` -- Full chat app (Welcome, Main, Chat, Contacts, Settings)
+- [ ] 3. Create `public/sw.js` -- Service worker for offline caching
+- [ ] 4. Update `next.config.ts` -- Add wss relay to CSP connect-src
+- [ ] 5. Update `public/manifest.json` -- Set start_url to /app
+- [ ] 6. npm run build (must pass)
+- [ ] 7. Git commit + push
+- [ ] 8. Deploy to Cloud Run
 
-Build passed, pushed to main, deployed to Cloud Run at https://speaq-web-244491980730.europe-west1.run.app
+## Design
+- WebSocket: wss://speaq-relay-244491980730.europe-west1.run.app
+- Encryption: AES-256-GCM, key = SHA-256(sorted IDs)
+- Brand tokens from globals.css
+- Mobile-first, dark mode, NO emoji icons
+- Fonts: Playfair Display / DM Sans / JetBrains Mono
+
+## Previous Sprint (completed)
+- i18n (9 languages), LanguageSwitcher, ThemeToggle, light/dark mode
