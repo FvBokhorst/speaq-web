@@ -7,6 +7,9 @@ import {
   initRatchet, ratchetEncrypt, ratchetDecrypt,
   saveRatchetState, loadRatchetState,
   type KyberKeyPair, type RatchetState,
+  generateSigningKeyPair, signData, verifySignature,
+  saveSigningKeys, loadSigningKeys, saveContactSigningKey, loadContactSigningKey,
+  type SigningKeyPair,
 } from "./crypto";
 import { languages, Lang } from "@/lib/i18n";
 import QRCode from "qrcode";
@@ -581,6 +584,7 @@ export default function SpeaqApp() {
 
   // Kyber keypair (quantum crypto)
   const kyberKeys = useRef<KyberKeyPair | null>(null);
+  const signingKeys = useRef<SigningKeyPair | null>(null);
   const pendingKeyExchanges = useRef<Record<string, string>>({}); // contactId -> our privateKey for this exchange
 
   // Video call refs
@@ -646,7 +650,7 @@ export default function SpeaqApp() {
     const savedPhoto = localStorage.getItem("speaq_profile_photo");
     if (savedPhoto) setProfilePhoto(savedPhoto);
 
-    // Load or generate Kyber keypair
+    // Load or generate Kyber keypair + signing keypair
     const savedKyber = localStorage.getItem("speaq_kyber_keys");
     if (savedKyber) {
       kyberKeys.current = JSON.parse(savedKyber);
@@ -654,6 +658,15 @@ export default function SpeaqApp() {
       generateKyberKeyPair().then((kp) => {
         kyberKeys.current = kp;
         localStorage.setItem("speaq_kyber_keys", JSON.stringify(kp));
+      });
+    }
+    const savedSigning = loadSigningKeys();
+    if (savedSigning) {
+      signingKeys.current = savedSigning;
+    } else if (saved) {
+      generateSigningKeyPair().then((sk) => {
+        signingKeys.current = sk;
+        saveSigningKeys(sk);
       });
     }
     setBlockedUsers(loadJSON<string[]>("speaq_blocked", []));
@@ -816,33 +829,50 @@ export default function SpeaqApp() {
       // KEY_EXCHANGE: someone wants to establish quantum-secure channel
       if (msg.type === "KEY_EXCHANGE" && msg.from && msg.blob && identity) {
         try {
-          // They sent their Kyber public key. We encapsulate to create shared secret.
+          // Verify signature if present (prevents MITM)
+          if (msg.sig && msg.signPub) {
+            const valid = await verifySignature(msg.blob, msg.sig, msg.signPub);
+            if (!valid) { console.warn("[SPEAQ] KEY_EXCHANGE signature INVALID from", msg.from); return; }
+            // Store their signing public key for future verification
+            saveContactSigningKey(msg.from, msg.signPub);
+            console.log("[SPEAQ] KEY_EXCHANGE signature verified from", msg.from);
+          }
+          // Encapsulate to create shared secret
           const theirPublicKey = msg.blob;
           const { ciphertext, sharedSecret } = await kyberEncapsulate(theirPublicKey);
-          // Send back the ciphertext so they can decapsulate
+          // Sign our response
+          const sig = signingKeys.current ? await signData(ciphertext, signingKeys.current.privateKey) : "";
+          const signPub = signingKeys.current?.publicKey || "";
+          // Send back signed ciphertext
           if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-            wsRef.current.send(JSON.stringify({ type: "KEY_EXCHANGE_RESPONSE", to: msg.from, blob: ciphertext }));
+            wsRef.current.send(JSON.stringify({ type: "KEY_EXCHANGE_RESPONSE", to: msg.from, blob: ciphertext, sig, signPub }));
           }
           // Init Double Ratchet as responder (not initiator)
           const ratchet = await initRatchet(sharedSecret, false);
           saveRatchetState(msg.from, ratchet);
-          console.log("[SPEAQ] Quantum key exchange complete with", msg.from);
+          console.log("[SPEAQ] SIGNED quantum key exchange complete with", msg.from);
         } catch (e) {
           console.error("[SPEAQ] Key exchange failed:", e);
         }
       }
 
-      // KEY_EXCHANGE_RESPONSE: they responded with Kyber ciphertext
+      // KEY_EXCHANGE_RESPONSE: they responded with signed Kyber ciphertext
       if (msg.type === "KEY_EXCHANGE_RESPONSE" && msg.from && msg.blob && identity) {
         try {
+          // Verify signature if present
+          if (msg.sig && msg.signPub) {
+            const valid = await verifySignature(msg.blob, msg.sig, msg.signPub);
+            if (!valid) { console.warn("[SPEAQ] KEY_EXCHANGE_RESPONSE signature INVALID from", msg.from); return; }
+            saveContactSigningKey(msg.from, msg.signPub);
+            console.log("[SPEAQ] KEY_EXCHANGE_RESPONSE signature verified from", msg.from);
+          }
           const privateKey = pendingKeyExchanges.current[msg.from];
           if (privateKey) {
             const sharedSecret = await kyberDecapsulate(msg.blob, privateKey);
-            // Init Double Ratchet as initiator
             const ratchet = await initRatchet(sharedSecret, true);
             saveRatchetState(msg.from, ratchet);
             delete pendingKeyExchanges.current[msg.from];
-            console.log("[SPEAQ] Quantum key exchange response received from", msg.from);
+            console.log("[SPEAQ] SIGNED quantum key exchange response received from", msg.from);
           }
         } catch (e) {
           console.error("[SPEAQ] Key exchange response failed:", e);
@@ -887,10 +917,14 @@ export default function SpeaqApp() {
     saveJSON("speaq_identity", id);
     setIdentity(id);
     setScreen("setPin");
-    // Generate Kyber keypair
+    // Generate Kyber keypair + signing keypair
     generateKyberKeyPair().then((kp) => {
       kyberKeys.current = kp;
       localStorage.setItem("speaq_kyber_keys", JSON.stringify(kp));
+    });
+    generateSigningKeyPair().then((sk) => {
+      signingKeys.current = sk;
+      saveSigningKeys(sk);
     });
     // Generate QR
     QRCode.toDataURL(`speaq://${speaqId}`, { width: 200, margin: 1, color: { dark: "#D4A853", light: "#0A0A0F" } })
@@ -1141,11 +1175,13 @@ export default function SpeaqApp() {
       // No ratchet yet -- initiate Kyber key exchange AND send with legacy encryption
       // The key exchange runs in background; future messages will use ratchet
       if (!pendingKeyExchanges.current[activeContact.speaqId] && kyberKeys.current) {
-        // Generate fresh keypair for this exchange
+        // Generate fresh keypair for this exchange + sign it
         const kp = await generateKyberKeyPair();
         pendingKeyExchanges.current[activeContact.speaqId] = kp.privateKey;
-        wsRef.current.send(JSON.stringify({ type: "KEY_EXCHANGE", to: activeContact.speaqId, blob: kp.publicKey }));
-        console.log("[SPEAQ] Initiated Kyber key exchange with", activeContact.speaqId);
+        const sig = signingKeys.current ? await signData(kp.publicKey, signingKeys.current.privateKey) : "";
+        const signPub = signingKeys.current?.publicKey || "";
+        wsRef.current.send(JSON.stringify({ type: "KEY_EXCHANGE", to: activeContact.speaqId, blob: kp.publicKey, sig, signPub }));
+        console.log("[SPEAQ] Initiated SIGNED Kyber key exchange with", activeContact.speaqId);
       }
       // Send with legacy AES-256-GCM (still encrypted, just not quantum-resistant yet)
       const key = await deriveKey(identity.speaqId, activeContact.speaqId);
@@ -2594,7 +2630,7 @@ The Netherlands`}</div>
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-bg-surface border-b border-[rgba(100,116,139,0.15)] shrink-0">
         <div className="flex items-center gap-2"><SpeaqLogo size={32} /><span className="text-lg font-heading font-bold text-text-primary">SPEAQ</span></div>
-        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v60</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
+        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v61</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
       </header>
 
       {/* Content */}

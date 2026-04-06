@@ -1,0 +1,124 @@
+(* ============================================================
+   SPEAQ Protocol v2 -- With Authentication (Signed Key Exchange)
+
+   Fix for MITM vulnerability found in v1:
+   Key exchange messages are now signed with the sender's
+   long-term signing key. This prevents impersonation.
+   ============================================================ *)
+
+free relay: channel.
+
+type key.
+type nonce.
+type keypair.
+type skey.    (* signing private key *)
+type vkey.    (* signing public key / verification key *)
+
+(* --- Kyber-768 KEM --- *)
+fun kyber_keygen(key): keypair.
+fun kyber_pubkey(keypair): key.
+fun kyber_encapsulate(key, nonce): bitstring.
+
+(* Shared secret: only derivable through encapsulate or decapsulate *)
+fun kyber_secret_from_encaps(key, nonce): key [private].
+reduc forall seed: key, n: nonce;
+  kyber_decapsulate(kyber_encapsulate(kyber_pubkey(kyber_keygen(seed)), n), kyber_keygen(seed)) = kyber_secret_from_encaps(kyber_pubkey(kyber_keygen(seed)), n).
+
+(* --- Digital Signatures (Ed25519 / Dilithium) --- *)
+fun sign_keygen(skey): vkey.
+fun sign(bitstring, skey): bitstring.
+reduc forall m: bitstring, sk: skey;
+  verify(sign(m, sk), m, sign_keygen(sk)) = true.
+
+(* --- AES-256-GCM --- *)
+fun aes_encrypt(bitstring, key, nonce): bitstring.
+reduc forall m: bitstring, k: key, n: nonce;
+  aes_decrypt(aes_encrypt(m, k, n), k, n) = m.
+
+(* --- Key Derivation --- *)
+fun derive_root(key): key.
+fun derive_chain_a(key): key.
+fun derive_chain_b(key): key.
+fun message_key(key): key.
+fun key_to_bitstring(key): bitstring [typeConverter].
+
+(* --- Events --- *)
+event AliceSendsMessage(bitstring).
+event BobReceivesMessage(bitstring).
+event AliceInitiatesKeyExchange(key).
+event BobCompletesKeyExchange(key).
+
+(* --- Secrecy Queries --- *)
+free secret_message: bitstring [private].
+query attacker(secret_message).
+
+(* --- Authentication Queries --- *)
+query m: bitstring; event(BobReceivesMessage(m)) ==> event(AliceSendsMessage(m)).
+
+(* --- Protocol with Signed Key Exchange --- *)
+
+(* Alice: Initiator -- signs her public key *)
+let Alice(alice_seed: key, alice_sign_sk: skey, bob_verify_key: vkey) =
+  let alice_kp = kyber_keygen(alice_seed) in
+  let alice_pub = kyber_pubkey(alice_kp) in
+
+  (* Sign the public key so Bob can verify it's really from Alice *)
+  let signed_pub = sign(key_to_bitstring(alice_pub), alice_sign_sk) in
+  event AliceInitiatesKeyExchange(alice_pub);
+  out(relay, (alice_pub, signed_pub));
+
+  (* Receive signed ciphertext from Bob *)
+  in(relay, (bob_ciphertext: bitstring, bob_sig: bitstring));
+
+  (* Verify Bob's signature *)
+  if verify(bob_sig, bob_ciphertext, bob_verify_key) = true then
+
+  (* Decapsulate *)
+  let ss = kyber_decapsulate(bob_ciphertext, alice_kp) in
+  let root_key = derive_root(ss) in
+  let send_chain = derive_chain_a(root_key) in
+
+  (* Send encrypted message *)
+  let mk = message_key(send_chain) in
+  new msg_nonce: nonce;
+  event AliceSendsMessage(secret_message);
+  let ciphertext = aes_encrypt(secret_message, mk, msg_nonce) in
+  out(relay, (ciphertext, msg_nonce)).
+
+(* Bob: Responder -- signs his ciphertext *)
+let Bob(bob_sign_sk: skey, alice_verify_key: vkey) =
+  (* Receive Alice's signed public key *)
+  in(relay, (alice_pub: key, alice_sig: bitstring));
+
+  (* Verify Alice's signature *)
+  if verify(alice_sig, key_to_bitstring(alice_pub), alice_verify_key) = true then
+
+  (* Encapsulate *)
+  new bob_randomness: nonce;
+  let bob_ciphertext = kyber_encapsulate(alice_pub, bob_randomness) in
+  let ss = kyber_secret_from_encaps(alice_pub, bob_randomness) in
+  event BobCompletesKeyExchange(alice_pub);
+
+  (* Sign and send ciphertext *)
+  let signed_ct = sign(bob_ciphertext, bob_sign_sk) in
+  out(relay, (bob_ciphertext, signed_ct));
+
+  (* Receive and decrypt message *)
+  let root_key = derive_root(ss) in
+  let recv_chain = derive_chain_a(root_key) in
+  in(relay, (ciphertext: bitstring, msg_nonce: nonce));
+  let mk = message_key(recv_chain) in
+  let plaintext = aes_decrypt(ciphertext, mk, msg_nonce) in
+  event BobReceivesMessage(plaintext).
+
+(* --- Main Process --- *)
+process
+  new alice_seed: key;
+  new alice_sign_sk: skey;
+  new bob_sign_sk: skey;
+  let alice_vk = sign_keygen(alice_sign_sk) in
+  let bob_vk = sign_keygen(bob_sign_sk) in
+  (* Public verification keys are known to both parties *)
+  out(relay, alice_vk);
+  out(relay, bob_vk);
+  (Alice(alice_seed, alice_sign_sk, bob_vk) | Bob(bob_sign_sk, alice_vk))

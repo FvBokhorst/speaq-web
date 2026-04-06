@@ -1,0 +1,139 @@
+(* ============================================================
+   SPEAQ Protocol -- ProVerif Formal Verification Model
+
+   Verifies:
+   1. Kyber-768 Key Exchange (lattice-based, quantum-resistant)
+   2. Double Ratchet (forward secrecy per message)
+   3. AES-256-GCM message encryption
+   4. Secrecy: attacker cannot learn message content
+   5. Authentication: messages come from the claimed sender
+   ============================================================ *)
+
+(* --- Channels --- *)
+free relay: channel.       (* Public relay server -- attacker can observe *)
+free internet: channel.    (* Public internet -- attacker can intercept *)
+
+(* --- Types --- *)
+type key.
+type nonce.
+type keypair.
+type lattice_poly.
+
+(* --- Cryptographic Functions --- *)
+
+(* Kyber-768 Lattice KEM *)
+fun kyber_keygen(key): keypair.                        (* Generate keypair from seed *)
+fun kyber_pubkey(keypair): key.                         (* Extract public key *)
+fun kyber_encapsulate(key, nonce): bitstring.           (* Encapsulate: pubkey + randomness -> ciphertext *)
+fun kyber_shared_secret(key, nonce): key.               (* Shared secret from encapsulation *)
+reduc forall seed: key, n: nonce;
+  kyber_decapsulate(kyber_encapsulate(kyber_pubkey(kyber_keygen(seed)), n), kyber_keygen(seed)) = kyber_shared_secret(kyber_pubkey(kyber_keygen(seed)), n).
+
+(* AES-256-GCM Symmetric Encryption *)
+fun aes_encrypt(bitstring, key, nonce): bitstring.
+reduc forall m: bitstring, k: key, n: nonce;
+  aes_decrypt(aes_encrypt(m, k, n), k, n) = m.
+
+(* HMAC-SHA256 for ratchet chain *)
+fun hmac(key, bitstring): key.
+
+(* Key derivation *)
+fun derive_root(key): key.
+fun derive_chain_a(key): key.
+fun derive_chain_b(key): key.
+fun advance_chain(key): key.
+fun message_key(key): key.
+
+(* Hash *)
+fun hash(bitstring): key.
+
+(* --- Events for verification --- *)
+event AliceSendsMessage(bitstring).
+event BobReceivesMessage(bitstring).
+event AliceInitiatesKeyExchange(key).
+event BobCompletesKeyExchange(key).
+event RatchetInitialized(key).
+
+(* --- Secrecy Queries --- *)
+
+(* The attacker should NEVER learn the message content *)
+free secret_message: bitstring [private].
+query attacker(secret_message).
+
+(* The attacker should NEVER learn the shared secret *)
+free shared_secret_test: key [private].
+query attacker(shared_secret_test).
+
+(* --- Authentication Queries --- *)
+
+(* If Bob receives a message, Alice must have sent it *)
+query m: bitstring; event(BobReceivesMessage(m)) ==> event(AliceSendsMessage(m)).
+
+(* If Bob completes key exchange, Alice must have initiated it *)
+query k: key; event(BobCompletesKeyExchange(k)) ==> event(AliceInitiatesKeyExchange(k)).
+
+(* --- Protocol Processes --- *)
+
+(* Alice: Initiator *)
+let Alice(alice_seed: key) =
+  (* Step 1: Generate Kyber keypair *)
+  let alice_kp = kyber_keygen(alice_seed) in
+  let alice_pub = kyber_pubkey(alice_kp) in
+
+  (* Step 2: Send public key to Bob via relay *)
+  event AliceInitiatesKeyExchange(alice_pub);
+  out(relay, alice_pub);
+
+  (* Step 5: Receive ciphertext from Bob *)
+  in(relay, bob_ciphertext: bitstring);
+
+  (* Step 6: Decapsulate to get shared secret *)
+  let ss = kyber_decapsulate(bob_ciphertext, alice_kp) in
+
+  (* Step 7: Initialize Double Ratchet (initiator) *)
+  let root_key = derive_root(ss) in
+  let send_chain = derive_chain_a(root_key) in
+  let recv_chain = derive_chain_b(root_key) in
+  event RatchetInitialized(root_key);
+
+  (* Step 8: Send ratchet-encrypted message *)
+  let mk = message_key(send_chain) in
+  new msg_nonce: nonce;
+  event AliceSendsMessage(secret_message);
+  let ciphertext = aes_encrypt(secret_message, mk, msg_nonce) in
+  out(relay, (ciphertext, msg_nonce));
+
+  (* Advance chain (forward secrecy: mk is discarded) *)
+  let next_send = advance_chain(send_chain) in
+  0.
+
+(* Bob: Responder *)
+let Bob() =
+  (* Step 3: Receive Alice's public key *)
+  in(relay, alice_pub: key);
+
+  (* Step 4: Encapsulate to create shared secret *)
+  new bob_randomness: nonce;
+  let bob_ciphertext = kyber_encapsulate(alice_pub, bob_randomness) in
+  let ss = kyber_shared_secret(alice_pub, bob_randomness) in
+  event BobCompletesKeyExchange(alice_pub);
+
+  (* Send ciphertext back to Alice *)
+  out(relay, bob_ciphertext);
+
+  (* Step 7: Initialize Double Ratchet (responder) *)
+  let root_key = derive_root(ss) in
+  let send_chain = derive_chain_b(root_key) in
+  let recv_chain = derive_chain_a(root_key) in
+
+  (* Step 9: Receive and decrypt ratchet message *)
+  in(relay, (ciphertext: bitstring, msg_nonce: nonce));
+  let mk = message_key(recv_chain) in
+  let plaintext = aes_decrypt(ciphertext, mk, msg_nonce) in
+  event BobReceivesMessage(plaintext);
+  0.
+
+(* --- Main Process --- *)
+process
+  new alice_seed: key;
+  (Alice(alice_seed) | Bob())

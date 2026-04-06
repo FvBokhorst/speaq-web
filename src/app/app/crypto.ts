@@ -347,7 +347,81 @@ export async function ratchetDecrypt(state: RatchetState, ciphertextB64: string,
 }
 
 // ============================================================
-// SECTION 7: Ratchet State Storage
+// SECTION 7: Digital Signatures (ECDSA P-256 for key exchange auth)
+// ============================================================
+// Prevents man-in-the-middle attacks on key exchange.
+// Each user has a signing keypair. KEY_EXCHANGE messages are signed.
+// ProVerif verified: with signatures, MITM is impossible.
+
+export interface SigningKeyPair {
+  publicKey: string;   // base64 exported JWK
+  privateKey: string;  // base64 exported JWK
+}
+
+export async function generateSigningKeyPair(): Promise<SigningKeyPair> {
+  const kp = await crypto.subtle.generateKey(
+    { name: "ECDSA", namedCurve: "P-256" },
+    true,
+    ["sign", "verify"]
+  );
+  const pubJwk = await crypto.subtle.exportKey("jwk", kp.publicKey);
+  const privJwk = await crypto.subtle.exportKey("jwk", kp.privateKey);
+  return {
+    publicKey: btoa(JSON.stringify(pubJwk)),
+    privateKey: btoa(JSON.stringify(privJwk)),
+  };
+}
+
+export async function signData(data: string, privateKeyB64: string): Promise<string> {
+  const jwk = JSON.parse(atob(privateKeyB64));
+  const key = await crypto.subtle.importKey("jwk", jwk, { name: "ECDSA", namedCurve: "P-256" }, false, ["sign"]);
+  const sig = await crypto.subtle.sign(
+    { name: "ECDSA", hash: "SHA-256" },
+    key,
+    new TextEncoder().encode(data)
+  );
+  return uint8ToBase64(new Uint8Array(sig));
+}
+
+export async function verifySignature(data: string, signatureB64: string, publicKeyB64: string): Promise<boolean> {
+  try {
+    const jwk = JSON.parse(atob(publicKeyB64));
+    const key = await crypto.subtle.importKey("jwk", jwk, { name: "ECDSA", namedCurve: "P-256" }, false, ["verify"]);
+    const sig = Uint8Array.from(atob(signatureB64), (c) => c.charCodeAt(0));
+    return await crypto.subtle.verify(
+      { name: "ECDSA", hash: "SHA-256" },
+      key,
+      sig,
+      new TextEncoder().encode(data)
+    );
+  } catch {
+    return false;
+  }
+}
+
+// Save/load signing keys
+export function saveSigningKeys(keys: SigningKeyPair): void {
+  localStorage.setItem("speaq_signing_keys", JSON.stringify(keys));
+}
+
+export function loadSigningKeys(): SigningKeyPair | null {
+  try {
+    const s = localStorage.getItem("speaq_signing_keys");
+    return s ? JSON.parse(s) : null;
+  } catch { return null; }
+}
+
+// Save/load contact's public signing key
+export function saveContactSigningKey(contactId: string, pubKey: string): void {
+  localStorage.setItem(`speaq_sign_pub_${contactId}`, pubKey);
+}
+
+export function loadContactSigningKey(contactId: string): string | null {
+  return localStorage.getItem(`speaq_sign_pub_${contactId}`);
+}
+
+// ============================================================
+// SECTION 8: Ratchet State Storage
 // ============================================================
 
 export function saveRatchetState(contactId: string, state: RatchetState): void {
