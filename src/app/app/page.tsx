@@ -300,20 +300,18 @@ function IconGlobe({ className = "w-5 h-5" }: { className?: string }) {
 function SpeaqLogo({ size = 80 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 200 200" fill="none">
-      <circle cx="100" cy="100" r="90" stroke="#D4A853" strokeWidth="3" opacity="0.3" />
-      <circle cx="100" cy="100" r="70" stroke="#D4A853" strokeWidth="2" opacity="0.15" />
-      <text x="100" y="120" textAnchor="middle" fontFamily="'Playfair Display', serif" fontSize="72" fontWeight="700" fill="#F1F5F9">
-        S
+      {/* Outer teal circle */}
+      <circle cx="100" cy="100" r="90" stroke="#2DD4BF" strokeWidth="0.5" opacity="0.15" />
+      {/* Inner gold circle */}
+      <circle cx="100" cy="100" r="80" stroke="#D4A853" strokeWidth="1" opacity="0.3" />
+      {/* Q letter in gold */}
+      <text x="100" y="125" textAnchor="middle" fontFamily="'Playfair Display', serif" fontSize="100" fontWeight="700" fill="#D4A853">
+        Q
       </text>
-      <text x="100" y="120" textAnchor="middle" fontFamily="'Playfair Display', serif" fontSize="72" fontWeight="700" fill="url(#goldGrad)" opacity="0.3">
-        S
-      </text>
-      <defs>
-        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#D4A853" />
-          <stop offset="100%" stopColor="#E8C47A" />
-        </linearGradient>
-      </defs>
+      {/* Teal dot (trademark) */}
+      <circle cx="132" cy="148" r="5" fill="#2DD4BF" opacity="0.7" />
+      {/* Smaller teal dot */}
+      <circle cx="140" cy="155" r="2.5" fill="#2DD4BF" opacity="0.35" />
     </svg>
   );
 }
