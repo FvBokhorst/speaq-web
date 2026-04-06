@@ -605,9 +605,9 @@ export default function Home() {
               <p className="text-text-muted text-sm mb-6">
                 {t("download.pwa", lang)}
               </p>
-              <span className="inline-flex items-center justify-center h-10 px-6 rounded-full bg-voice-gold text-bg-deep font-medium text-sm">
-                {t("download.comingsoon", lang)}
-              </span>
+              <a href="/app" className="inline-flex items-center justify-center h-10 px-6 rounded-full bg-voice-gold text-bg-deep font-medium text-sm hover:bg-voice-warm transition-colors">
+                {t("download.launch", lang)}
+              </a>
             </div>
           </div>
 

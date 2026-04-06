@@ -650,6 +650,17 @@ const translations: Record<string, Record<Lang, string>> = {
     lg: "Ejja Mangu",
     sw: "Inakuja Hivi Karibuni",
   },
+  "download.launch": {
+    en: "Launch Web App",
+    nl: "Open Web App",
+    fr: "Lancer l'App Web",
+    es: "Abrir App Web",
+    ru: "Otkryt Web App",
+    de: "Web App Starten",
+    sl: "Zazeni Spletno Aplikacijo",
+    lg: "Tandika Web App",
+    sw: "Fungua Programu ya Wavuti",
+  },
   "download.pwa.hint": {
     en: "Open thespeaq.com on your phone and tap \"Add to Home Screen\"",
     nl: "Open thespeaq.com op je telefoon en tik op \"Voeg toe aan beginscherm\"",
