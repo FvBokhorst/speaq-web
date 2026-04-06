@@ -1,8 +1,10 @@
 // SPEAQ Web Mining Service - localStorage based
 // Mirrors native app mining.ts logic exactly
+// C+ Mining: every reward is signed by miner + relay co-signs as witness
 
 const STATS_KEY = "speaq_mining_stats";
 const REWARDS_KEY = "speaq_mining_rewards";
+const MINING_LEDGER_KEY = "speaq_mining_ledger";
 
 export type MiningType = "relay" | "mesh" | "bridge" | "validation" | "storage" | "translation" | "onboarding";
 
@@ -27,6 +29,37 @@ export interface MiningReward {
   amount: number;
   timestamp: number;
   description: string;
+}
+
+// Signed mining ledger entry (C+ system)
+export interface MiningLedgerEntry {
+  speaqId: string;
+  miningType: MiningType;
+  amount: number;
+  timestamp: number;
+  minerSignature: string;     // User's ECDSA signature
+  relaySignature?: string;    // Relay's HMAC co-signature (proof of witness)
+  receiptData?: string;       // Raw receipt data string
+}
+
+export function loadMiningLedger(): MiningLedgerEntry[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const s = localStorage.getItem(MINING_LEDGER_KEY);
+    return s ? JSON.parse(s) : [];
+  } catch { return []; }
+}
+
+export function saveMiningLedger(ledger: MiningLedgerEntry[]): void {
+  // Keep last 1000 entries
+  const trimmed = ledger.slice(-1000);
+  try { localStorage.setItem(MINING_LEDGER_KEY, JSON.stringify(trimmed)); } catch {}
+}
+
+export function addLedgerEntry(entry: MiningLedgerEntry): void {
+  const ledger = loadMiningLedger();
+  ledger.push(entry);
+  saveMiningLedger(ledger);
 }
 
 // Calibrated to ~5-8% annual yield (comparable to Bitvavo/Binance staking)

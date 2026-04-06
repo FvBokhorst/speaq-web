@@ -23,8 +23,8 @@ import {
 import {
   loadStats, saveStats, loadRewards, saveRewards,
   simulateMiningCycle, getSupplyInfo, getEstimatedDaily,
-  REWARD_RATES, WEB_MINING_TYPES,
-  type MiningStats, type MiningReward, type MiningType,
+  REWARD_RATES, WEB_MINING_TYPES, addLedgerEntry,
+  type MiningStats, type MiningReward, type MiningType, type MiningLedgerEntry,
 } from "./mining";
 
 // ---------------------------------------------------------------------------
@@ -877,6 +877,20 @@ export default function SpeaqApp() {
         } catch (e) {
           console.error("[SPEAQ] Key exchange response failed:", e);
         }
+      }
+
+      // ACK with mining receipt (C+ system)
+      if (msg.type === "ACK" && msg.miningReceipt && msg.receiptData && identity) {
+        const entry: MiningLedgerEntry = {
+          speaqId: identity.speaqId,
+          miningType: "relay",
+          amount: 0.0001,
+          timestamp: Date.now(),
+          minerSignature: signingKeys.current ? await signData(msg.receiptData, signingKeys.current.privateKey) : "",
+          relaySignature: msg.miningReceipt,
+          receiptData: msg.receiptData,
+        };
+        addLedgerEntry(entry);
       }
 
       // Typing indicator
@@ -2630,7 +2644,7 @@ The Netherlands`}</div>
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-bg-surface border-b border-[rgba(100,116,139,0.15)] shrink-0">
         <div className="flex items-center gap-2"><SpeaqLogo size={32} /><span className="text-lg font-heading font-bold text-text-primary">SPEAQ</span></div>
-        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v61</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
+        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v62</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
       </header>
 
       {/* Content */}
