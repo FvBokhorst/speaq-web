@@ -15,6 +15,7 @@ import { languages, Lang } from "@/lib/i18n";
 import QRCode from "qrcode";
 import jsQR from "jsqr";
 import { WavRecorder } from "./wav-recorder";
+import INFO from "./info-data";
 import {
   loadWallet, saveWallet, loadTransactions, saveTransactions,
   addMiningReward, sendQC as walletSendQC, qcToGold, qcToEur, qcToSparks, getGoldPrice,
@@ -2407,57 +2408,18 @@ export default function SpeaqApp() {
   // RENDER: Info
   // =========================================================================
   if (screen === "info") {
+    const infoData = INFO[lang] || INFO.en;
     return (
       <div className="min-h-dvh bg-bg-deep flex flex-col">
-        <ScreenHeader title={t("info.title", lang)} onBack={() => { setScreen("main"); setTab("settings"); }} lang={lang} />
+        <ScreenHeader title={infoData.title} onBack={() => { setScreen("main"); setTab("settings"); }} lang={lang} />
         <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
           <div className="text-center py-6"><SpeaqLogo size={80} /><h2 className="mt-4 text-xl font-heading font-bold text-text-primary">SPEAQ</h2><p className="text-sm text-text-secondary mt-1">{t("info.tagline", lang)}</p><p className="text-[10px] font-mono text-text-muted mt-1">v1.0.0 PWA</p></div>
-          {[
-            { name: t("mod.chat", lang), desc: t("mod.chatDesc", lang), icon: <IconChat className="w-4 h-4" /> },
-            { name: t("mod.call", lang), desc: t("mod.callDesc", lang), icon: <IconPhone className="w-4 h-4" /> },
-            { name: t("mod.pay", lang), desc: t("mod.payDesc", lang), icon: <IconWallet className="w-4 h-4" /> },
-            { name: t("mod.mining", lang), desc: t("mod.miningDesc", lang), icon: <IconMining className="w-4 h-4" /> },
-            { name: t("mod.groups", lang), desc: t("mod.groupsDesc", lang), icon: <IconGroup className="w-4 h-4" /> },
-            { name: t("mod.ghost", lang), desc: t("mod.ghostDesc", lang), icon: <IconGhost className="w-4 h-4" /> },
-            { name: t("mod.witness", lang), desc: t("mod.witnessDesc", lang), icon: <IconEye className="w-4 h-4" /> },
-            { name: t("mod.deadman", lang), desc: t("mod.deadmanDesc", lang), icon: <IconAlert className="w-4 h-4" /> },
-            { name: t("mod.sovereign", lang), desc: t("mod.sovereignDesc", lang), icon: <IconFingerprint className="w-4 h-4" /> },
-            { name: t("mod.lightning", lang), desc: t("mod.lightningDesc", lang), icon: <IconZap className="w-4 h-4" /> },
-          ].map((mod) => (
-            <div key={mod.name} className="flex items-center gap-3 px-3 py-2 bg-bg-card rounded-lg border border-[rgba(100,116,139,0.08)]">
-              <div className="w-8 h-8 rounded-full bg-bg-elevated flex items-center justify-center text-quantum-teal">{mod.icon}</div>
-              <div><p className="text-sm font-body font-semibold text-text-primary">{mod.name}</p><p className="text-[10px] text-text-muted">{mod.desc}</p></div>
+          {infoData.sections.map((section, i) => (
+            <div key={i} className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.15)]">
+              <p className="text-xs font-mono text-quantum-teal uppercase tracking-wider mb-2">{section.heading}</p>
+              <p className="text-xs text-text-secondary leading-relaxed whitespace-pre-line">{section.body}</p>
             </div>
           ))}
-          <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.15)]">
-            <p className="text-xs font-mono text-quantum-teal uppercase tracking-wider mb-2">{t("settings.security", lang)}</p>
-            <p className="text-xs text-text-secondary leading-relaxed">{t("info.securityDesc", lang)}</p>
-          </div>
-          {/* How Mining Works */}
-          <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.15)]">
-            <p className="text-xs font-mono text-voice-gold uppercase tracking-wider mb-3">{t("info.miningTitle", lang)}</p>
-            <div className="space-y-3 text-xs text-text-secondary leading-relaxed">
-              <p>{t("info.miningP1", lang)}</p>
-              <p>{t("info.miningTypes", lang)}</p>
-              <p>{t("info.miningRates", lang)}</p>
-            </div>
-          </div>
-          {/* Proof System C+ */}
-          <div className="bg-bg-card rounded-xl p-4 border border-voice-gold/20">
-            <p className="text-xs font-mono text-voice-gold uppercase tracking-wider mb-3">Proof of Contribution (C+)</p>
-            <p className="text-xs text-text-secondary leading-relaxed">{t("info.miningProof", lang)}</p>
-          </div>
-          {/* Tokenomics */}
-          <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.15)]">
-            <p className="text-xs font-mono text-quantum-teal uppercase tracking-wider mb-2">{t("info.tokenomics", lang)}</p>
-            <div className="space-y-1 text-xs text-text-secondary">
-              <p>Max Supply: 21,000,000 QC</p>
-              <p>1 QC = 0.01 gram gold</p>
-              <p>1 QC = 100,000,000 Sparks</p>
-              <p>Halving: 2,100,000 QC</p>
-              <p>~5-8% annual yield</p>
-            </div>
-          </div>
         </div>
       </div>
     );
@@ -2685,7 +2647,7 @@ The Netherlands`}</div>
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-bg-surface border-b border-[rgba(100,116,139,0.15)] shrink-0">
         <div className="flex items-center gap-2"><SpeaqLogo size={32} /><span className="text-lg font-heading font-bold text-text-primary">SPEAQ</span></div>
-        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v64</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
+        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v65</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
       </header>
 
       {/* Content */}
