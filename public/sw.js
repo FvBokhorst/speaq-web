@@ -1,5 +1,5 @@
-const CACHE_NAME = "speaq-pwa-v1";
-const STATIC_ASSETS = ["/app", "/manifest.json", "/icon-192.png", "/icon-512.png"];
+const CACHE_NAME = "speaq-pwa-v3";
+const STATIC_ASSETS = ["/manifest.json", "/icon-192.png", "/icon-512.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -19,9 +19,15 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
-  // Skip WebSocket and API requests
   if (event.request.url.includes("wss://") || event.request.url.includes("ws://")) return;
 
+  // NEVER cache the app page -- always fetch fresh
+  if (event.request.url.includes("/app")) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
+  // Cache-first for static assets only
   event.respondWith(
     fetch(event.request)
       .then((response) => {
