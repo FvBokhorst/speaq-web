@@ -93,7 +93,7 @@ export default function ExplorerPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by block height, tx hash, or SQ1 address..."
-            className="w-full px-4 py-3 rounded-xl bg-[#12121A] border border-[rgba(100,116,139,0.15)] text-white placeholder:text-[#555] font-mono text-sm focus:outline-none focus:border-[#D4A853]/50"
+            className="w-full px-4 py-3 rounded-xl bg-bg-card border border-[rgba(100,116,139,0.15)] text-text-primary placeholder:text-text-muted font-mono text-sm focus:outline-none focus:border-voice-gold/50"
           />
         </div>
       </div>
@@ -107,8 +107,8 @@ export default function ExplorerPage() {
               onClick={() => setTab(t)}
               className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
                 tab === t
-                  ? "text-[#D4A853] border-[#D4A853]"
-                  : "text-[#8C8C8C] border-transparent hover:text-white"
+                  ? "text-voice-gold border-voice-gold"
+                  : "text-text-muted border-transparent hover:text-text-primary"
               }`}
             >
               {t.charAt(0).toUpperCase() + t.slice(1)}
@@ -127,28 +127,28 @@ export default function ExplorerPage() {
               {/* Stats Grid */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {STATS.map((stat) => (
-                  <div key={stat.label} className="bg-[#12121A] rounded-xl p-4 border border-[rgba(100,116,139,0.1)]">
-                    <p className="text-[10px] font-mono text-[#8C8C8C] uppercase tracking-wider">{stat.label}</p>
-                    <p className="text-lg font-bold text-white mt-1 font-serif">{stat.value}</p>
+                  <div key={stat.label} className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.1)]">
+                    <p className="text-[10px] font-mono text-text-muted uppercase tracking-wider">{stat.label}</p>
+                    <p className="text-lg font-bold text-text-primary mt-1 font-serif">{stat.value}</p>
                   </div>
                 ))}
               </div>
 
               {/* Latest Blocks */}
               <div>
-                <h2 className="text-sm font-mono text-[#2DD4BF] uppercase tracking-wider mb-3">Latest Blocks</h2>
-                <div className="bg-[#12121A] rounded-xl border border-[rgba(100,116,139,0.1)] overflow-hidden">
-                  <div className="grid grid-cols-6 gap-4 px-4 py-2 text-[10px] font-mono text-[#8C8C8C] uppercase border-b border-[rgba(100,116,139,0.1)]">
+                <h2 className="text-sm font-mono text-quantum-teal uppercase tracking-wider mb-3">Latest Blocks</h2>
+                <div className="bg-bg-card rounded-xl border border-[rgba(100,116,139,0.1)] overflow-hidden">
+                  <div className="grid grid-cols-6 gap-4 px-4 py-2 text-[10px] font-mono text-text-muted uppercase border-b border-[rgba(100,116,139,0.1)]">
                     <span>Height</span><span>Hash</span><span>Txs</span><span>Time</span><span>Validator</span><span>Reward</span>
                   </div>
                   {SAMPLE_BLOCKS.map((block) => (
                     <div key={block.height} className="grid grid-cols-6 gap-4 px-4 py-3 text-sm border-b border-[rgba(100,116,139,0.05)] hover:bg-[rgba(100,116,139,0.05)]">
-                      <span className="font-mono text-[#D4A853]">{block.height}</span>
-                      <span className="font-mono text-[#2DD4BF] text-xs">{block.hash}</span>
+                      <span className="font-mono text-voice-gold">{block.height}</span>
+                      <span className="font-mono text-quantum-teal text-xs">{block.hash}</span>
                       <span>{block.txs}</span>
-                      <span className="text-[#8C8C8C] text-xs">{block.time}</span>
+                      <span className="text-text-muted text-xs">{block.time}</span>
                       <span className="font-mono text-xs">{block.validator}</span>
-                      <span className="text-[#D4A853]">{block.reward}</span>
+                      <span className="text-voice-gold">{block.reward}</span>
                     </div>
                   ))}
                 </div>
@@ -156,15 +156,15 @@ export default function ExplorerPage() {
 
               {/* Genesis Block */}
               <div>
-                <h2 className="text-sm font-mono text-[#D4A853] uppercase tracking-wider mb-3">Genesis Block</h2>
-                <div className="bg-[#12121A] rounded-xl p-5 border border-[#D4A853]/20">
-                  <p className="text-xs text-[#8C8C8C] mb-1">Motto</p>
-                  <p className="text-sm text-white font-serif italic mb-4">&quot;{GENESIS_BLOCK.motto}&quot;</p>
+                <h2 className="text-sm font-mono text-voice-gold uppercase tracking-wider mb-3">Genesis Block</h2>
+                <div className="bg-bg-card rounded-xl p-5 border border-voice-gold/20">
+                  <p className="text-xs text-text-muted mb-1">Motto</p>
+                  <p className="text-sm text-text-primary font-serif italic mb-4">&quot;{GENESIS_BLOCK.motto}&quot;</p>
                   <div className="grid grid-cols-2 gap-3 text-xs">
-                    <div><span className="text-[#8C8C8C]">Height:</span> <span className="font-mono text-[#D4A853]">{GENESIS_BLOCK.height}</span></div>
-                    <div><span className="text-[#8C8C8C]">Hash:</span> <span className="font-mono text-[#2DD4BF]">{GENESIS_BLOCK.hash}</span></div>
-                    <div><span className="text-[#8C8C8C]">Timestamp:</span> <span>{GENESIS_BLOCK.timestamp}</span></div>
-                    <div><span className="text-[#8C8C8C]">Transactions:</span> <span>{GENESIS_BLOCK.txCount}</span></div>
+                    <div><span className="text-text-muted">Height:</span> <span className="font-mono text-voice-gold">{GENESIS_BLOCK.height}</span></div>
+                    <div><span className="text-text-muted">Hash:</span> <span className="font-mono text-quantum-teal">{GENESIS_BLOCK.hash}</span></div>
+                    <div><span className="text-text-muted">Timestamp:</span> <span>{GENESIS_BLOCK.timestamp}</span></div>
+                    <div><span className="text-text-muted">Transactions:</span> <span>{GENESIS_BLOCK.txCount}</span></div>
                   </div>
                 </div>
               </div>
@@ -173,21 +173,21 @@ export default function ExplorerPage() {
 
           {/* Blocks Tab */}
           {tab === "blocks" && (
-            <div className="bg-[#12121A] rounded-xl border border-[rgba(100,116,139,0.1)] overflow-hidden">
-              <div className="grid grid-cols-6 gap-4 px-4 py-2 text-[10px] font-mono text-[#8C8C8C] uppercase border-b border-[rgba(100,116,139,0.1)]">
+            <div className="bg-bg-card rounded-xl border border-[rgba(100,116,139,0.1)] overflow-hidden">
+              <div className="grid grid-cols-6 gap-4 px-4 py-2 text-[10px] font-mono text-text-muted uppercase border-b border-[rgba(100,116,139,0.1)]">
                 <span>Height</span><span>Hash</span><span>Txs</span><span>Time</span><span>Validator</span><span>Reward</span>
               </div>
               {SAMPLE_BLOCKS.map((block) => (
                 <div key={block.height} className="grid grid-cols-6 gap-4 px-4 py-3 text-sm border-b border-[rgba(100,116,139,0.05)] hover:bg-[rgba(100,116,139,0.05)] cursor-pointer">
-                  <span className="font-mono text-[#D4A853]">{block.height}</span>
-                  <span className="font-mono text-[#2DD4BF] text-xs">{block.hash}</span>
+                  <span className="font-mono text-voice-gold">{block.height}</span>
+                  <span className="font-mono text-quantum-teal text-xs">{block.hash}</span>
                   <span>{block.txs}</span>
-                  <span className="text-[#8C8C8C] text-xs">{block.time}</span>
+                  <span className="text-text-muted text-xs">{block.time}</span>
                   <span className="font-mono text-xs">{block.validator}</span>
-                  <span className="text-[#D4A853]">{block.reward}</span>
+                  <span className="text-voice-gold">{block.reward}</span>
                 </div>
               ))}
-              <div className="px-4 py-8 text-center text-sm text-[#555]">
+              <div className="px-4 py-8 text-center text-sm text-text-muted">
                 Live block data will appear when testnet is running.
               </div>
             </div>
@@ -197,22 +197,22 @@ export default function ExplorerPage() {
           {tab === "validators" && (
             <div className="space-y-4">
               <div className="grid grid-cols-3 gap-4">
-                <div className="bg-[#12121A] rounded-xl p-4 border border-[rgba(100,116,139,0.1)]">
-                  <p className="text-[10px] font-mono text-[#8C8C8C]">ACTIVE VALIDATORS</p>
-                  <p className="text-2xl font-bold text-[#D4A853] font-serif">3 / 21</p>
+                <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.1)]">
+                  <p className="text-[10px] font-mono text-text-muted">ACTIVE VALIDATORS</p>
+                  <p className="text-2xl font-bold text-voice-gold font-serif">3 / 21</p>
                 </div>
-                <div className="bg-[#12121A] rounded-xl p-4 border border-[rgba(100,116,139,0.1)]">
-                  <p className="text-[10px] font-mono text-[#8C8C8C]">FINALITY</p>
-                  <p className="text-2xl font-bold text-[#2DD4BF] font-serif">14/21</p>
+                <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.1)]">
+                  <p className="text-[10px] font-mono text-text-muted">FINALITY</p>
+                  <p className="text-2xl font-bold text-quantum-teal font-serif">14/21</p>
                 </div>
-                <div className="bg-[#12121A] rounded-xl p-4 border border-[rgba(100,116,139,0.1)]">
-                  <p className="text-[10px] font-mono text-[#8C8C8C]">REGIONS</p>
-                  <p className="text-2xl font-bold text-white font-serif">3</p>
+                <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.1)]">
+                  <p className="text-[10px] font-mono text-text-muted">REGIONS</p>
+                  <p className="text-2xl font-bold text-text-primary font-serif">3</p>
                 </div>
               </div>
-              <div className="bg-[#12121A] rounded-xl p-4 border border-[rgba(100,116,139,0.1)]">
-                <p className="text-xs text-[#8C8C8C] mb-3">Consensus: Delegated Proof of Contribution</p>
-                <p className="text-xs text-[#555]">Validators earn positions by helping the network: relaying messages, validating proofs, storing data, translating the app, onboarding users. The top 21 by contribution score produce blocks.</p>
+              <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.1)]">
+                <p className="text-xs text-text-muted mb-3">Consensus: Delegated Proof of Contribution</p>
+                <p className="text-xs text-text-muted">Validators earn positions by helping the network: relaying messages, validating proofs, storing data, translating the app, onboarding users. The top 21 by contribution score produce blocks.</p>
               </div>
             </div>
           )}
@@ -220,36 +220,36 @@ export default function ExplorerPage() {
           {/* Network Tab */}
           {tab === "network" && (
             <div className="space-y-4">
-              <h2 className="text-sm font-mono text-[#2DD4BF] uppercase tracking-wider">Crypto Stack</h2>
+              <h2 className="text-sm font-mono text-quantum-teal uppercase tracking-wider">Crypto Stack</h2>
               <div className="space-y-2">
                 {CHAIN_INFO.cryptoStack.map((item) => (
-                  <div key={item} className="bg-[#12121A] rounded-lg px-4 py-3 border border-[rgba(100,116,139,0.08)] flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-[#2DD4BF]" />
+                  <div key={item} className="bg-bg-card rounded-lg px-4 py-3 border border-[rgba(100,116,139,0.08)] flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full bg-quantum-teal" />
                     <span className="text-sm font-mono">{item}</span>
                   </div>
                 ))}
               </div>
-              <h2 className="text-sm font-mono text-[#D4A853] uppercase tracking-wider mt-6">Network Layers</h2>
+              <h2 className="text-sm font-mono text-voice-gold uppercase tracking-wider mt-6">Network Layers</h2>
               <div className="space-y-2">
                 {CHAIN_INFO.network.map((item) => (
-                  <div key={item} className="bg-[#12121A] rounded-lg px-4 py-3 border border-[rgba(100,116,139,0.08)] flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-[#D4A853]" />
+                  <div key={item} className="bg-bg-card rounded-lg px-4 py-3 border border-[rgba(100,116,139,0.08)] flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full bg-voice-gold" />
                     <span className="text-sm font-mono">{item}</span>
                   </div>
                 ))}
               </div>
-              <div className="bg-[#12121A] rounded-xl p-4 border border-[rgba(100,116,139,0.1)] mt-4">
-                <p className="text-xs font-mono text-[#2DD4BF] mb-2">VERIFICATION</p>
-                <p className="text-xs text-[#8C8C8C]">106 Rust tests PASS. 23 ProVerif mathematical proofs TRUE. 3 NIST certifications (FIPS 203, 204, 205). Full system formally verified.</p>
+              <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.1)] mt-4">
+                <p className="text-xs font-mono text-quantum-teal mb-2">VERIFICATION</p>
+                <p className="text-xs text-text-muted">106 Rust tests PASS. 23 ProVerif mathematical proofs TRUE. 3 NIST certifications (FIPS 203, 204, 205). Full system formally verified.</p>
               </div>
             </div>
           )}
 
           {/* Transactions Tab */}
           {tab === "transactions" && (
-            <div className="bg-[#12121A] rounded-xl p-8 border border-[rgba(100,116,139,0.1)] text-center">
-              <p className="text-sm text-[#8C8C8C]">Transaction data will appear when testnet is running.</p>
-              <p className="text-xs text-[#555] mt-2">All transactions use: CLSAG ring signatures (11 decoys) + Pedersen commitments + Bulletproofs range proofs + Dilithium-3 quantum signature</p>
+            <div className="bg-bg-card rounded-xl p-8 border border-[rgba(100,116,139,0.1)] text-center">
+              <p className="text-sm text-text-muted">Transaction data will appear when testnet is running.</p>
+              <p className="text-xs text-text-muted mt-2">All transactions use: CLSAG ring signatures (11 decoys) + Pedersen commitments + Bulletproofs range proofs + Dilithium-3 quantum signature</p>
             </div>
           )}
         </div>
@@ -257,7 +257,7 @@ export default function ExplorerPage() {
 
       {/* Footer */}
       <footer className="border-t border-[rgba(100,116,139,0.1)] px-6 py-4 mt-12">
-        <div className="max-w-6xl mx-auto flex items-center justify-between text-xs text-[#555]">
+        <div className="max-w-6xl mx-auto flex items-center justify-between text-xs text-text-muted">
           <span>SPEAQ Chain Explorer v1.0</span>
           <span>By the people, for the people.</span>
         </div>
