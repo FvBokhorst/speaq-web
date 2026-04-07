@@ -1,14 +1,21 @@
-import type { Metadata } from "next";
+"use client";
+
 import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: "Connect on SPEAQ",
-  description: "Join SPEAQ - the quantum-resistant communication platform.",
-};
+import { useParams } from "next/navigation";
 
-export default async function ConnectPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const shortId = id.substring(0, 12);
+export default function ConnectPage() {
+  const params = useParams();
+  const id = params.id as string;
+  const shortId = id?.substring(0, 12) || "";
+
+  function handleOpenSpeaq() {
+    // Try native app deep link first, fallback to PWA after 1 second
+    window.location.href = `speaq://connect/${id}`;
+    setTimeout(() => {
+      window.location.href = `/app?connect=${id}`;
+    }, 1000);
+  }
 
   return (
     <main className="min-h-screen bg-bg-deep flex items-center justify-center p-6">
@@ -42,13 +49,13 @@ export default async function ConnectPage({ params }: { params: Promise<{ id: st
             Open SPEAQ to start a quantum-encrypted conversation. No phone number or email required.
           </p>
 
-          {/* Open in PWA */}
-          <Link
-            href={`/app?connect=${id}`}
+          {/* Open in SPEAQ (tries native app first, then PWA) */}
+          <button
+            onClick={handleOpenSpeaq}
             className="block w-full py-3.5 rounded-xl bg-voice-gold text-bg-deep font-semibold text-base mb-3 hover:bg-[#E8C47A] transition-colors"
           >
             Open in SPEAQ
-          </Link>
+          </button>
 
           {/* Download */}
           <Link
