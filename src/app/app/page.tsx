@@ -1637,10 +1637,10 @@ export default function SpeaqApp() {
         </div>
         {/* Numpad */}
         <div className="grid grid-cols-3 gap-2 w-60">
-          {["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "del"].map((key) => (
-            <button key={key || "empty"} disabled={key === ""}
-              onClick={() => { if (key === "del") handlePinDelete(); else if (key !== "") handlePinDigit(key); }}
-              className={`h-14 rounded-xl flex items-center justify-center text-2xl font-body transition-all min-h-[56px] ${key === "" ? "" : "bg-bg-card hover:bg-bg-elevated active:bg-bg-elevated text-text-primary"}`}>
+          {["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "del"].map((key) => (
+            <button key={key}
+              onClick={() => { if (key === "del") handlePinDelete(); else handlePinDigit(key); }}
+              className="h-14 rounded-xl flex items-center justify-center text-2xl font-body transition-all min-h-[56px] bg-bg-card hover:bg-bg-elevated active:bg-bg-elevated text-text-primary">
               {key === "del" ? <span className="text-lg text-text-muted">&#8592;</span> : key}
             </button>
           ))}
@@ -2787,7 +2787,7 @@ The Netherlands`}</div>
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-bg-surface border-b border-[rgba(100,116,139,0.15)] shrink-0">
         <div className="flex items-center gap-2"><SpeaqLogo size={32} /><span className="text-lg font-heading font-bold text-text-primary">SPEAQ</span></div>
-        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v80</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
+        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v81</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
       </header>
 
       {/* Content */}
