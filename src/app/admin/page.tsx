@@ -54,9 +54,9 @@ async function hashPin(pin: string): Promise<string> {
   return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-// Pre-computed SHA-256 hash of "555766"
+// Pre-computed SHA-256 hash of admin PIN
 const EXPECTED_HASH =
-  "a]PLACEHOLDER"; // Will be computed at runtime
+  "8e0d3608677364333b81bcdd3693af27df33f93b6bbf743d82b8e612b0a828de";
 
 function formatUptime(seconds: number): string {
   const days = Math.floor(seconds / 86400);
