@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import ThemeToggle from "../components/ThemeToggle";
 
 // ===================================================================
 // SPEAQ Chain Block Explorer
@@ -63,22 +64,23 @@ export default function ExplorerPage() {
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
-    <div className="min-h-screen bg-[#0A0A0F] text-white">
+    <div className="min-h-screen bg-bg-deep text-text-primary">
       {/* Header */}
       <header className="border-b border-[rgba(100,116,139,0.15)] px-6 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full border border-[#D4A853] flex items-center justify-center">
-              <span className="text-sm font-bold text-[#D4A853] font-serif">Q</span>
+            <div className="w-8 h-8 rounded-full border border-voice-gold flex items-center justify-center">
+              <span className="text-sm font-bold text-voice-gold font-serif">Q</span>
             </div>
             <div>
               <h1 className="text-lg font-bold font-serif">SPEAQ Explorer</h1>
-              <p className="text-[10px] text-[#2DD4BF] font-mono uppercase tracking-wider">Quantum-Resistant Blockchain</p>
+              <p className="text-[10px] text-quantum-teal font-mono uppercase tracking-wider">Quantum-Resistant Blockchain</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
             <div className="w-2 h-2 rounded-full bg-[#22C55E]" />
-            <span className="text-xs font-mono text-[#8C8C8C]">Testnet</span>
+            <span className="text-xs font-mono text-text-muted">Testnet</span>
           </div>
         </div>
       </header>

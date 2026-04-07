@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import ThemeToggle from "../components/ThemeToggle";
 
 // --- Constants ---
 
@@ -493,6 +494,7 @@ export default function AdminPage() {
             </p>
           </div>
           <div className="flex items-center gap-4">
+            <ThemeToggle />
             <button
               onClick={fetchStats}
               className="flex items-center gap-2 text-text-muted hover:text-text-primary transition-colors text-sm"
