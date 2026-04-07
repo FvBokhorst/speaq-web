@@ -5,6 +5,7 @@ import { t, Lang, languages } from "@/lib/i18n";
 import LanguageSwitcher from "./components/LanguageSwitcher";
 import ThemeToggle from "./components/ThemeToggle";
 import ScrollReveal from "./components/ScrollReveal";
+import CookieBanner from "./components/CookieBanner";
 
 export default function Home() {
   const [lang, setLang] = useState<Lang>("en");
@@ -664,6 +665,12 @@ export default function Home() {
             >
               {t("footer.privacy", lang)}
             </a>
+            <a
+              href="/terms"
+              className="hover:text-voice-gold transition-colors"
+            >
+              {t("footer.terms", lang)}
+            </a>
           </div>
 
           <p className="text-text-muted text-xs mb-1">
@@ -675,6 +682,8 @@ export default function Home() {
           </p>
         </div>
       </footer>
+
+      <CookieBanner />
     </main>
   );
 }

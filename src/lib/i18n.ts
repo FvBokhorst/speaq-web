@@ -720,6 +720,17 @@ const translations: Record<string, Record<Lang, string>> = {
     lg: "Enkola y'Ekyama",
     sw: "Sera ya Faragha",
   },
+  "footer.terms": {
+    en: "Terms of Service",
+    nl: "Servicevoorwaarden",
+    fr: "Conditions d'utilisation",
+    es: "Terminos de servicio",
+    ru: "Usloviya ispolzovaniya",
+    de: "Nutzungsbedingungen",
+    sl: "Pogoji uporabe",
+    lg: "Emiteeko gy'okukozesa",
+    sw: "Masharti ya Huduma",
+  },
   "footer.built": {
     en: "Built by Plexaris Technology Consulting",
     nl: "Gebouwd door Plexaris Technology Consulting",

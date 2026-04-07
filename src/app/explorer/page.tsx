@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import ThemeToggle from "../components/ThemeToggle";
+import CookieBanner from "../components/CookieBanner";
 
 // ===================================================================
 // SPEAQ Chain Block Explorer
@@ -261,7 +262,14 @@ export default function ExplorerPage() {
           <span>SPEAQ Chain Explorer v1.0</span>
           <span>By the people, for the people.</span>
         </div>
+        <div className="max-w-6xl mx-auto mt-2">
+          <p className="text-[10px] text-text-muted text-center">
+            Public blockchain data only. No personal data is displayed or collected.
+          </p>
+        </div>
       </footer>
+
+      <CookieBanner />
     </div>
   );
 }

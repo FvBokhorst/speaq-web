@@ -188,6 +188,7 @@ const appStrings: Record<string, Record<string, string>> = {
   "settings.reset": { en: "Reset", nl: "Reset", fr: "Reinitialiser", es: "Restablecer", ru: "Sbrosit", de: "Zurucksetzen", sl: "Ponastavi", lg: "Ddamu", sw: "Weka upya" },
   "settings.privacyData": { en: "Privacy & Data", nl: "Privacy & Gegevens", fr: "Confidentialite et donnees", es: "Privacidad y datos", ru: "Konfidentsialnost i dannye", de: "Datenschutz & Daten", sl: "Zasebnost in podatki", lg: "Ekyama n'ebikukwatako", sw: "Faragha na data" },
   "settings.privacyPolicy": { en: "Privacy Policy", nl: "Privacybeleid", fr: "Politique de confidentialite", es: "Politica de privacidad", ru: "Politika konfidentsialnosti", de: "Datenschutzrichtlinie", sl: "Politika zasebnosti", lg: "Ebiragiro by'ekyama", sw: "Sera ya faragha" },
+  "settings.termsOfService": { en: "Terms of Service", nl: "Servicevoorwaarden", fr: "Conditions d'utilisation", es: "Terminos de servicio", ru: "Usloviya ispolzovaniya", de: "Nutzungsbedingungen", sl: "Pogoji uporabe", lg: "Emiteeko gy'okukozesa", sw: "Masharti ya Huduma" },
   "settings.view": { en: "View", nl: "Bekijk", fr: "Voir", es: "Ver", ru: "Smotret", de: "Anzeigen", sl: "Ogled", lg: "Laba", sw: "Tazama" },
   "settings.delete": { en: "Delete", nl: "Verwijder", fr: "Supprimer", es: "Eliminar", ru: "Udalit", de: "Loschen", sl: "Izbrisi", lg: "Sangula", sw: "Futa" },
   "settings.appearance": { en: "Appearance", nl: "Weergave", fr: "Apparence", es: "Apariencia", ru: "Oformlenie", de: "Darstellung", sl: "Videz", lg: "Endabika", sw: "Muonekano" },
@@ -2708,6 +2709,7 @@ export default function SpeaqApp() {
             <p className="text-[10px] font-mono text-text-muted uppercase tracking-wider mb-2 px-2">{ t("settings.privacyData", lang) }</p>
             <div className="bg-bg-card rounded-xl border border-[rgba(100,116,139,0.15)] divide-y divide-[rgba(100,116,139,0.1)]">
               <button onClick={() => setScreen("privacy")} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{t("settings.privacyPolicy", lang)}</span><span className="text-sm text-voice-gold">{t("settings.view", lang)}</span></button>
+              <a href="/terms" target="_blank" rel="noopener noreferrer" className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{t("settings.termsOfService", lang)}</span><span className="text-sm text-voice-gold">{t("settings.view", lang)}</span></a>
               <button onClick={deleteAllData} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-resistance-red">{ t("settings.deleteAll", lang) }</span><span className="text-sm text-resistance-red">{t("settings.delete", lang)}</span></button>
             </div>
           </div>
@@ -3140,6 +3142,7 @@ The Netherlands`}</div>
             <p className="text-[10px] font-mono text-text-muted uppercase tracking-wider px-2 mt-4">{ t("settings.privacyData", lang) }</p>
             <div className="bg-bg-card rounded-xl border border-[rgba(100,116,139,0.15)] divide-y divide-[rgba(100,116,139,0.1)]">
               <button onClick={() => setScreen("privacy")} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{t("settings.privacyPolicy", lang)}</span><span className="text-sm text-voice-gold">{t("settings.view", lang)}</span></button>
+              <a href="/terms" target="_blank" rel="noopener noreferrer" className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{t("settings.termsOfService", lang)}</span><span className="text-sm text-voice-gold">{t("settings.view", lang)}</span></a>
               <button onClick={deleteAllData} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-resistance-red">{ t("settings.deleteAll", lang) }</span><span className="text-sm text-resistance-red">{t("settings.delete", lang)}</span></button>
             </div>
 
