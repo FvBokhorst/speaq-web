@@ -651,6 +651,9 @@ export default function SpeaqApp() {
     const onboardingDone = !!localStorage.getItem("speaq_onboarding_done");
     if (saved) {
       setIdentity(saved);
+      // Generate QR code for existing identity
+      QRCode.toDataURL(`speaq://${saved.speaqId}`, { width: 200, margin: 1, color: { dark: "#D4A853", light: "#0A0A0F" } })
+        .then((url: string) => setQrDataUrl(url)).catch(() => {});
       if (hasPin) {
         setScreen("lock");
         setPinLocked(true);
@@ -2696,7 +2699,7 @@ The Netherlands`}</div>
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-bg-surface border-b border-[rgba(100,116,139,0.15)] shrink-0">
         <div className="flex items-center gap-2"><SpeaqLogo size={32} /><span className="text-lg font-heading font-bold text-text-primary">SPEAQ</span></div>
-        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v71</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
+        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v72</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
       </header>
 
       {/* Content */}
