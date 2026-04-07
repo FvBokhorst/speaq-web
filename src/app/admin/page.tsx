@@ -418,8 +418,7 @@ export default function AdminPage() {
       }
     } catch {
       // If relay is down, verify PIN locally
-      const expectedHash =
-        "b68e0c25168940aa82838e3795a458b84138c84b3dc5930ac3cd67a9a049fec1";
+      const expectedHash = EXPECTED_HASH;
       if (pinHash === expectedHash) {
         setAuthenticated(true);
         setError("Authenticated (relay offline)");
