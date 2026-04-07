@@ -1238,13 +1238,13 @@ export default function SpeaqApp() {
     if (wsRef.current.readyState !== WebSocket.OPEN) return;
 
     const payload: Record<string, unknown> = { type: "message", text: inputText.trim(), from: identity.displayName, senderId: identity.speaqId, timestamp: Date.now() };
-    // Include profile photo with first message per session to this contact
+    // Include profile photo thumbnail with first message per session to this contact
     if (profilePhoto && !photoSentThisSession.current.has(activeContact.speaqId)) {
-      const thumb = await compressImage(profilePhoto);
-      if (thumb.length < 15000) {
+      try {
+        const thumb = await compressImage(profilePhoto, 80, 0.5);
         payload.photo = thumb;
         photoSentThisSession.current.add(activeContact.speaqId);
-      }
+      } catch {}
     }
     const plainPayload = JSON.stringify(payload);
     let blob: string;
@@ -2785,7 +2785,7 @@ The Netherlands`}</div>
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-bg-surface border-b border-[rgba(100,116,139,0.15)] shrink-0">
         <div className="flex items-center gap-2"><SpeaqLogo size={32} /><span className="text-lg font-heading font-bold text-text-primary">SPEAQ</span></div>
-        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v73</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
+        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v74</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
       </header>
 
       {/* Content */}
