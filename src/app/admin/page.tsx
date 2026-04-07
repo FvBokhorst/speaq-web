@@ -376,8 +376,8 @@ export default function AdminPage() {
       const data = await res.json();
       setStats(data);
       setError("");
-    } catch (e) {
-      setError("Failed to connect to relay server");
+    } catch (e: unknown) {
+      setError(`Failed to connect to relay server: ${(e as Error)?.message || "unknown error"}`);
     } finally {
       setLoading(false);
     }
