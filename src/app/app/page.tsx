@@ -58,6 +58,7 @@ interface Group {
   name: string;
   members: string[];
   createdAt: number;
+  photo?: string;
 }
 
 interface GroupMsg {
@@ -546,6 +547,8 @@ export default function SpeaqApp() {
   const [groupMessages, setGroupMessages] = useState<Record<string, GroupMsg[]>>({});
   const [newGroupName, setNewGroupName] = useState("");
   const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
+  const [showGroupSettings, setShowGroupSettings] = useState<Group | null>(null);
+  const groupPhotoRef = useRef<HTMLInputElement>(null);
 
   // Call state
   const [callContact, setCallContact] = useState<Contact | null>(null);
@@ -825,6 +828,14 @@ export default function SpeaqApp() {
         // Handle QC payment
         if (parsed.qc && parsed.amount && parsed.amount > 0) {
           const senderId = parsed.senderId || parsed.from || fromId;
+          // Save sender's photo if included in QC payment
+          if (parsed.photo && senderId) {
+            setContactPhotos((prev) => {
+              const updated = { ...prev, [senderId]: parsed.photo! };
+              saveJSON("speaq_contact_photos", updated);
+              return updated;
+            });
+          }
           const result = receiveQC(wallet, txs, parsed.amount, senderId);
           setWalletState(result.wallet);
           setTxs(result.txs);
@@ -1352,7 +1363,11 @@ export default function SpeaqApp() {
     // Send encrypted QC to recipient via WebSocket
     if (wsRef.current && identity) {
       const key = await deriveKey(identity.speaqId, sendTo.trim());
-      const blob = await encrypt(key, JSON.stringify({ qc: true, amount, from: identity.speaqId, fromName: identity.displayName, senderId: identity.speaqId, timestamp: Date.now() }));
+      const payload: Record<string, unknown> = { qc: true, amount, from: identity.speaqId, fromName: identity.displayName, senderId: identity.speaqId, timestamp: Date.now() };
+      if (profilePhoto) {
+        try { payload.photo = await compressImage(profilePhoto, 200, 0.3); } catch { /* skip photo */ }
+      }
+      const blob = await encrypt(key, JSON.stringify(payload));
       wsRef.current.send(JSON.stringify({ type: "SEND", to: sendTo.trim(), blob }));
     }
     setSendAmount("");
@@ -2219,18 +2234,84 @@ export default function SpeaqApp() {
           ) : (
             <div className="divide-y divide-[rgba(100,116,139,0.1)]">
               {groups.map((g) => (
-                <button key={g.id} onClick={() => { setActiveGroup(g); setScreen("groupChat"); }}
-                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-bg-card/50 transition-colors text-left min-h-[64px]">
-                  <div className="w-10 h-10 rounded-full bg-quantum-teal/20 flex items-center justify-center shrink-0"><IconGroup className="w-5 h-5 text-quantum-teal" /></div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-body font-semibold text-text-primary truncate">{g.name}</p>
-                    <p className="text-[10px] font-mono text-text-muted">{g.members.length} members</p>
-                  </div>
-                </button>
+                <div key={g.id} className="flex items-center gap-3 px-4 py-3 hover:bg-bg-card/50 transition-colors min-h-[64px]">
+                  <button onClick={() => { setActiveGroup(g); setScreen("groupChat"); }} className="flex items-center gap-3 flex-1 min-w-0 text-left">
+                    {g.photo ? (
+                      <img src={g.photo} alt={g.name} className="w-10 h-10 rounded-full object-cover border border-quantum-teal/30 shrink-0" />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-quantum-teal/20 flex items-center justify-center shrink-0"><IconGroup className="w-5 h-5 text-quantum-teal" /></div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-body font-semibold text-text-primary truncate">{g.name}</p>
+                      <p className="text-[10px] font-mono text-text-muted">{g.members.length} members</p>
+                    </div>
+                  </button>
+                  <button onClick={() => setShowGroupSettings(g)} className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-text-muted hover:text-text-primary"><IconSettings className="w-4 h-4" /></button>
+                </div>
               ))}
             </div>
           )}
         </div>
+        {/* Group Settings Modal */}
+        {showGroupSettings && (
+          <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50" onClick={() => setShowGroupSettings(null)}>
+            <div className="w-full max-w-md bg-bg-surface rounded-t-2xl p-6 space-y-3" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center gap-3 mb-4">
+                {showGroupSettings.photo ? (
+                  <img src={showGroupSettings.photo} alt={showGroupSettings.name} className="w-12 h-12 rounded-full object-cover border border-quantum-teal/30" />
+                ) : (
+                  <div className="w-12 h-12 rounded-full bg-quantum-teal/20 flex items-center justify-center"><IconGroup className="w-6 h-6 text-quantum-teal" /></div>
+                )}
+                <p className="text-base font-body font-semibold text-text-primary">{showGroupSettings.name}</p>
+              </div>
+              <button onClick={() => {
+                const newName = prompt("New group name:", showGroupSettings.name);
+                if (newName && newName.trim()) {
+                  setGroups((prev) => prev.map((g) => g.id === showGroupSettings.id ? { ...g, name: newName.trim() } : g));
+                  setShowGroupSettings({ ...showGroupSettings, name: newName.trim() });
+                }
+              }} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-bg-card text-left min-h-[44px]">
+                <span className="text-sm font-body text-text-primary">Rename</span>
+              </button>
+              <button onClick={() => groupPhotoRef.current?.click()} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-bg-card text-left min-h-[44px]">
+                <span className="text-sm font-body text-text-primary">Change Photo</span>
+              </button>
+              {showGroupSettings.photo && (
+                <button onClick={() => {
+                  setGroups((prev) => prev.map((g) => g.id === showGroupSettings.id ? { ...g, photo: undefined } : g));
+                  setShowGroupSettings({ ...showGroupSettings, photo: undefined });
+                }} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-bg-card text-left min-h-[44px]">
+                  <span className="text-sm font-body text-text-muted">Remove Photo</span>
+                </button>
+              )}
+              <button onClick={() => {
+                if (confirm(`Delete group "${showGroupSettings.name}"?`)) {
+                  setGroups((prev) => prev.filter((g) => g.id !== showGroupSettings.id));
+                  setShowGroupSettings(null);
+                }
+              }} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-resistance-red/10 text-left min-h-[44px]">
+                <span className="text-sm font-body text-resistance-red">Delete Group</span>
+              </button>
+              <button onClick={() => setShowGroupSettings(null)} className="w-full py-3 rounded-xl bg-bg-card text-center min-h-[44px]">
+                <span className="text-sm font-body text-text-muted">Cancel</span>
+              </button>
+            </div>
+          </div>
+        )}
+        <input ref={groupPhotoRef} type="file" accept="image/*" className="hidden" onChange={async (e) => {
+          const file = e.target.files?.[0];
+          if (!file || !showGroupSettings) return;
+          const reader = new FileReader();
+          reader.onload = async () => {
+            try {
+              const compressed = await compressImage(reader.result as string, 300, 0.5);
+              setGroups((prev) => prev.map((g) => g.id === showGroupSettings.id ? { ...g, photo: compressed } : g));
+              setShowGroupSettings({ ...showGroupSettings, photo: compressed });
+            } catch { /* skip */ }
+          };
+          reader.readAsDataURL(file);
+          e.target.value = "";
+        }} />
       </div>
     );
   }
@@ -2278,6 +2359,11 @@ export default function SpeaqApp() {
       <div className="h-dvh bg-bg-deep flex flex-col">
         <header className="flex items-center gap-3 px-4 py-3 bg-bg-surface border-b border-[rgba(100,116,139,0.15)] shrink-0">
           <button onClick={() => { setScreen("groups"); setActiveGroup(null); }} className="p-2 -ml-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-text-secondary hover:text-text-primary"><IconBack /></button>
+          {activeGroup.photo ? (
+            <img src={activeGroup.photo} alt={activeGroup.name} className="w-9 h-9 rounded-full object-cover border border-quantum-teal/30 shrink-0" />
+          ) : (
+            <div className="w-9 h-9 rounded-full bg-quantum-teal/20 flex items-center justify-center shrink-0"><IconGroup className="w-4 h-4 text-quantum-teal" /></div>
+          )}
           <div className="flex-1 min-w-0">
             <p className="text-base font-body font-semibold text-text-primary truncate">{activeGroup.name}</p>
             <p className="text-[10px] font-mono text-text-muted">{activeGroup.members.length} members</p>
@@ -2699,7 +2785,7 @@ The Netherlands`}</div>
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-bg-surface border-b border-[rgba(100,116,139,0.15)] shrink-0">
         <div className="flex items-center gap-2"><SpeaqLogo size={32} /><span className="text-lg font-heading font-bold text-text-primary">SPEAQ</span></div>
-        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v72</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
+        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v73</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
       </header>
 
       {/* Content */}
