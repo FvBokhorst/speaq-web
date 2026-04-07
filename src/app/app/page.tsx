@@ -727,6 +727,24 @@ export default function SpeaqApp() {
     return () => { mq.removeEventListener("change", onSystemThemeChange); };
   }, []);
 
+  // Handle ?connect= parameter from QR code scan
+  useEffect(() => {
+    if (screen !== "main" || !identity) return;
+    const params = new URLSearchParams(window.location.search);
+    const connectId = params.get("connect");
+    if (connectId && connectId.length >= 8 && connectId !== identity.speaqId) {
+      // Check not already a contact and not deleted
+      if (!contacts.some((c) => c.speaqId === connectId) && !deletedContacts.current.has(connectId)) {
+        const name = connectId.substring(0, 8);
+        setContacts((prev) => [...prev, { speaqId: connectId, name, addedAt: Date.now() }]);
+        setScreen("addContact");
+        setNewContactId(connectId);
+      }
+      // Clean URL
+      window.history.replaceState({}, "", "/app");
+    }
+  }, [screen, identity]);
+
   // Save on change
   useEffect(() => { saveJSON("speaq_contacts", contacts); }, [contacts]);
   useEffect(() => {
@@ -2788,7 +2806,7 @@ The Netherlands`}</div>
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-bg-surface border-b border-[rgba(100,116,139,0.15)] shrink-0">
         <div className="flex items-center gap-2"><SpeaqLogo size={32} /><span className="text-lg font-heading font-bold text-text-primary">SPEAQ</span></div>
-        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v83</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
+        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v84</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
       </header>
 
       {/* Content */}
