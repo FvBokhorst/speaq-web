@@ -361,9 +361,7 @@ export default function AdminPage() {
     if (!storedPin) return;
     setLoading(true);
     try {
-      const res = await fetch(`${RELAY_URL}/api/v1/admin/stats`, {
-        headers: { "x-admin-pin": storedPin },
-      });
+      const res = await fetch(`${RELAY_URL}/api/v1/admin/stats?pin=${encodeURIComponent(storedPin)}`);
       if (!res.ok) {
         if (res.status === 403) {
           setAuthenticated(false);
@@ -403,9 +401,7 @@ export default function AdminPage() {
     sessionStorage.setItem("speaq-admin-pin", pin);
 
     try {
-      const res = await fetch(`${RELAY_URL}/api/v1/admin/stats`, {
-        headers: { "x-admin-pin": pin },
-      });
+      const res = await fetch(`${RELAY_URL}/api/v1/admin/stats?pin=${encodeURIComponent(pin)}`);
       if (res.ok) {
         const data = await res.json();
         setStats(data);
