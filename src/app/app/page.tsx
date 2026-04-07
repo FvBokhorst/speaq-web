@@ -189,6 +189,11 @@ const appStrings: Record<string, Record<string, string>> = {
   "settings.privacyPolicy": { en: "Privacy Policy", nl: "Privacybeleid", fr: "Politique de confidentialite", es: "Politica de privacidad", ru: "Politika konfidentsialnosti", de: "Datenschutzrichtlinie", sl: "Politika zasebnosti", lg: "Ebiragiro by'ekyama", sw: "Sera ya faragha" },
   "settings.view": { en: "View", nl: "Bekijk", fr: "Voir", es: "Ver", ru: "Smotret", de: "Anzeigen", sl: "Ogled", lg: "Laba", sw: "Tazama" },
   "settings.delete": { en: "Delete", nl: "Verwijder", fr: "Supprimer", es: "Eliminar", ru: "Udalit", de: "Loschen", sl: "Izbrisi", lg: "Sangula", sw: "Futa" },
+  "settings.appearance": { en: "Appearance", nl: "Weergave", fr: "Apparence", es: "Apariencia", ru: "Oformlenie", de: "Darstellung", sl: "Videz", lg: "Endabika", sw: "Muonekano" },
+  "settings.theme": { en: "Theme", nl: "Thema", fr: "Theme", es: "Tema", ru: "Tema", de: "Design", sl: "Tema", lg: "Ekikula", sw: "Mandhari" },
+  "settings.themeDark": { en: "Dark", nl: "Donker", fr: "Sombre", es: "Oscuro", ru: "Temnaya", de: "Dunkel", sl: "Temna", lg: "Ekizirizi", sw: "Giza" },
+  "settings.themeLight": { en: "Light", nl: "Licht", fr: "Clair", es: "Claro", ru: "Svetlaya", de: "Hell", sl: "Svetla", lg: "Ekitangaala", sw: "Mwanga" },
+  "settings.themeSystem": { en: "System", nl: "Systeem", fr: "Systeme", es: "Sistema", ru: "Sistemnaya", de: "System", sl: "Sistem", lg: "Sisitemu", sw: "Mfumo" },
   "settings.about": { en: "About", nl: "Over", fr: "A propos", es: "Acerca de", ru: "O prilozhenii", de: "Uber", sl: "O aplikaciji", lg: "Ebikwata ku", sw: "Kuhusu" },
   "settings.howItWorks": { en: "How SPEAQ Works", nl: "Hoe SPEAQ Werkt", fr: "Comment SPEAQ Fonctionne", es: "Como Funciona SPEAQ", ru: "Kak Rabotaet SPEAQ", de: "Wie SPEAQ Funktioniert", sl: "Kako Deluje SPEAQ", lg: "SPEAQ Ekola Etya", sw: "Jinsi SPEAQ Inavyofanya Kazi" },
   "settings.version": { en: "Version", nl: "Versie", fr: "Version", es: "Version", ru: "Versiya", de: "Version", sl: "Razlicica", lg: "Ekika", sw: "Toleo" },
@@ -584,6 +589,7 @@ export default function SpeaqApp() {
 
   // Language picker
   const [showLangPicker, setShowLangPicker] = useState(false);
+  const [theme, setThemeState] = useState<"system" | "dark" | "light">("system");
 
   // Chat share menu
   const [showShareMenu, setShowShareMenu] = useState(false);
@@ -673,6 +679,15 @@ export default function SpeaqApp() {
     const savedLang = localStorage.getItem("speaq_lang");
     if (savedLang && languages.some((l) => l.code === savedLang)) setLang(savedLang as Lang);
 
+    // Theme (check both key formats for compat with landing page)
+    const savedTheme = (localStorage.getItem("speaq_theme") || localStorage.getItem("speaq-theme")) as "system" | "dark" | "light" | null;
+    if (savedTheme) { setThemeState(savedTheme); applyTheme(savedTheme); }
+    else { applyTheme("system"); }
+    // Listen for system theme changes
+    const mq = window.matchMedia("(prefers-color-scheme: light)");
+    const onSystemThemeChange = () => { if ((localStorage.getItem("speaq_theme") || "system") === "system") applyTheme("system"); };
+    mq.addEventListener("change", onSystemThemeChange);
+
     // Profile photo
     const savedPhoto = localStorage.getItem("speaq_profile_photo");
     if (savedPhoto) setProfilePhoto(savedPhoto);
@@ -700,6 +715,7 @@ export default function SpeaqApp() {
     setLinkedWallets(loadJSON<{ type: string; address: string; label: string }[]>("speaq_linked_wallets", []));
     setDisappearTimers(loadJSON<Record<string, number>>("speaq_disappear", {}));
     setContactPhotos(loadJSON<Record<string, string>>("speaq_contact_photos", {}));
+    return () => { mq.removeEventListener("change", onSystemThemeChange); };
   }, []);
 
   // Save on change
@@ -1262,6 +1278,17 @@ export default function SpeaqApp() {
   };
 
   const changeLang = (newLang: Lang) => { setLang(newLang); localStorage.setItem("speaq_lang", newLang); };
+
+  const applyTheme = useCallback((t: "system" | "dark" | "light") => {
+    const isDark = t === "dark" || (t === "system" && !window.matchMedia("(prefers-color-scheme: light)").matches);
+    document.documentElement.classList.toggle("light", !isDark);
+  }, []);
+
+  const changeTheme = (t: "system" | "dark" | "light") => {
+    setThemeState(t);
+    localStorage.setItem("speaq_theme", t);
+    applyTheme(t);
+  };
   const formatTime = (ts: number) => new Date(ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   const formatDate = (ts: number) => new Date(ts).toLocaleDateString();
   const getLastMessage = (cid: string): string => { const m = messages[cid]; return m && m.length > 0 ? m[m.length - 1].text : ""; };
@@ -2973,6 +3000,17 @@ The Netherlands`}</div>
                   className={`flex justify-between px-4 py-3 w-full text-left min-h-[44px] ${l.code === lang ? "bg-voice-gold/10" : ""}`}>
                   <span className={`text-sm ${l.code === lang ? "text-voice-gold font-semibold" : "text-text-primary"}`}>{l.name}</span>
                   <span className="text-xs text-text-muted">{l.label}</span>
+                </button>
+              ))}
+            </div>
+
+            {/* Appearance / Theme */}
+            <p className="text-[10px] font-mono text-text-muted uppercase tracking-wider px-2 mt-4">{t("settings.appearance", lang)}</p>
+            <div className="bg-bg-card rounded-xl border border-[rgba(100,116,139,0.15)] p-1 flex gap-1">
+              {(["system", "dark", "light"] as const).map((opt) => (
+                <button key={opt} onClick={() => changeTheme(opt)}
+                  className={`flex-1 py-2.5 rounded-lg text-sm font-body min-h-[44px] transition-colors ${theme === opt ? "bg-voice-gold/20 text-voice-gold font-semibold" : "text-text-muted hover:text-text-secondary"}`}>
+                  {t(`settings.theme${opt.charAt(0).toUpperCase() + opt.slice(1)}` as keyof typeof appStrings, lang)}
                 </button>
               ))}
             </div>
