@@ -610,6 +610,7 @@ export default function SpeaqApp() {
   // Store audio Blobs by message ID for playback (avoids data URL corruption)
   const voiceBlobs = useRef<Record<string, string>>({});
   const photoSentThisSession = useRef<Set<string>>(new Set());
+  const deletedContacts = useRef<Set<string>>(new Set(loadJSON<string[]>("speaq_deleted_contacts", [])));
 
   // Onboarding
   const [onboardingSlide, setOnboardingSlide] = useState(0);
@@ -727,7 +728,7 @@ export default function SpeaqApp() {
   }, []);
 
   // Save on change
-  useEffect(() => { if (contacts.length > 0) saveJSON("speaq_contacts", contacts); }, [contacts]);
+  useEffect(() => { saveJSON("speaq_contacts", contacts); }, [contacts]);
   useEffect(() => {
     if (Object.keys(messages).length > 0) {
       const safe: Record<string, Message[]> = {};
@@ -844,7 +845,7 @@ export default function SpeaqApp() {
           const qcMsg: Message = { id: Date.now().toString(36) + Math.random().toString(36).substring(2, 6), text: `Received ${parsed.amount} QC from ${parsed.fromName || senderId.substring(0, 8)}`, fromMe: false, timestamp: Date.now() };
           setMessages((prev) => ({ ...prev, [senderId]: [...(prev[senderId] || []), qcMsg] }));
           setContacts((prev) => {
-            if (prev.some((c) => c.speaqId === senderId)) return prev;
+            if (prev.some((c) => c.speaqId === senderId) || deletedContacts.current.has(senderId)) return prev;
             return [...prev, { speaqId: senderId, name: parsed.fromName || senderId.substring(0, 8), addedAt: Date.now() }];
           });
           return;
@@ -880,7 +881,7 @@ export default function SpeaqApp() {
         const newMsg: Message = { id: msgId, text, fromMe: false, timestamp: parsed.timestamp || Date.now() };
         setMessages((prev) => ({ ...prev, [senderId]: [...(prev[senderId] || []), newMsg] }));
         setContacts((prev) => {
-          if (prev.some((c) => c.speaqId === senderId)) return prev;
+          if (prev.some((c) => c.speaqId === senderId) || deletedContacts.current.has(senderId)) return prev;
           return [...prev, { speaqId: senderId, name: parsed.from || senderId.substring(0, 8), addedAt: Date.now() }];
         });
       }
@@ -2866,6 +2867,8 @@ The Netherlands`}</div>
                     {/* Delete contact */}
                     <button onClick={() => {
                       if (confirm(`${contact.name}\n\nDelete?`)) {
+                        deletedContacts.current.add(contact.speaqId);
+                        saveJSON("speaq_deleted_contacts", Array.from(deletedContacts.current));
                         setContacts((prev) => prev.filter((c) => c.speaqId !== contact.speaqId));
                       }
                     }} className="text-text-muted hover:text-resistance-red p-1 shrink-0 min-h-[36px] min-w-[36px] flex items-center justify-center">
