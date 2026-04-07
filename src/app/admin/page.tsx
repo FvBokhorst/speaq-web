@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 
 // --- Constants ---
 
-const RELAY_URL = "https://speaq-relay-244491980730.europe-west1.run.app";
+const STATS_API = "/api/admin/stats";
 const MAX_SUPPLY = 21_000_000;
 const REFRESH_INTERVAL = 30_000; // 30 seconds
 
@@ -361,7 +361,7 @@ export default function AdminPage() {
     if (!storedPin) return;
     setLoading(true);
     try {
-      const res = await fetch(`${RELAY_URL}/api/v1/admin/stats?pin=${encodeURIComponent(storedPin)}`);
+      const res = await fetch(`${STATS_API}?pin=${encodeURIComponent(storedPin)}`);
       if (!res.ok) {
         if (res.status === 403) {
           setAuthenticated(false);
@@ -401,7 +401,7 @@ export default function AdminPage() {
     sessionStorage.setItem("speaq-admin-pin", pin);
 
     try {
-      const res = await fetch(`${RELAY_URL}/api/v1/admin/stats?pin=${encodeURIComponent(pin)}`);
+      const res = await fetch(`${STATS_API}?pin=${encodeURIComponent(pin)}`);
       if (res.ok) {
         const data = await res.json();
         setStats(data);
