@@ -1340,16 +1340,18 @@ export default function SpeaqApp() {
   };
 
   // Wallet handlers
-  const handleSendQC = () => {
+  const handleSendQC = async () => {
     const amount = parseFloat(sendAmount);
     if (!amount || amount <= 0 || !sendTo.trim()) return;
     const result = walletSendQC(wallet, txs, amount, sendTo.trim());
     if (!result) { alert("Insufficient balance"); return; }
     setWalletState(result.wallet);
     setTxs(result.txs);
-    // Send QC to recipient via WebSocket
+    // Send encrypted QC to recipient via WebSocket
     if (wsRef.current && identity) {
-      wsRef.current.send(JSON.stringify({ type: "SEND", to: sendTo.trim(), blob: JSON.stringify({ qc: true, amount, from: identity.speaqId, fromName: identity.displayName }) }));
+      const key = await deriveKey(identity.speaqId, sendTo.trim());
+      const blob = await encrypt(key, JSON.stringify({ qc: true, amount, from: identity.speaqId, fromName: identity.displayName, senderId: identity.speaqId, timestamp: Date.now() }));
+      wsRef.current.send(JSON.stringify({ type: "SEND", to: sendTo.trim(), blob }));
     }
     setSendAmount("");
     setSendTo("");
@@ -2695,7 +2697,7 @@ The Netherlands`}</div>
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-bg-surface border-b border-[rgba(100,116,139,0.15)] shrink-0">
         <div className="flex items-center gap-2"><SpeaqLogo size={32} /><span className="text-lg font-heading font-bold text-text-primary">SPEAQ</span></div>
-        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v68</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
+        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v69</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
       </header>
 
       {/* Content */}
