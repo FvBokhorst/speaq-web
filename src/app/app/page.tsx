@@ -18,7 +18,7 @@ import { WavRecorder } from "./wav-recorder";
 import INFO from "./info-data";
 import {
   loadWallet, saveWallet, loadTransactions, saveTransactions,
-  addMiningReward, sendQC as walletSendQC, qcToGold, qcToEur, qcToSparks, getGoldPrice,
+  addMiningReward, sendQC as walletSendQC, receiveQC, qcToGold, qcToEur, qcToSparks, getGoldPrice,
   type WalletState, type Transaction,
 } from "./wallet";
 import {
@@ -815,8 +815,24 @@ export default function SpeaqApp() {
         }
 
         if (!plaintext) return;
-        let parsed: { text?: string; from?: string; senderId?: string; timestamp?: number; photo?: string; audioB64?: string };
+        let parsed: { text?: string; from?: string; senderId?: string; timestamp?: number; photo?: string; audioB64?: string; qc?: boolean; amount?: number; fromName?: string };
         try { parsed = JSON.parse(plaintext); } catch { parsed = { text: plaintext }; }
+
+        // Handle QC payment
+        if (parsed.qc && parsed.amount && parsed.amount > 0) {
+          const senderId = parsed.senderId || parsed.from || fromId;
+          const result = receiveQC(wallet, txs, parsed.amount, senderId);
+          setWalletState(result.wallet);
+          setTxs(result.txs);
+          // Show as chat message too
+          const qcMsg: Message = { id: Date.now().toString(36) + Math.random().toString(36).substring(2, 6), text: `Received ${parsed.amount} QC from ${parsed.fromName || senderId.substring(0, 8)}`, fromMe: false, timestamp: Date.now() };
+          setMessages((prev) => ({ ...prev, [senderId]: [...(prev[senderId] || []), qcMsg] }));
+          setContacts((prev) => {
+            if (prev.some((c) => c.speaqId === senderId)) return prev;
+            return [...prev, { speaqId: senderId, name: parsed.fromName || senderId.substring(0, 8), addedAt: Date.now() }];
+          });
+          return;
+        }
 
         // Store sender's profile photo if included
         if (parsed.photo && parsed.senderId) {
@@ -1331,6 +1347,10 @@ export default function SpeaqApp() {
     if (!result) { alert("Insufficient balance"); return; }
     setWalletState(result.wallet);
     setTxs(result.txs);
+    // Send QC to recipient via WebSocket
+    if (wsRef.current && identity) {
+      wsRef.current.send(JSON.stringify({ type: "SEND", to: sendTo.trim(), blob: JSON.stringify({ qc: true, amount, from: identity.speaqId, fromName: identity.displayName }) }));
+    }
     setSendAmount("");
     setSendTo("");
     setScreen("walletDetail");
@@ -1862,11 +1882,12 @@ export default function SpeaqApp() {
                   const amount = parseFloat(amountStr);
                   if (!amount || amount <= 0 || amount > wallet.balance) { alert("Invalid amount or insufficient balance"); return; }
                   setWalletState((w) => { const u = { ...w, balance: w.balance - amount, totalSent: w.totalSent + amount }; saveWallet(u); return u; });
+                  setTxs((prev) => { const tx: Transaction = { id: generateId(), type: "send", amount, counterparty: activeContact.speaqId, description: `Sent to ${activeContact.name}`, timestamp: Date.now() }; const updated = [tx, ...prev].slice(0, 500); saveTransactions(updated); return updated; });
                   const payText = `[Payment: ${amount.toFixed(2)} QC]`;
                   const newMsg: Message = { id: generateId(), text: payText, fromMe: true, timestamp: Date.now() };
                   setMessages((prev) => ({ ...prev, [activeContact.speaqId]: [...(prev[activeContact.speaqId] || []), newMsg] }));
                   deriveKey(identity.speaqId, activeContact.speaqId).then(async (key) => {
-                    const blob = await encrypt(key, JSON.stringify({ type: "message", text: payText, from: identity.displayName, senderId: identity.speaqId, timestamp: Date.now() }));
+                    const blob = await encrypt(key, JSON.stringify({ qc: true, amount, from: identity.speaqId, fromName: identity.displayName, senderId: identity.speaqId, timestamp: Date.now() }));
                     wsRef.current!.send(JSON.stringify({ type: "SEND", to: activeContact.speaqId, blob }));
                   });
                 }},
@@ -2674,7 +2695,7 @@ The Netherlands`}</div>
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-bg-surface border-b border-[rgba(100,116,139,0.15)] shrink-0">
         <div className="flex items-center gap-2"><SpeaqLogo size={32} /><span className="text-lg font-heading font-bold text-text-primary">SPEAQ</span></div>
-        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v67</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
+        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v68</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
       </header>
 
       {/* Content */}
