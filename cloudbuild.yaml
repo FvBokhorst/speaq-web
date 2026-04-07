@@ -12,3 +12,4 @@ steps:
       - '--min-instances=0'
       - '--max-instances=2'
 timeout: '600s'
+logsBucket: 'gs://speaq-web-build-logs'
