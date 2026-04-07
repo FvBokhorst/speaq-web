@@ -36,7 +36,7 @@ const GENESIS_BLOCK = {
   timestamp: "April 2026",
   validator: "Genesis Validator",
   txCount: 1,
-  motto: "Van en voor de people. - SPEAQ Chain Genesis, April 2026",
+  motto: "By the people, for the people. - SPEAQ Chain Genesis, April 2026",
 };
 
 const SAMPLE_BLOCKS = [
@@ -257,7 +257,7 @@ export default function ExplorerPage() {
       <footer className="border-t border-[rgba(100,116,139,0.1)] px-6 py-4 mt-12">
         <div className="max-w-6xl mx-auto flex items-center justify-between text-xs text-[#555]">
           <span>SPEAQ Chain Explorer v1.0</span>
-          <span>Van en voor de people.</span>
+          <span>By the people, for the people.</span>
         </div>
       </footer>
     </div>
