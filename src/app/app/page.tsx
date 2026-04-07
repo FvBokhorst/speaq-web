@@ -605,6 +605,7 @@ export default function SpeaqApp() {
 
   // Store audio Blobs by message ID for playback (avoids data URL corruption)
   const voiceBlobs = useRef<Record<string, string>>({});
+  const photoSentThisSession = useRef<Set<string>>(new Set());
 
   // Onboarding
   const [onboardingSlide, setOnboardingSlide] = useState(0);
@@ -1223,14 +1224,12 @@ export default function SpeaqApp() {
     if (wsRef.current.readyState !== WebSocket.OPEN) return;
 
     const payload: Record<string, unknown> = { type: "message", text: inputText.trim(), from: identity.displayName, senderId: identity.speaqId, timestamp: Date.now() };
-    // Include small profile photo thumbnail (only if not already cached by receiver)
-    if (profilePhoto && !contactPhotos[activeContact.speaqId + "_sent"]) {
-      // Compress to tiny 80px thumbnail for embedding in messages
+    // Include profile photo with first message per session to this contact
+    if (profilePhoto && !photoSentThisSession.current.has(activeContact.speaqId)) {
       const thumb = await compressImage(profilePhoto);
-      // Only include if small enough (< 10KB as data URL)
       if (thumb.length < 15000) {
         payload.photo = thumb;
-        setContactPhotos((prev) => ({ ...prev, [activeContact.speaqId + "_sent"]: "1" }));
+        photoSentThisSession.current.add(activeContact.speaqId);
       }
     }
     const plainPayload = JSON.stringify(payload);
@@ -2697,7 +2696,7 @@ The Netherlands`}</div>
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-bg-surface border-b border-[rgba(100,116,139,0.15)] shrink-0">
         <div className="flex items-center gap-2"><SpeaqLogo size={32} /><span className="text-lg font-heading font-bold text-text-primary">SPEAQ</span></div>
-        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v70</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
+        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v71</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
       </header>
 
       {/* Content */}
@@ -2737,16 +2736,19 @@ The Netherlands`}</div>
             {/* Your QR Code Card */}
             {identity && (
               <button onClick={() => setShowQrModal(true)} className="w-full bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.15)] flex items-center gap-4 text-left">
-                {qrDataUrl ? (
-                  <img src={qrDataUrl} alt="QR" className="w-16 h-16 rounded-lg" />
+                {profilePhoto ? (
+                  <img src={profilePhoto} alt={identity.displayName} className="w-12 h-12 rounded-full object-cover border-2 border-voice-gold shrink-0" />
                 ) : (
-                  <div className="w-16 h-16 rounded-lg bg-bg-elevated flex items-center justify-center"><IconFingerprint className="w-8 h-8 text-voice-gold" /></div>
+                  <div className="w-12 h-12 rounded-full bg-bg-elevated flex items-center justify-center border-2 border-voice-gold shrink-0">
+                    <span className="text-xl font-heading font-bold text-voice-gold">{identity.displayName.charAt(0).toUpperCase()}</span>
+                  </div>
                 )}
                 <div className="flex-1 min-w-0">
                   <p className="text-base font-body font-semibold text-text-primary">{identity.displayName}</p>
                   <p className="text-[10px] font-mono text-voice-gold truncate">{identity.speaqId}</p>
                   <p className="text-[10px] text-text-muted mt-1">{t("ui.tapEnlarge", lang)}</p>
                 </div>
+                {qrDataUrl && <img src={qrDataUrl} alt="QR" className="w-14 h-14 rounded-lg shrink-0" />}
               </button>
             )}
             {/* Contact List */}
