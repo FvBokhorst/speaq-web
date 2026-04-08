@@ -575,6 +575,7 @@ export default function SpeaqApp() {
 
   // QR code state
   const [qrDataUrl, setQrDataUrl] = useState("");
+  const [qrScanUrl, setQrScanUrl] = useState("");
   const [showQrModal, setShowQrModal] = useState(false);
 
   // Profile photo
@@ -656,9 +657,12 @@ export default function SpeaqApp() {
     const onboardingDone = !!localStorage.getItem("speaq_onboarding_done");
     if (saved) {
       setIdentity(saved);
-      // Generate QR code for existing identity
-      QRCode.toDataURL(`https://thespeaq.com/connect/${saved.speaqId}`, { width: 200, margin: 1, color: { dark: "#D4A853", light: "#0A0A0F" } })
+      // Generate QR codes: gold (thumbnail) + black-on-white (scannable)
+      const connectUrl = `https://thespeaq.com/connect/${saved.speaqId}`;
+      QRCode.toDataURL(connectUrl, { width: 200, margin: 1, color: { dark: "#D4A853", light: "#0A0A0F" } })
         .then((url: string) => setQrDataUrl(url)).catch(() => {});
+      QRCode.toDataURL(connectUrl, { width: 400, margin: 2, color: { dark: "#000000", light: "#FFFFFF" } })
+        .then((url: string) => setQrScanUrl(url)).catch(() => {});
       if (hasPin) {
         setScreen("lock");
         setPinLocked(true);
@@ -1031,9 +1035,12 @@ export default function SpeaqApp() {
       signingKeys.current = sk;
       saveSigningKeys(sk);
     });
-    // Generate QR
-    QRCode.toDataURL(`https://thespeaq.com/connect/${speaqId}`, { width: 200, margin: 1, color: { dark: "#D4A853", light: "#0A0A0F" } })
+    // Generate QR codes: gold (thumbnail) + black-on-white (scannable)
+    const connectUrl = `https://thespeaq.com/connect/${speaqId}`;
+    QRCode.toDataURL(connectUrl, { width: 200, margin: 1, color: { dark: "#D4A853", light: "#0A0A0F" } })
       .then((url: string) => setQrDataUrl(url)).catch(() => {});
+    QRCode.toDataURL(connectUrl, { width: 400, margin: 2, color: { dark: "#000000", light: "#FFFFFF" } })
+      .then((url: string) => setQrScanUrl(url)).catch(() => {});
   };
 
   // PIN handlers -- uses PBKDF2 with 100,000 iterations (same as native app)
@@ -2803,7 +2810,7 @@ The Netherlands`}</div>
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-bg-surface border-b border-[rgba(100,116,139,0.15)] shrink-0">
         <div className="flex items-center gap-2"><SpeaqLogo size={32} /><span className="text-lg font-heading font-bold text-text-primary">SPEAQ</span></div>
-        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v85</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
+        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v86</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
       </header>
 
       {/* Content */}
@@ -2916,7 +2923,7 @@ The Netherlands`}</div>
               <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-6" onClick={() => setShowQrModal(false)}>
                 <div className="bg-bg-card rounded-2xl p-7 max-w-xs w-full border border-[rgba(100,116,139,0.15)] text-center" onClick={(e) => e.stopPropagation()}>
                   <h3 className="text-lg font-heading font-semibold text-text-primary mb-5">Your SPEAQ QR Code</h3>
-                  {qrDataUrl && <img src={qrDataUrl} alt="QR" className="w-48 h-48 mx-auto rounded-xl bg-bg-elevated p-3" />}
+                  {(qrScanUrl || qrDataUrl) && <img src={qrScanUrl || qrDataUrl} alt="QR" className="w-48 h-48 mx-auto rounded-xl bg-white p-3" />}
                   <p className="font-mono text-sm text-voice-gold mt-4">{identity.speaqId}</p>
                   <p className="text-xs text-text-muted mt-2">{t("contacts.qrDesc", lang)}</p>
                   <div className="flex gap-3 mt-5">
