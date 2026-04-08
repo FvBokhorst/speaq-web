@@ -21,7 +21,7 @@ import {
   addMiningReward, sendQC as walletSendQC, receiveQC, qcToGold, qcToEur, qcToSparks, getGoldPrice,
   type WalletState, type Transaction,
 } from "./wallet";
-import { getOrCreateOnChainWallet, type OnChainWallet } from "./onchain-wallet";
+import { getOrCreateOnChainWallet, sendOnChainTransaction, type OnChainWallet } from "./onchain-wallet";
 import {
   loadStats, saveStats, loadRewards, saveRewards,
   simulateMiningCycle, getSupplyInfo, getEstimatedDaily,
@@ -1420,6 +1420,13 @@ export default function SpeaqApp() {
       }
       const blob = await encrypt(key, JSON.stringify(payload));
       wsRef.current.send(JSON.stringify({ type: "SEND", to: sendTo.trim(), blob }));
+    }
+    // Also submit on-chain transaction (sovereign wallet)
+    if (onChainWallet) {
+      sendOnChainTransaction(onChainWallet, sendTo.trim(), amount).then((res) => {
+        if (res.success) console.log("[SPEAQ] On-chain TX accepted:", res.txId);
+        else console.warn("[SPEAQ] On-chain TX failed:", res.error);
+      });
     }
     setSendAmount("");
     setSendTo("");
@@ -2837,7 +2844,7 @@ The Netherlands`}</div>
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-bg-surface border-b border-[rgba(100,116,139,0.15)] shrink-0">
         <div className="flex items-center gap-2"><SpeaqLogo size={32} /><span className="text-lg font-heading font-bold text-text-primary">SPEAQ</span></div>
-        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v89</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
+        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v90</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
       </header>
 
       {/* Content */}

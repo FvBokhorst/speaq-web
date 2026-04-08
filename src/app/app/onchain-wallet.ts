@@ -93,3 +93,42 @@ export function getOrCreateOnChainWallet(): OnChainWallet {
   if (existing) return existing;
   return generateOnChainWallet();
 }
+
+const CHAIN_API = "https://speaq-chain-244491980730.europe-west1.run.app";
+
+// Send an on-chain transaction (signed with sovereign keys)
+export async function sendOnChainTransaction(
+  wallet: OnChainWallet,
+  toAddress: string,
+  amount: number
+): Promise<{ success: boolean; txId?: string; error?: string }> {
+  // Create transaction message
+  const txData = JSON.stringify({ from: wallet.address, to: toAddress, amount, timestamp: Date.now() });
+  const messageBytes = new TextEncoder().encode(txData);
+
+  // Sign with ML-DSA-65
+  const signature = signTransaction(messageBytes, wallet.secretKey);
+
+  // Send to blockchain node
+  try {
+    const res = await fetch(`${CHAIN_API}/api/transaction`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from: wallet.address,
+        to: toAddress,
+        amount,
+        publicKey: wallet.publicKey,
+        signature: toHex(signature),
+        message: toHex(messageBytes),
+      }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      return { success: true, txId: data.txId };
+    }
+    return { success: false, error: data.error || "Transaction rejected" };
+  } catch (e) {
+    return { success: false, error: "Failed to connect to blockchain node" };
+  }
+}
