@@ -610,7 +610,7 @@ export default function SpeaqApp() {
 
   // Store audio Blobs by message ID for playback (avoids data URL corruption)
   const voiceBlobs = useRef<Record<string, string>>({});
-  const photoSentThisSession = useRef<Set<string>>(new Set());
+  const photoSentThisSession = useRef<Map<string, number>>(new Map());
   const deletedContacts = useRef<Set<string>>(new Set(loadJSON<string[]>("speaq_deleted_contacts", [])));
 
   // Onboarding
@@ -871,9 +871,10 @@ export default function SpeaqApp() {
         }
 
         // Store sender's profile photo if included
-        if (parsed.photo && parsed.senderId) {
+        const photoSenderId = parsed.senderId || fromId;
+        if (parsed.photo && photoSenderId) {
           setContactPhotos((prev) => {
-            const updated = { ...prev, [parsed.senderId!]: parsed.photo! };
+            const updated = { ...prev, [photoSenderId]: parsed.photo! };
             saveJSON("speaq_contact_photos", updated);
             return updated;
           });
@@ -1262,13 +1263,16 @@ export default function SpeaqApp() {
     if (wsRef.current.readyState !== WebSocket.OPEN) return;
 
     const payload: Record<string, unknown> = { type: "message", text: inputText.trim(), from: identity.displayName, senderId: identity.speaqId, timestamp: Date.now() };
-    // Include profile photo thumbnail with first message per session to this contact
-    if (profilePhoto && !photoSentThisSession.current.has(activeContact.speaqId)) {
-      try {
-        const thumb = await compressImage(profilePhoto, 80, 0.5);
-        payload.photo = thumb;
-        photoSentThisSession.current.add(activeContact.speaqId);
-      } catch {}
+    // Include profile photo thumbnail (first 3 messages per session to this contact)
+    if (profilePhoto) {
+      const sentCount = photoSentThisSession.current.get(activeContact.speaqId) || 0;
+      if (sentCount < 3) {
+        try {
+          const thumb = await compressImage(profilePhoto, 80, 0.5);
+          payload.photo = thumb;
+          photoSentThisSession.current.set(activeContact.speaqId, sentCount + 1);
+        } catch {}
+      }
     }
     const plainPayload = JSON.stringify(payload);
     let blob: string;
@@ -2810,7 +2814,7 @@ The Netherlands`}</div>
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-bg-surface border-b border-[rgba(100,116,139,0.15)] shrink-0">
         <div className="flex items-center gap-2"><SpeaqLogo size={32} /><span className="text-lg font-heading font-bold text-text-primary">SPEAQ</span></div>
-        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v86</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
+        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v87</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
       </header>
 
       {/* Content */}
