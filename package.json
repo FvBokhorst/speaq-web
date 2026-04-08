@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@noble/post-quantum": "^0.6.0",
     "jsqr": "^1.4.0",
     "next": "16.2.2",
     "qrcode": "^1.5.4",

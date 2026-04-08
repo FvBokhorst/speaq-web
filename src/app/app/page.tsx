@@ -21,6 +21,7 @@ import {
   addMiningReward, sendQC as walletSendQC, receiveQC, qcToGold, qcToEur, qcToSparks, getGoldPrice,
   type WalletState, type Transaction,
 } from "./wallet";
+import { getOrCreateOnChainWallet, type OnChainWallet } from "./onchain-wallet";
 import {
   loadStats, saveStats, loadRewards, saveRewards,
   simulateMiningCycle, getSupplyInfo, getEstimatedDaily,
@@ -529,6 +530,7 @@ export default function SpeaqApp() {
   // Wallet state
   const [wallet, setWalletState] = useState<WalletState>({ balance: 0, totalReceived: 0, totalSent: 0, totalMined: 0 });
   const [chainData, setChainData] = useState<{ chain_height: number; genesis_hash: string; connected_peers: number; version: string } | null>(null);
+  const [onChainWallet, setOnChainWallet] = useState<OnChainWallet | null>(null);
   const [txs, setTxs] = useState<Transaction[]>([]);
   const [sendAmount, setSendAmount] = useState("");
   const [sendTo, setSendTo] = useState("");
@@ -746,6 +748,12 @@ export default function SpeaqApp() {
       window.history.replaceState({}, "", "/app");
     }
   }, [screen, identity]);
+
+  // Initialize on-chain wallet when identity exists
+  useEffect(() => {
+    if (!identity || typeof window === "undefined") return;
+    try { setOnChainWallet(getOrCreateOnChainWallet()); } catch {}
+  }, [identity]);
 
   // Fetch blockchain data when wallet tab is active
   useEffect(() => {
@@ -2829,7 +2837,7 @@ The Netherlands`}</div>
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-bg-surface border-b border-[rgba(100,116,139,0.15)] shrink-0">
         <div className="flex items-center gap-2"><SpeaqLogo size={32} /><span className="text-lg font-heading font-bold text-text-primary">SPEAQ</span></div>
-        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v88</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
+        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v89</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
       </header>
 
       {/* Content */}
@@ -2992,6 +3000,19 @@ The Netherlands`}</div>
                 <div className="mt-3 pt-3 border-t border-[rgba(100,116,139,0.1)]">
                   <p className="text-[10px] text-text-muted">Genesis</p>
                   <p className="text-[9px] font-mono text-text-muted truncate">{chainData.genesis_hash}</p>
+                </div>
+              </div>
+            )}
+
+            {/* On-Chain Wallet */}
+            {onChainWallet && (
+              <div className="bg-bg-card rounded-xl p-4 border border-voice-gold/20">
+                <p className="text-[10px] font-mono text-voice-gold uppercase tracking-wider mb-2">Sovereign Wallet (FIPS 204)</p>
+                <p className="text-[10px] text-text-muted">On-Chain Address</p>
+                <p className="text-[9px] font-mono text-voice-gold truncate">{onChainWallet.address}</p>
+                <div className="flex items-center gap-2 mt-2">
+                  <svg className="w-3 h-3 text-quantum-teal" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+                  <span className="text-[9px] font-mono text-quantum-teal">ML-DSA-65 -- Quantum Resistant</span>
                 </div>
               </div>
             )}
