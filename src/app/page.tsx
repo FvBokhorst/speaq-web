@@ -77,24 +77,13 @@ export default function Home() {
             SPEA<span className="text-voice-gold">Q</span>
           </span>
 
-          {/* Desktop nav links */}
-          <div className="hidden md:flex items-center gap-6 text-sm text-text-muted">
-            <a href="#features" className="hover:text-voice-gold transition-colors">Features</a>
-            <a href="#security" className="hover:text-voice-gold transition-colors">Security</a>
-            <a href="#zero-knowledge" className="hover:text-voice-gold transition-colors">Zero Knowledge</a>
-            <a href="#qcredits" className="hover:text-voice-gold transition-colors">Q-Credits</a>
-            <a href="#download" className="hover:text-voice-gold transition-colors">Get SPEAQ</a>
-            <a href="/faq" className="hover:text-voice-gold transition-colors">FAQ</a>
-            <a href="#languages" className="hover:text-voice-gold transition-colors">Languages</a>
-          </div>
-
           <div className="flex items-center gap-3">
             <LanguageSwitcher currentLang={lang} onChangeLang={changeLang} />
             <ThemeToggle />
-            {/* Hamburger button - mobile only */}
+            {/* Hamburger button - always visible */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden w-10 h-10 flex items-center justify-center text-text-primary"
+              className="w-10 h-10 flex items-center justify-center text-text-primary"
               aria-label="Toggle menu"
             >
               {menuOpen ? (
@@ -113,7 +102,7 @@ export default function Home() {
 
       {/* ===== MOBILE MENU (slide-in from right) ===== */}
       {menuOpen && (
-        <div className="fixed inset-0 z-40 md:hidden">
+        <div className="fixed inset-0 z-40">
           <div className="absolute inset-0 bg-black/40" onClick={() => setMenuOpen(false)} />
           <div className="absolute top-14 right-0 w-64 h-[calc(100vh-56px)] bg-bg-deep border-l border-[rgba(100,116,139,0.15)] p-6 flex flex-col gap-1 overflow-y-auto animate-[slideIn_0.2s_ease-out]">
             {[
