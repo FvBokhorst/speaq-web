@@ -674,7 +674,7 @@ export default function AdminPage() {
               </div>
               <div className="bg-bg-card border border-[rgba(212,168,83,0.2)] rounded-lg p-4 mb-3">
                 <p className="text-voice-warm text-xs font-mono">
-                  Node not connected -- blockchain stats unavailable
+                  Node not connected - blockchain stats unavailable
                 </p>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">

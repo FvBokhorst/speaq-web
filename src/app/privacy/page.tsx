@@ -34,7 +34,7 @@ export default function PrivacyPage() {
             <p>
               SPEAQ is built on a simple principle: your data is yours. We designed
               SPEAQ so that we cannot read your messages, listen to your calls, see
-              your files, or access your wallet. This is not a policy choice -- it is
+              your files, or access your wallet. This is not a policy choice - it is
               a technical guarantee.
             </p>
           </section>
@@ -114,7 +114,7 @@ export default function PrivacyPage() {
               Data Storage
             </h2>
             <p>
-              All your data -- messages, files, contacts, wallet information -- is
+              All your data - messages, files, contacts, wallet information - is
               stored locally on your device. We do not have access to this data.
               If you delete the app, your data is gone. We recommend using the
               encrypted backup feature to protect against device loss.

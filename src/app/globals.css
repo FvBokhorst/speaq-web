@@ -114,6 +114,18 @@ body {
 .layer-animate:nth-child(5) { animation-delay: 0.75s; }
 .layer-animate:nth-child(6) { animation-delay: 0.9s; }
 
+/* Mobile menu slide-in */
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 /* Card hover - lift up */
 .card-hover {
   transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;

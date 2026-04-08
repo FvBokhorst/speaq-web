@@ -20,18 +20,18 @@ const faqData: FaqCategory[] = [
       {
         question: "What is SPEAQ?",
         answer:
-          "SPEAQ is the most secure communication and freedom platform in the world. It combines quantum-resistant encryption, censorship resistance, private payments, decentralized mining, and sovereign identity in one app. Chat, call, pay, browse, store, mine -- all protected by military-grade encryption that even quantum computers cannot break.",
+          "SPEAQ is the most secure communication and freedom platform in the world. It combines quantum-resistant encryption, censorship resistance, private payments, decentralized mining, and sovereign identity in one app. Chat, call, pay, browse, store, mine - all protected by military-grade encryption that even quantum computers cannot break.",
       },
       {
         question: "Why was SPEAQ created?",
         answer:
-          "SPEAQ was created because the world needs a communication platform that truly belongs to its users. Existing platforms collect your data, scan your messages, comply with government surveillance requests, and can freeze your accounts at will. SPEAQ was built from the ground up with zero-knowledge architecture -- we cannot read your messages, even if we wanted to. Your freedom is not a feature. It is the foundation.",
+          "SPEAQ was created because the world needs a communication platform that truly belongs to its users. Existing platforms collect your data, scan your messages, comply with government surveillance requests, and can freeze your accounts at will. SPEAQ was built from the ground up with zero-knowledge architecture - we cannot read your messages, even if we wanted to. Your freedom is not a feature. It is the foundation.",
       },
       {
         question:
           "How is SPEAQ different from WhatsApp, Signal, or Telegram?",
         answer:
-          "WhatsApp is owned by Meta and collects extensive metadata. Telegram does not encrypt group chats by default. Signal is good but still requires a phone number and has no built-in payments or mining. SPEAQ requires no phone number, no email, no real name. It adds a sovereign wallet with gold-backed Q-Credits, Proof of Contribution mining, a Quantum Vault with plausible deniability, Ghost Groups, Witness Mode, Dead Man's Switch, and mesh networking. SPEAQ is not just a messenger -- it is a freedom platform.",
+          "WhatsApp is owned by Meta and collects extensive metadata. Telegram does not encrypt group chats by default. Signal is good but still requires a phone number and has no built-in payments or mining. SPEAQ requires no phone number, no email, no real name. It adds a sovereign wallet with gold-backed Q-Credits, Proof of Contribution mining, a Quantum Vault with plausible deniability, Ghost Groups, Witness Mode, Dead Man's Switch, and mesh networking. SPEAQ is not just a messenger - it is a freedom platform.",
       },
       {
         question: "Do I need to register with my phone number or email?",
@@ -41,7 +41,7 @@ const faqData: FaqCategory[] = [
       {
         question: "Is SPEAQ free?",
         answer:
-          "Yes. SPEAQ is free to download and use. All core features -- messaging, voice and video calls, file sharing, Quantum Vault, Ghost Groups, Witness Mode, and Dead Man's Switch -- are free. You can also earn Q-Credits through Proof of Contribution mining at no cost.",
+          "Yes. SPEAQ is free to download and use. All core features - messaging, voice and video calls, file sharing, Quantum Vault, Ghost Groups, Witness Mode, and Dead Man's Switch - are free. You can also earn Q-Credits through Proof of Contribution mining at no cost.",
       },
     ],
   },
@@ -51,7 +51,7 @@ const faqData: FaqCategory[] = [
       {
         question: "How secure is SPEAQ?",
         answer:
-          "SPEAQ uses 9 layers of security, including AES-256 encryption, the Double Ratchet protocol for forward secrecy, Kyber-768 post-quantum key exchange, sealed sender relay, and quantum random number generation. Every message, call, file, and payment is encrypted before it leaves your device. The relay server sees only encrypted blobs -- it cannot read content, identify communicating parties, or determine what is being sent.",
+          "SPEAQ uses 9 layers of security, including AES-256 encryption, the Double Ratchet protocol for forward secrecy, Kyber-768 post-quantum key exchange, sealed sender relay, and quantum random number generation. Every message, call, file, and payment is encrypted before it leaves your device. The relay server sees only encrypted blobs - it cannot read content, identify communicating parties, or determine what is being sent.",
       },
       {
         question: "What encryption does SPEAQ use?",
@@ -62,10 +62,10 @@ const faqData: FaqCategory[] = [
         question:
           "What is quantum-resistant encryption and why does it matter?",
         answer:
-          "Quantum computers will eventually be able to break the encryption used by most apps today (RSA, ECC). This means messages encrypted today could be stored and decrypted in the future -- a strategy known as 'harvest now, decrypt later.' SPEAQ uses NIST-approved post-quantum algorithms (Kyber-768, ML-DSA-65, SPHINCS+) that are designed to resist attacks from both classical and quantum computers. Your messages are safe today and in the future.",
+          "Quantum computers will eventually be able to break the encryption used by most apps today (RSA, ECC). This means messages encrypted today could be stored and decrypted in the future - a strategy known as 'harvest now, decrypt later.' SPEAQ uses NIST-approved post-quantum algorithms (Kyber-768, ML-DSA-65, SPHINCS+) that are designed to resist attacks from both classical and quantum computers. Your messages are safe today and in the future.",
       },
       {
-        question: "Can anyone read my messages -- even SPEAQ itself?",
+        question: "Can anyone read my messages - even SPEAQ itself?",
         answer:
           "No. SPEAQ uses end-to-end encryption with zero-knowledge architecture. Messages are encrypted on your device before they are sent and can only be decrypted by the intended recipient. The relay server processes only encrypted blobs. We have no keys, no backdoors, and no ability to read your messages. This is a technical guarantee, not a policy promise.",
       },
@@ -82,7 +82,7 @@ const faqData: FaqCategory[] = [
       {
         question: "What happens if I lose my phone?",
         answer:
-          "All your data is stored locally on your device. If you lose your phone and have not created an encrypted backup, your data is gone permanently. We recommend using the encrypted backup feature to protect against device loss. Your backup is encrypted with your personal key -- we cannot access it.",
+          "All your data is stored locally on your device. If you lose your phone and have not created an encrypted backup, your data is gone permanently. We recommend using the encrypted backup feature to protect against device loss. Your backup is encrypted with your personal key - we cannot access it.",
       },
       {
         question: "Can governments access my data?",
@@ -92,7 +92,7 @@ const faqData: FaqCategory[] = [
       {
         question: "What are the security layers in SPEAQ?",
         answer:
-          "SPEAQ has 9 layers of security:\n\n1. Obfuscation + Mesh -- Traffic analysis resistance through mesh networking and data obfuscation\n2. Sealed Sender -- Server cannot see who sent a message\n3. AES-256 + Double Ratchet -- Military-grade encryption with forward secrecy for every message\n4. HMAC-SHA256 -- Message authentication to prevent tampering\n5. Kyber-768 -- Post-quantum key exchange resistant to quantum computers\n6. QRNG -- Quantum random number generation for true randomness\n7. ML-DSA-65 (FIPS 204) -- Quantum-resistant digital signatures for wallet transactions\n8. SPHINCS+ (FIPS 205) -- Hash-based signatures for blockchain block signing\n9. Plausible Deniability -- Hidden vault layer with no technical proof of existence",
+          "SPEAQ has 9 layers of security:\n\n1. Obfuscation + Mesh - Traffic analysis resistance through mesh networking and data obfuscation\n2. Sealed Sender - Server cannot see who sent a message\n3. AES-256 + Double Ratchet - Military-grade encryption with forward secrecy for every message\n4. HMAC-SHA256 - Message authentication to prevent tampering\n5. Kyber-768 - Post-quantum key exchange resistant to quantum computers\n6. QRNG - Quantum random number generation for true randomness\n7. ML-DSA-65 (FIPS 204) - Quantum-resistant digital signatures for wallet transactions\n8. SPHINCS+ (FIPS 205) - Hash-based signatures for blockchain block signing\n9. Plausible Deniability - Hidden vault layer with no technical proof of existence",
       },
     ],
   },
@@ -102,12 +102,12 @@ const faqData: FaqCategory[] = [
       {
         question: "What are Q-Credits?",
         answer:
-          "Q-Credits (QC) are SPEAQ's internal currency, pegged to gold: 1 QC = 0.01 gram of gold. This means the value of your Q-Credits is tied to real, physical gold -- not to any government currency that can be printed or inflated. Maximum supply: 21,000,000 QC, fixed forever. Total gold backing: 210 kg.",
+          "Q-Credits (QC) are SPEAQ's internal currency, pegged to gold: 1 QC = 0.01 gram of gold. This means the value of your Q-Credits is tied to real, physical gold - not to any government currency that can be printed or inflated. Maximum supply: 21,000,000 QC, fixed forever. Total gold backing: 210 kg.",
       },
       {
         question: "Why are Q-Credits backed by gold?",
         answer:
-          "Gold has been a store of value for thousands of years. By pegging Q-Credits to gold, we protect users from inflation and currency manipulation. The gold peg is a floor, not a ceiling -- if demand for QC exceeds supply, the price can rise above the gold peg. Early adopters benefit most from this scarcity-driven appreciation.",
+          "Gold has been a store of value for thousands of years. By pegging Q-Credits to gold, we protect users from inflation and currency manipulation. The gold peg is a floor, not a ceiling - if demand for QC exceeds supply, the price can rise above the gold peg. Early adopters benefit most from this scarcity-driven appreciation.",
       },
       {
         question: "How many Q-Credits will ever exist?",
@@ -117,7 +117,7 @@ const faqData: FaqCategory[] = [
       {
         question: "What is a Sovereign Wallet?",
         answer:
-          "Your SPEAQ wallet is sovereign -- it operates entirely on your device. Your private keys are generated locally and never leave your device. Not even SPEAQ can access them. No intermediary, no central authority, no backdoor. You have full control over your Q-Credits. No one can freeze, confiscate, or block your funds.",
+          "Your SPEAQ wallet is sovereign - it operates entirely on your device. Your private keys are generated locally and never leave your device. Not even SPEAQ can access them. No intermediary, no central authority, no backdoor. You have full control over your Q-Credits. No one can freeze, confiscate, or block your funds.",
       },
       {
         question: "What is ML-DSA-65 (FIPS 204)?",
@@ -157,7 +157,7 @@ const faqData: FaqCategory[] = [
       {
         question: "What are the 7 ways to mine?",
         answer:
-          "1. Relay Mining -- relay encrypted messages through the network\n2. Mesh Mining -- act as a Bluetooth/WiFi mesh node for offline connectivity\n3. Bridge Mining -- serve as a cash-to-QC exchange agent in your community\n4. Validation Mining -- validate transaction proofs on the blockchain\n5. Storage Mining -- store encrypted data fragments for the network\n6. Translation Mining -- translate the app into new languages\n7. Onboarding Mining -- bring new active users to the network",
+          "1. Relay Mining - relay encrypted messages through the network\n2. Mesh Mining - act as a Bluetooth/WiFi mesh node for offline connectivity\n3. Bridge Mining - serve as a cash-to-QC exchange agent in your community\n4. Validation Mining - validate transaction proofs on the blockchain\n5. Storage Mining - store encrypted data fragments for the network\n6. Translation Mining - translate the app into new languages\n7. Onboarding Mining - bring new active users to the network",
       },
       {
         question: "What is halving?",
@@ -167,7 +167,7 @@ const faqData: FaqCategory[] = [
       {
         question: "What is C+ signed mining?",
         answer:
-          "Before the SPEAQ Chain blockchain launches, all mining happens locally on your device. Every mining reward is double-signed: (1) you sign with your private key, proving your identity, and (2) the relay server co-signs as a witness, proving the work actually happened. Both signatures are stored in your mining ledger. When the blockchain launches, only entries with both signatures are accepted. This makes fraud impossible -- you cannot fake the relay's signature, and the relay only signs when you actually contribute.",
+          "Before the SPEAQ Chain blockchain launches, all mining happens locally on your device. Every mining reward is double-signed: (1) you sign with your private key, proving your identity, and (2) the relay server co-signs as a witness, proving the work actually happened. Both signatures are stored in your mining ledger. When the blockchain launches, only entries with both signatures are accepted. This makes fraud impossible - you cannot fake the relay's signature, and the relay only signs when you actually contribute.",
       },
     ],
   },
@@ -188,17 +188,17 @@ const faqData: FaqCategory[] = [
       {
         question: "How are blocks produced?",
         answer:
-          "Blocks are produced every 30 seconds by validators selected through Proof of Contribution. Each block is dual-signed with ML-DSA-65 (FIPS 204) for transaction-level signatures and SPHINCS+ (FIPS 205) for block-level signatures. This dual-signature approach provides defense in depth -- even if one algorithm is compromised, the other remains secure.",
+          "Blocks are produced every 30 seconds by validators selected through Proof of Contribution. Each block is dual-signed with ML-DSA-65 (FIPS 204) for transaction-level signatures and SPHINCS+ (FIPS 205) for block-level signatures. This dual-signature approach provides defense in depth - even if one algorithm is compromised, the other remains secure.",
       },
       {
         question: "How does validator selection work?",
         answer:
-          "Validators are selected based on their Proof of Contribution score, which reflects their ongoing useful work for the network (relaying messages, storing data, validating transactions). This is not Proof of Stake where the richest get richer -- it rewards actual contribution. Validators rotate to prevent centralization.",
+          "Validators are selected based on their Proof of Contribution score, which reflects their ongoing useful work for the network (relaying messages, storing data, validating transactions). This is not Proof of Stake where the richest get richer - it rewards actual contribution. Validators rotate to prevent centralization.",
       },
       {
         question: "What is finality?",
         answer:
-          "Finality means a transaction cannot be reversed once confirmed. On SPEAQ Chain, transactions achieve finality when included in a block (every 30 seconds). Once finalized, a transaction is permanently recorded on the blockchain and cannot be altered, reversed, or censored by anyone -- including SPEAQ itself.",
+          "Finality means a transaction cannot be reversed once confirmed. On SPEAQ Chain, transactions achieve finality when included in a block (every 30 seconds). Once finalized, a transaction is permanently recorded on the blockchain and cannot be altered, reversed, or censored by anyone - including SPEAQ itself.",
       },
     ],
   },
@@ -218,12 +218,12 @@ const faqData: FaqCategory[] = [
       {
         question: "What is the Dead Man's Switch?",
         answer:
-          "If you do not check in within your set interval, a pre-configured message is automatically sent to your chosen contacts. This protects journalists, activists, and whistleblowers. If something happens to you, your emergency contacts will be notified automatically. The switch is entirely configurable -- you set the interval, the message, and the recipients.",
+          "If you do not check in within your set interval, a pre-configured message is automatically sent to your chosen contacts. This protects journalists, activists, and whistleblowers. If something happens to you, your emergency contacts will be notified automatically. The switch is entirely configurable - you set the interval, the message, and the recipients.",
       },
       {
         question: "What is the Quantum Vault?",
         answer:
-          "The Quantum Vault stores your sensitive files (photos, documents, notes) with encryption on your device. It has two layers: a visible layer accessible with your normal PIN, and a hidden layer accessible only with a separate secret PIN. If someone forces you to open your phone, the hidden layer is completely invisible -- there is no technical proof it exists. This is called plausible deniability.",
+          "The Quantum Vault stores your sensitive files (photos, documents, notes) with encryption on your device. It has two layers: a visible layer accessible with your normal PIN, and a hidden layer accessible only with a separate secret PIN. If someone forces you to open your phone, the hidden layer is completely invisible - there is no technical proof it exists. This is called plausible deniability.",
       },
       {
         question: "Does SPEAQ work without internet?",

@@ -117,7 +117,7 @@ export default function TermsPage() {
               {[
                 "Initial block reward: 0.5 QC per block (30-second intervals)",
                 "Halving occurs every 2,100,000 QC mined (modeled after Bitcoin)",
-                "Maximum supply: 21,000,000 QC -- hard cap, no inflation",
+                "Maximum supply: 21,000,000 QC - hard cap, no inflation",
                 "Contribution types: message relay, proof validation, data storage, mesh networking, translation, user onboarding",
                 "Top 21 validators selected by contribution score with geographic diversity",
                 "Finality: 2/3 majority (14/21 validators must confirm each block)",
@@ -147,7 +147,7 @@ export default function TermsPage() {
             <ul className="list-none space-y-3">
               {[
                 "Transactions are irreversible once confirmed by the network",
-                "Blockchain data is public and permanent -- transaction hashes, block heights, and encrypted amounts are visible to all participants",
+                "Blockchain data is public and permanent - transaction hashes, block heights, and encrypted amounts are visible to all participants",
                 "SPEAQ cannot reverse, cancel, or modify transactions",
                 "Network consensus rules are enforced by software, not by any person or entity",
                 "Hard forks or protocol upgrades may occur with community consensus",
@@ -171,12 +171,12 @@ export default function TermsPage() {
             </p>
             <ul className="list-none space-y-3">
               {[
-                "Kyber-768 (FIPS 203) -- quantum-resistant key encapsulation",
-                "Dilithium-3 (FIPS 204) -- quantum-resistant digital signatures",
-                "SPHINCS+ (FIPS 205) -- hash-based backup signatures",
-                "AES-256-GCM -- symmetric encryption for messages",
-                "CLSAG ring signatures -- sender anonymity (ring size 11)",
-                "Pedersen commitments + Bulletproofs -- confidential transactions",
+                "Kyber-768 (FIPS 203) - quantum-resistant key encapsulation",
+                "Dilithium-3 (FIPS 204) - quantum-resistant digital signatures",
+                "SPHINCS+ (FIPS 205) - hash-based backup signatures",
+                "AES-256-GCM - symmetric encryption for messages",
+                "CLSAG ring signatures - sender anonymity (ring size 11)",
+                "Pedersen commitments + Bulletproofs - confidential transactions",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-quantum-teal mt-2.5 shrink-0" />
@@ -225,9 +225,9 @@ export default function TermsPage() {
             </p>
             <ul className="list-none space-y-3">
               {[
-                "Backing up your wallet and private keys -- lost keys cannot be recovered",
-                "Keeping your device secure -- your data lives on your device",
-                "Remembering your PIN -- SPEAQ cannot reset it for you",
+                "Backing up your wallet and private keys - lost keys cannot be recovered",
+                "Keeping your device secure - your data lives on your device",
+                "Remembering your PIN - SPEAQ cannot reset it for you",
                 "Complying with the laws of your jurisdiction",
                 "The content you send through the platform",
               ].map((item) => (

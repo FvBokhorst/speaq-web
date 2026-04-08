@@ -9,6 +9,7 @@ import CookieBanner from "./components/CookieBanner";
 
 export default function Home() {
   const [lang, setLang] = useState<Lang>("en");
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("speaq-lang") as Lang | null;
@@ -75,12 +76,68 @@ export default function Home() {
           <span className="font-[family-name:var(--font-playfair)] text-lg font-medium text-text-primary">
             SPEA<span className="text-voice-gold">Q</span>
           </span>
+
+          {/* Desktop nav links */}
+          <div className="hidden md:flex items-center gap-6 text-sm text-text-muted">
+            <a href="#security" className="hover:text-voice-gold transition-colors">Security</a>
+            <a href="#download" className="hover:text-voice-gold transition-colors">Download</a>
+            <a href="#languages" className="hover:text-voice-gold transition-colors">Languages</a>
+            <a href="/faq" className="hover:text-voice-gold transition-colors">FAQ</a>
+            <a href="/privacy" className="hover:text-voice-gold transition-colors">Privacy</a>
+            <a href="/terms" className="hover:text-voice-gold transition-colors">Terms</a>
+            <a href="/explorer" className="hover:text-voice-gold transition-colors">Explorer</a>
+          </div>
+
           <div className="flex items-center gap-3">
             <LanguageSwitcher currentLang={lang} onChangeLang={changeLang} />
             <ThemeToggle />
+            {/* Hamburger button - mobile only */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="md:hidden w-10 h-10 flex items-center justify-center text-text-primary"
+              aria-label="Toggle menu"
+            >
+              {menuOpen ? (
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 12h18M3 6h18M3 18h18" />
+                </svg>
+              )}
+            </button>
           </div>
         </div>
       </nav>
+
+      {/* ===== MOBILE MENU (slide-in from right) ===== */}
+      {menuOpen && (
+        <div className="fixed inset-0 z-40 md:hidden">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setMenuOpen(false)} />
+          <div className="absolute top-14 right-0 w-64 h-[calc(100vh-56px)] bg-bg-deep border-l border-[rgba(100,116,139,0.15)] p-6 flex flex-col gap-1 overflow-y-auto animate-[slideIn_0.2s_ease-out]">
+            {[
+              { label: "Home", href: "#" },
+              { label: "Security", href: "#security" },
+              { label: "Download", href: "#download" },
+              { label: "Languages", href: "#languages" },
+              { label: "FAQ", href: "/faq" },
+              { label: "Privacy", href: "/privacy" },
+              { label: "Terms", href: "/terms" },
+              { label: "Explorer", href: "/explorer" },
+            ].map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                className="block py-3 px-4 rounded-lg text-text-primary text-[15px] font-medium hover:bg-bg-card hover:text-voice-gold transition-colors"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* ===== HERO (100vh) ===== */}
       <section className="relative min-h-screen flex items-center justify-center text-center overflow-hidden pt-14">
@@ -621,8 +678,30 @@ export default function Home() {
         </div></ScrollReveal>
       </section>
 
+      {/* ===== FAQ LINK ===== */}
+      <section className="py-12 bg-bg-surface border-t border-[rgba(100,116,139,0.08)]">
+        <div className="max-w-[1100px] mx-auto px-6 md:px-12 text-center">
+          <a
+            href="/faq"
+            className="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-bg-card border border-[rgba(100,116,139,0.15)] hover:border-voice-gold/40 transition-all group"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-voice-gold">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            <span className="text-text-primary font-medium group-hover:text-voice-gold transition-colors">
+              Frequently Asked Questions
+            </span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-text-muted group-hover:text-voice-gold transition-colors">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+      </section>
+
       {/* ===== LANGUAGES ===== */}
-      <section className="py-24 md:py-32">
+      <section className="py-24 md:py-32" id="languages">
         <ScrollReveal delay={100}><div className="max-w-[1100px] mx-auto px-6 md:px-12 text-center">
           <span className="section-label block mb-3">{t("languages.label", lang)}</span>
           <h2 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl font-medium tracking-tight leading-tight mb-16">

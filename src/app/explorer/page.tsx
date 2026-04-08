@@ -20,12 +20,12 @@ const CHAIN_INFO = {
   validators: 21,
   finality: "14/21 (2/3 majority)",
   cryptoStack: [
-    "Dilithium-3 (FIPS 204) -- Quantum-safe signing",
-    "SPHINCS+ (FIPS 205) -- Backup hash-based signing",
-    "Kyber-768 (FIPS 203) -- Quantum-safe key exchange",
-    "CLSAG Ring Signatures -- Sender anonymity",
-    "Pedersen Commitments -- Amount hiding",
-    "Bulletproofs+ -- Range proofs",
+    "Dilithium-3 (FIPS 204) - Quantum-safe signing",
+    "SPHINCS+ (FIPS 205) - Backup hash-based signing",
+    "Kyber-768 (FIPS 203) - Quantum-safe key exchange",
+    "CLSAG Ring Signatures - Sender anonymity",
+    "Pedersen Commitments - Amount hiding",
+    "Bulletproofs+ - Range proofs",
   ],
   network: ["libp2p (Kademlia + GossipSub)", "Tor Hidden Services", "BLE Mesh"],
 };
