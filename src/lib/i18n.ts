@@ -731,6 +731,17 @@ const translations: Record<string, Record<Lang, string>> = {
     lg: "Emiteeko gy'okukozesa",
     sw: "Masharti ya Huduma",
   },
+  "footer.faq": {
+    en: "FAQ",
+    nl: "Veelgestelde vragen",
+    fr: "FAQ",
+    es: "Preguntas frecuentes",
+    ru: "Chasto zadavayemye voprosy",
+    de: "Haufig gestellte Fragen",
+    sl: "Pogosta vprasanja",
+    lg: "Ebibuuzo Ebibuuzibwa Ennyo",
+    sw: "Maswali Yanayoulizwa Mara kwa Mara",
+  },
   "footer.built": {
     en: "Built by Plexaris Technology Consulting",
     nl: "Gebouwd door Plexaris Technology Consulting",

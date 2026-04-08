@@ -671,6 +671,12 @@ export default function Home() {
             >
               {t("footer.terms", lang)}
             </a>
+            <a
+              href="/faq"
+              className="hover:text-voice-gold transition-colors"
+            >
+              {t("footer.faq", lang)}
+            </a>
           </div>
 
           <p className="text-text-muted text-xs mb-1">
