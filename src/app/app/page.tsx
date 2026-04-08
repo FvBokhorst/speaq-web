@@ -528,6 +528,7 @@ export default function SpeaqApp() {
 
   // Wallet state
   const [wallet, setWalletState] = useState<WalletState>({ balance: 0, totalReceived: 0, totalSent: 0, totalMined: 0 });
+  const [chainData, setChainData] = useState<{ chain_height: number; genesis_hash: string; connected_peers: number; version: string } | null>(null);
   const [txs, setTxs] = useState<Transaction[]>([]);
   const [sendAmount, setSendAmount] = useState("");
   const [sendTo, setSendTo] = useState("");
@@ -745,6 +746,20 @@ export default function SpeaqApp() {
       window.history.replaceState({}, "", "/app");
     }
   }, [screen, identity]);
+
+  // Fetch blockchain data when wallet tab is active
+  useEffect(() => {
+    if (tab !== "wallet" || screen !== "main") return;
+    const fetchChain = () => {
+      fetch("https://speaq-chain-244491980730.europe-west1.run.app/api/status")
+        .then((r) => r.json())
+        .then((d) => setChainData(d))
+        .catch(() => {});
+    };
+    fetchChain();
+    const interval = setInterval(fetchChain, 30000);
+    return () => clearInterval(interval);
+  }, [tab, screen]);
 
   // Save on change
   useEffect(() => { saveJSON("speaq_contacts", contacts); }, [contacts]);
@@ -1044,7 +1059,7 @@ export default function SpeaqApp() {
       .then((url: string) => setQrScanUrl(url)).catch(() => {});
   };
 
-  // PIN handlers -- uses PBKDF2 with 100,000 iterations (same as native app)
+  // PIN handlers -- uses PBKDF2 with 600,000 iterations (native app uses 100,000 with CryptoJS)
   const hashPin = async (pin: string): Promise<string> => {
     return hashPinPBKDF2(pin, identity?.speaqId || "default");
   };
@@ -2814,7 +2829,7 @@ The Netherlands`}</div>
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-bg-surface border-b border-[rgba(100,116,139,0.15)] shrink-0">
         <div className="flex items-center gap-2"><SpeaqLogo size={32} /><span className="text-lg font-heading font-bold text-text-primary">SPEAQ</span></div>
-        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v87</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
+        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v88</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
       </header>
 
       {/* Content */}
@@ -2964,6 +2979,23 @@ The Netherlands`}</div>
                 </button>
               </div>
             </div>
+            {/* Blockchain Status */}
+            {chainData && (
+              <div className="bg-bg-card rounded-xl p-4 border border-quantum-teal/20">
+                <p className="text-[10px] font-mono text-quantum-teal uppercase tracking-wider mb-3">SPEAQ Chain</p>
+                <div className="grid grid-cols-2 gap-3">
+                  <div><p className="text-[10px] text-text-muted">Block Height</p><p className="text-sm font-heading font-bold text-text-primary">{chainData.chain_height.toLocaleString()}</p></div>
+                  <div><p className="text-[10px] text-text-muted">Max Supply</p><p className="text-sm font-heading font-bold text-text-primary">21,000,000 QC</p></div>
+                  <div><p className="text-[10px] text-text-muted">Version</p><p className="text-sm font-mono text-quantum-teal">{chainData.version}</p></div>
+                  <div><p className="text-[10px] text-text-muted">Network</p><p className="text-sm font-mono text-quantum-teal">{chainData.connected_peers} peers</p></div>
+                </div>
+                <div className="mt-3 pt-3 border-t border-[rgba(100,116,139,0.1)]">
+                  <p className="text-[10px] text-text-muted">Genesis</p>
+                  <p className="text-[9px] font-mono text-text-muted truncate">{chainData.genesis_hash}</p>
+                </div>
+              </div>
+            )}
+
             {/* Projects Section */}
             <div>
               <div className="flex justify-between items-center mb-2 px-1">
