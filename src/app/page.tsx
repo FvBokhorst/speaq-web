@@ -79,13 +79,13 @@ export default function Home() {
 
           {/* Desktop nav links */}
           <div className="hidden md:flex items-center gap-6 text-sm text-text-muted">
+            <a href="#features" className="hover:text-voice-gold transition-colors">Features</a>
             <a href="#security" className="hover:text-voice-gold transition-colors">Security</a>
-            <a href="#download" className="hover:text-voice-gold transition-colors">Download</a>
-            <a href="#languages" className="hover:text-voice-gold transition-colors">Languages</a>
+            <a href="#zero-knowledge" className="hover:text-voice-gold transition-colors">Zero Knowledge</a>
+            <a href="#qcredits" className="hover:text-voice-gold transition-colors">Q-Credits</a>
+            <a href="#download" className="hover:text-voice-gold transition-colors">Get SPEAQ</a>
             <a href="/faq" className="hover:text-voice-gold transition-colors">FAQ</a>
-            <a href="/privacy" className="hover:text-voice-gold transition-colors">Privacy</a>
-            <a href="/terms" className="hover:text-voice-gold transition-colors">Terms</a>
-            <a href="/explorer" className="hover:text-voice-gold transition-colors">Explorer</a>
+            <a href="#languages" className="hover:text-voice-gold transition-colors">Languages</a>
           </div>
 
           <div className="flex items-center gap-3">
@@ -117,14 +117,13 @@ export default function Home() {
           <div className="absolute inset-0 bg-black/40" onClick={() => setMenuOpen(false)} />
           <div className="absolute top-14 right-0 w-64 h-[calc(100vh-56px)] bg-bg-deep border-l border-[rgba(100,116,139,0.15)] p-6 flex flex-col gap-1 overflow-y-auto animate-[slideIn_0.2s_ease-out]">
             {[
-              { label: "Home", href: "#" },
+              { label: "Features", href: "#features" },
               { label: "Security", href: "#security" },
-              { label: "Download", href: "#download" },
-              { label: "Languages", href: "#languages" },
+              { label: "Zero Knowledge", href: "#zero-knowledge" },
+              { label: "Q-Credits", href: "#qcredits" },
+              { label: "Get SPEAQ", href: "#download" },
               { label: "FAQ", href: "/faq" },
-              { label: "Privacy", href: "/privacy" },
-              { label: "Terms", href: "/terms" },
-              { label: "Explorer", href: "/explorer" },
+              { label: "Languages", href: "#languages" },
             ].map((link) => (
               <a
                 key={link.label}
@@ -456,7 +455,7 @@ export default function Home() {
 
 
       {/* ===== ZERO KNOWLEDGE ===== */}
-      <section className="py-24 md:py-32 bg-bg-surface relative overflow-hidden">
+      <section className="py-24 md:py-32 bg-bg-surface relative overflow-hidden" id="zero-knowledge">
         {/* Teal glow */}
         <div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none"
@@ -490,7 +489,7 @@ export default function Home() {
       </section>
 
       {/* ===== Q-CREDITS ===== */}
-      <section className="py-24 md:py-32">
+      <section className="py-24 md:py-32" id="qcredits">
         <ScrollReveal delay={100}><div className="max-w-[1100px] mx-auto px-6 md:px-12">
           <span className="section-label block mb-3">{t("qc.label", lang)}</span>
           <h2 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl font-medium tracking-tight leading-tight mb-4">

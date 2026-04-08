@@ -2778,7 +2778,7 @@ export default function SpeaqApp() {
               <button onClick={() => setScreen("info")} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.howItWorks", lang) }</span><span className="text-sm text-voice-gold">i</span></button>
               <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">{t("settings.version", lang)}</span><span className="text-sm text-text-muted">1.0.0 (PWA)</span></div>
               <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">Platform</span><span className="text-sm text-text-muted">{t("ui.platform", lang)}</span></div>
-              <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">{t("settings.website", lang)}</span><span className="text-xs font-mono text-voice-gold">thespeaq.com</span></div>
+              <a href="https://thespeaq.com" target="_blank" rel="noopener noreferrer" className="flex justify-between px-4 py-3 min-h-[44px]"><span className="text-sm text-text-primary">{t("settings.website", lang)}</span><span className="text-xs font-mono text-voice-gold">thespeaq.com</span></a>
             </div>
           </div>
         </div>
@@ -2844,7 +2844,7 @@ The Netherlands`}</div>
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-bg-surface border-b border-[rgba(100,116,139,0.15)] shrink-0">
         <div className="flex items-center gap-2"><SpeaqLogo size={32} /><span className="text-lg font-heading font-bold text-text-primary">SPEAQ</span></div>
-        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v93</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
+        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v94</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
       </header>
 
       {/* Content */}
@@ -3240,7 +3240,7 @@ The Netherlands`}</div>
             <div className="bg-bg-card rounded-xl border border-[rgba(100,116,139,0.15)] divide-y divide-[rgba(100,116,139,0.1)]">
               <button onClick={() => setScreen("info")} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.howItWorks", lang) }</span><span className="text-sm text-voice-gold">i</span></button>
               <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">{t("settings.version", lang)}</span><span className="text-sm text-text-muted">1.0.0 (PWA)</span></div>
-              <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">{t("settings.website", lang)}</span><span className="text-xs font-mono text-voice-gold">thespeaq.com</span></div>
+              <a href="https://thespeaq.com" target="_blank" rel="noopener noreferrer" className="flex justify-between px-4 py-3 min-h-[44px]"><span className="text-sm text-text-primary">{t("settings.website", lang)}</span><span className="text-xs font-mono text-voice-gold">thespeaq.com</span></a>
             </div>
           </div>
         )}
