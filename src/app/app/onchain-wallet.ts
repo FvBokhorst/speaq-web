@@ -94,7 +94,7 @@ export function getOrCreateOnChainWallet(): OnChainWallet {
   return generateOnChainWallet();
 }
 
-const CHAIN_API = "https://speaq-chain-244491980730.europe-west1.run.app";
+const CHAIN_API = "http://134.98.141.213:9334";
 
 // Send an on-chain transaction (signed with sovereign keys)
 export async function sendOnChainTransaction(
