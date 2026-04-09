@@ -759,7 +759,7 @@ export default function SpeaqApp() {
   useEffect(() => {
     if (tab !== "wallet" || screen !== "main") return;
     const fetchChain = () => {
-      fetch("http://134.98.141.213:9334/api/status")
+      fetch("http://136.117.234.208:9334/api/status")
         .then((r) => r.json())
         .then((d) => setChainData(d))
         .catch(() => {});
