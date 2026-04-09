@@ -379,21 +379,11 @@ export default function AdminPage() {
     } catch (e: unknown) {
       setError(`Failed to connect to relay server: ${(e as Error)?.message || "unknown error"}`);
     }
-    // Fetch blockchain data from VPS
+    // Fetch blockchain data via server-side proxy (avoids mixed content)
     try {
-      const [statusRes, balanceRes] = await Promise.all([
-        fetch("http://134.98.141.213:9334/api/status"),
-        fetch("http://134.98.141.213:9334/api/wallet/balance"),
-      ]);
-      if (statusRes.ok && balanceRes.ok) {
-        const status = await statusRes.json();
-        const balance = await balanceRes.json();
-        setChainData({
-          chain_height: status.chain_height,
-          balance: balance.balance,
-          balance_sparks: balance.balance_sparks,
-          genesis_hash: status.genesis_hash,
-        });
+      const chainRes = await fetch("/api/admin/chain");
+      if (chainRes.ok) {
+        setChainData(await chainRes.json());
       }
     } catch {}
     setLoading(false);
