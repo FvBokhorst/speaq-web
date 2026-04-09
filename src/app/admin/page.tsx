@@ -346,6 +346,7 @@ export default function AdminPage() {
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [loading, setLoading] = useState(false);
   const [storedPin, setStoredPin] = useState("");
+  const [chainData, setChainData] = useState<{ chain_height: number; balance: number; balance_sparks: number; genesis_hash: string } | null>(null);
 
   // Check session on mount
   useEffect(() => {
@@ -377,9 +378,25 @@ export default function AdminPage() {
       setError("");
     } catch (e: unknown) {
       setError(`Failed to connect to relay server: ${(e as Error)?.message || "unknown error"}`);
-    } finally {
-      setLoading(false);
     }
+    // Fetch blockchain data from VPS
+    try {
+      const [statusRes, balanceRes] = await Promise.all([
+        fetch("http://134.98.141.213:9334/api/status"),
+        fetch("http://134.98.141.213:9334/api/wallet/balance"),
+      ]);
+      if (statusRes.ok && balanceRes.ok) {
+        const status = await statusRes.json();
+        const balance = await balanceRes.json();
+        setChainData({
+          chain_height: status.chain_height,
+          balance: balance.balance,
+          balance_sparks: balance.balance_sparks,
+          genesis_hash: status.genesis_hash,
+        });
+      }
+    } catch {}
+    setLoading(false);
   }, [storedPin]);
 
   // Auto-fetch on auth
@@ -672,29 +689,24 @@ export default function AdminPage() {
                   Blockchain
                 </h2>
               </div>
-              <div className="bg-bg-card border border-[rgba(212,168,83,0.2)] rounded-lg p-4 mb-3">
-                <p className="text-voice-warm text-xs font-mono">
-                  Node not connected - blockchain stats unavailable
-                </p>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <StatCard label="Chain Height" value="--" sub="Node offline" />
-                <StatCard
-                  label="Avg Block Time"
-                  value="30s"
-                  sub="Target"
-                />
-                <StatCard
-                  label="Total Txs"
-                  value="--"
-                  sub="Node offline"
-                />
-                <StatCard
-                  label="Blocks/Day"
-                  value="--"
-                  sub="Node offline"
-                />
-              </div>
+              {chainData ? (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <StatCard label="Chain Height" value={chainData.chain_height.toLocaleString()} sub="blocks produced" />
+                  <StatCard label="Total QC Mined" value={chainData.balance.toFixed(2)} sub={`${(chainData.balance / 21000000 * 100).toFixed(4)}% of supply`} />
+                  <StatCard label="Max Supply" value="21,000,000" sub="QC hard cap" />
+                  <StatCard label="Remaining" value={(21000000 - chainData.balance).toLocaleString()} sub="QC still to mine" />
+                  <StatCard label="Block Reward" value="0.5 QC" sub="per 30 seconds" />
+                  <StatCard label="Blocks/Day" value="2,880" sub="24h x 120 blocks/hr" />
+                  <StatCard label="QC/Day" value="1,440" sub="mining output" />
+                  <StatCard label="Node" value="ONLINE" sub="VPS Amsterdam" />
+                </div>
+              ) : (
+                <div className="bg-bg-card border border-[rgba(212,168,83,0.2)] rounded-lg p-4 mb-3">
+                  <p className="text-voice-warm text-xs font-mono">
+                    Connecting to blockchain node...
+                  </p>
+                </div>
+              )}
             </section>
 
             {/* Section 5: Network */}
