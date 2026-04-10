@@ -6,6 +6,7 @@ import ThemeToggle from "../components/ThemeToggle";
 // --- Constants ---
 
 const STATS_API = "/api/admin/stats";
+const INCIDENTS_API = "/api/admin/incidents";
 const MAX_SUPPLY = 21_000_000;
 const REFRESH_INTERVAL = 30_000; // 30 seconds
 
@@ -347,6 +348,8 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [storedPin, setStoredPin] = useState("");
   const [chainData, setChainData] = useState<{ chain_height: number; balance: number; balance_sparks: number; genesis_hash: string } | null>(null);
+  const [incidents, setIncidents] = useState<{ id: string; type: string; source: string; timestamp: string; issues: string; services?: { node: boolean; stats: boolean; relay: boolean }; chainHeight?: number; memFreeMB?: number }[]>([]);
+  const [healthLog, setHealthLog] = useState<{ timestamp: string; source: string; status: string; node: boolean; stats: boolean; relay: boolean; chainHeight: number; memFreeMB?: number; relayClients?: number }[]>([]);
 
   // Check session on mount
   useEffect(() => {
@@ -384,6 +387,15 @@ export default function AdminPage() {
       const chainRes = await fetch("/api/admin/chain");
       if (chainRes.ok) {
         setChainData(await chainRes.json());
+      }
+    } catch {}
+    // Fetch incidents and health log
+    try {
+      const incRes = await fetch(INCIDENTS_API);
+      if (incRes.ok) {
+        const incData = await incRes.json();
+        setIncidents(incData.incidents || []);
+        setHealthLog(incData.healthLog || []);
       }
     } catch {}
     setLoading(false);
@@ -733,6 +745,93 @@ export default function AdminPage() {
                   value={formatUptime(s.network.uptimeSeconds)}
                   sub={`Since ${new Date(s.network.serverStartedAt).toLocaleDateString()}`}
                 />
+              </div>
+            </section>
+            {/* Section 6: System Health */}
+            <section>
+              <div className="flex items-center gap-2 mb-4 text-quantum-teal">
+                <IconRefresh spinning={false} />
+                <h2 className="text-sm font-mono uppercase tracking-wider">
+                  System Health
+                </h2>
+              </div>
+
+              {/* Current Status */}
+              {healthLog.length > 0 && (
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+                  <StatCard label="Last Check" value={new Date(healthLog[0].timestamp).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false })} sub={healthLog[0].source} />
+                  <StatCard label="Node" value={healthLog[0].node ? "OK" : "DOWN"} sub={healthLog[0].node ? "Healthy" : "Alert"} />
+                  <StatCard label="Stats Server" value={healthLog[0].stats ? "OK" : "DOWN"} sub={healthLog[0].stats ? "Healthy" : "Alert"} />
+                  <StatCard label="Relay" value={healthLog[0].relay ? "OK" : "DOWN"} sub={`${healthLog[0].relayClients || 0} clients`} />
+                  <StatCard label="Memory" value={healthLog[0].memFreeMB ? `${healthLog[0].memFreeMB}MB` : "-"} sub="Free" />
+                </div>
+              )}
+
+              {/* Incidents */}
+              {incidents.length > 0 && (
+                <div className="bg-bg-card border border-resistance-red/20 rounded-lg p-4 mb-4">
+                  <p className="text-resistance-red text-xs font-mono uppercase tracking-wider mb-3">
+                    Recent Incidents ({incidents.length})
+                  </p>
+                  <div className="space-y-2 max-h-60 overflow-y-auto">
+                    {incidents.slice(0, 20).map((inc) => (
+                      <div key={inc.id} className="flex items-start gap-3 py-2 border-b border-[rgba(100,116,139,0.1)] last:border-0">
+                        <div className="w-2 h-2 rounded-full bg-resistance-red mt-1.5 shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-text-primary">{inc.issues}</p>
+                          <div className="flex gap-3 mt-1 text-[10px] font-mono text-text-muted">
+                            <span>{new Date(inc.timestamp).toLocaleString()}</span>
+                            <span>{inc.source}</span>
+                            {inc.chainHeight !== undefined && <span>Height: {inc.chainHeight}</span>}
+                            {inc.memFreeMB !== undefined && <span>Mem: {inc.memFreeMB}MB</span>}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {incidents.length === 0 && (
+                <div className="bg-bg-card border border-quantum-teal/20 rounded-lg p-4 mb-4">
+                  <p className="text-quantum-teal text-xs font-mono">No incidents recorded. All systems healthy.</p>
+                </div>
+              )}
+
+              {/* Health Check History */}
+              <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-lg p-4">
+                <p className="text-text-muted text-xs font-mono uppercase tracking-wider mb-3">
+                  Health Check History ({healthLog.length} entries)
+                </p>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs font-mono">
+                    <thead>
+                      <tr className="text-text-muted border-b border-[rgba(100,116,139,0.1)]">
+                        <th className="text-left py-2 pr-3">Time</th>
+                        <th className="text-left py-2 pr-3">Source</th>
+                        <th className="text-center py-2 pr-3">Node</th>
+                        <th className="text-center py-2 pr-3">Stats</th>
+                        <th className="text-center py-2 pr-3">Relay</th>
+                        <th className="text-right py-2 pr-3">Height</th>
+                        <th className="text-right py-2 pr-3">Memory</th>
+                        <th className="text-right py-2">Clients</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {healthLog.slice(0, 48).map((entry, i) => (
+                        <tr key={i} className="border-b border-[rgba(100,116,139,0.05)] hover:bg-[rgba(100,116,139,0.03)]">
+                          <td className="py-1.5 pr-3 text-text-secondary">{new Date(entry.timestamp).toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false })}</td>
+                          <td className="py-1.5 pr-3 text-text-muted">{entry.source}</td>
+                          <td className={`py-1.5 pr-3 text-center ${entry.node ? "text-quantum-teal" : "text-resistance-red"}`}>{entry.node ? "OK" : "DOWN"}</td>
+                          <td className={`py-1.5 pr-3 text-center ${entry.stats ? "text-quantum-teal" : "text-resistance-red"}`}>{entry.stats ? "OK" : "DOWN"}</td>
+                          <td className={`py-1.5 pr-3 text-center ${entry.relay ? "text-quantum-teal" : "text-resistance-red"}`}>{entry.relay ? "OK" : "DOWN"}</td>
+                          <td className="py-1.5 pr-3 text-right text-voice-gold">{entry.chainHeight?.toLocaleString()}</td>
+                          <td className="py-1.5 pr-3 text-right text-text-secondary">{entry.memFreeMB ? `${entry.memFreeMB}MB` : "-"}</td>
+                          <td className="py-1.5 text-right text-text-secondary">{entry.relayClients ?? "-"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </section>
           </>
