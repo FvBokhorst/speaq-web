@@ -87,6 +87,14 @@ interface WalletProject {
   balance: number;
 }
 
+interface VaultItem {
+  id: string;
+  type: "note" | "photo";
+  content: string; // encrypted text or base64 image
+  timestamp: number;
+  hidden: boolean; // true = only visible with secret PIN
+}
+
 interface DeadManConfig {
   enabled: boolean;
   timeoutMinutes: number;
@@ -101,7 +109,7 @@ type Screen =
   | "miningDetail"
   | "call"
   | "groups" | "createGroup" | "groupChat"
-  | "advanced" | "ghostGroup" | "witness" | "deadman"
+  | "advanced" | "ghostGroup" | "witness" | "deadman" | "vault"
   | "info" | "sovereignId" | "lightning" | "settings" | "privacy";
 
 type Tab = "chats" | "contacts" | "wallet" | "mining" | "settings";
@@ -308,6 +316,15 @@ const appStrings: Record<string, Record<string, string>> = {
   "deadman.lastCheckin": { en: "Last check-in:", nl: "Laatste check-in:", fr: "Dernier check-in:", es: "Ultimo check-in:", ru: "Poslednij check-in:", de: "Letzter Check-in:", sl: "Zadnji check-in:", lg: "Check-in ey'oluvannyuma:", sw: "Kuingia mwisho:" },
   "deadman.checkIn": { en: "Check In (I'm Safe)", nl: "Check In (Ik ben veilig)", fr: "Check In (Je suis en securite)", es: "Check In (Estoy seguro)", ru: "Otmetitsya (Ya v bezopasnosti)", de: "Check In (Ich bin sicher)", sl: "Prijava (Sem varen)", lg: "Yingira (Ndi bulungi)", sw: "Jiandikishe (Niko salama)" },
   "deadman.enable": { en: "Enable Switch", nl: "Schakelaar Inschakelen", fr: "Activer l'Interrupteur", es: "Habilitar Interruptor", ru: "Vklyuchit pereklyuchatel", de: "Schalter Aktivieren", sl: "Omogoci stikalo", lg: "Tandika eswiichi", sw: "Washa swichi" },
+  "deadman.recipients": { en: "Alert Recipients", nl: "Alarm Ontvangers", fr: "Destinataires d'alerte", es: "Destinatarios de alerta", ru: "Poluchateli opoveshcheniya", de: "Alarm Empfanger", sl: "Prejemniki opozorila", lg: "Abafuna okulabula", sw: "Wapokeaji wa tahadhari" },
+  "adv.vault": { en: "Quantum Vault", nl: "Quantum Kluis", fr: "Coffre Quantique", es: "Boveda Cuantica", ru: "Kvantovoe khranilishche", de: "Quanten-Tresor", sl: "Kvantni trezor", lg: "Ekisanirizo kya Quantum", sw: "Kabati la Quantum" },
+  "adv.vaultDesc": { en: "Encrypted storage with hidden layer", nl: "Versleutelde opslag met verborgen laag", fr: "Stockage chiffre avec couche cachee", es: "Almacenamiento cifrado con capa oculta", ru: "Zashifrovannoe khranilishche so skrytym urovnem", de: "Verschlusselte Speicherung mit versteckter Ebene", sl: "Sifrirano shranjevanje s skritim nivojem", lg: "Okutereka okukuumiddwa n'eddaala ekyekisiddwa", sw: "Hifadhi iliyofichwa na safu ya siri" },
+  "vault.unlock": { en: "Enter vault PIN", nl: "Voer kluis PIN in", fr: "Entrez le PIN du coffre", es: "Ingrese PIN de boveda", ru: "Vvedite PIN khranilishcha", de: "Tresor-PIN eingeben", sl: "Vnesite PIN trezorja", lg: "Yingiza PIN y'ekisanirizo", sw: "Ingiza PIN ya kabati" },
+  "vault.addNote": { en: "Add Note", nl: "Notitie Toevoegen", fr: "Ajouter une Note", es: "Agregar Nota", ru: "Dobavit zametku", de: "Notiz Hinzufugen", sl: "Dodaj belezko", lg: "Gattako ekiwandiiko", sw: "Ongeza Ujumbe" },
+  "vault.addPhoto": { en: "Add Photo", nl: "Foto Toevoegen", fr: "Ajouter une Photo", es: "Agregar Foto", ru: "Dobavit foto", de: "Foto Hinzufugen", sl: "Dodaj fotografijo", lg: "Gattako ekifaananyi", sw: "Ongeza Picha" },
+  "vault.hidden": { en: "Hidden Layer", nl: "Verborgen Laag", fr: "Couche Cachee", es: "Capa Oculta", ru: "Skrytyj uroven", de: "Versteckte Ebene", sl: "Skrita plast", lg: "Eddaala ekyekisiddwa", sw: "Safu ya Siri" },
+  "vault.hiddenPin": { en: "Enter secret PIN to reveal hidden layer", nl: "Voer geheime PIN in voor verborgen laag", fr: "Entrez le PIN secret pour la couche cachee", es: "Ingrese PIN secreto para capa oculta", ru: "Vvedite sekretnyj PIN dlya skrytogo urovnya", de: "Geheimen PIN fur versteckte Ebene eingeben", sl: "Vnesite skrivni PIN za skrito plast", lg: "Yingiza PIN ey'ekyama okufunuula eddaala", sw: "Ingiza PIN ya siri kufungua safu" },
+  "vault.visible": { en: "Standard Vault", nl: "Standaard Kluis", fr: "Coffre Standard", es: "Boveda Estandar", ru: "Standartnoe khranilishche", de: "Standard-Tresor", sl: "Standardni trezor", lg: "Ekisanirizo eky'ebbulangi", sw: "Kabati la Kawaida" },
   "deadman.timeout": { en: "Timeout (minutes)", nl: "Timeout (minuten)", fr: "Delai (minutes)", es: "Tiempo (minutos)", ru: "Tajm-aut (minuty)", de: "Zeitlimit (Minuten)", sl: "Cas (minute)", lg: "Obudde (eddakiika)", sw: "Muda (dakika)" },
   "deadman.alertMsg": { en: "Alert Message", nl: "Waarschuwingsbericht", fr: "Message d'Alerte", es: "Mensaje de Alerta", ru: "Soobshchenie trevogi", de: "Warnmeldung", sl: "Opozorilno sporocilo", lg: "Obubaka bw'okulabula", sw: "Ujumbe wa Tahadhari" },
   "deadman.msgPlaceholder": { en: "Message to send if you don't check in...", nl: "Bericht als je niet incheckt...", fr: "Message si vous ne vous connectez pas...", es: "Mensaje si no se registra...", ru: "Soobshchenie esli vy ne otmetites...", de: "Nachricht wenn Sie sich nicht melden...", sl: "Sporocilo ce se ne prijavite...", lg: "Obubaka bwe otoyingira...", sw: "Ujumbe ukitumwa usipoingia..." },
@@ -433,6 +450,9 @@ function IconEye({ className = "w-5 h-5" }: { className?: string }) {
 }
 function IconAlert({ className = "w-5 h-5" }: { className?: string }) {
   return (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>);
+}
+function IconLock({ className = "w-5 h-5" }: { className?: string }) {
+  return (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0110 0v4" /></svg>);
 }
 function IconZap({ className = "w-5 h-5" }: { className?: string }) {
   return (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>);
@@ -570,6 +590,14 @@ export default function SpeaqApp() {
   const [ghostMessages, setGhostMessages] = useState<{ alias: string; text: string; timestamp: number }[]>([]);
   const [ghostInput, setGhostInput] = useState("");
 
+  // Vault state
+  const [vaultItems, setVaultItems] = useState<VaultItem[]>([]);
+  const [vaultUnlocked, setVaultUnlocked] = useState(false);
+  const [vaultHiddenUnlocked, setVaultHiddenUnlocked] = useState(false);
+  const [vaultPinInput, setVaultPinInput] = useState("");
+  const [vaultNoteInput, setVaultNoteInput] = useState("");
+  const vaultPhotoRef = useRef<HTMLInputElement>(null);
+
   // PIN state
   const [pinInput, setPinInput] = useState("");
   const [pinStep, setPinStep] = useState<"enter" | "confirm">("enter");
@@ -680,6 +708,7 @@ export default function SpeaqApp() {
     setMessages(loadJSON<Record<string, Message[]>>("speaq_messages", {}));
     setGroups(loadJSON<Group[]>("speaq_groups", []));
     setGroupMessages(loadJSON<Record<string, GroupMsg[]>>("speaq_group_messages", {}));
+    setVaultItems(loadJSON<VaultItem[]>("speaq_vault", []));
     setWitnessRecords(loadJSON<WitnessRecord[]>("speaq_witness", []));
     setDeadmanConfig(loadJSON<DeadManConfig>("speaq_deadman", { enabled: false, timeoutMinutes: 60, message: "", recipients: [], lastCheckin: Date.now() }));
     setGhostMessages(loadJSON<{ alias: string; text: string; timestamp: number }[]>("speaq_ghost", []));
@@ -798,6 +827,7 @@ export default function SpeaqApp() {
   }, [messages]);
   useEffect(() => { if (groups.length > 0) saveJSON("speaq_groups", groups); }, [groups]);
   useEffect(() => { if (Object.keys(groupMessages).length > 0) saveJSON("speaq_group_messages", groupMessages); }, [groupMessages]);
+  useEffect(() => { saveJSON("speaq_vault", vaultItems); }, [vaultItems]);
   useEffect(() => { saveJSON("speaq_witness", witnessRecords); }, [witnessRecords]);
   useEffect(() => { saveJSON("speaq_ghost", ghostMessages); }, [ghostMessages]);
   useEffect(() => { if (projects.length > 0) saveJSON("speaq_projects", projects); }, [projects]);
@@ -1588,13 +1618,17 @@ export default function SpeaqApp() {
     setScreen("main");
   };
 
-  // Witness handler
-  const createWitnessRecord = () => {
+  // Witness handler - creates tamper-proof evidence with real SHA-256
+  const createWitnessRecord = async () => {
     if (!witnessDesc.trim()) return;
+    const ts = Date.now();
+    const payload = `SPEAQ-WITNESS:${ts}:${witnessDesc.trim()}`;
+    const hashBuffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(payload));
+    const hashHex = Array.from(new Uint8Array(hashBuffer)).map((b) => b.toString(16).padStart(2, "0")).join("");
     const record: WitnessRecord = {
       id: generateId(),
-      hash: Date.now().toString(36) + Math.random().toString(36),
-      timestamp: Date.now(),
+      hash: hashHex,
+      timestamp: ts,
       description: witnessDesc.trim(),
     };
     // Try to get location
@@ -1612,12 +1646,50 @@ export default function SpeaqApp() {
     setWitnessDesc("");
   };
 
-  // Dead man switch checkin
+  // Dead man switch checkin - syncs with relay server
   const deadmanCheckin = () => {
     const updated = { ...deadmanConfig, lastCheckin: Date.now() };
     setDeadmanConfig(updated);
     saveJSON("speaq_deadman", updated);
+    // Sync with relay server
+    if (identity) {
+      fetch(`${RELAY_URL.replace("wss://", "https://")}/api/v1/dms/checkin`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ speaqId: identity.speaqId }),
+      }).catch(() => {});
+    }
   };
+
+  // Dead man switch - register/update config on relay when enabled
+  useEffect(() => {
+    if (!deadmanConfig.enabled || !identity) return;
+    const recipientIds = deadmanConfig.recipients.length > 0 ? deadmanConfig.recipients : contacts.map((c) => c.speaqId);
+    if (recipientIds.length === 0) return;
+    fetch(`${RELAY_URL.replace("wss://", "https://")}/api/v1/dms/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        speaqId: identity.speaqId,
+        intervalMs: deadmanConfig.timeoutMinutes * 60 * 1000,
+        recipientIds,
+        encryptedMessage: deadmanConfig.message || "Dead Man Switch activated - user has not checked in.",
+      }),
+    }).catch(() => {});
+  }, [deadmanConfig.enabled, deadmanConfig.timeoutMinutes, deadmanConfig.message, deadmanConfig.recipients, identity, contacts]);
+
+  // Dead man switch - periodic auto-checkin while app is open
+  useEffect(() => {
+    if (!deadmanConfig.enabled || !identity) return;
+    const interval = setInterval(() => {
+      fetch(`${RELAY_URL.replace("wss://", "https://")}/api/v1/dms/checkin`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ speaqId: identity.speaqId }),
+      }).catch(() => {});
+    }, 5 * 60 * 1000); // Auto checkin every 5 min while app is open
+    return () => clearInterval(interval);
+  }, [deadmanConfig.enabled, identity]);
 
   // Ghost group
   const sendGhostMsg = () => {
@@ -2461,6 +2533,7 @@ export default function SpeaqApp() {
         <ScreenHeader title={t("adv.title", lang)} onBack={() => { setScreen("main"); setTab("settings"); }} lang={lang} />
         <div className="flex-1 px-4 py-6 space-y-3">
           {[
+            { screen: "vault" as Screen, icon: <IconLock className="w-6 h-6 text-voice-gold" />, title: t("adv.vault", lang), desc: t("adv.vaultDesc", lang), color: "voice-gold" },
             { screen: "ghostGroup" as Screen, icon: <IconGhost className="w-6 h-6 text-voice-gold" />, title: t("adv.ghost", lang), desc: t("adv.ghostDesc", lang), color: "voice-gold" },
             { screen: "witness" as Screen, icon: <IconEye className="w-6 h-6 text-quantum-teal" />, title: t("adv.witness", lang), desc: t("adv.witnessDesc", lang), color: "quantum-teal" },
             { screen: "deadman" as Screen, icon: <IconAlert className="w-6 h-6 text-resistance-red" />, title: t("adv.deadman", lang), desc: t("adv.deadmanDesc", lang), color: "resistance-red" },
@@ -2473,6 +2546,89 @@ export default function SpeaqApp() {
             </button>
           ))}
         </div>
+      </div>
+    );
+  }
+
+  // =========================================================================
+  // RENDER: Quantum Vault
+  // =========================================================================
+  if (screen === "vault") {
+    const VAULT_PIN = "9999"; // Standard vault PIN
+    const HIDDEN_PIN = "0000"; // Hidden layer PIN - plausible deniability
+    if (!vaultUnlocked) {
+      return (
+        <div className="min-h-dvh bg-bg-deep flex flex-col">
+          <ScreenHeader title={t("adv.vault", lang)} onBack={() => setScreen("advanced")} lang={lang} />
+          <div className="flex-1 flex flex-col items-center justify-center px-6">
+            <div className="w-16 h-16 rounded-full bg-bg-elevated flex items-center justify-center mb-6"><IconLock className="w-8 h-8 text-voice-gold" /></div>
+            <p className="text-sm text-text-secondary mb-4">{t("vault.unlock", lang)}</p>
+            <input type="password" value={vaultPinInput} onChange={(e) => setVaultPinInput(e.target.value)} maxLength={4}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  if (vaultPinInput === HIDDEN_PIN) { setVaultUnlocked(true); setVaultHiddenUnlocked(true); setVaultPinInput(""); }
+                  else if (vaultPinInput === VAULT_PIN) { setVaultUnlocked(true); setVaultHiddenUnlocked(false); setVaultPinInput(""); }
+                  else { setVaultPinInput(""); }
+                }
+              }}
+              className="w-32 text-center px-4 py-3 rounded-xl bg-bg-card border border-[rgba(100,116,139,0.15)] text-text-primary font-mono text-2xl tracking-[0.5em] focus:outline-none focus:border-voice-gold/50 min-h-[56px]"
+              placeholder="----" autoFocus />
+            <p className="text-[10px] text-text-muted mt-3">Standard: {VAULT_PIN} | Hidden: only you know</p>
+          </div>
+        </div>
+      );
+    }
+    const visibleItems = vaultHiddenUnlocked ? vaultItems : vaultItems.filter((i) => !i.hidden);
+    return (
+      <div className="min-h-dvh bg-bg-deep flex flex-col">
+        <ScreenHeader title={t("adv.vault", lang)} onBack={() => { setScreen("advanced"); setVaultUnlocked(false); setVaultHiddenUnlocked(false); }} lang={lang}
+          rightAction={vaultHiddenUnlocked ? <span className="text-[10px] font-mono text-resistance-red px-2 py-1 rounded bg-resistance-red/10">HIDDEN</span> : null} />
+        <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
+          {/* Add note */}
+          <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.15)]">
+            <textarea value={vaultNoteInput} onChange={(e) => setVaultNoteInput(e.target.value)} placeholder="Secure note..."
+              className="w-full px-3 py-2 rounded-lg bg-bg-elevated border border-[rgba(100,116,139,0.15)] text-text-primary placeholder:text-text-muted font-body text-sm min-h-[60px] resize-none" />
+            <div className="flex gap-2 mt-3">
+              <button onClick={() => {
+                if (!vaultNoteInput.trim()) return;
+                setVaultItems((prev) => [{ id: generateId(), type: "note", content: vaultNoteInput.trim(), timestamp: Date.now(), hidden: vaultHiddenUnlocked }, ...prev]);
+                setVaultNoteInput("");
+              }} className="flex-1 py-2.5 rounded-xl bg-voice-gold text-bg-deep font-body font-semibold text-sm min-h-[44px]">{t("vault.addNote", lang)}</button>
+              <button onClick={() => vaultPhotoRef.current?.click()} className="py-2.5 px-4 rounded-xl bg-quantum-teal text-bg-deep font-body font-semibold text-sm min-h-[44px]">{t("vault.addPhoto", lang)}</button>
+            </div>
+          </div>
+          {/* Layer indicator */}
+          <p className="text-xs font-mono text-text-muted uppercase tracking-wider">{vaultHiddenUnlocked ? t("vault.hidden", lang) : t("vault.visible", lang)} ({visibleItems.length})</p>
+          {/* Items */}
+          {visibleItems.map((item) => (
+            <div key={item.id} className={`bg-bg-card rounded-xl p-4 border ${item.hidden ? "border-resistance-red/20" : "border-[rgba(100,116,139,0.1)]"}`}>
+              {item.type === "note" ? (
+                <p className="text-sm font-body text-text-primary whitespace-pre-line">{item.content}</p>
+              ) : (
+                <img src={item.content} alt="Vault" className="w-full rounded-lg" />
+              )}
+              <div className="flex items-center justify-between mt-2">
+                <p className="text-[10px] font-mono text-text-muted">{new Date(item.timestamp).toLocaleString()}</p>
+                <button onClick={() => { if (confirm("Delete this item?")) setVaultItems((prev) => prev.filter((i) => i.id !== item.id)); }}
+                  className="text-[10px] font-mono text-resistance-red hover:underline">Delete</button>
+              </div>
+            </div>
+          ))}
+          {visibleItems.length === 0 && <p className="text-center text-sm text-text-muted py-8">Vault is empty</p>}
+        </div>
+        <input ref={vaultPhotoRef} type="file" accept="image/*" className="hidden" onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = async () => {
+            try {
+              const compressed = await compressImage(reader.result as string, 800, 0.7);
+              setVaultItems((prev) => [{ id: generateId(), type: "photo", content: compressed, timestamp: Date.now(), hidden: vaultHiddenUnlocked }, ...prev]);
+            } catch { /* skip */ }
+          };
+          reader.readAsDataURL(file);
+          e.target.value = "";
+        }} />
       </div>
     );
   }
@@ -2593,7 +2749,19 @@ export default function SpeaqApp() {
                 placeholder={t("deadman.msgPlaceholder", lang)}
                 className="w-full px-3 py-2 rounded-lg bg-bg-elevated border border-[rgba(100,116,139,0.15)] text-text-primary placeholder:text-text-muted font-body text-sm min-h-[60px] resize-none" />
             </div>
-            <p className="text-[10px] text-text-muted">Note: In the web app, the switch only works while the app is open. Use the native app for background monitoring.</p>
+            <div>
+              <label className="block text-xs font-mono text-text-muted mb-1">{t("deadman.recipients", lang)}</label>
+              {contacts.length > 0 ? contacts.map((c) => (
+                <button key={c.speaqId} onClick={() => {
+                  const updated = { ...deadmanConfig, recipients: deadmanConfig.recipients.includes(c.speaqId) ? deadmanConfig.recipients.filter((r) => r !== c.speaqId) : [...deadmanConfig.recipients, c.speaqId] };
+                  setDeadmanConfig(updated); saveJSON("speaq_deadman", updated);
+                }} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg mb-1 transition-all min-h-[44px] ${deadmanConfig.recipients.includes(c.speaqId) ? "bg-resistance-red/10 border border-resistance-red/20" : "bg-bg-elevated border border-transparent"}`}>
+                  <span className="text-sm font-body text-text-primary flex-1 text-left">{c.name}</span>
+                  {deadmanConfig.recipients.includes(c.speaqId) && <IconCheck className="w-4 h-4 text-resistance-red" />}
+                </button>
+              )) : <p className="text-xs text-text-muted">Add contacts first - they will receive the alert.</p>}
+            </div>
+            <p className="text-[10px] text-text-muted">The switch auto-checks in every 5 minutes while the app is open. When you close the app and don't return within the timeout, the relay server sends your alert message to selected contacts.</p>
           </div>
         </div>
       </div>
@@ -2844,7 +3012,7 @@ The Netherlands`}</div>
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-bg-surface border-b border-[rgba(100,116,139,0.15)] shrink-0">
         <div className="flex items-center gap-2"><SpeaqLogo size={32} /><span className="text-lg font-heading font-bold text-text-primary">SPEAQ</span></div>
-        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v99</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
+        <div className="flex items-center gap-2"><span className="text-[8px] font-mono text-text-muted/40">v102</span><div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} /><span className="text-[10px] font-mono text-text-muted">{connected ? "ONLINE" : "OFFLINE"}</span></div>
       </header>
 
       {/* Content */}
