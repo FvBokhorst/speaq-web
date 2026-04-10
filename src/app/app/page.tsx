@@ -2676,8 +2676,8 @@ export default function SpeaqApp() {
           {/* Add note */}
           <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.15)]">
             <textarea value={vaultNoteInput} onChange={(e) => setVaultNoteInput(e.target.value)} placeholder="Secure note..."
-              className="w-full px-3 py-2 rounded-lg bg-freedom-white border border-[rgba(100,116,139,0.3)] text-text-primary placeholder:text-text-muted font-body text-sm min-h-[60px] resize-none"
-              style={{ color: "var(--color-text-primary)", backgroundColor: "var(--color-freedom-white)" }} />
+              className="w-full px-3 py-2 rounded-lg border border-[rgba(100,116,139,0.3)] font-body text-sm min-h-[60px] resize-none"
+              style={{ color: "#1A1A2E", backgroundColor: "#FFFFFF" }} />
             <div className="flex gap-2 mt-3">
               <button onClick={() => {
                 if (!vaultNoteInput.trim()) return;
