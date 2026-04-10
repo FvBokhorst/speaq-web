@@ -258,10 +258,87 @@
     margin-top: 16px;
   }
 
+  /* Theme toggle */
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .theme-toggle a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .theme-toggle a:hover {
+    color: var(--voice-gold);
+  }
+
+  .theme-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(100, 116, 139, 0.2);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .theme-btn:hover {
+    border-color: var(--voice-gold);
+    color: var(--voice-gold);
+  }
+
+  /* Light mode */
+  html.light {
+    --bg-deep: #FAFBFC;
+    --bg-surface: #F1F5F9;
+    --bg-card: #E2E8F0;
+    --bg-elevated: #E8ECF1;
+    --voice-gold: #8B6914;
+    --voice-warm: #A07D2E;
+    --voice-light: #6B5310;
+    --quantum-teal: #0F766E;
+    --quantum-dark: #134E4A;
+    --text-primary: #1A1A2E;
+    --text-secondary: #475569;
+    --text-muted: #64748B;
+    --freedom-white: #FFFFFF;
+    --resistance-red: #DC2626;
+  }
+
+  html.light .theme-btn {
+    background: #E2E8F0;
+    border-color: rgba(100, 116, 139, 0.3);
+  }
+
+  html.light .abstract {
+    border-color: rgba(139, 105, 20, 0.2);
+  }
+
+  html.light .divider {
+    opacity: 0.5;
+  }
+
+  /* SVG fills for light mode */
+  html.light svg text { fill: #8B6914; }
+  html.light svg circle[fill="#2DD4BF"] { fill: #0F766E; }
+
   /* Print */
   @media print {
     body { background: white; color: #1a1a1a; }
     .container { padding: 20px; }
+    .theme-toggle { display: none; }
     h1, .logo-title { color: #8B6914; }
     h3, .section-num { color: #0F766E; }
     .callout { border-left-color: #0F766E; background: #f5f5f5; }
@@ -271,6 +348,43 @@
 </style>
 </head>
 <body>
+
+<!-- Theme toggle + back link -->
+<div class="theme-toggle">
+  <a href="/">Back to SPEAQ</a>
+  <button class="theme-btn" id="themeBtn" title="Toggle dark/light mode">
+    <svg id="sunIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+    </svg>
+    <svg id="moonIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  </button>
+</div>
+
+<script>
+(function() {
+  var btn = document.getElementById('themeBtn');
+  var sun = document.getElementById('sunIcon');
+  var moon = document.getElementById('moonIcon');
+  function setTheme(light) {
+    if (light) {
+      document.documentElement.classList.add('light');
+      sun.style.display = 'none';
+      moon.style.display = 'block';
+    } else {
+      document.documentElement.classList.remove('light');
+      sun.style.display = 'block';
+      moon.style.display = 'none';
+    }
+    localStorage.setItem('speaq-wp-theme', light ? 'light' : 'dark');
+  }
+  btn.addEventListener('click', function() {
+    setTheme(!document.documentElement.classList.contains('light'));
+  });
+  if (localStorage.getItem('speaq-wp-theme') === 'light') setTheme(true);
+})();
+</script>
 
 <div class="container">
 
@@ -295,7 +409,7 @@
 <div class="abstract">
   <p>SPEAQ is a communication and value transfer network built on post-quantum cryptography, designed for a world where privacy is not a privilege but a right. It combines end-to-end encrypted messaging, voice and video calling, and a native digital currency (Q-Credits) in a single platform that requires no registration, no phone number, and no bank account.</p>
   <br>
-  <p>SPEAQ introduces Proof of Contribution (DPoC), a consensus mechanism where participants earn their position by helping the network -- not by solving puzzles or staking capital. The result is a system where value flows from participation, not from wealth.</p>
+  <p>SPEAQ introduces Proof of Contribution (DPoC), a consensus mechanism where participants earn their position by helping the network - not by solving puzzles or staking capital. The result is a system where value flows from participation, not from wealth.</p>
   <br>
   <p>This paper describes the architecture, the economics, and the principles behind SPEAQ.</p>
 </div>
@@ -309,8 +423,8 @@
 <h3>1.1 The Question</h3>
 <p>SPEAQ was born from a simple question: <strong>why should anyone have the power to decide whether two people can talk to each other?</strong></p>
 <p>Not a government. Not a corporation. Not an algorithm. No one.</p>
-<p>If you have someone you love in another country, in another timezone, under another regime -- you should be able to speak with them. Always. Without permission. Without surveillance. Without the possibility that someone, somewhere, flips a switch and silences you both.</p>
-<p>This is not a theoretical concern. It happens today. Entire countries are disconnected from the global internet. Messaging platforms are blocked. Calls are monitored. People lose contact with their families, their partners, their communities -- not because of technology, but because of power.</p>
+<p>If you have someone you love in another country, in another timezone, under another regime - you should be able to speak with them. Always. Without permission. Without surveillance. Without the possibility that someone, somewhere, flips a switch and silences you both.</p>
+<p>This is not a theoretical concern. It happens today. Entire countries are disconnected from the global internet. Messaging platforms are blocked. Calls are monitored. People lose contact with their families, their partners, their communities - not because of technology, but because of power.</p>
 <p>SPEAQ exists because we refuse to accept that.</p>
 
 <h3>1.2 The Bigger Problem</h3>
@@ -324,17 +438,17 @@
 
 <h3>1.3 What We Believe</h3>
 <p>We believe that the ability to speak freely and transact freely are foundational human capabilities. Not features. Not services. Capabilities.</p>
-<p>A capability cannot be granted by a company or a government. It can only be built into the architecture of the system itself. If a system CAN be shut down, it eventually WILL be shut down -- by policy, by pressure, or by economics.</p>
-<p>SPEAQ is designed so that no single entity -- including its creators -- can read your messages, freeze your funds, or exclude you from the network.</p>
+<p>A capability cannot be granted by a company or a government. It can only be built into the architecture of the system itself. If a system CAN be shut down, it eventually WILL be shut down - by policy, by pressure, or by economics.</p>
+<p>SPEAQ is designed so that no single entity - including its creators - can read your messages, freeze your funds, or exclude you from the network.</p>
 <p><strong>This is not a policy. It is mathematics.</strong></p>
 
 <h3>1.4 Who SPEAQ Is For</h3>
 <p>SPEAQ is for everyone. But some people need it more than others:</p>
 <ul>
-  <li><strong>The 1.4 billion unbanked</strong> -- who need a way to send and receive value without a bank account</li>
-  <li><strong>People in restrictive environments</strong> -- who need communication that cannot be monitored or blocked</li>
-  <li><strong>Communities building local economies</strong> -- who need a currency that rewards participation, not speculation</li>
-  <li><strong>Anyone who values privacy</strong> -- who wants communication that is private by design, not by promise</li>
+  <li><strong>The 1.4 billion unbanked</strong> - who need a way to send and receive value without a bank account</li>
+  <li><strong>People in restrictive environments</strong> - who need communication that cannot be monitored or blocked</li>
+  <li><strong>Communities building local economies</strong> - who need a currency that rewards participation, not speculation</li>
+  <li><strong>Anyone who values privacy</strong> - who wants communication that is private by design, not by promise</li>
 </ul>
 
 <div class="divider"></div>
@@ -344,7 +458,7 @@
 <h1>Principles</h1>
 
 <h3>2.1 No Registration</h3>
-<p>SPEAQ does not ask for your name, email, phone number, or any identifier. Your identity is a cryptographic keypair generated on your device. You are known only by your SPEAQ ID -- a string of characters that is not linked to anything in the physical world.</p>
+<p>SPEAQ does not ask for your name, email, phone number, or any identifier. Your identity is a cryptographic keypair generated on your device. You are known only by your SPEAQ ID - a string of characters that is not linked to anything in the physical world.</p>
 <p>Why this matters: registration creates a database. A database can be breached, subpoenaed, or sold. No registration means no database. No database means nothing to breach.</p>
 
 <h3>2.2 Zero Knowledge</h3>
@@ -358,7 +472,7 @@
 <p>The server is a utility, like a road. It carries traffic. It does not read the letters.</p>
 
 <h3>2.3 Sovereignty</h3>
-<p>Your keys, your messages, your money -- all stored on your device. SPEAQ cannot access them, freeze them, or take them away. If you lose your keys, they are gone. This is the price of sovereignty, and it is worth paying.</p>
+<p>Your keys, your messages, your money - all stored on your device. SPEAQ cannot access them, freeze them, or take them away. If you lose your keys, they are gone. This is the price of sovereignty, and it is worth paying.</p>
 
 <h3>2.4 Contribution Over Capital</h3>
 <p>In most systems, the people with the most money have the most power. SPEAQ inverts this: the people who contribute the most to the network earn the most. Your value comes from what you do, not what you have.</p>
@@ -432,10 +546,10 @@
 <h3>3.6 Network Layer</h3>
 <p>SPEAQ nodes communicate using libp2p, the same peer-to-peer networking stack used by Polkadot, Filecoin, and IPFS:</p>
 <ul>
-  <li><strong>GossipSub</strong> -- Efficient broadcast of blocks and transactions to all peers</li>
-  <li><strong>Kademlia DHT</strong> -- Decentralised peer discovery, no central server needed</li>
-  <li><strong>Noise Protocol</strong> -- All node-to-node connections are encrypted</li>
-  <li><strong>BLE Mesh</strong> -- For environments without internet, relay messages over Bluetooth</li>
+  <li><strong>GossipSub</strong> - Efficient broadcast of blocks and transactions to all peers</li>
+  <li><strong>Kademlia DHT</strong> - Decentralised peer discovery, no central server needed</li>
+  <li><strong>Noise Protocol</strong> - All node-to-node connections are encrypted</li>
+  <li><strong>BLE Mesh</strong> - For environments without internet, relay messages over Bluetooth</li>
 </ul>
 
 <h3>3.7 On-Chain Transactions</h3>
@@ -534,7 +648,7 @@
 </table>
 
 <h3>5.3 The Freedom Fund</h3>
-<p>5% of all Q-Credits are allocated to the Freedom Fund -- a community-governed treasury that funds projects aligned with SPEAQ's mission:</p>
+<p>5% of all Q-Credits are allocated to the Freedom Fund - a community-governed treasury that funds projects aligned with SPEAQ's mission:</p>
 <ul>
   <li>Mesh network hardware for communities without internet</li>
   <li>Translation of the app into underserved languages</li>
@@ -618,7 +732,7 @@
 <div class="section-num">Section 08</div>
 <h1>Formal Verification</h1>
 
-<p>SPEAQ's cryptographic protocols are not just tested -- they are mathematically proven.</p>
+<p>SPEAQ's cryptographic protocols are not just tested - they are mathematically proven.</p>
 <p>Using ProVerif, a formal verification tool for cryptographic protocols, we have proven 24 security properties across 7 protocol models:</p>
 
 <table>
