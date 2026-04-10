@@ -113,6 +113,7 @@ export default function Home() {
               { label: "Get SPEAQ", href: "#download" },
               { label: "FAQ", href: "/faq" },
               { label: "Languages", href: "#languages" },
+              { label: "Whitepaper", href: "/whitepaper" },
             ].map((link) => (
               <a
                 key={link.label}

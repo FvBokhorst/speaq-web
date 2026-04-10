@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPEAQ Whitepaper v2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #08090D;
+    --bg-surface: #0E1017;
+    --bg-card: #141620;
+    --bg-elevated: #1A1D2B;
+    --voice-gold: #D4A853;
+    --voice-warm: #E8C47A;
+    --voice-light: #F5DFA6;
+    --quantum-teal: #2DD4BF;
+    --quantum-dark: #0F766E;
+    --text-primary: #F1F5F9;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+    --freedom-white: #FAFBFC;
+    --resistance-red: #E24B4A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 60px 40px;
+  }
+
+  /* Logo */
+  .logo-section {
+    text-align: center;
+    padding: 80px 0 40px;
+  }
+
+  .logo-section svg {
+    margin-bottom: 24px;
+  }
+
+  .logo-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--voice-gold);
+    letter-spacing: 12px;
+    margin-bottom: 8px;
+  }
+
+  .logo-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+
+  .motto {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--voice-warm);
+    margin-bottom: 8px;
+  }
+
+  .version-info {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--voice-gold), transparent);
+    margin: 48px 0;
+    opacity: 0.3;
+  }
+
+  .divider-teal {
+    background: linear-gradient(90deg, transparent, var(--quantum-teal), transparent);
+  }
+
+  /* Headings */
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--voice-gold);
+    margin-bottom: 24px;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-top: 48px;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--quantum-teal);
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+
+  /* Text */
+  p {
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+  }
+
+  strong {
+    color: var(--text-primary);
+    font-weight: 700;
+  }
+
+  em {
+    color: var(--voice-warm);
+    font-style: italic;
+  }
+
+  /* Section number */
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--quantum-teal);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 14px;
+  }
+
+  th {
+    background: var(--bg-elevated);
+    color: var(--voice-gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid rgba(212, 168, 83, 0.2);
+  }
+
+  td {
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(100, 116, 139, 0.1);
+    color: var(--text-secondary);
+  }
+
+  tr:hover td {
+    background: rgba(45, 212, 191, 0.03);
+  }
+
+  /* Callout boxes */
+  .callout {
+    background: var(--bg-card);
+    border-left: 3px solid var(--quantum-teal);
+    padding: 20px 24px;
+    margin: 24px 0;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .callout-gold {
+    border-left-color: var(--voice-gold);
+  }
+
+  .callout p {
+    margin-bottom: 0;
+    color: var(--text-primary);
+  }
+
+  /* Lists */
+  ul {
+    margin: 16px 0;
+    padding-left: 24px;
+  }
+
+  li {
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+
+  li strong {
+    color: var(--quantum-teal);
+  }
+
+  /* Code / mono */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    background: var(--bg-elevated);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--quantum-teal);
+  }
+
+  /* Abstract box */
+  .abstract {
+    background: var(--bg-surface);
+    border: 1px solid rgba(212, 168, 83, 0.15);
+    border-radius: 12px;
+    padding: 32px;
+    margin: 32px 0;
+  }
+
+  .abstract p {
+    color: var(--text-primary);
+    font-size: 17px;
+    line-height: 1.8;
+  }
+
+  /* Comparison checkmark */
+  .yes { color: var(--quantum-teal); font-weight: 700; }
+  .no { color: var(--text-muted); }
+  .speaq-col { color: var(--voice-gold); font-weight: 700; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 60px 0 40px;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  .footer .motto-footer {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--voice-gold);
+    margin-top: 16px;
+  }
+
+  /* Print */
+  @media print {
+    body { background: white; color: #1a1a1a; }
+    .container { padding: 20px; }
+    h1, .logo-title { color: #8B6914; }
+    h3, .section-num { color: #0F766E; }
+    .callout { border-left-color: #0F766E; background: #f5f5f5; }
+    table th { background: #f0f0f0; color: #8B6914; }
+    td, p, li { color: #333; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- COVER -->
+<div class="logo-section">
+  <svg width="120" height="120" viewBox="0 0 200 200" fill="none">
+    <circle cx="100" cy="100" r="90" stroke="#2DD4BF" stroke-width="0.5" opacity="0.15"/>
+    <circle cx="100" cy="100" r="80" stroke="#D4A853" stroke-width="1" opacity="0.3"/>
+    <text x="100" y="125" text-anchor="middle" font-family="'Playfair Display', serif" font-size="100" font-weight="700" fill="#D4A853">Q</text>
+    <circle cx="132" cy="148" r="5" fill="#2DD4BF" opacity="0.7"/>
+    <circle cx="140" cy="155" r="2.5" fill="#2DD4BF" opacity="0.35"/>
+  </svg>
+  <div class="logo-title">SPEAQ</div>
+  <div class="logo-subtitle">A Quantum-Resistant Communication and Value Network</div>
+  <div class="motto">"By the people, for the people."</div>
+  <div class="version-info">Version 2.0 - April 2026</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ABSTRACT -->
+<div class="abstract">
+  <p>SPEAQ is a communication and value transfer network built on post-quantum cryptography, designed for a world where privacy is not a privilege but a right. It combines end-to-end encrypted messaging, voice and video calling, and a native digital currency (Q-Credits) in a single platform that requires no registration, no phone number, and no bank account.</p>
+  <br>
+  <p>SPEAQ introduces Proof of Contribution (DPoC), a consensus mechanism where participants earn their position by helping the network -- not by solving puzzles or staking capital. The result is a system where value flows from participation, not from wealth.</p>
+  <br>
+  <p>This paper describes the architecture, the economics, and the principles behind SPEAQ.</p>
+</div>
+
+<div class="divider divider-teal"></div>
+
+<!-- SECTION 1 -->
+<div class="section-num">Section 01</div>
+<h1>Why SPEAQ Exists</h1>
+
+<h3>1.1 The Question</h3>
+<p>SPEAQ was born from a simple question: <strong>why should anyone have the power to decide whether two people can talk to each other?</strong></p>
+<p>Not a government. Not a corporation. Not an algorithm. No one.</p>
+<p>If you have someone you love in another country, in another timezone, under another regime -- you should be able to speak with them. Always. Without permission. Without surveillance. Without the possibility that someone, somewhere, flips a switch and silences you both.</p>
+<p>This is not a theoretical concern. It happens today. Entire countries are disconnected from the global internet. Messaging platforms are blocked. Calls are monitored. People lose contact with their families, their partners, their communities -- not because of technology, but because of power.</p>
+<p>SPEAQ exists because we refuse to accept that.</p>
+
+<h3>1.2 The Bigger Problem</h3>
+<p>There are 5.4 billion people connected to the internet. Most of them use communication platforms built by companies whose business model depends on collecting data, serving advertisements, or complying with government requests to access private conversations.</p>
+<p>At the same time, 1.4 billion adults worldwide have no bank account. They cannot send or receive money without intermediaries who charge fees, impose limits, or deny service entirely.</p>
+<p>These are not separate problems. They are the same problem: <strong>people depend on systems they do not control.</strong></p>
+
+<div class="callout callout-gold">
+  <p>When a platform decides to shut down your account, your messages disappear. When a bank decides you are too risky, your money is frozen. When a government decides your communication is inconvenient, your app is blocked.</p>
+</div>
+
+<h3>1.3 What We Believe</h3>
+<p>We believe that the ability to speak freely and transact freely are foundational human capabilities. Not features. Not services. Capabilities.</p>
+<p>A capability cannot be granted by a company or a government. It can only be built into the architecture of the system itself. If a system CAN be shut down, it eventually WILL be shut down -- by policy, by pressure, or by economics.</p>
+<p>SPEAQ is designed so that no single entity -- including its creators -- can read your messages, freeze your funds, or exclude you from the network.</p>
+<p><strong>This is not a policy. It is mathematics.</strong></p>
+
+<h3>1.4 Who SPEAQ Is For</h3>
+<p>SPEAQ is for everyone. But some people need it more than others:</p>
+<ul>
+  <li><strong>The 1.4 billion unbanked</strong> -- who need a way to send and receive value without a bank account</li>
+  <li><strong>People in restrictive environments</strong> -- who need communication that cannot be monitored or blocked</li>
+  <li><strong>Communities building local economies</strong> -- who need a currency that rewards participation, not speculation</li>
+  <li><strong>Anyone who values privacy</strong> -- who wants communication that is private by design, not by promise</li>
+</ul>
+
+<div class="divider"></div>
+
+<!-- SECTION 2 -->
+<div class="section-num">Section 02</div>
+<h1>Principles</h1>
+
+<h3>2.1 No Registration</h3>
+<p>SPEAQ does not ask for your name, email, phone number, or any identifier. Your identity is a cryptographic keypair generated on your device. You are known only by your SPEAQ ID -- a string of characters that is not linked to anything in the physical world.</p>
+<p>Why this matters: registration creates a database. A database can be breached, subpoenaed, or sold. No registration means no database. No database means nothing to breach.</p>
+
+<h3>2.2 Zero Knowledge</h3>
+<p>The SPEAQ relay server operates on a zero-knowledge principle. It sees only encrypted data moving between addresses. It cannot:</p>
+<ul>
+  <li>Read messages</li>
+  <li>Identify senders or receivers</li>
+  <li>Access wallet balances</li>
+  <li>Log communication patterns</li>
+</ul>
+<p>The server is a utility, like a road. It carries traffic. It does not read the letters.</p>
+
+<h3>2.3 Sovereignty</h3>
+<p>Your keys, your messages, your money -- all stored on your device. SPEAQ cannot access them, freeze them, or take them away. If you lose your keys, they are gone. This is the price of sovereignty, and it is worth paying.</p>
+
+<h3>2.4 Contribution Over Capital</h3>
+<p>In most systems, the people with the most money have the most power. SPEAQ inverts this: the people who contribute the most to the network earn the most. Your value comes from what you do, not what you have.</p>
+
+<div class="divider divider-teal"></div>
+
+<!-- SECTION 3 -->
+<div class="section-num">Section 03</div>
+<h1>Architecture</h1>
+
+<h3>3.1 System Overview</h3>
+<p>SPEAQ runs on Google Cloud Platform with four core components:</p>
+
+<table>
+  <tr><th>Component</th><th>Technology</th><th>Platform</th><th>Purpose</th></tr>
+  <tr><td>speaq-web (PWA)</td><td>Next.js 16.2.2</td><td>Cloud Run (europe-west1)</td><td>Web application, installable on any device</td></tr>
+  <tr><td>speaq-app (Native)</td><td>React Native 0.84</td><td>iOS / Android</td><td>Native mobile app with mesh networking</td></tr>
+  <tr><td>speaq-relay</td><td>Node.js WebSocket</td><td>Cloud Run (europe-west1)</td><td>Zero-knowledge message relay</td></tr>
+  <tr><td>speaq-chain</td><td>Rust + RocksDB</td><td>Google Compute Engine</td><td>Blockchain node, persistent storage</td></tr>
+</table>
+
+<h3>3.2 Communication Layer</h3>
+<p>All communication in SPEAQ is end-to-end encrypted using post-quantum cryptography:</p>
+
+<table>
+  <tr><th>Component</th><th>Technology</th><th>Standard</th><th>Purpose</th></tr>
+  <tr><td>Key exchange</td><td>Kyber-768</td><td>NIST FIPS 203</td><td>Establish shared secrets, quantum-resistant</td></tr>
+  <tr><td>Digital signature</td><td>ML-DSA-65</td><td>NIST FIPS 204</td><td>Verify message and transaction authenticity</td></tr>
+  <tr><td>Backup signing</td><td>SPHINCS+</td><td>NIST FIPS 205</td><td>Hash-based fallback if lattice crypto is ever compromised</td></tr>
+  <tr><td>Message encryption</td><td>AES-256-GCM</td><td>NIST</td><td>Encrypt each message with a unique key</td></tr>
+  <tr><td>Forward secrecy</td><td>Double Ratchet</td><td>Signal Protocol</td><td>Each message has its own key</td></tr>
+  <tr><td>PIN protection</td><td>PBKDF2</td><td>600K iterations</td><td>Brute-force resistant PIN hashing</td></tr>
+  <tr><td>Sender privacy</td><td>Sealed Sender</td><td>Custom</td><td>Relay cannot identify message sender</td></tr>
+</table>
+
+<div class="callout">
+  <p>These are not experimental algorithms. They are NIST-certified standards, developed through a decade of international review and selected specifically for their resistance to quantum computing attacks.</p>
+</div>
+
+<h3>3.3 Cross-Platform Cryptographic Compatibility</h3>
+<p>SPEAQ uses the same cryptographic algorithms across all platforms, proven compatible:</p>
+
+<table>
+  <tr><th>Platform</th><th>Library</th><th>Key Sizes (bytes)</th></tr>
+  <tr><td>PWA + Native (JavaScript)</td><td>@noble/post-quantum (ML-DSA-65)</td><td>PK=1952, SK=4032, Sig=3309</td></tr>
+  <tr><td>Blockchain Node (Rust)</td><td>fips204 crate (ML-DSA-65)</td><td>PK=1952, SK=4032, Sig=3309</td></tr>
+</table>
+<p>Cross-compatibility between JavaScript and Rust implementations has been cryptographically verified: keys generated on one platform can be validated on the other.</p>
+
+<h3>3.4 Sovereign Wallet</h3>
+<p>Every SPEAQ user has a sovereign wallet with ML-DSA-65 (FIPS 204) keys generated locally on their device. Keys never leave the device. The on-chain address is derived as:</p>
+<p><code>SQ1 + SHA-256(publicKey)</code></p>
+<p>Transactions are signed on-device and submitted directly to the blockchain node. No intermediary holds your keys or can authorize transactions on your behalf.</p>
+
+<h3>3.5 Value Layer (Q-Credits)</h3>
+
+<table>
+  <tr><th>Property</th><th>Value</th></tr>
+  <tr><td>Maximum supply</td><td>21,000,000 QC</td></tr>
+  <tr><td>Smallest unit</td><td>1 Spark (1 QC = 100,000,000 Sparks)</td></tr>
+  <tr><td>Block interval</td><td>30 seconds</td></tr>
+  <tr><td>Initial block reward</td><td>0.5 QC</td></tr>
+  <tr><td>Halving interval</td><td>Every 2,100,000 QC mined</td></tr>
+  <tr><td>Gold peg</td><td>1 QC = 0.01 gram of gold</td></tr>
+  <tr><td>Consensus</td><td>Proof of Contribution (DPoC)</td></tr>
+  <tr><td>Blockchain storage</td><td>RocksDB (persistent on disk)</td></tr>
+</table>
+
+<p>The supply is capped. No one can create more Q-Credits than the protocol allows. This is enforced by code, not by policy.</p>
+
+<h3>3.6 Network Layer</h3>
+<p>SPEAQ nodes communicate using libp2p, the same peer-to-peer networking stack used by Polkadot, Filecoin, and IPFS:</p>
+<ul>
+  <li><strong>GossipSub</strong> -- Efficient broadcast of blocks and transactions to all peers</li>
+  <li><strong>Kademlia DHT</strong> -- Decentralised peer discovery, no central server needed</li>
+  <li><strong>Noise Protocol</strong> -- All node-to-node connections are encrypted</li>
+  <li><strong>BLE Mesh</strong> -- For environments without internet, relay messages over Bluetooth</li>
+</ul>
+
+<h3>3.7 On-Chain Transactions</h3>
+<p>The complete transaction flow:</p>
+<ol>
+  <li>Sender creates transaction JSON (from, to, amount, timestamp)</li>
+  <li>Sender signs with ML-DSA-65 (FIPS 204) sovereign keys</li>
+  <li>Transaction submitted via POST <code>/api/transaction</code> to speaq-chain</li>
+  <li>Node verifies ML-DSA-65 signature against public key</li>
+  <li>Node verifies sender address = <code>SHA-256(publicKey)</code> with SQ1 prefix</li>
+  <li>Transaction enters mempool</li>
+  <li>Next block producer (every 30 seconds) drains mempool into block</li>
+  <li>Block signed with ML-DSA-65 (primary) + SPHINCS+ (backup)</li>
+  <li>Block stored in RocksDB, broadcast to peers via GossipSub</li>
+</ol>
+
+<div class="divider"></div>
+
+<!-- SECTION 4 -->
+<div class="section-num">Section 04</div>
+<h1>Proof of Contribution (DPoC)</h1>
+
+<h3>4.1 The Problem with Existing Consensus</h3>
+<p><strong>Proof of Work</strong> (Bitcoin) secures the network through computational puzzles. This works, but at enormous environmental cost. The Bitcoin network consumes more electricity than many countries. The security comes from waste.</p>
+<p><strong>Proof of Stake</strong> (Ethereum) replaces computation with capital. Validators stake money to earn the right to produce blocks. This is more efficient, but it concentrates power with those who already have wealth. The rich get richer.</p>
+<p>Both systems answer the question "who should produce the next block?" with a proxy: either "whoever has the most hardware" or "whoever has the most money."</p>
+
+<h3>4.2 A Different Answer</h3>
+<p>SPEAQ asks a simpler question: <strong>who has helped the network the most?</strong></p>
+
+<table>
+  <tr><th>Contribution</th><th>What You Do</th><th>Why It Matters</th></tr>
+  <tr><td>Message relay</td><td>Forward encrypted messages between users</td><td>Keeps the network connected</td></tr>
+  <tr><td>Proof validation</td><td>Verify blocks produced by other validators</td><td>Ensures network integrity</td></tr>
+  <tr><td>Data storage</td><td>Store blockchain data for other nodes</td><td>Preserves the shared history</td></tr>
+  <tr><td>Mesh networking</td><td>Bridge connections for users without internet</td><td>Extends access to underserved areas</td></tr>
+  <tr><td>Translation</td><td>Translate the app into new languages</td><td>Makes SPEAQ accessible to more people</td></tr>
+  <tr><td>User onboarding</td><td>Help new users join the network</td><td>Grows the community</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Important:</strong> All contribution verification and reward calculation happens server-side. The app does not mine on your device. It earns rewards by participating in the network, and the server validates and assigns those rewards. Your phone's battery and performance are not affected.</p>
+</div>
+
+<h3>4.3 Geographic Diversity</h3>
+<p>To prevent concentration in wealthy regions, SPEAQ applies a geographic diversity bonus:</p>
+<ul>
+  <li>Nodes in Africa receive a 150% score multiplier</li>
+  <li>South America: 140%</li>
+  <li>Oceania: 130%</li>
+  <li>Asia: 110%</li>
+  <li>Europe and North America: 100% (baseline)</li>
+</ul>
+<p>No more than 5 of the 21 validators can come from the same geographic region.</p>
+
+<h3>4.4 How Block Production Works</h3>
+<p>Every 30 seconds, the protocol deterministically selects one validator to produce the next block. The selection is weighted by contribution score.</p>
+<p>The selection is deterministic: every node can independently calculate who should produce each block, using only the block height and the previous block's hash. No communication is needed to agree on whose turn it is.</p>
+<p>When a validator produces a block, the block is:</p>
+<ol>
+  <li>Signed with ML-DSA-65 (primary quantum-resistant signature)</li>
+  <li>Counter-signed with SPHINCS+ (backup hash-based signature)</li>
+  <li>Broadcast to all peers via GossipSub</li>
+  <li>Validated by receiving nodes (signature, merkle root, chain link, height)</li>
+  <li>Stored in each node's local RocksDB database</li>
+</ol>
+
+<h3>4.5 Finality</h3>
+<p>A block achieves finality when 2/3 of the active validators (14 out of 21) confirm it. Once final, a block cannot be reversed.</p>
+
+<div class="divider divider-teal"></div>
+
+<!-- SECTION 5 -->
+<div class="section-num">Section 05</div>
+<h1>Token Economics</h1>
+
+<h3>5.1 Supply Schedule</h3>
+
+<table>
+  <tr><th>Phase</th><th>Total QC Mined</th><th>Block Reward</th><th>Approximate Duration</th></tr>
+  <tr><td>1</td><td>0 - 2,100,000</td><td>0.50 QC</td><td>~4 years</td></tr>
+  <tr><td>2</td><td>2,100,000 - 4,200,000</td><td>0.25 QC</td><td>~8 years</td></tr>
+  <tr><td>3</td><td>4,200,000 - 6,300,000</td><td>0.125 QC</td><td>~16 years</td></tr>
+  <tr><td>...</td><td>...</td><td>Halves each phase</td><td>Doubles each phase</td></tr>
+</table>
+
+<h3>5.2 Initial Allocation</h3>
+
+<table>
+  <tr><th>Allocation</th><th>Percentage</th><th>Purpose</th></tr>
+  <tr><td>Mining rewards</td><td>85%</td><td>Earned by network contributors over time</td></tr>
+  <tr><td>Freedom Fund</td><td>5%</td><td>Community-governed fund for projects that expand access</td></tr>
+  <tr><td>Founders</td><td>5%</td><td>4-year vesting, aligned with long-term network health</td></tr>
+  <tr><td>Development</td><td>3%</td><td>Ongoing platform maintenance and security</td></tr>
+  <tr><td>Early contributors</td><td>2%</td><td>Recognition of those who helped build the foundation</td></tr>
+</table>
+
+<h3>5.3 The Freedom Fund</h3>
+<p>5% of all Q-Credits are allocated to the Freedom Fund -- a community-governed treasury that funds projects aligned with SPEAQ's mission:</p>
+<ul>
+  <li>Mesh network hardware for communities without internet</li>
+  <li>Translation of the app into underserved languages</li>
+  <li>Digital literacy programs</li>
+  <li>Local community networks</li>
+</ul>
+
+<div class="divider"></div>
+
+<!-- SECTION 6 -->
+<div class="section-num">Section 06</div>
+<h1>Infrastructure</h1>
+
+<h3>6.1 Production Architecture</h3>
+<p>All SPEAQ services run on Google Cloud Platform:</p>
+
+<table>
+  <tr><th>Service</th><th>Platform</th><th>Region</th><th>Storage</th></tr>
+  <tr><td>PWA (thespeaq.com)</td><td>Cloud Run</td><td>europe-west1 (Belgium)</td><td>Stateless</td></tr>
+  <tr><td>Relay Server</td><td>Cloud Run</td><td>europe-west1 (Belgium)</td><td>Stats synced to VM (persistent)</td></tr>
+  <tr><td>Blockchain Node</td><td>Compute Engine e2-micro</td><td>us-west1 (Oregon)</td><td>RocksDB on disk (persistent)</td></tr>
+  <tr><td>Stats Server</td><td>Compute Engine e2-micro</td><td>us-west1 (Oregon)</td><td>JSON on disk (persistent)</td></tr>
+</table>
+
+<h3>6.2 Resilience</h3>
+<ul>
+  <li><strong>Blockchain node:</strong> Systemd service with automatic restart after reboot or crash</li>
+  <li><strong>Stats persistence:</strong> Relay syncs user data to VM every 2 minutes + immediately on new user registration</li>
+  <li><strong>Memory footprint:</strong> Blockchain node uses only 6.5 MB RAM. Runs on 1 GB RAM + 2 GB swap with 516 MB available</li>
+  <li><strong>Chain data:</strong> Survives reboots, stored in RocksDB on persistent disk</li>
+  <li><strong>Zero single point of failure:</strong> PWA, relay, and blockchain are independent services</li>
+</ul>
+
+<h3>6.3 Security Headers</h3>
+<p>The PWA enforces strict security headers:</p>
+<ul>
+  <li>HSTS (HTTP Strict Transport Security)</li>
+  <li>Content Security Policy (CSP)</li>
+  <li>X-Frame-Options: DENY</li>
+  <li>X-Content-Type-Options: nosniff</li>
+  <li>Referrer-Policy: strict-origin-when-cross-origin</li>
+</ul>
+
+<div class="divider divider-teal"></div>
+
+<!-- SECTION 7 -->
+<div class="section-num">Section 07</div>
+<h1>Privacy Layer</h1>
+
+<h3>7.1 What We Know About You</h3>
+
+<div class="callout callout-gold">
+  <p><strong>Nothing.</strong></p>
+</div>
+
+<table>
+  <tr><th>Data Point</th><th>Stored?</th><th>Accessible?</th></tr>
+  <tr><td>Email address</td><td>No</td><td>N/A</td></tr>
+  <tr><td>Phone number</td><td>No</td><td>N/A</td></tr>
+  <tr><td>Real name</td><td>No</td><td>N/A</td></tr>
+  <tr><td>Message content</td><td>No</td><td>N/A</td></tr>
+  <tr><td>Call records</td><td>No</td><td>N/A</td></tr>
+  <tr><td>Wallet balances</td><td>On device only</td><td>Only by device owner</td></tr>
+  <tr><td>Browsing history</td><td>On device only</td><td>Only by device owner</td></tr>
+  <tr><td>Contact list</td><td>On device only</td><td>Only by device owner</td></tr>
+  <tr><td>Transaction history</td><td>On chain (encrypted)</td><td>Only by transaction parties</td></tr>
+</table>
+
+<h3>7.2 Transaction Privacy</h3>
+<p>SPEAQ transactions use privacy techniques inspired by Monero:</p>
+<ul>
+  <li><strong>CLSAG ring signatures</strong> (ring size 11): The sender is hidden among 10 decoy signers</li>
+  <li><strong>Stealth addresses</strong>: Each transaction generates a one-time address for the recipient</li>
+  <li><strong>Pedersen commitments</strong>: Transaction amounts are mathematically hidden</li>
+  <li><strong>Bulletproofs</strong>: Zero-knowledge range proofs that verify amounts are non-negative without revealing them</li>
+</ul>
+
+<div class="divider"></div>
+
+<!-- SECTION 8 -->
+<div class="section-num">Section 08</div>
+<h1>Formal Verification</h1>
+
+<p>SPEAQ's cryptographic protocols are not just tested -- they are mathematically proven.</p>
+<p>Using ProVerif, a formal verification tool for cryptographic protocols, we have proven 24 security properties across 7 protocol models:</p>
+
+<table>
+  <tr><th>Model</th><th>Properties Proven</th></tr>
+  <tr><td>Wallet Protocol</td><td>Key secrecy (2 TRUE)</td></tr>
+  <tr><td>Transaction Protocol</td><td>Amount + key secrecy (2 TRUE)</td></tr>
+  <tr><td>Privacy Protocol</td><td>Amount, sender, recipient, blinding secrecy (4 TRUE)</td></tr>
+  <tr><td>Block Protocol</td><td>Validator key + authentication (2 TRUE)</td></tr>
+  <tr><td>Consensus Protocol</td><td>Validator keys + authentication (3 TRUE)</td></tr>
+  <tr><td>Full System</td><td>End-to-end: 8 secrets verified (8 TRUE)</td></tr>
+  <tr><td>Node Initialization</td><td>Key secrecy + address derivation (3 TRUE)</td></tr>
+</table>
+
+<p>In addition, the Rust implementation includes 113 unit tests covering the complete blockchain lifecycle from wallet creation through block production and chain validation.</p>
+
+<div class="divider divider-teal"></div>
+
+<!-- SECTION 9 -->
+<div class="section-num">Section 09</div>
+<h1>Competitive Landscape</h1>
+
+<table>
+  <tr>
+    <th>Capability</th><th>Signal</th><th>WhatsApp</th><th>Telegram</th><th>Bitcoin</th><th>Monero</th><th class="speaq-col">SPEAQ</th>
+  </tr>
+  <tr><td>End-to-end encryption</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="no">Optional</td><td class="no">N/A</td><td class="no">N/A</td><td class="speaq-col">Yes</td></tr>
+  <tr><td>Quantum-resistant crypto</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="speaq-col">Yes (3 FIPS)</td></tr>
+  <tr><td>No registration required</td><td class="no">No (phone)</td><td class="no">No (phone)</td><td class="no">No (phone)</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="speaq-col">Yes</td></tr>
+  <tr><td>Voice & video calling</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="no">No</td><td class="no">No</td><td class="speaq-col">Yes</td></tr>
+  <tr><td>Native digital currency</td><td class="no">No</td><td class="no">No</td><td class="no">Yes</td><td class="yes">Yes</td><td class="no">No</td><td class="speaq-col">Yes (QC)</td></tr>
+  <tr><td>Transaction privacy</td><td class="no">N/A</td><td class="no">N/A</td><td class="no">N/A</td><td class="no">No</td><td class="yes">Yes</td><td class="speaq-col">Yes</td></tr>
+  <tr><td>Consensus by contribution</td><td class="no">N/A</td><td class="no">N/A</td><td class="no">N/A</td><td class="no">No (PoW)</td><td class="no">No (PoW)</td><td class="speaq-col">Yes (DPoC)</td></tr>
+  <tr><td>Offline mesh networking</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="speaq-col">Yes (BLE)</td></tr>
+  <tr><td>Formal math proofs</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="speaq-col">Yes (24)</td></tr>
+  <tr><td>Gold-backed currency</td><td class="no">N/A</td><td class="no">N/A</td><td class="no">N/A</td><td class="no">No</td><td class="no">No</td><td class="speaq-col">Yes</td></tr>
+</table>
+
+<div class="divider"></div>
+
+<!-- SECTION 10 -->
+<div class="section-num">Section 10</div>
+<h1>Platform Status</h1>
+
+<h3>10.1 What Is Live Today</h3>
+
+<table>
+  <tr><th>Component</th><th>Version</th><th>Status</th></tr>
+  <tr><td>PWA (thespeaq.com)</td><td>v99</td><td class="yes">LIVE</td></tr>
+  <tr><td>Native iOS App</td><td>build 99</td><td>Ready for TestFlight</td></tr>
+  <tr><td>Blockchain Node</td><td>1.0.0</td><td class="yes">LIVE, mining</td></tr>
+  <tr><td>Relay Server</td><td>0.1.0</td><td class="yes">LIVE</td></tr>
+  <tr><td>Admin Dashboard</td><td>v99</td><td class="yes">LIVE</td></tr>
+</table>
+
+<h3>10.2 Available Languages</h3>
+<p>SPEAQ is available in 9 languages: English, Dutch, French, Spanish, Russian, German, Slovenian, Luganda, and Swahili.</p>
+
+<h3>10.3 Features</h3>
+<ul>
+  <li><strong>Messaging:</strong> Text, voice messages, photo sharing, typing indicators</li>
+  <li><strong>Wallet:</strong> Send/receive QC, transaction history, on-chain balance</li>
+  <li><strong>Sovereign Wallet:</strong> ML-DSA-65 keys, on-chain transactions with FIPS 204 signatures</li>
+  <li><strong>Mining:</strong> Server-side Proof of Contribution rewards</li>
+  <li><strong>Contacts:</strong> QR code connect, SPEAQ ID matching, profile photos</li>
+  <li><strong>Security:</strong> PIN protection, dark/light mode, encrypted local storage</li>
+  <li><strong>Information:</strong> 16-section "How SPEAQ Works" guide, 41-question FAQ</li>
+</ul>
+
+<div class="divider divider-teal"></div>
+
+<!-- SECTION 11 -->
+<div class="section-num">Section 11</div>
+<h1>SPEAQ Freely</h1>
+
+<p>SPEAQ is not a company offering a service. It is a protocol offering a capability.</p>
+<p>The difference matters. A service can be changed, restricted, or shut down. A capability, once distributed, belongs to the people who use it.</p>
+<p>When you run a SPEAQ node, you are not a customer. You are the network. When you earn Q-Credits, you are not working for someone. You are building infrastructure that serves everyone, including yourself.</p>
+
+<div class="callout callout-gold">
+  <p>"By the people, for the people" is not a slogan. It is the architecture.</p>
+</div>
+
+<p>The genesis block contains these words not as decoration, but as a commitment: this network exists because people built it, and it will continue to exist as long as people find it useful.</p>
+<p>No permission needed. No authority required. No backdoor possible.</p>
+<p style="font-family: 'Playfair Display', serif; font-size: 24px; color: var(--voice-gold); margin-top: 32px;"><em>SPEAQ Freely.</em></p>
+
+<div class="divider"></div>
+
+<!-- REFERENCES -->
+<div class="section-num">References</div>
+<h1>Technical References</h1>
+
+<ul>
+  <li>NIST FIPS 203: Module-Lattice-Based Key-Encapsulation Mechanism (ML-KEM / Kyber)</li>
+  <li>NIST FIPS 204: Module-Lattice-Based Digital Signature Algorithm (ML-DSA / Dilithium)</li>
+  <li>NIST FIPS 205: Stateless Hash-Based Digital Signature Algorithm (SLH-DSA / SPHINCS+)</li>
+  <li>libp2p Specification: https://libp2p.io</li>
+  <li>ProVerif: Formal verification of cryptographic protocols</li>
+  <li>RocksDB: Persistent key-value storage by Meta</li>
+  <li>Double Ratchet Algorithm: https://signal.org/docs/specifications/doubleratchet/</li>
+  <li>@noble/post-quantum: JavaScript ML-DSA-65 implementation</li>
+  <li>fips204 crate: Rust ML-DSA-65 implementation</li>
+</ul>
+
+<!-- FOOTER -->
+<div class="footer">
+  <svg width="48" height="48" viewBox="0 0 200 200" fill="none">
+    <circle cx="100" cy="100" r="80" stroke="#D4A853" stroke-width="1" opacity="0.3"/>
+    <text x="100" y="125" text-anchor="middle" font-family="'Playfair Display', serif" font-size="100" font-weight="700" fill="#D4A853">Q</text>
+    <circle cx="132" cy="148" r="5" fill="#2DD4BF" opacity="0.7"/>
+  </svg>
+  <p style="margin-top: 16px;">SPEAQ is developed by Plexaris Technology Consulting, The Netherlands.</p>
+  <p>This whitepaper describes the SPEAQ protocol as of April 2026.</p>
+  <p>The protocol is open source and subject to community governance.</p>
+  <p>thespeaq.com</p>
+  <div class="motto-footer">"By the people, for the people."</div>
+</div>
+
+</div>
+</body>
+</html>

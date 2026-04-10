@@ -2,6 +2,14 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  async rewrites() {
+    return [
+      {
+        source: "/whitepaper",
+        destination: "/whitepaper.html",
+      },
+    ];
+  },
   async headers() {
     return [
       {
