@@ -596,6 +596,11 @@ export default function SpeaqApp() {
   const [vaultHiddenUnlocked, setVaultHiddenUnlocked] = useState(false);
   const [vaultPinInput, setVaultPinInput] = useState("");
   const [vaultNoteInput, setVaultNoteInput] = useState("");
+  const [vaultSetupStep, setVaultSetupStep] = useState<"none" | "setPin" | "confirmPin" | "setHidden" | "confirmHidden">("none");
+  const [vaultTempPin, setVaultTempPin] = useState("");
+  const [vaultPinHash, setVaultPinHash] = useState<string | null>(null); // stored vault PIN hash
+  const [vaultHiddenHash, setVaultHiddenHash] = useState<string | null>(null); // stored hidden PIN hash
+  const [vaultPinError, setVaultPinError] = useState(false);
   const vaultPhotoRef = useRef<HTMLInputElement>(null);
 
   // PIN state
@@ -709,6 +714,8 @@ export default function SpeaqApp() {
     setGroups(loadJSON<Group[]>("speaq_groups", []));
     setGroupMessages(loadJSON<Record<string, GroupMsg[]>>("speaq_group_messages", {}));
     setVaultItems(loadJSON<VaultItem[]>("speaq_vault", []));
+    setVaultPinHash(localStorage.getItem("speaq_vault_pin"));
+    setVaultHiddenHash(localStorage.getItem("speaq_vault_hidden"));
     setWitnessRecords(loadJSON<WitnessRecord[]>("speaq_witness", []));
     setDeadmanConfig(loadJSON<DeadManConfig>("speaq_deadman", { enabled: false, timeoutMinutes: 60, message: "", recipients: [], lastCheckin: Date.now() }));
     setGhostMessages(loadJSON<{ alias: string; text: string; timestamp: number }[]>("speaq_ghost", []));
@@ -2554,26 +2561,83 @@ export default function SpeaqApp() {
   // RENDER: Quantum Vault
   // =========================================================================
   if (screen === "vault") {
-    const VAULT_PIN = "9999"; // Standard vault PIN
-    const HIDDEN_PIN = "0000"; // Hidden layer PIN - plausible deniability
-    if (!vaultUnlocked) {
+    const hashPin = async (pin: string) => {
+      const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`SPEAQ-VAULT:${pin}`));
+      return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
+    };
+
+    // STEP 1: First time - set up vault PIN
+    if (!vaultPinHash) {
+      const step = vaultSetupStep === "none" ? "setPin" : vaultSetupStep;
       return (
         <div className="min-h-dvh bg-bg-deep flex flex-col">
-          <ScreenHeader title={t("adv.vault", lang)} onBack={() => setScreen("advanced")} lang={lang} />
+          <ScreenHeader title={t("adv.vault", lang)} onBack={() => { setScreen("advanced"); setVaultSetupStep("none"); setVaultPinInput(""); setVaultTempPin(""); }} lang={lang} />
           <div className="flex-1 flex flex-col items-center justify-center px-6">
             <div className="w-16 h-16 rounded-full bg-bg-elevated flex items-center justify-center mb-6"><IconLock className="w-8 h-8 text-voice-gold" /></div>
-            <p className="text-sm text-text-secondary mb-4">{t("vault.unlock", lang)}</p>
-            <input type="password" value={vaultPinInput} onChange={(e) => setVaultPinInput(e.target.value)} maxLength={4}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  if (vaultPinInput === HIDDEN_PIN) { setVaultUnlocked(true); setVaultHiddenUnlocked(true); setVaultPinInput(""); }
-                  else if (vaultPinInput === VAULT_PIN) { setVaultUnlocked(true); setVaultHiddenUnlocked(false); setVaultPinInput(""); }
-                  else { setVaultPinInput(""); }
+            <p className="text-lg font-heading font-bold text-text-primary mb-2">
+              {step === "setPin" ? "Create Vault PIN" : step === "confirmPin" ? "Confirm Vault PIN" : step === "setHidden" ? "Create Hidden PIN" : "Confirm Hidden PIN"}
+            </p>
+            <p className="text-xs text-text-muted mb-6 text-center max-w-[280px]">
+              {step === "setPin" ? "Choose a 4-digit PIN to protect your vault." :
+               step === "confirmPin" ? "Enter the same PIN again to confirm." :
+               step === "setHidden" ? "Choose a DIFFERENT 4-digit PIN for the hidden layer. This PIN reveals items that are invisible with the standard PIN." :
+               "Confirm your hidden layer PIN."}
+            </p>
+            {vaultPinError && <p className="text-xs text-resistance-red mb-3">PINs don't match. Try again.</p>}
+            <input type="password" value={vaultPinInput} onChange={(e) => { setVaultPinInput(e.target.value.replace(/\D/g, "")); setVaultPinError(false); }} maxLength={4}
+              onKeyDown={async (e) => {
+                if (e.key === "Enter" && vaultPinInput.length === 4) {
+                  if (step === "setPin") { setVaultTempPin(vaultPinInput); setVaultPinInput(""); setVaultSetupStep("confirmPin"); }
+                  else if (step === "confirmPin") {
+                    if (vaultPinInput === vaultTempPin) {
+                      const h = await hashPin(vaultPinInput);
+                      localStorage.setItem("speaq_vault_pin", h);
+                      setVaultPinHash(h);
+                      setVaultPinInput(""); setVaultTempPin(""); setVaultSetupStep("setHidden");
+                    } else { setVaultPinError(true); setVaultPinInput(""); setVaultSetupStep("setPin"); setVaultTempPin(""); }
+                  }
+                  else if (step === "setHidden") { setVaultTempPin(vaultPinInput); setVaultPinInput(""); setVaultSetupStep("confirmHidden"); }
+                  else if (step === "confirmHidden") {
+                    if (vaultPinInput === vaultTempPin) {
+                      const h = await hashPin(vaultPinInput);
+                      localStorage.setItem("speaq_vault_hidden", h);
+                      setVaultHiddenHash(h);
+                      setVaultPinInput(""); setVaultTempPin(""); setVaultSetupStep("none");
+                    } else { setVaultPinError(true); setVaultPinInput(""); setVaultSetupStep("setHidden"); setVaultTempPin(""); }
+                  }
                 }
               }}
               className="w-32 text-center px-4 py-3 rounded-xl bg-bg-card border border-[rgba(100,116,139,0.15)] text-text-primary font-mono text-2xl tracking-[0.5em] focus:outline-none focus:border-voice-gold/50 min-h-[56px]"
-              placeholder="----" autoFocus />
-            <p className="text-[10px] text-text-muted mt-3">Standard: {VAULT_PIN} | Hidden: only you know</p>
+              placeholder="----" autoFocus inputMode="numeric" />
+            <p className="text-[10px] text-text-muted mt-3">
+              {step === "setPin" || step === "confirmPin" ? "Step 1 of 2: Standard vault PIN" : "Step 2 of 2: Hidden layer PIN"}
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    // STEP 2: Vault exists - unlock with PIN
+    if (!vaultUnlocked) {
+      return (
+        <div className="min-h-dvh bg-bg-deep flex flex-col">
+          <ScreenHeader title={t("adv.vault", lang)} onBack={() => { setScreen("advanced"); setVaultPinInput(""); setVaultPinError(false); }} lang={lang} />
+          <div className="flex-1 flex flex-col items-center justify-center px-6">
+            <div className="w-16 h-16 rounded-full bg-bg-elevated flex items-center justify-center mb-6"><IconLock className="w-8 h-8 text-voice-gold" /></div>
+            <p className="text-sm text-text-secondary mb-4">{t("vault.unlock", lang)}</p>
+            {vaultPinError && <p className="text-xs text-resistance-red mb-3">Wrong PIN</p>}
+            <input type="password" value={vaultPinInput} onChange={(e) => { setVaultPinInput(e.target.value.replace(/\D/g, "")); setVaultPinError(false); }} maxLength={4}
+              onKeyDown={async (e) => {
+                if (e.key === "Enter" && vaultPinInput.length === 4) {
+                  const h = await hashPin(vaultPinInput);
+                  if (vaultHiddenHash && h === vaultHiddenHash) { setVaultUnlocked(true); setVaultHiddenUnlocked(true); setVaultPinInput(""); setVaultPinError(false); }
+                  else if (h === vaultPinHash) { setVaultUnlocked(true); setVaultHiddenUnlocked(false); setVaultPinInput(""); setVaultPinError(false); }
+                  else { setVaultPinError(true); setVaultPinInput(""); }
+                }
+              }}
+              className={`w-32 text-center px-4 py-3 rounded-xl bg-bg-card border ${vaultPinError ? "border-resistance-red" : "border-[rgba(100,116,139,0.15)]"} text-text-primary font-mono text-2xl tracking-[0.5em] focus:outline-none focus:border-voice-gold/50 min-h-[56px]`}
+              placeholder="----" autoFocus inputMode="numeric" />
+            <p className="text-[10px] text-text-muted mt-3">Enter your 4-digit vault PIN</p>
           </div>
         </div>
       );
