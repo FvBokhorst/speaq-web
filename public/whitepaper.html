@@ -530,7 +530,7 @@
   <tr><td>Block interval</td><td>30 seconds</td></tr>
   <tr><td>Initial block reward</td><td>0.5 QC</td></tr>
   <tr><td>Halving interval</td><td>Every 2,100,000 QC mined</td></tr>
-  <tr><td>Gold peg</td><td>1 QC = 0.01 gram of gold</td></tr>
+  <tr><td>Gold reference</td><td>1 QC = 0.01 gram of gold (reference value, not physical reserve)</td></tr>
   <tr><td>Consensus</td><td>Proof of Contribution (DPoC)</td></tr>
   <tr><td>Blockchain storage</td><td>RocksDB (persistent on disk)</td></tr>
 </table>
@@ -712,13 +712,14 @@
 </table>
 
 <h3>7.2 Transaction Privacy</h3>
-<p>SPEAQ transactions use privacy techniques inspired by Monero:</p>
+<p>SPEAQ transactions are signed with ML-DSA-65 (FIPS 204) quantum-resistant signatures. The transaction flow is designed for privacy:</p>
 <ul>
-  <li><strong>CLSAG ring signatures</strong> (ring size 11): The sender is hidden among 10 decoy signers</li>
-  <li><strong>Stealth addresses</strong>: Each transaction generates a one-time address for the recipient</li>
-  <li><strong>Pedersen commitments</strong>: Transaction amounts are mathematically hidden</li>
-  <li><strong>Bulletproofs</strong>: Zero-knowledge range proofs that verify amounts are non-negative without revealing them</li>
+  <li><strong>Sovereign keys</strong>: Your signing keys are generated on your device and never leave it</li>
+  <li><strong>Pseudonymous addresses</strong>: Your on-chain address (SQ1 prefix) is derived from a SHA-256 hash of your public key - not linked to your identity</li>
+  <li><strong>No metadata on relay</strong>: The relay server cannot see transaction amounts, sender, or recipient</li>
+  <li><strong>End-to-end signed</strong>: Every transaction is cryptographically signed and verified by the blockchain network</li>
 </ul>
+<p><em>Advanced transaction privacy features (ring signatures, stealth addresses, zero-knowledge proofs) are planned for a future protocol upgrade.</em></p>
 
 <div class="divider"></div>
 
@@ -755,13 +756,13 @@
   <tr><td>End-to-end encryption</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="no">Optional</td><td class="no">N/A</td><td class="no">N/A</td><td class="speaq-col">Yes</td></tr>
   <tr><td>Quantum-resistant crypto</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="speaq-col">Yes (3 FIPS)</td></tr>
   <tr><td>No registration required</td><td class="no">No (phone)</td><td class="no">No (phone)</td><td class="no">No (phone)</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="speaq-col">Yes</td></tr>
-  <tr><td>Voice & video calling</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="no">No</td><td class="no">No</td><td class="speaq-col">Yes</td></tr>
+  <tr><td>Voice & video calling</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="no">No</td><td class="no">No</td><td class="speaq-col">In development*</td></tr>
   <tr><td>Native digital currency</td><td class="no">No</td><td class="no">No</td><td class="no">Yes</td><td class="yes">Yes</td><td class="no">No</td><td class="speaq-col">Yes (QC)</td></tr>
-  <tr><td>Transaction privacy</td><td class="no">N/A</td><td class="no">N/A</td><td class="no">N/A</td><td class="no">No</td><td class="yes">Yes</td><td class="speaq-col">Yes</td></tr>
+  <tr><td>Pseudonymous transactions</td><td class="no">N/A</td><td class="no">N/A</td><td class="no">N/A</td><td class="no">Partial</td><td class="yes">Yes</td><td class="speaq-col">Yes</td></tr>
   <tr><td>Consensus by contribution</td><td class="no">N/A</td><td class="no">N/A</td><td class="no">N/A</td><td class="no">No (PoW)</td><td class="no">No (PoW)</td><td class="speaq-col">Yes (DPoC)</td></tr>
-  <tr><td>Offline mesh networking</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="speaq-col">Yes (BLE)</td></tr>
+  <tr><td>Offline mesh networking</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="speaq-col">Planned*</td></tr>
   <tr><td>Formal math proofs</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="speaq-col">Yes (24)</td></tr>
-  <tr><td>Gold-backed currency</td><td class="no">N/A</td><td class="no">N/A</td><td class="no">N/A</td><td class="no">No</td><td class="no">No</td><td class="speaq-col">Yes</td></tr>
+  <tr><td>Gold-referenced currency</td><td class="no">N/A</td><td class="no">N/A</td><td class="no">N/A</td><td class="no">No</td><td class="no">No</td><td class="speaq-col">Yes</td></tr>
 </table>
 
 <div class="divider"></div>
@@ -774,25 +775,35 @@
 
 <table>
   <tr><th>Component</th><th>Version</th><th>Status</th></tr>
-  <tr><td>PWA (thespeaq.com)</td><td>v99</td><td class="yes">LIVE</td></tr>
+  <tr><td>PWA (thespeaq.com)</td><td>v101</td><td class="yes">LIVE</td></tr>
   <tr><td>Native iOS App</td><td>build 99</td><td>Ready for TestFlight</td></tr>
   <tr><td>Blockchain Node</td><td>1.0.0</td><td class="yes">LIVE, mining</td></tr>
   <tr><td>Relay Server</td><td>0.1.0</td><td class="yes">LIVE</td></tr>
-  <tr><td>Admin Dashboard</td><td>v99</td><td class="yes">LIVE</td></tr>
 </table>
 
 <h3>10.2 Available Languages</h3>
 <p>SPEAQ is available in 9 languages: English, Dutch, French, Spanish, Russian, German, Slovenian, Luganda, and Swahili.</p>
 
-<h3>10.3 Features</h3>
+<h3>10.3 Live Features</h3>
 <ul>
   <li><strong>Messaging:</strong> Text, voice messages, photo sharing, typing indicators</li>
   <li><strong>Wallet:</strong> Send/receive QC, transaction history, on-chain balance</li>
   <li><strong>Sovereign Wallet:</strong> ML-DSA-65 keys, on-chain transactions with FIPS 204 signatures</li>
-  <li><strong>Mining:</strong> Server-side Proof of Contribution rewards</li>
+  <li><strong>Network Rewards:</strong> Server-side Proof of Contribution rewards</li>
   <li><strong>Contacts:</strong> QR code connect, SPEAQ ID matching, profile photos</li>
   <li><strong>Security:</strong> PIN protection, dark/light mode, encrypted local storage</li>
-  <li><strong>Information:</strong> 16-section "How SPEAQ Works" guide, 41-question FAQ</li>
+  <li><strong>Information:</strong> 16-section "How SPEAQ Works" guide, 41-question FAQ in 9 languages</li>
+</ul>
+
+<h3>10.4 Roadmap</h3>
+<p><em>Features marked with * in this whitepaper are planned for future releases:</em></p>
+<ul>
+  <li>Voice and video calling (WebRTC)</li>
+  <li>BLE mesh networking for offline communication</li>
+  <li>Ghost Groups and Witness Mode</li>
+  <li>Dead Man's Switch</li>
+  <li>Advanced transaction privacy (ring signatures, stealth addresses)</li>
+  <li>iOS App Store and Android Google Play distribution</li>
 </ul>
 
 <div class="divider divider-teal"></div>
