@@ -2566,6 +2566,37 @@ export default function SpeaqApp() {
       return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
     };
 
+    // Vault PIN submit handler (shared by setup and unlock)
+    const handleVaultPinSubmit = async (pin: string) => {
+      if (pin.length !== 4) return;
+      const step = !vaultPinHash ? (vaultSetupStep === "none" ? "setPin" : vaultSetupStep) : "unlock";
+
+      if (step === "setPin") { setVaultTempPin(pin); setVaultPinInput(""); setVaultSetupStep("confirmPin"); }
+      else if (step === "confirmPin") {
+        if (pin === vaultTempPin) {
+          const h = await hashPin(pin);
+          localStorage.setItem("speaq_vault_pin", h);
+          setVaultPinHash(h);
+          setVaultPinInput(""); setVaultTempPin(""); setVaultSetupStep("setHidden");
+        } else { setVaultPinError(true); setVaultPinInput(""); setVaultSetupStep("setPin"); setVaultTempPin(""); }
+      }
+      else if (step === "setHidden") { setVaultTempPin(pin); setVaultPinInput(""); setVaultSetupStep("confirmHidden"); }
+      else if (step === "confirmHidden") {
+        if (pin === vaultTempPin) {
+          const h = await hashPin(pin);
+          localStorage.setItem("speaq_vault_hidden", h);
+          setVaultHiddenHash(h);
+          setVaultPinInput(""); setVaultTempPin(""); setVaultSetupStep("none");
+        } else { setVaultPinError(true); setVaultPinInput(""); setVaultSetupStep("setHidden"); setVaultTempPin(""); }
+      }
+      else if (step === "unlock") {
+        const h = await hashPin(pin);
+        if (vaultHiddenHash && h === vaultHiddenHash) { setVaultUnlocked(true); setVaultHiddenUnlocked(true); setVaultPinInput(""); setVaultPinError(false); }
+        else if (h === vaultPinHash) { setVaultUnlocked(true); setVaultHiddenUnlocked(false); setVaultPinInput(""); setVaultPinError(false); }
+        else { setVaultPinError(true); setVaultPinInput(""); }
+      }
+    };
+
     // STEP 1: First time - set up vault PIN
     if (!vaultPinHash) {
       const step = vaultSetupStep === "none" ? "setPin" : vaultSetupStep;
@@ -2584,31 +2615,20 @@ export default function SpeaqApp() {
                "Confirm your hidden layer PIN."}
             </p>
             {vaultPinError && <p className="text-xs text-resistance-red mb-3">PINs don't match. Try again.</p>}
-            <input type="password" value={vaultPinInput} onChange={(e) => { setVaultPinInput(e.target.value.replace(/\D/g, "")); setVaultPinError(false); }} maxLength={4}
-              onKeyDown={async (e) => {
-                if (e.key === "Enter" && vaultPinInput.length === 4) {
-                  if (step === "setPin") { setVaultTempPin(vaultPinInput); setVaultPinInput(""); setVaultSetupStep("confirmPin"); }
-                  else if (step === "confirmPin") {
-                    if (vaultPinInput === vaultTempPin) {
-                      const h = await hashPin(vaultPinInput);
-                      localStorage.setItem("speaq_vault_pin", h);
-                      setVaultPinHash(h);
-                      setVaultPinInput(""); setVaultTempPin(""); setVaultSetupStep("setHidden");
-                    } else { setVaultPinError(true); setVaultPinInput(""); setVaultSetupStep("setPin"); setVaultTempPin(""); }
-                  }
-                  else if (step === "setHidden") { setVaultTempPin(vaultPinInput); setVaultPinInput(""); setVaultSetupStep("confirmHidden"); }
-                  else if (step === "confirmHidden") {
-                    if (vaultPinInput === vaultTempPin) {
-                      const h = await hashPin(vaultPinInput);
-                      localStorage.setItem("speaq_vault_hidden", h);
-                      setVaultHiddenHash(h);
-                      setVaultPinInput(""); setVaultTempPin(""); setVaultSetupStep("none");
-                    } else { setVaultPinError(true); setVaultPinInput(""); setVaultSetupStep("setHidden"); setVaultTempPin(""); }
-                  }
-                }
+            <input type="tel" value={vaultPinInput}
+              onChange={(e) => {
+                const val = e.target.value.replace(/\D/g, "").slice(0, 4);
+                setVaultPinInput(val);
+                setVaultPinError(false);
+                if (val.length === 4) setTimeout(() => handleVaultPinSubmit(val), 100);
               }}
+              onKeyDown={(e) => { if (e.key === "Enter") handleVaultPinSubmit(vaultPinInput); }}
               className="w-32 text-center px-4 py-3 rounded-xl bg-bg-card border border-[rgba(100,116,139,0.15)] text-text-primary font-mono text-2xl tracking-[0.5em] focus:outline-none focus:border-voice-gold/50 min-h-[56px]"
               placeholder="----" autoFocus inputMode="numeric" />
+            <button onClick={() => handleVaultPinSubmit(vaultPinInput)} disabled={vaultPinInput.length !== 4}
+              className="mt-4 px-8 py-3 rounded-xl bg-voice-gold text-bg-deep font-body font-semibold text-sm min-h-[44px] disabled:opacity-40">
+              {step === "setPin" || step === "setHidden" ? "Set PIN" : "Confirm"}
+            </button>
             <p className="text-[10px] text-text-muted mt-3">
               {step === "setPin" || step === "confirmPin" ? "Step 1 of 2: Standard vault PIN" : "Step 2 of 2: Hidden layer PIN"}
             </p>
@@ -2626,17 +2646,20 @@ export default function SpeaqApp() {
             <div className="w-16 h-16 rounded-full bg-bg-elevated flex items-center justify-center mb-6"><IconLock className="w-8 h-8 text-voice-gold" /></div>
             <p className="text-sm text-text-secondary mb-4">{t("vault.unlock", lang)}</p>
             {vaultPinError && <p className="text-xs text-resistance-red mb-3">Wrong PIN</p>}
-            <input type="password" value={vaultPinInput} onChange={(e) => { setVaultPinInput(e.target.value.replace(/\D/g, "")); setVaultPinError(false); }} maxLength={4}
-              onKeyDown={async (e) => {
-                if (e.key === "Enter" && vaultPinInput.length === 4) {
-                  const h = await hashPin(vaultPinInput);
-                  if (vaultHiddenHash && h === vaultHiddenHash) { setVaultUnlocked(true); setVaultHiddenUnlocked(true); setVaultPinInput(""); setVaultPinError(false); }
-                  else if (h === vaultPinHash) { setVaultUnlocked(true); setVaultHiddenUnlocked(false); setVaultPinInput(""); setVaultPinError(false); }
-                  else { setVaultPinError(true); setVaultPinInput(""); }
-                }
+            <input type="tel" value={vaultPinInput}
+              onChange={(e) => {
+                const val = e.target.value.replace(/\D/g, "").slice(0, 4);
+                setVaultPinInput(val);
+                setVaultPinError(false);
+                if (val.length === 4) setTimeout(() => handleVaultPinSubmit(val), 100);
               }}
+              onKeyDown={(e) => { if (e.key === "Enter") handleVaultPinSubmit(vaultPinInput); }}
               className={`w-32 text-center px-4 py-3 rounded-xl bg-bg-card border ${vaultPinError ? "border-resistance-red" : "border-[rgba(100,116,139,0.15)]"} text-text-primary font-mono text-2xl tracking-[0.5em] focus:outline-none focus:border-voice-gold/50 min-h-[56px]`}
               placeholder="----" autoFocus inputMode="numeric" />
+            <button onClick={() => handleVaultPinSubmit(vaultPinInput)} disabled={vaultPinInput.length !== 4}
+              className="mt-4 px-8 py-3 rounded-xl bg-voice-gold text-bg-deep font-body font-semibold text-sm min-h-[44px] disabled:opacity-40">
+              Unlock
+            </button>
             <p className="text-[10px] text-text-muted mt-3">Enter your 4-digit vault PIN</p>
           </div>
         </div>
