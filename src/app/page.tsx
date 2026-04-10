@@ -114,6 +114,7 @@ export default function Home() {
               { label: "FAQ", href: "/faq" },
               { label: "Languages", href: "#languages" },
               { label: "Whitepaper", href: "/whitepaper" },
+              { label: "Explorer", href: "/explorer" },
             ].map((link) => (
               <a
                 key={link.label}

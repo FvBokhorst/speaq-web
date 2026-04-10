@@ -21,7 +21,7 @@ import {
   addMiningReward, sendQC as walletSendQC, receiveQC, qcToGold, qcToEur, qcToSparks, getGoldPrice,
   type WalletState, type Transaction,
 } from "./wallet";
-import { getOrCreateOnChainWallet, sendOnChainTransaction, type OnChainWallet } from "./onchain-wallet";
+import { getOrCreateOnChainWallet, sendOnChainTransaction, exportWalletBackup, importWalletBackup, type OnChainWallet } from "./onchain-wallet";
 import {
   loadStats, saveStats, loadRewards, saveRewards,
   simulateMiningCycle, getSupplyInfo, getEstimatedDaily,
@@ -212,6 +212,8 @@ const appStrings: Record<string, Record<string, string>> = {
   "settings.website": { en: "Website", nl: "Website", fr: "Site web", es: "Sitio web", ru: "Sajt", de: "Webseite", sl: "Spletna stran", lg: "Omukutu", sw: "Tovuti" },
   "settings.tapChangePhoto": { en: "Tap to change photo", nl: "Tik om foto te wijzigen", fr: "Appuyez pour changer la photo", es: "Toca para cambiar la foto", ru: "Nazhmite chtoby izmenit foto", de: "Tippen um Foto zu andern", sl: "Tapnite za spremembo", lg: "Nyiga okukyusa ekifaananyi", sw: "Gusa kubadilisha picha" },
   "settings.exportIdentity": { en: "Export Identity", nl: "Identiteit exporteren", fr: "Exporter l'identite", es: "Exportar identidad", ru: "Eksportirovat lichnost", de: "Identitat exportieren", sl: "Izvozi identiteto", lg: "Ggya obuntukirivu", sw: "Hamisha utambulisho" },
+  "settings.backupWallet": { en: "Backup Wallet", nl: "Wallet Backup", fr: "Sauvegarder Portefeuille", es: "Respaldar Billetera", ru: "Rezervnaya kopiya koshelka", de: "Wallet Sichern", sl: "Varnostna kopija denarnice", lg: "Koppa ssente", sw: "Hifadhi Pochi" },
+  "settings.restoreWallet": { en: "Restore Wallet", nl: "Wallet Herstellen", fr: "Restaurer Portefeuille", es: "Restaurar Billetera", ru: "Vosstanovit koshelek", de: "Wallet Wiederherstellen", sl: "Obnovi denarnico", lg: "Ddamu ssente", sw: "Rejesha Pochi" },
   "settings.name": { en: "Name", nl: "Naam", fr: "Nom", es: "Nombre", ru: "Imya", de: "Name", sl: "Ime", lg: "Erinnya", sw: "Jina" },
   "settings.open": { en: "Open", nl: "Open", fr: "Ouvrir", es: "Abrir", ru: "Otkryt", de: "Offnen", sl: "Odpri", lg: "Ggula", sw: "Fungua" },
   // Wallet extra
@@ -326,6 +328,7 @@ const appStrings: Record<string, Record<string, string>> = {
   "vault.hidden": { en: "Hidden Layer", nl: "Verborgen Laag", fr: "Couche Cachee", es: "Capa Oculta", ru: "Skrytyj uroven", de: "Versteckte Ebene", sl: "Skrita plast", lg: "Eddaala ekyekisiddwa", sw: "Safu ya Siri" },
   "vault.hiddenPin": { en: "Enter secret PIN to reveal hidden layer", nl: "Voer geheime PIN in voor verborgen laag", fr: "Entrez le PIN secret pour la couche cachee", es: "Ingrese PIN secreto para capa oculta", ru: "Vvedite sekretnyj PIN dlya skrytogo urovnya", de: "Geheimen PIN fur versteckte Ebene eingeben", sl: "Vnesite skrivni PIN za skrito plast", lg: "Yingiza PIN ey'ekyama okufunuula eddaala", sw: "Ingiza PIN ya siri kufungua safu" },
   "vault.visible": { en: "Standard Vault", nl: "Standaard Kluis", fr: "Coffre Standard", es: "Boveda Estandar", ru: "Standartnoe khranilishche", de: "Standard-Tresor", sl: "Standardni trezor", lg: "Ekisanirizo eky'ebbulangi", sw: "Kabati la Kawaida" },
+  "vault.resetPin": { en: "Reset Vault PIN", nl: "Kluis PIN resetten", fr: "Reinitialiser PIN coffre", es: "Restablecer PIN boveda", ru: "Sbrosit PIN khranilishcha", de: "Tresor-PIN zurucksetzen", sl: "Ponastavi PIN trezorja", lg: "Ddamu PIN y'ekisanirizo", sw: "Weka upya PIN ya kabati" },
   "deadman.timeout": { en: "Timeout (minutes)", nl: "Timeout (minuten)", fr: "Delai (minutes)", es: "Tiempo (minutos)", ru: "Tajm-aut (minuty)", de: "Zeitlimit (Minuten)", sl: "Cas (minute)", lg: "Obudde (eddakiika)", sw: "Muda (dakika)" },
   "deadman.alertMsg": { en: "Alert Message", nl: "Waarschuwingsbericht", fr: "Message d'Alerte", es: "Mensaje de Alerta", ru: "Soobshchenie trevogi", de: "Warnmeldung", sl: "Opozorilno sporocilo", lg: "Obubaka bw'okulabula", sw: "Ujumbe wa Tahadhari" },
   "deadman.msgPlaceholder": { en: "Message to send if you don't check in...", nl: "Bericht als je niet incheckt...", fr: "Message si vous ne vous connectez pas...", es: "Mensaje si no se registra...", ru: "Soobshchenie esli vy ne otmetites...", de: "Nachricht wenn Sie sich nicht melden...", sl: "Sporocilo ce se ne prijavite...", lg: "Obubaka bwe otoyingira...", sw: "Ujumbe ukitumwa usipoingia..." },
@@ -2663,6 +2666,22 @@ export default function SpeaqApp() {
               Unlock
             </button>
             <p className="text-[10px] text-text-muted mt-3">Enter your 4-digit vault PIN</p>
+            <button onClick={async () => {
+              const appPin = prompt("Enter your APP PIN to reset vault PIN:");
+              if (!appPin) return;
+              const h = await hashPin(appPin);
+              const storedAppPin = localStorage.getItem("speaq_pin");
+              if (h !== storedAppPin) { alert("Wrong app PIN"); return; }
+              localStorage.removeItem("speaq_vault_pin");
+              localStorage.removeItem("speaq_vault_hidden");
+              setVaultPinHash(null);
+              setVaultHiddenHash(null);
+              setVaultPinInput("");
+              setVaultSetupStep("none");
+              alert("Vault PIN reset. Set up a new PIN.");
+            }} className="mt-6 text-[11px] text-text-muted hover:text-resistance-red transition-colors">
+              {t("vault.resetPin", lang)}
+            </button>
           </div>
         </div>
       );
@@ -2978,6 +2997,37 @@ export default function SpeaqApp() {
               <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">SPEAQ ID</span><span className="text-xs font-mono text-voice-gold">{identity?.speaqId}</span></div>
               {identity?.did && <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">DID</span><span className="text-[9px] font-mono text-text-muted truncate max-w-[180px]">{identity.did}</span></div>}
               <button onClick={() => setScreen("sovereignId")} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.exportIdentity", lang) }</span><span className="text-sm text-voice-gold">QR</span></button>
+              <button onClick={async () => {
+                if (!onChainWallet) { alert("No wallet to backup"); return; }
+                const pin = prompt("Enter a backup PIN (you need this to restore):");
+                if (!pin || pin.length < 4) { alert("PIN must be at least 4 characters"); return; }
+                try {
+                  const backup = await exportWalletBackup(onChainWallet, pin);
+                  const blob = new Blob([backup], { type: "application/json" });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url; a.download = `speaq-wallet-backup-${new Date().toISOString().slice(0,10)}.json`;
+                  a.click(); URL.revokeObjectURL(url);
+                  alert("Backup saved. Keep this file safe and remember your backup PIN.");
+                } catch { alert("Backup failed"); }
+              }} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.backupWallet", lang) }</span><span className="text-sm text-quantum-teal">Export</span></button>
+              <button onClick={() => {
+                const input = document.createElement("input");
+                input.type = "file"; input.accept = ".json";
+                input.onchange = async (e) => {
+                  const file = (e.target as HTMLInputElement).files?.[0];
+                  if (!file) return;
+                  const text = await file.text();
+                  const pin = prompt("Enter the backup PIN you used when creating this backup:");
+                  if (!pin) return;
+                  try {
+                    const wallet = await importWalletBackup(text, pin);
+                    setOnChainWallet(wallet);
+                    alert(`Wallet restored. Address: ${wallet.address.substring(0, 16)}...`);
+                  } catch { alert("Restore failed. Wrong PIN or corrupted backup file."); }
+                };
+                input.click();
+              }} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.restoreWallet", lang) }</span><span className="text-sm text-voice-gold">Import</span></button>
             </div>
           </div>
 
@@ -3447,6 +3497,37 @@ The Netherlands`}</div>
               <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">SPEAQ ID</span><span className="text-xs font-mono text-voice-gold">{identity?.speaqId}</span></div>
               {identity?.did && <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">DID</span><span className="text-[9px] font-mono text-text-muted truncate max-w-[180px]">{identity.did}</span></div>}
               <button onClick={() => setScreen("sovereignId")} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.exportIdentity", lang) }</span><span className="text-sm text-voice-gold">QR</span></button>
+              <button onClick={async () => {
+                if (!onChainWallet) { alert("No wallet to backup"); return; }
+                const pin = prompt("Enter a backup PIN (you need this to restore):");
+                if (!pin || pin.length < 4) { alert("PIN must be at least 4 characters"); return; }
+                try {
+                  const backup = await exportWalletBackup(onChainWallet, pin);
+                  const blob = new Blob([backup], { type: "application/json" });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url; a.download = `speaq-wallet-backup-${new Date().toISOString().slice(0,10)}.json`;
+                  a.click(); URL.revokeObjectURL(url);
+                  alert("Backup saved. Keep this file safe and remember your backup PIN.");
+                } catch { alert("Backup failed"); }
+              }} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.backupWallet", lang) }</span><span className="text-sm text-quantum-teal">Export</span></button>
+              <button onClick={() => {
+                const input = document.createElement("input");
+                input.type = "file"; input.accept = ".json";
+                input.onchange = async (e) => {
+                  const file = (e.target as HTMLInputElement).files?.[0];
+                  if (!file) return;
+                  const text = await file.text();
+                  const pin = prompt("Enter the backup PIN you used when creating this backup:");
+                  if (!pin) return;
+                  try {
+                    const wallet = await importWalletBackup(text, pin);
+                    setOnChainWallet(wallet);
+                    alert(`Wallet restored. Address: ${wallet.address.substring(0, 16)}...`);
+                  } catch { alert("Restore failed. Wrong PIN or corrupted backup file."); }
+                };
+                input.click();
+              }} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.restoreWallet", lang) }</span><span className="text-sm text-voice-gold">Import</span></button>
             </div>
 
             {/* Security */}
