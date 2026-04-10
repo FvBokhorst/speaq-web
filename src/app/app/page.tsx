@@ -193,8 +193,9 @@ const appStrings: Record<string, Record<string, string>> = {
   "settings.security": { en: "Security", nl: "Beveiliging", fr: "Securite", es: "Seguridad", ru: "Bezopasnost", de: "Sicherheit", sl: "Varnost", lg: "Obukuumi", sw: "Usalama" },
   "settings.encryption": { en: "Encryption", nl: "Versleuteling", fr: "Chiffrement", es: "Cifrado", ru: "Shifrovanie", de: "Verschlusselung", sl: "Sifriranje", lg: "Enkuuma", sw: "Usimbaji" },
   "settings.forwardSecrecy": { en: "Forward Secrecy", nl: "Forward Secrecy", fr: "Confidentialite persistante", es: "Secreto perfecto", ru: "Pryamaya sekretnost", de: "Vorwartssicherheit", sl: "Posredna tajnost", lg: "Ekyama eky'omu maaso", sw: "Usiri wa mbele" },
-  "settings.resetPin": { en: "Reset PIN", nl: "PIN resetten", fr: "Reinitialiser le PIN", es: "Restablecer PIN", ru: "Sbrosit PIN", de: "PIN zurucksetzen", sl: "Ponastavi PIN", lg: "Ddamu PIN", sw: "Weka upya PIN" },
+  "settings.resetPin": { en: "Change PIN", nl: "PIN wijzigen", fr: "Modifier le PIN", es: "Cambiar PIN", ru: "Izmenit PIN", de: "PIN andern", sl: "Spremeni PIN", lg: "Kyusa PIN", sw: "Badilisha PIN" },
   "settings.reset": { en: "Reset", nl: "Reset", fr: "Reinitialiser", es: "Restablecer", ru: "Sbrosit", de: "Zurucksetzen", sl: "Ponastavi", lg: "Ddamu", sw: "Weka upya" },
+  "settings.change": { en: "Change", nl: "Wijzigen", fr: "Modifier", es: "Cambiar", ru: "Izmenit", de: "Andern", sl: "Spremeni", lg: "Kyusa", sw: "Badilisha" },
   "settings.privacyData": { en: "Privacy & Data", nl: "Privacy & Gegevens", fr: "Confidentialite et donnees", es: "Privacidad y datos", ru: "Konfidentsialnost i dannye", de: "Datenschutz & Daten", sl: "Zasebnost in podatki", lg: "Ekyama n'ebikukwatako", sw: "Faragha na data" },
   "settings.privacyPolicy": { en: "Privacy Policy", nl: "Privacybeleid", fr: "Politique de confidentialite", es: "Politica de privacidad", ru: "Politika konfidentsialnosti", de: "Datenschutzrichtlinie", sl: "Politika zasebnosti", lg: "Ebiragiro by'ekyama", sw: "Sera ya faragha" },
   "settings.termsOfService": { en: "Terms of Service", nl: "Servicevoorwaarden", fr: "Conditions d'utilisation", es: "Terminos de servicio", ru: "Usloviya ispolzovaniya", de: "Nutzungsbedingungen", sl: "Pogoji uporabe", lg: "Emiteeko gy'okukozesa", sw: "Masharti ya Huduma" },
@@ -1323,16 +1324,17 @@ export default function SpeaqApp() {
     if (wsRef.current.readyState !== WebSocket.OPEN) return;
 
     const payload: Record<string, unknown> = { type: "message", text: inputText.trim(), from: identity.displayName, senderId: identity.speaqId, timestamp: Date.now() };
-    // Include profile photo thumbnail (first 3 messages per session to this contact)
+    // Include profile photo: always on first message to contact, then every 10 messages
     if (profilePhoto) {
       const sentCount = photoSentThisSession.current.get(activeContact.speaqId) || 0;
-      if (sentCount < 3) {
+      const contactHasOurPhoto = contactPhotos[identity.speaqId];
+      if (sentCount < 1 || sentCount % 10 === 0 || !contactHasOurPhoto) {
         try {
           const thumb = await compressImage(profilePhoto, 80, 0.5);
           payload.photo = thumb;
-          photoSentThisSession.current.set(activeContact.speaqId, sentCount + 1);
         } catch {}
       }
+      photoSentThisSession.current.set(activeContact.speaqId, sentCount + 1);
     }
     const plainPayload = JSON.stringify(payload);
     let blob: string;
@@ -2984,8 +2986,15 @@ export default function SpeaqApp() {
             <div className="bg-bg-card rounded-xl border border-[rgba(100,116,139,0.15)] divide-y divide-[rgba(100,116,139,0.1)]">
               <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">{ t("settings.encryption", lang) }</span><span className="text-xs text-quantum-teal">AES-256-GCM</span></div>
               <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">Key Derivation</span><span className="text-xs text-quantum-teal">Web Crypto API</span></div>
-              <button onClick={() => { localStorage.removeItem("speaq_pin"); setScreen("setPin"); setPinInput(""); setPinStep("enter"); }}
-                className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.resetPin", lang) }</span><span className="text-sm text-voice-gold">{ t("settings.reset", lang) }</span></button>
+              <button onClick={async () => {
+                const currentPin = prompt("Enter current PIN to change:");
+                if (!currentPin) return;
+                const h = await hashPin(currentPin);
+                const stored = localStorage.getItem("speaq_pin");
+                if (h !== stored) { alert("Wrong PIN"); return; }
+                localStorage.removeItem("speaq_pin"); setScreen("setPin"); setPinInput(""); setPinStep("enter");
+              }}
+                className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.resetPin", lang) }</span><span className="text-sm text-voice-gold">{ t("settings.change", lang) }</span></button>
             </div>
           </div>
 
@@ -3444,8 +3453,15 @@ The Netherlands`}</div>
             <div className="bg-bg-card rounded-xl border border-[rgba(100,116,139,0.15)] divide-y divide-[rgba(100,116,139,0.1)]">
               <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">{ t("settings.encryption", lang) }</span><span className="text-xs text-quantum-teal">Kyber-768 + AES-256-GCM</span></div>
               <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">{ t("settings.forwardSecrecy", lang) }</span><span className="text-xs text-quantum-teal">Double Ratchet</span></div>
-              <button onClick={() => { localStorage.removeItem("speaq_pin"); setScreen("setPin"); setPinInput(""); setPinStep("enter"); }}
-                className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.resetPin", lang) }</span><span className="text-sm text-voice-gold">{ t("settings.reset", lang) }</span></button>
+              <button onClick={async () => {
+                const currentPin = prompt("Enter current PIN to change:");
+                if (!currentPin) return;
+                const h = await hashPin(currentPin);
+                const stored = localStorage.getItem("speaq_pin");
+                if (h !== stored) { alert("Wrong PIN"); return; }
+                localStorage.removeItem("speaq_pin"); setScreen("setPin"); setPinInput(""); setPinStep("enter");
+              }}
+                className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.resetPin", lang) }</span><span className="text-sm text-voice-gold">{ t("settings.change", lang) }</span></button>
             </div>
 
             {/* Language -- dropdown list like native */}

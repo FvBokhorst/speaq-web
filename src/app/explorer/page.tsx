@@ -1,117 +1,72 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ThemeToggle from "../components/ThemeToggle";
-import CookieBanner from "../components/CookieBanner";
 
-// ===================================================================
-// SPEAQ Chain Block Explorer
-// Connects to a SPEAQ Chain full node API (when running)
-// For now: shows chain structure with genesis block data
-// ===================================================================
+const NODE_API = "/api/admin/chain";
 
-const CHAIN_INFO = {
-  name: "SPEAQ Chain",
-  version: "1.0.0",
-  consensus: "Proof of Contribution (DPoC)",
-  maxSupply: "21,000,000 QC",
-  blockInterval: "30 seconds",
-  ringSize: 11,
-  validators: 21,
-  finality: "14/21 (2/3 majority)",
-  cryptoStack: [
-    "Dilithium-3 (FIPS 204) - Quantum-safe signing",
-    "SPHINCS+ (FIPS 205) - Backup hash-based signing",
-    "Kyber-768 (FIPS 203) - Quantum-safe key exchange",
-    "CLSAG Ring Signatures - Sender anonymity",
-    "Pedersen Commitments - Amount hiding",
-    "Bulletproofs+ - Range proofs",
-  ],
-  network: ["libp2p (Kademlia + GossipSub)", "Tor Hidden Services", "BLE Mesh"],
-};
-
-const GENESIS_BLOCK = {
-  height: 0,
-  hash: "db0ef1629c72f36a...",
-  previousHash: "0000000000000000000000000000000000000000000000000000000000000000",
-  merkleRoot: "a1b2c3d4...",
-  timestamp: "April 2026",
-  validator: "Genesis Validator",
-  txCount: 1,
-  motto: "By the people, for the people. - SPEAQ Chain Genesis, April 2026",
-};
-
-const SAMPLE_BLOCKS = [
-  { height: 0, hash: "db0ef162", txs: 1, time: "Genesis", validator: "Genesis", reward: "0 QC" },
-  { height: 1, hash: "9c8fbe71", txs: 1, time: "30s ago", validator: "SQ1a3b4...", reward: "0.5 QC" },
-  { height: 2, hash: "a95f6144", txs: 2, time: "60s ago", validator: "SQ1f7e2...", reward: "0.5 QC" },
-];
-
-const STATS = [
-  { label: "Chain Height", value: "2" },
-  { label: "Total Transactions", value: "4" },
-  { label: "Total QC Mined", value: "1.0 QC" },
-  { label: "Active Validators", value: "3 / 21" },
-  { label: "Network Nodes", value: "3" },
-  { label: "Block Interval", value: "30s" },
-  { label: "Max Supply", value: "21,000,000 QC" },
-  { label: "Halving", value: "Phase 0 (0.5 QC/block)" },
-];
-
-type Tab = "overview" | "blocks" | "transactions" | "validators" | "network";
+interface ChainData {
+  chain_height: number;
+  balance: number;
+  balance_sparks: number;
+  genesis_hash: string;
+  connected_peers: number;
+  version: string;
+}
 
 export default function ExplorerPage() {
-  const [tab, setTab] = useState<Tab>("overview");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [tab, setTab] = useState<"overview" | "network">("overview");
+  const [chain, setChain] = useState<ChainData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchChain = () => {
+      fetch(NODE_API)
+        .then((r) => r.json())
+        .then((d: ChainData) => { setChain(d); setLoading(false); })
+        .catch(() => setLoading(false));
+    };
+    fetchChain();
+    const interval = setInterval(fetchChain, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const maxSupply = 21_000_000;
+  const totalMined = chain ? chain.balance : 0;
+  const percentMined = chain ? ((chain.balance / maxSupply) * 100).toFixed(6) : "0";
+  const remaining = maxSupply - totalMined;
+  const blockReward = 0.5;
+  const blocksPerDay = (24 * 60 * 60) / 30;
+  const qcPerDay = blocksPerDay * blockReward;
 
   return (
     <div className="min-h-screen bg-bg-deep text-text-primary">
       {/* Header */}
       <header className="border-b border-[rgba(100,116,139,0.15)] px-6 py-4">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
+        <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full border border-voice-gold flex items-center justify-center">
-              <span className="text-sm font-bold text-voice-gold font-serif">Q</span>
-            </div>
-            <div>
-              <h1 className="text-lg font-bold font-serif">SPEAQ Explorer</h1>
-              <p className="text-[10px] text-quantum-teal font-mono uppercase tracking-wider">Quantum-Resistant Blockchain</p>
-            </div>
+            <a href="/" className="flex items-center gap-3">
+              <img src="/speaq-logo.png" alt="SPEAQ" width="32" height="32" className="rounded-full" />
+              <div>
+                <h1 className="text-lg font-bold font-[family-name:var(--font-playfair)]">SPEAQ Explorer</h1>
+                <p className="text-[10px] text-quantum-teal font-[family-name:var(--font-jetbrains)] uppercase tracking-wider">Quantum-Resistant Blockchain</p>
+              </div>
+            </a>
           </div>
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <div className="w-2 h-2 rounded-full bg-[#22C55E]" />
-            <span className="text-xs font-mono text-text-muted">Testnet</span>
+            <div className={`w-2 h-2 rounded-full ${chain ? "bg-[#22C55E]" : "bg-resistance-red"}`} />
+            <span className="text-xs font-[family-name:var(--font-jetbrains)] text-text-muted">{chain ? "Live" : "Offline"}</span>
           </div>
         </div>
       </header>
 
-      {/* Search */}
-      <div className="px-6 py-4 border-b border-[rgba(100,116,139,0.1)]">
-        <div className="max-w-6xl mx-auto">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by block height, tx hash, or SQ1 address..."
-            className="w-full px-4 py-3 rounded-xl bg-bg-card border border-[rgba(100,116,139,0.15)] text-text-primary placeholder:text-text-muted font-mono text-sm focus:outline-none focus:border-voice-gold/50"
-          />
-        </div>
-      </div>
-
       {/* Tabs */}
       <div className="px-6 border-b border-[rgba(100,116,139,0.1)]">
-        <div className="max-w-6xl mx-auto flex gap-1">
-          {(["overview", "blocks", "transactions", "validators", "network"] as Tab[]).map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
-                tab === t
-                  ? "text-voice-gold border-voice-gold"
-                  : "text-text-muted border-transparent hover:text-text-primary"
-              }`}
-            >
+        <div className="max-w-5xl mx-auto flex gap-1">
+          {(["overview", "network"] as const).map((t) => (
+            <button key={t} onClick={() => setTab(t)}
+              className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${tab === t ? "text-voice-gold border-voice-gold" : "text-text-muted border-transparent hover:text-text-primary"}`}>
               {t.charAt(0).toUpperCase() + t.slice(1)}
             </button>
           ))}
@@ -120,36 +75,63 @@ export default function ExplorerPage() {
 
       {/* Content */}
       <div className="px-6 py-6">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-5xl mx-auto">
 
-          {/* Overview Tab */}
-          {tab === "overview" && (
+          {loading && (
+            <div className="text-center py-12"><p className="text-sm text-text-muted">Connecting to SPEAQ Chain node...</p></div>
+          )}
+
+          {!loading && tab === "overview" && (
             <div className="space-y-6">
               {/* Stats Grid */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {STATS.map((stat) => (
+                {[
+                  { label: "Chain Height", value: chain ? chain.chain_height.toLocaleString() : "-" },
+                  { label: "Total QC Mined", value: chain ? `${chain.balance.toFixed(1)} QC` : "-" },
+                  { label: "Supply Mined", value: chain ? `${percentMined}%` : "-" },
+                  { label: "Remaining", value: chain ? `${remaining.toLocaleString()} QC` : "-" },
+                  { label: "Block Reward", value: `${blockReward} QC` },
+                  { label: "Block Interval", value: "30 seconds" },
+                  { label: "QC per Day", value: `~${qcPerDay.toFixed(0)} QC` },
+                  { label: "Max Supply", value: "21,000,000 QC" },
+                ].map((stat) => (
                   <div key={stat.label} className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.1)]">
-                    <p className="text-[10px] font-mono text-text-muted uppercase tracking-wider">{stat.label}</p>
-                    <p className="text-lg font-bold text-text-primary mt-1 font-serif">{stat.value}</p>
+                    <p className="text-[10px] font-[family-name:var(--font-jetbrains)] text-text-muted uppercase tracking-wider">{stat.label}</p>
+                    <p className="text-lg font-bold text-text-primary mt-1 font-[family-name:var(--font-playfair)]">{stat.value}</p>
                   </div>
                 ))}
               </div>
 
-              {/* Latest Blocks */}
-              <div>
-                <h2 className="text-sm font-mono text-quantum-teal uppercase tracking-wider mb-3">Latest Blocks</h2>
-                <div className="bg-bg-card rounded-xl border border-[rgba(100,116,139,0.1)] overflow-hidden">
-                  <div className="grid grid-cols-6 gap-4 px-4 py-2 text-[10px] font-mono text-text-muted uppercase border-b border-[rgba(100,116,139,0.1)]">
-                    <span>Height</span><span>Hash</span><span>Txs</span><span>Time</span><span>Validator</span><span>Reward</span>
-                  </div>
-                  {SAMPLE_BLOCKS.map((block) => (
-                    <div key={block.height} className="grid grid-cols-6 gap-4 px-4 py-3 text-sm border-b border-[rgba(100,116,139,0.05)] hover:bg-[rgba(100,116,139,0.05)]">
-                      <span className="font-mono text-voice-gold">{block.height}</span>
-                      <span className="font-mono text-quantum-teal text-xs">{block.hash}</span>
-                      <span>{block.txs}</span>
-                      <span className="text-text-muted text-xs">{block.time}</span>
-                      <span className="font-mono text-xs">{block.validator}</span>
-                      <span className="text-voice-gold">{block.reward}</span>
+              {/* Supply Progress */}
+              <div className="bg-bg-card rounded-xl p-5 border border-[rgba(100,116,139,0.1)]">
+                <p className="text-[10px] font-[family-name:var(--font-jetbrains)] text-quantum-teal uppercase tracking-wider mb-3">Supply Distribution</p>
+                <div className="w-full h-4 rounded-full bg-bg-elevated overflow-hidden">
+                  <div className="h-full rounded-full bg-gradient-to-r from-voice-gold to-quantum-teal transition-all"
+                    style={{ width: `${Math.max(parseFloat(percentMined), 0.5)}%` }} />
+                </div>
+                <div className="flex justify-between text-[10px] text-text-muted mt-2">
+                  <span>{totalMined.toFixed(1)} QC mined</span>
+                  <span>{remaining.toLocaleString()} QC remaining</span>
+                </div>
+              </div>
+
+              {/* Halving Schedule */}
+              <div className="bg-bg-card rounded-xl p-5 border border-[rgba(100,116,139,0.1)]">
+                <p className="text-[10px] font-[family-name:var(--font-jetbrains)] text-voice-gold uppercase tracking-wider mb-3">Halving Schedule</p>
+                <div className="space-y-2">
+                  {[
+                    { phase: 1, reward: "0.50 QC", target: "2,100,000 QC", status: totalMined < 2100000 ? "active" : "done" },
+                    { phase: 2, reward: "0.25 QC", target: "4,200,000 QC", status: totalMined >= 2100000 && totalMined < 4200000 ? "active" : totalMined >= 4200000 ? "done" : "future" },
+                    { phase: 3, reward: "0.125 QC", target: "6,300,000 QC", status: "future" },
+                    { phase: 4, reward: "0.0625 QC", target: "8,400,000 QC", status: "future" },
+                  ].map((h) => (
+                    <div key={h.phase} className={`flex items-center justify-between px-4 py-2 rounded-lg ${h.status === "active" ? "bg-voice-gold/10 border border-voice-gold/20" : "bg-bg-elevated"}`}>
+                      <span className="text-xs font-[family-name:var(--font-jetbrains)]">Phase {h.phase}</span>
+                      <span className="text-xs text-text-muted">{h.reward}/block</span>
+                      <span className="text-xs text-text-muted">until {h.target}</span>
+                      <span className={`text-[10px] font-[family-name:var(--font-jetbrains)] ${h.status === "active" ? "text-voice-gold" : h.status === "done" ? "text-quantum-teal" : "text-text-muted"}`}>
+                        {h.status === "active" ? "ACTIVE" : h.status === "done" ? "DONE" : "UPCOMING"}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -157,100 +139,80 @@ export default function ExplorerPage() {
 
               {/* Genesis Block */}
               <div>
-                <h2 className="text-sm font-mono text-voice-gold uppercase tracking-wider mb-3">Genesis Block</h2>
+                <p className="text-[10px] font-[family-name:var(--font-jetbrains)] text-voice-gold uppercase tracking-wider mb-3">Genesis Block</p>
                 <div className="bg-bg-card rounded-xl p-5 border border-voice-gold/20">
-                  <p className="text-xs text-text-muted mb-1">Motto</p>
-                  <p className="text-sm text-text-primary font-serif italic mb-4">&quot;{GENESIS_BLOCK.motto}&quot;</p>
-                  <div className="grid grid-cols-2 gap-3 text-xs">
-                    <div><span className="text-text-muted">Height:</span> <span className="font-mono text-voice-gold">{GENESIS_BLOCK.height}</span></div>
-                    <div><span className="text-text-muted">Hash:</span> <span className="font-mono text-quantum-teal">{GENESIS_BLOCK.hash}</span></div>
-                    <div><span className="text-text-muted">Timestamp:</span> <span>{GENESIS_BLOCK.timestamp}</span></div>
-                    <div><span className="text-text-muted">Transactions:</span> <span>{GENESIS_BLOCK.txCount}</span></div>
+                  <p className="text-sm text-text-primary font-[family-name:var(--font-playfair)] italic mb-4">"By the people, for the people."</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                    <div><span className="text-text-muted">Height:</span> <span className="font-[family-name:var(--font-jetbrains)] text-voice-gold">0</span></div>
+                    <div><span className="text-text-muted">Hash:</span> <span className="font-[family-name:var(--font-jetbrains)] text-quantum-teal break-all">{chain?.genesis_hash || "-"}</span></div>
+                    <div><span className="text-text-muted">Node Version:</span> <span className="font-[family-name:var(--font-jetbrains)]">{chain?.version || "-"}</span></div>
+                    <div><span className="text-text-muted">Connected Peers:</span> <span className="font-[family-name:var(--font-jetbrains)]">{chain?.connected_peers ?? "-"}</span></div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
 
-          {/* Blocks Tab */}
-          {tab === "blocks" && (
-            <div className="bg-bg-card rounded-xl border border-[rgba(100,116,139,0.1)] overflow-hidden">
-              <div className="grid grid-cols-6 gap-4 px-4 py-2 text-[10px] font-mono text-text-muted uppercase border-b border-[rgba(100,116,139,0.1)]">
-                <span>Height</span><span>Hash</span><span>Txs</span><span>Time</span><span>Validator</span><span>Reward</span>
-              </div>
-              {SAMPLE_BLOCKS.map((block) => (
-                <div key={block.height} className="grid grid-cols-6 gap-4 px-4 py-3 text-sm border-b border-[rgba(100,116,139,0.05)] hover:bg-[rgba(100,116,139,0.05)] cursor-pointer">
-                  <span className="font-mono text-voice-gold">{block.height}</span>
-                  <span className="font-mono text-quantum-teal text-xs">{block.hash}</span>
-                  <span>{block.txs}</span>
-                  <span className="text-text-muted text-xs">{block.time}</span>
-                  <span className="font-mono text-xs">{block.validator}</span>
-                  <span className="text-voice-gold">{block.reward}</span>
+              {/* Token Allocation */}
+              <div className="bg-bg-card rounded-xl p-5 border border-[rgba(100,116,139,0.1)]">
+                <p className="text-[10px] font-[family-name:var(--font-jetbrains)] text-quantum-teal uppercase tracking-wider mb-3">Token Allocation</p>
+                <div className="space-y-2">
+                  {[
+                    { label: "Mining Rewards", pct: 85, color: "bg-voice-gold" },
+                    { label: "Freedom Fund", pct: 5, color: "bg-quantum-teal" },
+                    { label: "Founders (4yr vest)", pct: 5, color: "bg-text-muted" },
+                    { label: "Development", pct: 3, color: "bg-text-secondary" },
+                    { label: "Early Contributors", pct: 2, color: "bg-voice-warm" },
+                  ].map((a) => (
+                    <div key={a.label} className="flex items-center gap-3">
+                      <div className={`w-3 h-3 rounded-sm ${a.color} shrink-0`} />
+                      <span className="text-xs text-text-primary flex-1">{a.label}</span>
+                      <span className="text-xs font-[family-name:var(--font-jetbrains)] text-text-muted">{a.pct}%</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-              <div className="px-4 py-8 text-center text-sm text-text-muted">
-                Live block data will appear when testnet is running.
-              </div>
-            </div>
-          )}
-
-          {/* Validators Tab */}
-          {tab === "validators" && (
-            <div className="space-y-4">
-              <div className="grid grid-cols-3 gap-4">
-                <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.1)]">
-                  <p className="text-[10px] font-mono text-text-muted">ACTIVE VALIDATORS</p>
-                  <p className="text-2xl font-bold text-voice-gold font-serif">3 / 21</p>
-                </div>
-                <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.1)]">
-                  <p className="text-[10px] font-mono text-text-muted">FINALITY</p>
-                  <p className="text-2xl font-bold text-quantum-teal font-serif">14/21</p>
-                </div>
-                <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.1)]">
-                  <p className="text-[10px] font-mono text-text-muted">REGIONS</p>
-                  <p className="text-2xl font-bold text-text-primary font-serif">3</p>
-                </div>
-              </div>
-              <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.1)]">
-                <p className="text-xs text-text-muted mb-3">Consensus: Delegated Proof of Contribution</p>
-                <p className="text-xs text-text-muted">Validators earn positions by helping the network: relaying messages, validating proofs, storing data, translating the app, onboarding users. The top 21 by contribution score produce blocks.</p>
               </div>
             </div>
           )}
 
-          {/* Network Tab */}
-          {tab === "network" && (
-            <div className="space-y-4">
-              <h2 className="text-sm font-mono text-quantum-teal uppercase tracking-wider">Crypto Stack</h2>
+          {!loading && tab === "network" && (
+            <div className="space-y-6">
+              <p className="text-[10px] font-[family-name:var(--font-jetbrains)] text-quantum-teal uppercase tracking-wider">Cryptographic Stack</p>
               <div className="space-y-2">
-                {CHAIN_INFO.cryptoStack.map((item) => (
-                  <div key={item} className="bg-bg-card rounded-lg px-4 py-3 border border-[rgba(100,116,139,0.08)] flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-quantum-teal" />
-                    <span className="text-sm font-mono">{item}</span>
+                {[
+                  { name: "ML-DSA-65 (FIPS 204)", desc: "Quantum-resistant digital signatures for wallet transactions" },
+                  { name: "SPHINCS+ (FIPS 205)", desc: "Hash-based backup signatures for blockchain blocks" },
+                  { name: "Kyber-768 (FIPS 203)", desc: "Quantum-resistant key encapsulation for message encryption" },
+                  { name: "AES-256-GCM", desc: "Military-grade symmetric encryption for every message" },
+                  { name: "Double Ratchet Protocol", desc: "Forward secrecy - unique key per message" },
+                  { name: "PBKDF2 (600K iterations)", desc: "PIN protection against brute-force attacks" },
+                  { name: "SHA-256", desc: "Cryptographic hashing for addresses, witness records, block links" },
+                  { name: "Sealed Sender", desc: "Relay cannot identify message sender" },
+                ].map((item) => (
+                  <div key={item.name} className="bg-bg-card rounded-lg px-4 py-3 border border-[rgba(100,116,139,0.08)]">
+                    <p className="text-sm font-[family-name:var(--font-jetbrains)] text-quantum-teal">{item.name}</p>
+                    <p className="text-xs text-text-muted mt-1">{item.desc}</p>
                   </div>
                 ))}
               </div>
-              <h2 className="text-sm font-mono text-voice-gold uppercase tracking-wider mt-6">Network Layers</h2>
+
+              <p className="text-[10px] font-[family-name:var(--font-jetbrains)] text-voice-gold uppercase tracking-wider mt-6">Formal Verification</p>
+              <div className="bg-bg-card rounded-xl p-4 border border-voice-gold/20">
+                <p className="text-xs text-text-muted">24 security properties proven TRUE across 7 ProVerif protocol models. 113 Rust unit tests. 3 NIST certifications (FIPS 203, 204, 205).</p>
+              </div>
+
+              <p className="text-[10px] font-[family-name:var(--font-jetbrains)] text-voice-gold uppercase tracking-wider mt-6">Network Infrastructure</p>
               <div className="space-y-2">
-                {CHAIN_INFO.network.map((item) => (
+                {[
+                  "libp2p (GossipSub + Kademlia DHT)",
+                  "Noise Protocol (node-to-node encryption)",
+                  "RocksDB (persistent blockchain storage)",
+                  "Google Cloud Platform (europe-west1 + us-west1)",
+                ].map((item) => (
                   <div key={item} className="bg-bg-card rounded-lg px-4 py-3 border border-[rgba(100,116,139,0.08)] flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-voice-gold" />
-                    <span className="text-sm font-mono">{item}</span>
+                    <div className="w-2 h-2 rounded-full bg-voice-gold shrink-0" />
+                    <span className="text-sm font-[family-name:var(--font-jetbrains)]">{item}</span>
                   </div>
                 ))}
               </div>
-              <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.1)] mt-4">
-                <p className="text-xs font-mono text-quantum-teal mb-2">VERIFICATION</p>
-                <p className="text-xs text-text-muted">106 Rust tests PASS. 23 ProVerif mathematical proofs TRUE. 3 NIST certifications (FIPS 203, 204, 205). Full system formally verified.</p>
-              </div>
-            </div>
-          )}
-
-          {/* Transactions Tab */}
-          {tab === "transactions" && (
-            <div className="bg-bg-card rounded-xl p-8 border border-[rgba(100,116,139,0.1)] text-center">
-              <p className="text-sm text-text-muted">Transaction data will appear when testnet is running.</p>
-              <p className="text-xs text-text-muted mt-2">All transactions use: CLSAG ring signatures (11 decoys) + Pedersen commitments + Bulletproofs range proofs + Dilithium-3 quantum signature</p>
             </div>
           )}
         </div>
@@ -258,18 +220,11 @@ export default function ExplorerPage() {
 
       {/* Footer */}
       <footer className="border-t border-[rgba(100,116,139,0.1)] px-6 py-4 mt-12">
-        <div className="max-w-6xl mx-auto flex items-center justify-between text-xs text-text-muted">
-          <span>SPEAQ Chain Explorer v1.0</span>
-          <span>By the people, for the people.</span>
-        </div>
-        <div className="max-w-6xl mx-auto mt-2">
-          <p className="text-[10px] text-text-muted text-center">
-            Public blockchain data only. No personal data is displayed or collected.
-          </p>
+        <div className="max-w-5xl mx-auto flex items-center justify-between text-xs text-text-muted">
+          <a href="/" className="hover:text-voice-gold transition-colors">Back to SPEAQ</a>
+          <span className="font-[family-name:var(--font-playfair)] italic">By the people, for the people.</span>
         </div>
       </footer>
-
-      <CookieBanner />
     </div>
   );
 }

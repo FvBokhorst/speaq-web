@@ -1556,7 +1556,7 @@ const technical: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Has the protocol been formally verified?",
-      answer: "The SPEAQ protocol is designed based on formally verified cryptographic primitives (AES-256, SHA-256, Double Ratchet) and NIST-standardized post-quantum algorithms. The complete protocol specification will be published for independent security audit and formal verification. We believe in security through transparency, not obscurity.",
+      answer: "Yes. SPEAQ's cryptographic protocols have been formally verified using ProVerif, a mathematical proof tool for cryptographic protocols. We have proven 24 security properties across 7 protocol models, including wallet key secrecy, transaction privacy, block authentication, and full end-to-end system verification. All 24 properties returned TRUE. In addition, the Rust blockchain implementation includes 113 unit tests. The protocol uses NIST-certified primitives (AES-256, SHA-256, Kyber-768, ML-DSA-65, SPHINCS+) and the Double Ratchet Protocol. We believe in security through transparency, not obscurity.",
     },
     {
       question: "Is SPEAQ open source?",
@@ -1574,7 +1574,7 @@ const technical: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Is het protocol formeel geverifieerd?",
-      answer: "Het SPEAQ-protocol is ontworpen op basis van formeel geverifieerde cryptografische primitieven (AES-256, SHA-256, Double Ratchet) en NIST-gestandaardiseerde post-quantum algoritmen. De volledige protocolspecificatie zal worden gepubliceerd voor onafhankelijke beveiligingsaudit en formele verificatie. Wij geloven in beveiliging door transparantie, niet door ondoorzichtigheid.",
+      answer: "Ja. De cryptografische protocollen van SPEAQ zijn formeel geverifieerd met ProVerif, een wiskundig bewijsgereedschap voor cryptografische protocollen. We hebben 24 beveiligingseigenschappen bewezen over 7 protocolmodellen, waaronder wallet-sleutelgeheimhouding, transactieprivacy, blokauthenticatie en volledige end-to-end systeemverificatie. Alle 24 eigenschappen retourneerden TRUE. Daarnaast bevat de Rust blockchain-implementatie 113 unit tests. Het protocol gebruikt NIST-gecertificeerde primitieven (AES-256, SHA-256, Kyber-768, ML-DSA-65, SPHINCS+) en het Double Ratchet Protocol.",
     },
     {
       question: "Is SPEAQ open source?",
@@ -1592,7 +1592,7 @@ const technical: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Le protocole a-t-il ete formellement verifie ?",
-      answer: "Le protocole SPEAQ est concu sur la base de primitives cryptographiques formellement verifiees (AES-256, SHA-256, Double Ratchet) et d'algorithmes post-quantiques standardises par le NIST. La specification complete du protocole sera publiee pour un audit de securite independant et une verification formelle. Nous croyons en la securite par la transparence, pas par l'obscurite.",
+      answer: "Oui. Les protocoles cryptographiques de SPEAQ ont ete formellement verifies avec ProVerif, un outil de preuve mathematique pour les protocoles cryptographiques. Nous avons prouve 24 proprietes de securite sur 7 modeles de protocoles. Tous les 24 ont retourne TRUE. L'implementation Rust comprend 113 tests unitaires. Le protocole utilise des primitives certifiees NIST (AES-256, SHA-256, Kyber-768, ML-DSA-65, SPHINCS+) et le protocole Double Ratchet.",
     },
     {
       question: "SPEAQ est-il open source ?",
@@ -1610,7 +1610,7 @@ const technical: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Ha sido el protocolo formalmente verificado?",
-      answer: "El protocolo SPEAQ esta disenado basandose en primitivas criptograficas formalmente verificadas (AES-256, SHA-256, Double Ratchet) y algoritmos post-cuanticos estandarizados por NIST. La especificacion completa del protocolo sera publicada para auditoria de seguridad independiente y verificacion formal. Creemos en la seguridad a traves de la transparencia, no de la oscuridad.",
+      answer: "Si. Los protocolos criptograficos de SPEAQ han sido verificados formalmente con ProVerif, una herramienta de prueba matematica. Hemos probado 24 propiedades de seguridad en 7 modelos de protocolo. Todos retornaron TRUE. La implementacion Rust incluye 113 pruebas unitarias. El protocolo usa primitivas certificadas por NIST (AES-256, SHA-256, Kyber-768, ML-DSA-65, SPHINCS+) y el Protocolo Double Ratchet.",
     },
     {
       question: "Es SPEAQ de codigo abierto?",
@@ -1628,7 +1628,7 @@ const technical: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Byl li protokol formalno verificirovan?",
-      answer: "Protokol SPEAQ razrabotan na osnove formalno verificirovannykh kriptograficheskikh primitivov (AES-256, SHA-256, Double Ratchet) i standartizovannykh NIST postkvantovykh algoritmov. Polnaya spetsifikatsiya protokola budet opublikovana dlya nezavisimogo audita bezopasnosti i formalnoy verifikatsii. My verim v bezopasnost cherez prozrachnost, a ne cherez zatemnenost.",
+      answer: "Da. Kriptograficheskie protokoly SPEAQ formalno verificirovany s pomoshchyu ProVerif - matematicheskogo instrumenta dokazatelstva. Dokazano 24 svoystva bezopasnosti v 7 modelyakh protokolov. Vse 24 vernuli TRUE. Realizatsiya na Rust vklyuchaet 113 unit-testov. Protokol ispolzuet NIST-sertifitsirovannye primitivy (AES-256, SHA-256, Kyber-768, ML-DSA-65, SPHINCS+) i protokol Double Ratchet.",
     },
     {
       question: "Yavlyaetsya li SPEAQ otkrytym ishodnym kodom?",
@@ -1646,7 +1646,7 @@ const technical: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Wurde das Protokoll formal verifiziert?",
-      answer: "Das SPEAQ-Protokoll basiert auf formal verifizierten kryptographischen Primitiven (AES-256, SHA-256, Double Ratchet) und NIST-standardisierten Post-Quanten-Algorithmen. Die vollstandige Protokollspezifikation wird fur unabhangige Sicherheitsprufung und formale Verifikation veroffentlicht. Wir glauben an Sicherheit durch Transparenz, nicht durch Verschleierung.",
+      answer: "Ja. Die kryptographischen Protokolle von SPEAQ wurden mit ProVerif formal verifiziert - einem mathematischen Beweiswerkzeug. 24 Sicherheitseigenschaften wurden uber 7 Protokollmodelle bewiesen. Alle 24 ergaben TRUE. Die Rust-Implementierung umfasst 113 Unit-Tests. Das Protokoll verwendet NIST-zertifizierte Primitive (AES-256, SHA-256, Kyber-768, ML-DSA-65, SPHINCS+) und das Double Ratchet Protocol.",
     },
     {
       question: "Ist SPEAQ Open Source?",
@@ -1664,7 +1664,7 @@ const technical: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Ali je bil protokol formalno preverjen?",
-      answer: "Protokol SPEAQ je zasnovan na formalno preverjenih kriptografskih primitivih (AES-256, SHA-256, Double Ratchet) in NIST-standardiziranih postkvantnih algoritmih. Popolna specifikacija protokola bo objavljena za neodvisen varnostni pregled in formalno preverjanje. Verjamemo v varnost skozi preglednost, ne skozi nejasnost.",
+      answer: "Da. Kriptografski protokoli SPEAQ so bili formalno preverjeni s ProVerif - matematicnim orodjem za dokazovanje. 24 varnostnih lastnosti je bilo dokazanih v 7 modelih protokolov. Vseh 24 je vrnilo TRUE. Implementacija v Rustu vkljucuje 113 unit testov. Protokol uporablja NIST-certificirane primitive (AES-256, SHA-256, Kyber-768, ML-DSA-65, SPHINCS+) in protokol Double Ratchet.",
     },
     {
       question: "Ali je SPEAQ odprtokoden?",
@@ -1682,7 +1682,7 @@ const technical: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Empeereza yakakasizibwa mu ngeri ensungiddwa?",
-      answer: "Empeereza ya SPEAQ yatondebwa okusinziira ku nkola z'ekikryptogurafu ezikakasiziddwa mu ngeri ensungiddwa (AES-256, SHA-256, Double Ratchet) ne algorithm z'omu maaso ez'ekikwantimu ezisunguddwa NIST. Ennyonyoola y'empeereza yonna enajjulizibwa olw'okukebera obukuumi okw'obwekusu n'okukakasa mu ngeri ensungiddwa. Tukkiriza obukuumi okuyita mu kutegeezebwa, si mu kukwekebwa.",
+      answer: "Yee. Enkola z'ekikryptogurafu eza SPEAQ zakakasizibwa mu ngeri ensungiddwa nga bakozesa ProVerif - ekintu ky'okukakasa mu bwa kiyonkimu. Ebika 24 eby'obukuumi byakakasizibwa mu mitindo 7 gy'enkola. Byonna 24 byaddizaayo TRUE. Enteekateeka ya Rust erimu okugezesa 113 okw'ebitundu. Enkola ekozesa ebisinziiro ebisunguddwa NIST (AES-256, SHA-256, Kyber-768, ML-DSA-65, SPHINCS+) n'Enkola ya Double Ratchet.",
     },
     {
       question: "SPEAQ ya open source?",
@@ -1700,7 +1700,7 @@ const technical: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Je, itifaki imethibitishwa rasmi?",
-      answer: "Itifaki ya SPEAQ imeundwa kulingana na misingi ya kriptografia iliyothibitishwa rasmi (AES-256, SHA-256, Double Ratchet) na algoriti za baada ya quantum zilizowekwa viwango na NIST. Maelezo kamili ya itifaki yatachapishwa kwa ukaguzi wa usalama huru na uthibitisho rasmi. Tunaamini katika usalama kupitia uwazi, si kwa usiri.",
+      answer: "Ndiyo. Itifaki za kriptografia za SPEAQ zimethibitishwa rasmi kwa kutumia ProVerif - chombo cha uthibitisho wa kihisabati. Sifa 24 za usalama zimethibitishwa katika mifano 7 ya itifaki. Zote 24 zilirudisha TRUE. Utekelezaji wa Rust una majaribio 113 ya vitengo. Itifaki inatumia misingi iliyoidhinishwa na NIST (AES-256, SHA-256, Kyber-768, ML-DSA-65, SPHINCS+) na Itifaki ya Double Ratchet.",
     },
     {
       question: "Je, SPEAQ ni chanzo wazi?",
