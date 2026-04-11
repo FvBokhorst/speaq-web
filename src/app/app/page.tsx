@@ -126,6 +126,7 @@ const appStrings: Record<string, Record<string, string>> = {
   "tab.contacts": { en: "Contacts", nl: "Contacten", fr: "Contacts", es: "Contactos", ru: "Kontakty", de: "Kontakte", sl: "Stiki", lg: "Abantu", sw: "Wasiliani" },
   "tab.wallet": { en: "Wallet", nl: "Wallet", fr: "Portefeuille", es: "Billetera", ru: "Koshelek", de: "Wallet", sl: "Denarnica", lg: "Wallet", sw: "Mkoba" },
   "tab.earning": { en: "Earn", nl: "Verdien", fr: "Gagner", es: "Ganar", ru: "Zarabotat", de: "Verdienen", sl: "Zasluzek", lg: "Funa", sw: "Pata" },
+  "tab.mining": { en: "Earn", nl: "Verdien", fr: "Gagner", es: "Ganar", ru: "Zarabotat", de: "Verdienen", sl: "Zasluzek", lg: "Funa", sw: "Pata" },
   "tab.more": { en: "More", nl: "Meer", fr: "Plus", es: "Mas", ru: "Eshche", de: "Mehr", sl: "Vec", lg: "Ebisingawo", sw: "Zaidi" },
   "tab.settings": { en: "Settings", nl: "Instellingen", fr: "Parametres", es: "Ajustes", ru: "Nastrojki", de: "Einstellungen", sl: "Nastavitve", lg: "Entegeka", sw: "Mipangilio" },
   "chat.secured": { en: "Secure", ru: "Zashchishcheno", nl: "Beveiligd", fr: "Securise", es: "Seguro", de: "Gesichert", sl: "Zasciteno", lg: "Ekuumiddwa", sw: "Salama" },
