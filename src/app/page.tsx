@@ -342,7 +342,7 @@ export default function Home() {
             </div>
 
             </ScrollReveal>
-            {/* Card 4: Quantum Vault */}
+            {/* Card 4: Private Storage */}
             <ScrollReveal delay={400}>
             <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover">
               <div className="absolute top-0 left-0 w-1 h-full bg-quantum-teal rounded-l-2xl" />

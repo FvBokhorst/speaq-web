@@ -82,15 +82,15 @@ const platform: Record<Lang, FaqItem[]> = {
   en: [
     {
       question: "What is SPEAQ?",
-      answer: "SPEAQ is the most secure communication and freedom platform in the world. It combines quantum-resistant encryption, censorship resistance, private payments, decentralized mining, and sovereign identity in one app. Chat, call, pay, browse, store, mine - all protected by military-grade encryption that even quantum computers cannot break.",
+      answer: "SPEAQ is the most secure communication and freedom platform in the world. It combines quantum-resistant encryption, censorship resistance, private payments, decentralized mining, and sovereign identity in one app. Chat, call, pay, browse, store, mine - all protected by verified encryption that even quantum computers cannot break.",
     },
     {
       question: "Why was SPEAQ created?",
-      answer: "SPEAQ was created because the world needs a communication platform that truly belongs to its users. Existing platforms collect your data, scan your messages, comply with government surveillance requests, and can freeze your accounts at will. SPEAQ was built from the ground up with zero-knowledge architecture - we cannot read your messages, even if we wanted to. Your freedom is not a feature. It is the foundation.",
+      answer: "SPEAQ was created because the world needs a communication platform that truly belongs to its users. Existing platforms collect your data, scan your messages, and can share your data with third parties. SPEAQ was built from the ground up with zero-knowledge architecture - we cannot read your messages, even if we wanted to. Your freedom is not a feature. It is the foundation.",
     },
     {
       question: "How is SPEAQ different from WhatsApp, Signal, or Telegram?",
-      answer: "WhatsApp is owned by Meta and collects extensive metadata. Telegram does not encrypt group chats by default. Signal is good but still requires a phone number and has no built-in payments or mining. SPEAQ requires no phone number, no email, no real name. It adds a sovereign wallet with gold-backed Q-Credits, Proof of Contribution mining, a Quantum Vault with plausible deniability, Ghost Groups, Witness Mode, Dead Man's Switch, and mesh networking. SPEAQ is not just a messenger - it is a freedom platform.",
+      answer: "WhatsApp is owned by Meta and collects extensive metadata. Telegram does not encrypt group chats by default. Signal is good but still requires a phone number and has no built-in payments or mining. SPEAQ requires no phone number, no email, no real name. It adds a sovereign wallet with gold-backed Q-Credits, Proof of Contribution mining, a Private Storage with extra privacy layer, Private Groups, Witness Mode, Safety Check-in, and mesh networking. SPEAQ is not just a messenger - it is a freedom platform.",
     },
     {
       question: "Do I need to register with my phone number or email?",
@@ -98,7 +98,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Is SPEAQ free?",
-      answer: "Yes. SPEAQ is free to download and use. All core features - messaging, voice and video calls, file sharing, Quantum Vault, Ghost Groups, Witness Mode, and Dead Man's Switch - are free. You can also earn Q-Credits through Proof of Contribution mining at no cost.",
+      answer: "Yes. SPEAQ is free to download and use. All core features - messaging, voice and video calls, file sharing, Private Storage, Private Groups, Witness Mode, and Safety Check-in - are free. You can also earn Q-Credits through Proof of Contribution mining at no cost.",
     },
   ],
   nl: [
@@ -112,7 +112,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Hoe verschilt SPEAQ van WhatsApp, Signal of Telegram?",
-      answer: "WhatsApp is eigendom van Meta en verzamelt uitgebreide metadata. Telegram versleutelt groepschats niet standaard. Signal is goed maar vereist nog steeds een telefoonnummer en heeft geen ingebouwde betalingen of mining. SPEAQ vereist geen telefoonnummer, geen e-mail, geen echte naam. Het voegt een soevereine wallet toe met door goud gedekte Q-Credits, Proof of Contribution mining, een Quantum Vault met plausibele ontkenning, Ghost Groups, Witness Mode, Dead Man's Switch en mesh-netwerken. SPEAQ is niet zomaar een messenger - het is een vrijheidsplatform.",
+      answer: "WhatsApp is eigendom van Meta en verzamelt uitgebreide metadata. Telegram versleutelt groepschats niet standaard. Signal is goed maar vereist nog steeds een telefoonnummer en heeft geen ingebouwde betalingen of mining. SPEAQ vereist geen telefoonnummer, geen e-mail, geen echte naam. Het voegt een soevereine wallet toe met door goud gedekte Q-Credits, Proof of Contribution mining, een Private Storage met extra privacylaag, Private Groups, Witness Mode, Safety Check-in en mesh-netwerken. SPEAQ is niet zomaar een messenger - het is een vrijheidsplatform.",
     },
     {
       question: "Moet ik me registreren met mijn telefoonnummer of e-mail?",
@@ -120,7 +120,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Is SPEAQ gratis?",
-      answer: "Ja. SPEAQ is gratis te downloaden en te gebruiken. Alle kernfuncties - berichten, spraak- en videogesprekken, bestandsdeling, Quantum Vault, Ghost Groups, Witness Mode en Dead Man's Switch - zijn gratis. Je kunt ook Q-Credits verdienen via Proof of Contribution mining zonder kosten.",
+      answer: "Ja. SPEAQ is gratis te downloaden en te gebruiken. Alle kernfuncties - berichten, spraak- en videogesprekken, bestandsdeling, Private Storage, Private Groups, Witness Mode en Safety Check-in - zijn gratis. Je kunt ook Q-Credits verdienen via Proof of Contribution mining zonder kosten.",
     },
   ],
   fr: [
@@ -130,11 +130,11 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Pourquoi SPEAQ a-t-il ete cree ?",
-      answer: "SPEAQ a ete cree parce que le monde a besoin d'une plateforme de communication qui appartient reellement a ses utilisateurs. Les plateformes existantes collectent vos donnees, scannent vos messages, se conforment aux demandes de surveillance gouvernementale et peuvent geler vos comptes a volonte. SPEAQ a ete construit de zero avec une architecture zero-knowledge - nous ne pouvons pas lire vos messages, meme si nous le voulions. Votre liberte n'est pas une fonctionnalite. C'est le fondement.",
+      answer: "SPEAQ a ete cree parce que le monde a besoin d'une plateforme de communication qui appartient reellement a ses utilisateurs. Les plateformes existantes collectent vos donnees, scannent vos messages, et peuvent partager vos donnees avec des tiers. SPEAQ a ete construit de zero avec une architecture zero-knowledge - nous ne pouvons pas lire vos messages, meme si nous le voulions. Votre liberte n'est pas une fonctionnalite. C'est le fondement.",
     },
     {
       question: "En quoi SPEAQ est-il different de WhatsApp, Signal ou Telegram ?",
-      answer: "WhatsApp appartient a Meta et collecte des metadonnees etendues. Telegram ne chiffre pas les discussions de groupe par defaut. Signal est bon mais necessite toujours un numero de telephone et n'a pas de paiements ni de minage integres. SPEAQ ne necessite ni numero de telephone, ni e-mail, ni vrai nom. Il ajoute un portefeuille souverain avec des Q-Credits adosses a l'or, le minage Proof of Contribution, un Quantum Vault avec deniabilite plausible, des Ghost Groups, le mode Temoin, le Dead Man's Switch et un reseau maille. SPEAQ n'est pas qu'une messagerie - c'est une plateforme de liberte.",
+      answer: "WhatsApp appartient a Meta et collecte des metadonnees etendues. Telegram ne chiffre pas les discussions de groupe par defaut. Signal est bon mais necessite toujours un numero de telephone et n'a pas de paiements ni de minage integres. SPEAQ ne necessite ni numero de telephone, ni e-mail, ni vrai nom. Il ajoute un portefeuille souverain avec des Q-Credits adosses a l'or, le minage Proof of Contribution, un Private Storage avec couche de confidentialite, des Private Groups, le mode Temoin, le Safety Check-in et un reseau maille. SPEAQ n'est pas qu'une messagerie - c'est une plateforme de liberte.",
     },
     {
       question: "Dois-je m'inscrire avec mon numero de telephone ou mon e-mail ?",
@@ -142,7 +142,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "SPEAQ est-il gratuit ?",
-      answer: "Oui. SPEAQ est gratuit a telecharger et a utiliser. Toutes les fonctionnalites principales - messagerie, appels vocaux et video, partage de fichiers, Quantum Vault, Ghost Groups, mode Temoin et Dead Man's Switch - sont gratuites. Vous pouvez egalement gagner des Q-Credits grace au minage Proof of Contribution sans aucun cout.",
+      answer: "Oui. SPEAQ est gratuit a telecharger et a utiliser. Toutes les fonctionnalites principales - messagerie, appels vocaux et video, partage de fichiers, Private Storage, Private Groups, mode Temoin et Safety Check-in - sont gratuites. Vous pouvez egalement gagner des Q-Credits grace au minage Proof of Contribution sans aucun cout.",
     },
   ],
   es: [
@@ -156,7 +156,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "En que se diferencia SPEAQ de WhatsApp, Signal o Telegram?",
-      answer: "WhatsApp es propiedad de Meta y recopila metadatos extensos. Telegram no cifra los chats grupales por defecto. Signal es bueno pero todavia requiere un numero de telefono y no tiene pagos ni mineria integrados. SPEAQ no requiere numero de telefono, ni correo electronico, ni nombre real. Agrega una billetera soberana con Q-Credits respaldados por oro, mineria Proof of Contribution, un Quantum Vault con negacion plausible, Ghost Groups, modo Testigo, Dead Man's Switch y red mesh. SPEAQ no es solo un mensajero - es una plataforma de libertad.",
+      answer: "WhatsApp es propiedad de Meta y recopila metadatos extensos. Telegram no cifra los chats grupales por defecto. Signal es bueno pero todavia requiere un numero de telefono y no tiene pagos ni mineria integrados. SPEAQ no requiere numero de telefono, ni correo electronico, ni nombre real. Agrega una billetera soberana con Q-Credits respaldados por oro, mineria Proof of Contribution, un Private Storage con capa de privacidad, Private Groups, modo Testigo, Safety Check-in y red mesh. SPEAQ no es solo un mensajero - es una plataforma de libertad.",
     },
     {
       question: "Necesito registrarme con mi numero de telefono o correo electronico?",
@@ -164,7 +164,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Es SPEAQ gratuito?",
-      answer: "Si. SPEAQ es gratuito para descargar y usar. Todas las funciones principales - mensajeria, llamadas de voz y video, uso compartido de archivos, Quantum Vault, Ghost Groups, modo Testigo y Dead Man's Switch - son gratuitas. Tambien puedes ganar Q-Credits a traves de la mineria Proof of Contribution sin costo alguno.",
+      answer: "Si. SPEAQ es gratuito para descargar y usar. Todas las funciones principales - mensajeria, llamadas de voz y video, uso compartido de archivos, Private Storage, Private Groups, modo Testigo y Safety Check-in - son gratuitas. Tambien puedes ganar Q-Credits a traves de la mineria Proof of Contribution sin costo alguno.",
     },
   ],
   ru: [
@@ -178,7 +178,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Chem SPEAQ otlichaetsya ot WhatsApp, Signal ili Telegram?",
-      answer: "WhatsApp prinadlezhit Meta i sobiraet obshirnye metadannye. Telegram ne shifruet gruppovye chaty po umolchaniyu. Signal khorosh, no vse eshche trebuet nomer telefona i ne imeet vstroyennykh platezhey ili mayninga. SPEAQ ne trebuet nomera telefona, elektronnoy pochty ili nastoyashchego imeni. On dobavlyaet suverennyy koshelek s Q-Credits, obespechennymi zolotom, mayning Proof of Contribution, Quantum Vault s pravdopodobnym otpiratelstvom, Ghost Groups, rezhim Svidetelya, Dead Man's Switch i mesh-set. SPEAQ - eto ne prosto messendzher - eto platforma svobody.",
+      answer: "WhatsApp prinadlezhit Meta i sobiraet obshirnye metadannye. Telegram ne shifruet gruppovye chaty po umolchaniyu. Signal khorosh, no vse eshche trebuet nomer telefona i ne imeet vstroyennykh platezhey ili mayninga. SPEAQ ne trebuet nomera telefona, elektronnoy pochty ili nastoyashchego imeni. On dobavlyaet suverennyy koshelek s Q-Credits, obespechennymi zolotom, mayning Proof of Contribution, Private Storage s dopolnitelnoj konfidentsialnostyu, Private Groups, rezhim Svidetelya, Safety Check-in i mesh-set. SPEAQ - eto ne prosto messendzher - eto platforma svobody.",
     },
     {
       question: "Nuzhno li registrirovatsya s nomerom telefona ili elektronnoy pochtoy?",
@@ -186,13 +186,13 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "SPEAQ besplaten?",
-      answer: "Da. SPEAQ besplaten dlya skachivaniya i ispolzovaniya. Vse osnovnye funktsii - soobshcheniya, golosovye i videozvonki, obmen faylami, Quantum Vault, Ghost Groups, rezhim Svidetelya i Dead Man's Switch - besplatny. Vy takzhe mozhete zarabatyvat Q-Credits cherez mayning Proof of Contribution bez kakikh-libo zatrat.",
+      answer: "Da. SPEAQ besplaten dlya skachivaniya i ispolzovaniya. Vse osnovnye funktsii - soobshcheniya, golosovye i videozvonki, obmen faylami, Private Storage, Private Groups, rezhim Svidetelya i Safety Check-in - besplatny. Vy takzhe mozhete zarabatyvat Q-Credits cherez mayning Proof of Contribution bez kakikh-libo zatrat.",
     },
   ],
   de: [
     {
       question: "Was ist SPEAQ?",
-      answer: "SPEAQ ist die sicherste Kommunikations- und Freiheitsplattform der Welt. Sie kombiniert quantenresistente Verschlusselung, Zensurresistenz, private Zahlungen, dezentrales Mining und souverane Identitat in einer App. Chatten, telefonieren, bezahlen, surfen, speichern, minen - alles geschutzt durch Verschlusselung auf Militarniveau, die selbst Quantencomputer nicht knacken konnen.",
+      answer: "SPEAQ ist die sicherste Kommunikations- und Freiheitsplattform der Welt. Sie kombiniert quantenresistente Verschlusselung, Zensurresistenz, private Zahlungen, dezentrales Mining und souverane Identitat in einer App. Chatten, telefonieren, bezahlen, surfen, speichern, minen - alles geschutzt durch Verifizierte Verschlusselung, die selbst Quantencomputer nicht knacken konnen.",
     },
     {
       question: "Warum wurde SPEAQ geschaffen?",
@@ -200,7 +200,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Wie unterscheidet sich SPEAQ von WhatsApp, Signal oder Telegram?",
-      answer: "WhatsApp gehort Meta und sammelt umfangreiche Metadaten. Telegram verschlusselt Gruppenchats nicht standardmassig. Signal ist gut, erfordert aber immer noch eine Telefonnummer und hat keine integrierten Zahlungen oder Mining. SPEAQ erfordert keine Telefonnummer, keine E-Mail, keinen echten Namen. Es bietet eine souverane Wallet mit goldgedeckten Q-Credits, Proof of Contribution Mining, einen Quantum Vault mit plausibler Abstreitbarkeit, Ghost Groups, Zeugenmodus, Dead Man's Switch und Mesh-Netzwerke. SPEAQ ist nicht nur ein Messenger - es ist eine Freiheitsplattform.",
+      answer: "WhatsApp gehort Meta und sammelt umfangreiche Metadaten. Telegram verschlusselt Gruppenchats nicht standardmassig. Signal ist gut, erfordert aber immer noch eine Telefonnummer und hat keine integrierten Zahlungen oder Mining. SPEAQ erfordert keine Telefonnummer, keine E-Mail, keinen echten Namen. Es bietet eine souverane Wallet mit goldgedeckten Q-Credits, Proof of Contribution Mining, einen Private Storage mit zusatzlicher Privatsphare, Private Groups, Zeugenmodus, Safety Check-in und Mesh-Netzwerke. SPEAQ ist nicht nur ein Messenger - es ist eine Freiheitsplattform.",
     },
     {
       question: "Muss ich mich mit meiner Telefonnummer oder E-Mail registrieren?",
@@ -208,7 +208,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Ist SPEAQ kostenlos?",
-      answer: "Ja. SPEAQ kann kostenlos heruntergeladen und genutzt werden. Alle Kernfunktionen - Nachrichten, Sprach- und Videoanrufe, Dateifreigabe, Quantum Vault, Ghost Groups, Zeugenmodus und Dead Man's Switch - sind kostenlos. Sie konnen auch Q-Credits durch Proof of Contribution Mining ohne Kosten verdienen.",
+      answer: "Ja. SPEAQ kann kostenlos heruntergeladen und genutzt werden. Alle Kernfunktionen - Nachrichten, Sprach- und Videoanrufe, Dateifreigabe, Private Storage, Private Groups, Zeugenmodus und Safety Check-in - sind kostenlos. Sie konnen auch Q-Credits durch Proof of Contribution Mining ohne Kosten verdienen.",
     },
   ],
   sl: [
@@ -222,7 +222,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Kako se SPEAQ razlikuje od WhatsApp, Signal ali Telegram?",
-      answer: "WhatsApp je v lasti podjetja Meta in zbira obsezne metapodatke. Telegram privzeto ne sifrira skupinskih klepetov. Signal je dober, a se vedno zahteva telefonsko stevilko in nima vgrajenih placil ali rudarjenja. SPEAQ ne zahteva telefonske stevilke, e-poste ali pravega imena. Dodaja suvereno denarnico z zlatom podprtimi Q-Credits, rudarjenje Proof of Contribution, Quantum Vault z verjetnim zanikanjem, Ghost Groups, nacin Price, Dead Man's Switch in omrezje mesh. SPEAQ ni le sporocilnik - je platforma svobode.",
+      answer: "WhatsApp je v lasti podjetja Meta in zbira obsezne metapodatke. Telegram privzeto ne sifrira skupinskih klepetov. Signal je dober, a se vedno zahteva telefonsko stevilko in nima vgrajenih placil ali rudarjenja. SPEAQ ne zahteva telefonske stevilke, e-poste ali pravega imena. Dodaja suvereno denarnico z zlatom podprtimi Q-Credits, rudarjenje Proof of Contribution, Private Storage z verjetnim zanikanjem, Private Groups, nacin Price, Safety Check-in in omrezje mesh. SPEAQ ni le sporocilnik - je platforma svobode.",
     },
     {
       question: "Ali se moram registrirati s telefonsko stevilko ali e-posto?",
@@ -230,7 +230,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Ali je SPEAQ brezplacen?",
-      answer: "Da. SPEAQ je brezplacen za prenos in uporabo. Vse osnovne funkcije - sporocanje, glasovni in video klici, deljenje datotek, Quantum Vault, Ghost Groups, nacin Price in Dead Man's Switch - so brezplacne. Prav tako lahko zasluzite Q-Credits z rudarjenjem Proof of Contribution brez stroskov.",
+      answer: "Da. SPEAQ je brezplacen za prenos in uporabo. Vse osnovne funkcije - sporocanje, glasovni in video klici, deljenje datotek, Private Storage, Private Groups, nacin Price in Safety Check-in - so brezplacne. Prav tako lahko zasluzite Q-Credits z rudarjenjem Proof of Contribution brez stroskov.",
     },
   ],
   lg: [
@@ -244,7 +244,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "SPEAQ eyawukana etya ku WhatsApp, Signal, oba Telegram?",
-      answer: "WhatsApp ya Meta era ekuŋŋaanya metadata ennyingi. Telegram tekola nkola y'okuziyiza mu biwandiiko by'ekibinja mu butandisi. Signal nnungi naye ekyetaagisa ennamba y'essimu era terina kusasula oba okusimba okuzimbiddwamu. SPEAQ tekyetaagisa nnamba ya ssimu, email, oba erinnya ly'amazima. Eyongera wallet ey'obwannannyini n'e Q-Credits ezisigamiziddwa ku zabu, okusimba Proof of Contribution, Quantum Vault n'okusobola okugaana, Ghost Groups, Witness Mode, Dead Man's Switch, n'emikutu gya mesh. SPEAQ si messenger bwokka - ye pulatifomu y'eddembe.",
+      answer: "WhatsApp ya Meta era ekuŋŋaanya metadata ennyingi. Telegram tekola nkola y'okuziyiza mu biwandiiko by'ekibinja mu butandisi. Signal nnungi naye ekyetaagisa ennamba y'essimu era terina kusasula oba okusimba okuzimbiddwamu. SPEAQ tekyetaagisa nnamba ya ssimu, email, oba erinnya ly'amazima. Eyongera wallet ey'obwannannyini n'e Q-Credits ezisigamiziddwa ku zabu, okusimba Proof of Contribution, Private Storage n'okusobola okugaana, Private Groups, Witness Mode, Safety Check-in, n'emikutu gya mesh. SPEAQ si messenger bwokka - ye pulatifomu y'eddembe.",
     },
     {
       question: "Nneetaaga okwewandiisa n'ennamba yange ey'essimu oba email?",
@@ -252,7 +252,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "SPEAQ ya bwereere?",
-      answer: "Yee. SPEAQ ya bwereere okugulawo n'okukozesa. Ebikola byonna ebikulu - obubaka, okukuba amaloboozi n'ebifaananyi, okugabana fayiro, Quantum Vault, Ghost Groups, Witness Mode, ne Dead Man's Switch - bya bwereere. Osobola n'okufuna Q-Credits okuyita mu kusimba Proof of Contribution awatali ssente.",
+      answer: "Yee. SPEAQ ya bwereere okugulawo n'okukozesa. Ebikola byonna ebikulu - obubaka, okukuba amaloboozi n'ebifaananyi, okugabana fayiro, Private Storage, Private Groups, Witness Mode, ne Safety Check-in - bya bwereere. Osobola n'okufuna Q-Credits okuyita mu kusimba Proof of Contribution awatali ssente.",
     },
   ],
   sw: [
@@ -266,7 +266,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "SPEAQ inatofautiana vipi na WhatsApp, Signal, au Telegram?",
-      answer: "WhatsApp inamilikiwa na Meta na inakusanya metadata nyingi. Telegram haisimbaji mazungumzo ya vikundi kwa chaguo-msingi. Signal ni nzuri lakini bado inahitaji nambari ya simu na haina malipo au uchimbaji uliojengwa ndani. SPEAQ haihitaji nambari ya simu, barua pepe, au jina halisi. Inaongeza pochi huru yenye Q-Credits zinazoungwa mkono na dhahabu, uchimbaji wa Proof of Contribution, Quantum Vault yenye ukanushi wa kuaminika, Ghost Groups, Hali ya Shahidi, Dead Man's Switch, na mtandao wa mesh. SPEAQ si mjumbe tu - ni jukwaa la uhuru.",
+      answer: "WhatsApp inamilikiwa na Meta na inakusanya metadata nyingi. Telegram haisimbaji mazungumzo ya vikundi kwa chaguo-msingi. Signal ni nzuri lakini bado inahitaji nambari ya simu na haina malipo au uchimbaji uliojengwa ndani. SPEAQ haihitaji nambari ya simu, barua pepe, au jina halisi. Inaongeza pochi huru yenye Q-Credits zinazoungwa mkono na dhahabu, uchimbaji wa Proof of Contribution, Private Storage yenye ukanushi wa kuaminika, Private Groups, Hali ya Shahidi, Safety Check-in, na mtandao wa mesh. SPEAQ si mjumbe tu - ni jukwaa la uhuru.",
     },
     {
       question: "Je, ninahitaji kusajiliwa na nambari yangu ya simu au barua pepe?",
@@ -274,7 +274,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Je, SPEAQ ni bure?",
-      answer: "Ndiyo. SPEAQ ni bure kupakua na kutumia. Vipengele vyote vya msingi - ujumbe, simu za sauti na video, kushiriki faili, Quantum Vault, Ghost Groups, Hali ya Shahidi, na Dead Man's Switch - ni bure. Unaweza pia kupata Q-Credits kupitia uchimbaji wa Proof of Contribution bila gharama yoyote.",
+      answer: "Ndiyo. SPEAQ ni bure kupakua na kutumia. Vipengele vyote vya msingi - ujumbe, simu za sauti na video, kushiriki faili, Private Storage, Private Groups, Hali ya Shahidi, na Safety Check-in - ni bure. Unaweza pia kupata Q-Credits kupitia uchimbaji wa Proof of Contribution bila gharama yoyote.",
     },
   ],
 };
@@ -289,7 +289,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "What encryption does SPEAQ use?",
-      answer: "SPEAQ uses AES-256 for message encryption (the same standard used by military and intelligence agencies), the Double Ratchet protocol for forward secrecy (every message has a unique key), Kyber-768 for post-quantum key exchange (NIST-approved lattice-based KEM), ML-DSA-65 (FIPS 204) for wallet transaction signing, SPHINCS+ (FIPS 205) for blockchain block signing, SHA-256 for hashing, and HMAC-SHA256 for message authentication.",
+      answer: "SPEAQ uses AES-256 for message encryption (the same standard used by banks worldwide), the Double Ratchet protocol for forward secrecy (every message has a unique key), Kyber-768 for post-quantum key exchange (NIST-approved lattice-based KEM), ML-DSA-65 (FIPS 204) for wallet transaction signing, SPHINCS+ (FIPS 205) for blockchain block signing, SHA-256 for hashing, and HMAC-SHA256 for message authentication.",
     },
     {
       question: "What is quantum-resistant encryption and why does it matter?",
@@ -317,7 +317,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "What are the security layers in SPEAQ?",
-      answer: "SPEAQ has 9 layers of security:\n\n1. Obfuscation + Mesh - Traffic analysis resistance through mesh networking and data obfuscation\n2. Sealed Sender - Server cannot see who sent a message\n3. AES-256 + Double Ratchet - Military-grade encryption with forward secrecy for every message\n4. HMAC-SHA256 - Message authentication to prevent tampering\n5. Kyber-768 - Post-quantum key exchange resistant to quantum computers\n6. QRNG - Quantum random number generation for true randomness\n7. ML-DSA-65 (FIPS 204) - Quantum-resistant digital signatures for wallet transactions\n8. SPHINCS+ (FIPS 205) - Hash-based signatures for blockchain block signing\n9. Plausible Deniability - Hidden vault layer with no technical proof of existence",
+      answer: "SPEAQ has 9 layers of security:\n\n1. Obfuscation + Mesh - Traffic analysis resistance through mesh networking and data obfuscation\n2. Sealed Sender - Server cannot see who sent a message\n3. AES-256 + Double Ratchet - Verified encryption with forward secrecy for every message\n4. HMAC-SHA256 - Message authentication to prevent tampering\n5. Kyber-768 - Post-quantum key exchange resistant to quantum computers\n6. QRNG - Quantum random number generation for true randomness\n7. ML-DSA-65 (FIPS 204) - Quantum-resistant digital signatures for wallet transactions\n8. SPHINCS+ (FIPS 205) - Hash-based signatures for blockchain block signing\n9. Extra Privacy Layer - Hidden vault layer with no technical proof of existence",
     },
   ],
   nl: [
@@ -327,7 +327,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Welke encryptie gebruikt SPEAQ?",
-      answer: "SPEAQ gebruikt AES-256 voor berichtencryptie (dezelfde standaard als bij militaire en inlichtingendiensten), het Double Ratchet-protocol voor forward secrecy (elk bericht heeft een unieke sleutel), Kyber-768 voor post-quantum sleuteluitwisseling (NIST-goedgekeurde lattice-gebaseerde KEM), ML-DSA-65 (FIPS 204) voor het ondertekenen van wallet-transacties, SPHINCS+ (FIPS 205) voor het ondertekenen van blockchain-blokken, SHA-256 voor hashing en HMAC-SHA256 voor berichtauthenticatie.",
+      answer: "SPEAQ gebruikt AES-256 voor berichtencryptie (dezelfde standaard als bij banken wereldwijd), het Double Ratchet-protocol voor forward secrecy (elk bericht heeft een unieke sleutel), Kyber-768 voor post-quantum sleuteluitwisseling (NIST-goedgekeurde lattice-gebaseerde KEM), ML-DSA-65 (FIPS 204) voor het ondertekenen van wallet-transacties, SPHINCS+ (FIPS 205) voor het ondertekenen van blockchain-blokken, SHA-256 voor hashing en HMAC-SHA256 voor berichtauthenticatie.",
     },
     {
       question: "Wat is kwantumbestendige encryptie en waarom is het belangrijk?",
@@ -393,7 +393,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Quelles sont les couches de securite de SPEAQ ?",
-      answer: "SPEAQ dispose de 9 couches de securite :\n\n1. Obfuscation + Mesh - Resistance a l'analyse du trafic grace au reseau maille et a l'obfuscation des donnees\n2. Sealed Sender - Le serveur ne peut pas voir qui a envoye un message\n3. AES-256 + Double Ratchet - Chiffrement de niveau militaire avec confidentialite persistante pour chaque message\n4. HMAC-SHA256 - Authentification des messages pour empecher la falsification\n5. Kyber-768 - Echange de cles post-quantique resistant aux ordinateurs quantiques\n6. QRNG - Generation de nombres aleatoires quantiques pour un veritable hasard\n7. ML-DSA-65 (FIPS 204) - Signatures numeriques resistantes aux quantiques pour les transactions de portefeuille\n8. SPHINCS+ (FIPS 205) - Signatures basees sur le hachage pour la signature des blocs de la blockchain\n9. Deniabilite plausible - Couche de coffre-fort cachee sans preuve technique d'existence",
+      answer: "SPEAQ dispose de 9 couches de securite :\n\n1. Obfuscation + Mesh - Resistance a l'analyse du trafic grace au reseau maille et a l'obfuscation des donnees\n2. Sealed Sender - Le serveur ne peut pas voir qui a envoye un message\n3. AES-256 + Double Ratchet - Chiffrement verifie avec confidentialite persistante pour chaque message\n4. HMAC-SHA256 - Authentification des messages pour empecher la falsification\n5. Kyber-768 - Echange de cles post-quantique resistant aux ordinateurs quantiques\n6. QRNG - Generation de nombres aleatoires quantiques pour un veritable hasard\n7. ML-DSA-65 (FIPS 204) - Signatures numeriques resistantes aux quantiques pour les transactions de portefeuille\n8. SPHINCS+ (FIPS 205) - Signatures basees sur le hachage pour la signature des blocs de la blockchain\n9. Couche de confidentialite supplementaire pour fichiers sensibles",
     },
   ],
   es: [
@@ -431,7 +431,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Cuales son las capas de seguridad en SPEAQ?",
-      answer: "SPEAQ tiene 9 capas de seguridad:\n\n1. Ofuscacion + Mesh - Resistencia al analisis de trafico mediante redes mesh y ofuscacion de datos\n2. Sealed Sender - El servidor no puede ver quien envio un mensaje\n3. AES-256 + Double Ratchet - Cifrado de grado militar con secreto perfecto hacia adelante para cada mensaje\n4. HMAC-SHA256 - Autenticacion de mensajes para prevenir manipulacion\n5. Kyber-768 - Intercambio de claves post-cuantico resistente a computadoras cuanticas\n6. QRNG - Generacion de numeros aleatorios cuanticos para aleatoriedad verdadera\n7. ML-DSA-65 (FIPS 204) - Firmas digitales resistentes a cuanticas para transacciones de billetera\n8. SPHINCS+ (FIPS 205) - Firmas basadas en hash para firmar bloques de blockchain\n9. Negacion plausible - Capa de boveda oculta sin prueba tecnica de existencia",
+      answer: "SPEAQ tiene 9 capas de seguridad:\n\n1. Ofuscacion + Mesh - Resistencia al analisis de trafico mediante redes mesh y ofuscacion de datos\n2. Sealed Sender - El servidor no puede ver quien envio un mensaje\n3. AES-256 + Double Ratchet - Cifrado verificado con secreto perfecto hacia adelante para cada mensaje\n4. HMAC-SHA256 - Autenticacion de mensajes para prevenir manipulacion\n5. Kyber-768 - Intercambio de claves post-cuantico resistente a computadoras cuanticas\n6. QRNG - Generacion de numeros aleatorios cuanticos para aleatoriedad verdadera\n7. ML-DSA-65 (FIPS 204) - Firmas digitales resistentes a cuanticas para transacciones de billetera\n8. SPHINCS+ (FIPS 205) - Firmas basadas en hash para firmar bloques de blockchain\n9. Capa de privacidad adicional - Capa de boveda oculta sin prueba tecnica de existencia",
     },
   ],
   ru: [
@@ -507,7 +507,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Welche Sicherheitsschichten hat SPEAQ?",
-      answer: "SPEAQ hat 9 Sicherheitsschichten:\n\n1. Verschleierung + Mesh - Widerstand gegen Verkehrsanalyse durch Mesh-Netzwerke und Datenverschleierung\n2. Sealed Sender - Server kann nicht sehen, wer eine Nachricht gesendet hat\n3. AES-256 + Double Ratchet - Verschlusselung auf Militarniveau mit Vorwartsgeheimnis fur jede Nachricht\n4. HMAC-SHA256 - Nachrichtenauthentifizierung zur Verhinderung von Manipulation\n5. Kyber-768 - Post-Quanten-Schlusselaustausch resistent gegen Quantencomputer\n6. QRNG - Quantenzufallige Zahlengenerierung fur echte Zufalligkeit\n7. ML-DSA-65 (FIPS 204) - Quantenresistente digitale Signaturen fur Wallet-Transaktionen\n8. SPHINCS+ (FIPS 205) - Hash-basierte Signaturen fur Blockchain-Block-Signierung\n9. Plausible Abstreitbarkeit - Versteckte Tresorschicht ohne technischen Existenznachweis",
+      answer: "SPEAQ hat 9 Sicherheitsschichten:\n\n1. Verschleierung + Mesh - Widerstand gegen Verkehrsanalyse durch Mesh-Netzwerke und Datenverschleierung\n2. Sealed Sender - Server kann nicht sehen, wer eine Nachricht gesendet hat\n3. AES-256 + Double Ratchet - Verifizierte Verschlusselung mit Vorwartsgeheimnis fur jede Nachricht\n4. HMAC-SHA256 - Nachrichtenauthentifizierung zur Verhinderung von Manipulation\n5. Kyber-768 - Post-Quanten-Schlusselaustausch resistent gegen Quantencomputer\n6. QRNG - Quantenzufallige Zahlengenerierung fur echte Zufalligkeit\n7. ML-DSA-65 (FIPS 204) - Quantenresistente digitale Signaturen fur Wallet-Transaktionen\n8. SPHINCS+ (FIPS 205) - Hash-basierte Signaturen fur Blockchain-Block-Signierung\n9. Zusatzliche Privatsphare - Versteckte Tresorschicht ohne technischen Existenznachweis",
     },
   ],
   sl: [
@@ -583,7 +583,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Ebitundu by'obukuumi mu SPEAQ bye biruwa?",
-      answer: "SPEAQ erina ebitundu 9 eby'obukuumi:\n\n1. Obfuscation + Mesh - Okweziyiza okwekenneenya kwa traffic okuyita mu mikutu gya mesh n'obfuscation y'adata\n2. Sealed Sender - Seva tesobola kulaba ani eyatumye obubaka\n3. AES-256 + Double Ratchet - Enkola y'okuziyiza ey'amagye n'obukyama obw'omu maaso ku buli bubaka\n4. HMAC-SHA256 - Okukakasa obubaka okuziyiza okukyusakyusa\n5. Kyber-768 - Okukyusakyusa ebisumuluzo okw'omu maaso okukwatagana ne kkomppyuta z'ekikwantimu\n6. QRNG - Okukola ennamba z'akasirise eza kwantimu olw'akasirise ak'amazima\n7. ML-DSA-65 (FIPS 204) - Okusayina kwe digital okukwatagana ne kwantimu ku by'enfuna mu wallet\n8. SPHINCS+ (FIPS 205) - Okusayina okusigamiziddwa ku hash ku blocks za blockchain\n9. Plausible Deniability - Ekitundu eky'ekyama ekitaliiko bukakasa bwa tekiniki nti kiliwo",
+      answer: "SPEAQ erina ebitundu 9 eby'obukuumi:\n\n1. Obfuscation + Mesh - Okweziyiza okwekenneenya kwa traffic okuyita mu mikutu gya mesh n'obfuscation y'adata\n2. Sealed Sender - Seva tesobola kulaba ani eyatumye obubaka\n3. AES-256 + Double Ratchet - Enkola y'okuziyiza ey'amagye n'obukyama obw'omu maaso ku buli bubaka\n4. HMAC-SHA256 - Okukakasa obubaka okuziyiza okukyusakyusa\n5. Kyber-768 - Okukyusakyusa ebisumuluzo okw'omu maaso okukwatagana ne kkomppyuta z'ekikwantimu\n6. QRNG - Okukola ennamba z'akasirise eza kwantimu olw'akasirise ak'amazima\n7. ML-DSA-65 (FIPS 204) - Okusayina kwe digital okukwatagana ne kwantimu ku by'enfuna mu wallet\n8. SPHINCS+ (FIPS 205) - Okusayina okusigamiziddwa ku hash ku blocks za blockchain\n9. Extra Privacy Layer - Ekitundu eky'ekyama ekitaliiko bukakasa bwa tekiniki nti kiliwo",
     },
   ],
   sw: [
@@ -1348,20 +1348,20 @@ const blockchain: Record<Lang, FaqItem[]> = {
 const features: Record<Lang, FaqItem[]> = {
   en: [
     {
-      question: "What are Ghost Groups?",
-      answer: "Ghost Groups are invisible group chats. Members cannot see who else is in the group. The server has no record of the group existing. Messages are sent individually to each member through separate encrypted channels. This protects activists, journalists, and anyone who needs to communicate without a visible group structure. There is no group metadata to subpoena.",
+      question: "What are Private Groups?",
+      answer: "Private Groups are invisible group chats. Members cannot see who else is in the group. The server has no record of the group existing. Messages are sent individually to each member through separate encrypted channels. This protects activists, journalists, and anyone who needs to communicate without a visible group structure. There is no group metadata to subpoena.",
     },
     {
       question: "What is Witness Mode?",
       answer: "Witness Mode creates tamper-proof evidence. When you record something in Witness Mode, it is timestamped and hashed with SHA-256. The hash cryptographically proves that the content existed at that exact moment and has not been modified since. Use this for documenting human rights violations, corruption, police misconduct, or any situation where evidence must be preserved and verified.",
     },
     {
-      question: "What is the Dead Man's Switch?",
+      question: "What is the Safety Check-in?",
       answer: "If you do not check in within your set interval, a pre-configured message is automatically sent to your chosen contacts. This protects journalists, activists, and whistleblowers. If something happens to you, your emergency contacts will be notified automatically. The switch is entirely configurable - you set the interval, the message, and the recipients.",
     },
     {
-      question: "What is the Quantum Vault?",
-      answer: "The Quantum Vault stores your sensitive files (photos, documents, notes) with encryption on your device. It has two layers: a visible layer accessible with your normal PIN, and a hidden layer accessible only with a separate secret PIN. If someone forces you to open your phone, the hidden layer is completely invisible - there is no technical proof it exists. This is called plausible deniability.",
+      question: "What is the Private Storage?",
+      answer: "The Private Storage stores your sensitive files (photos, documents, notes) with encryption on your device. It has two layers: a visible layer accessible with your normal PIN, and a hidden layer accessible only with a separate secret PIN. If someone forces you to open your phone, the hidden layer is completely invisible - there is no technical proof it exists. This is called extra privacy layer.",
     },
     {
       question: "Does SPEAQ work without internet?",
@@ -1370,20 +1370,20 @@ const features: Record<Lang, FaqItem[]> = {
   ],
   nl: [
     {
-      question: "Wat zijn Ghost Groups?",
-      answer: "Ghost Groups zijn onzichtbare groepschats. Leden kunnen niet zien wie er nog meer in de groep zit. De server heeft geen registratie dat de groep bestaat. Berichten worden individueel naar elk lid verstuurd via afzonderlijke versleutelde kanalen. Dit beschermt activisten, journalisten en iedereen die moet communiceren zonder een zichtbare groepsstructuur. Er is geen groepsmetadata om op te vragen.",
+      question: "Wat zijn Private Groups?",
+      answer: "Private Groups zijn onzichtbare groepschats. Leden kunnen niet zien wie er nog meer in de groep zit. De server heeft geen registratie dat de groep bestaat. Berichten worden individueel naar elk lid verstuurd via afzonderlijke versleutelde kanalen. Dit beschermt activisten, journalisten en iedereen die moet communiceren zonder een zichtbare groepsstructuur. Er is geen groepsmetadata om op te vragen.",
     },
     {
       question: "Wat is Witness Mode?",
       answer: "Witness Mode creert manipulatiebestendig bewijs. Wanneer je iets opneemt in Witness Mode, wordt het voorzien van een tijdstempel en gehasht met SHA-256. De hash bewijst cryptografisch dat de inhoud op dat exacte moment bestond en sindsdien niet is gewijzigd. Gebruik dit voor het documenteren van mensenrechtenschendingen, corruptie, politiemisbruik of elke situatie waarin bewijs bewaard en geverifieerd moet worden.",
     },
     {
-      question: "Wat is de Dead Man's Switch?",
+      question: "Wat is de Safety Check-in?",
       answer: "Als je niet incheckt binnen je ingestelde interval, wordt een vooraf geconfigureerd bericht automatisch verzonden naar je gekozen contacten. Dit beschermt journalisten, activisten en klokkenluiders. Als er iets met je gebeurt, worden je noodcontacten automatisch op de hoogte gesteld. De schakelaar is volledig configureerbaar - je stelt het interval, het bericht en de ontvangers in.",
     },
     {
-      question: "Wat is de Quantum Vault?",
-      answer: "De Quantum Vault slaat je gevoelige bestanden op (foto's, documenten, notities) met encryptie op je apparaat. Het heeft twee lagen: een zichtbare laag toegankelijk met je normale PIN, en een verborgen laag die alleen toegankelijk is met een aparte geheime PIN. Als iemand je dwingt je telefoon te openen, is de verborgen laag volledig onzichtbaar - er is geen technisch bewijs dat deze bestaat. Dit heet plausibele ontkenning.",
+      question: "Wat is de Private Storage?",
+      answer: "De Private Storage slaat je gevoelige bestanden op (foto's, documenten, notities) met encryptie op je apparaat. Het heeft twee lagen: een zichtbare laag toegankelijk met je normale PIN, en een verborgen laag die alleen toegankelijk is met een aparte geheime PIN. Als iemand je dwingt je telefoon te openen, is de verborgen laag volledig onzichtbaar - er is geen technisch bewijs dat deze bestaat. Dit heet extra privacylaag.",
     },
     {
       question: "Werkt SPEAQ zonder internet?",
@@ -1392,20 +1392,20 @@ const features: Record<Lang, FaqItem[]> = {
   ],
   fr: [
     {
-      question: "Que sont les Ghost Groups ?",
-      answer: "Les Ghost Groups sont des discussions de groupe invisibles. Les membres ne peuvent pas voir qui d'autre est dans le groupe. Le serveur n'a aucun enregistrement de l'existence du groupe. Les messages sont envoyes individuellement a chaque membre via des canaux chiffres separes. Cela protege les activistes, les journalistes et tous ceux qui ont besoin de communiquer sans structure de groupe visible. Il n'y a pas de metadonnees de groupe a citer en justice.",
+      question: "Que sont les Private Groups ?",
+      answer: "Les Private Groups sont des discussions de groupe invisibles. Les membres ne peuvent pas voir qui d'autre est dans le groupe. Le serveur n'a aucun enregistrement de l'existence du groupe. Les messages sont envoyes individuellement a chaque membre via des canaux chiffres separes. Cela protege les activistes, les journalistes et tous ceux qui ont besoin de communiquer sans structure de groupe visible. Il n'y a pas de metadonnees de groupe a citer en justice.",
     },
     {
       question: "Qu'est-ce que le mode Temoin ?",
       answer: "Le mode Temoin cree des preuves inviolables. Lorsque vous enregistrez quelque chose en mode Temoin, il est horodate et hache avec SHA-256. Le hash prouve cryptographiquement que le contenu existait a ce moment precis et n'a pas ete modifie depuis. Utilisez-le pour documenter les violations des droits de l'homme, la corruption, les bavures policieres ou toute situation ou les preuves doivent etre preservees et verifiees.",
     },
     {
-      question: "Qu'est-ce que le Dead Man's Switch ?",
+      question: "Qu'est-ce que le Safety Check-in ?",
       answer: "Si vous ne vous manifestez pas dans l'intervalle defini, un message pre-configure est automatiquement envoye a vos contacts choisis. Cela protege les journalistes, les activistes et les lanceurs d'alerte. Si quelque chose vous arrive, vos contacts d'urgence seront automatiquement notifies. Le commutateur est entierement configurable - vous definissez l'intervalle, le message et les destinataires.",
     },
     {
-      question: "Qu'est-ce que le Quantum Vault ?",
-      answer: "Le Quantum Vault stocke vos fichiers sensibles (photos, documents, notes) avec chiffrement sur votre appareil. Il a deux couches : une couche visible accessible avec votre code PIN normal, et une couche cachee accessible uniquement avec un code PIN secret separe. Si quelqu'un vous force a ouvrir votre telephone, la couche cachee est completement invisible - il n'y a aucune preuve technique de son existence. Cela s'appelle la deniabilite plausible.",
+      question: "Qu'est-ce que le Private Storage ?",
+      answer: "Le Private Storage stocke vos fichiers sensibles (photos, documents, notes) avec chiffrement sur votre appareil. Il a deux couches : une couche visible accessible avec votre code PIN normal, et une couche cachee accessible uniquement avec un code PIN secret separe. Si quelqu'un vous force a ouvrir votre telephone, la couche cachee est completement invisible - il n'y a aucune preuve technique de son existence. Cela s'appelle la couche de confidentialite.",
     },
     {
       question: "SPEAQ fonctionne-t-il sans internet ?",
@@ -1414,20 +1414,20 @@ const features: Record<Lang, FaqItem[]> = {
   ],
   es: [
     {
-      question: "Que son los Ghost Groups?",
-      answer: "Los Ghost Groups son chats de grupo invisibles. Los miembros no pueden ver quien mas esta en el grupo. El servidor no tiene registro de la existencia del grupo. Los mensajes se envian individualmente a cada miembro a traves de canales cifrados separados. Esto protege a activistas, periodistas y cualquier persona que necesite comunicarse sin una estructura de grupo visible. No hay metadatos de grupo que se puedan solicitar judicialmente.",
+      question: "Que son los Private Groups?",
+      answer: "Los Private Groups son chats de grupo invisibles. Los miembros no pueden ver quien mas esta en el grupo. El servidor no tiene registro de la existencia del grupo. Los mensajes se envian individualmente a cada miembro a traves de canales cifrados separados. Esto protege a activistas, periodistas y cualquier persona que necesite comunicarse sin una estructura de grupo visible. No hay metadatos de grupo que se puedan solicitar judicialmente.",
     },
     {
       question: "Que es el modo Testigo?",
       answer: "El modo Testigo crea evidencia a prueba de manipulacion. Cuando grabas algo en modo Testigo, se marca con fecha y hora y se hashea con SHA-256. El hash prueba criptograficamente que el contenido existia en ese momento exacto y no ha sido modificado desde entonces. Usalo para documentar violaciones de derechos humanos, corrupcion, mala conducta policial o cualquier situacion donde la evidencia debe preservarse y verificarse.",
     },
     {
-      question: "Que es el Dead Man's Switch?",
+      question: "Que es el Safety Check-in?",
       answer: "Si no te registras dentro de tu intervalo establecido, un mensaje preconfigurado se envia automaticamente a tus contactos elegidos. Esto protege a periodistas, activistas y denunciantes. Si algo te sucede, tus contactos de emergencia seran notificados automaticamente. El interruptor es completamente configurable - tu estableces el intervalo, el mensaje y los destinatarios.",
     },
     {
-      question: "Que es el Quantum Vault?",
-      answer: "El Quantum Vault almacena tus archivos sensibles (fotos, documentos, notas) con cifrado en tu dispositivo. Tiene dos capas: una capa visible accesible con tu PIN normal, y una capa oculta accesible solo con un PIN secreto separado. Si alguien te obliga a abrir tu telefono, la capa oculta es completamente invisible - no hay prueba tecnica de que exista. Esto se llama negacion plausible.",
+      question: "Que es el Private Storage?",
+      answer: "El Private Storage almacena tus archivos sensibles (fotos, documentos, notas) con cifrado en tu dispositivo. Tiene dos capas: una capa visible accesible con tu PIN normal, y una capa oculta accesible solo con un PIN secreto separado. Si alguien te obliga a abrir tu telefono, la capa oculta es completamente invisible - no hay prueba tecnica de que exista. Esto se llama capa de privacidad.",
     },
     {
       question: "Funciona SPEAQ sin internet?",
@@ -1436,20 +1436,20 @@ const features: Record<Lang, FaqItem[]> = {
   ],
   ru: [
     {
-      question: "Chto takoe Ghost Groups?",
-      answer: "Ghost Groups - eto nevidimye gruppovye chaty. Uchastniki ne mogut videt, kto eshche nakhoditsya v gruppe. Server ne imeet zapisi o sushchestvovanii gruppy. Soobshcheniya otpravlyayutsya individualno kazhdomu uchastinku cherez otdelnye zashifrovannye kanaly. Eto zashchishchaet aktivistov, zhurnalistov i vsekh, komu nuzhno obshchatsya bez vidimoy gruppovoy struktury. Net gruppovykh metadannykh, kotorye mozhno zaprosity cherez sud.",
+      question: "Chto takoe Private Groups?",
+      answer: "Private Groups - eto nevidimye gruppovye chaty. Uchastniki ne mogut videt, kto eshche nakhoditsya v gruppe. Server ne imeet zapisi o sushchestvovanii gruppy. Soobshcheniya otpravlyayutsya individualno kazhdomu uchastinku cherez otdelnye zashifrovannye kanaly. Eto zashchishchaet aktivistov, zhurnalistov i vsekh, komu nuzhno obshchatsya bez vidimoy gruppovoy struktury. Net gruppovykh metadannykh, kotorye mozhno zaprosity cherez sud.",
     },
     {
       question: "Chto takoe rezhim Svidetelya?",
       answer: "Rezhim Svidetelya sozdaet zashchishchennye ot poddelki dokazatelstva. Kogda vy zapisyvaete chto-to v rezhime Svidetelya, eto poluchaet vremennnuyu metku i kheshiruetsya s pomoshchyu SHA-256. Khesh kriptograficheski dokazyvaet, chto soderzhimoe sushchestvovalo v etot tochnyy moment i ne bylo izmeneno s tekh por. Ispolzuyte eto dlya dokumentirovaniya narusheniy prav cheloveka, korruptsii, nepravomernykh deystviy politsii ili lyuboy situatsii, gde dokazatelstva dolzhny byt sokhraneny i provereny.",
     },
     {
-      question: "Chto takoe Dead Man's Switch?",
+      question: "Chto takoe Safety Check-in?",
       answer: "Yesli vy ne otmetites v techenie ustanovlennogo intervala, predvaritelno nastroennoe soobshchenie avtomaticheski otpravlyaetsya vashim vybrannym kontaktam. Eto zashchishchaet zhurnalistov, aktivistov i informatorov. Yesli chto-to sluchitsya s vami, vashi avariynye kontakty budut avtomaticheski uvedomleny. Pereklyuchatel polnostyu nastpaivaemyy - vy ustanavlivaete interval, soobshchenie i poluchateley.",
     },
     {
-      question: "Chto takoe Quantum Vault?",
-      answer: "Quantum Vault khranit vashi konfidentsialnye fayly (fotografii, dokumenty, zametki) s shifrovaniyem na vashem ustroystve. On imeet dva urovnya: vidimyy uroven, dostupnyy s vashim obychnym PIN-kodom, i skrytyy uroven, dostupnyy tolko s otdelnym sekretnym PIN-kodom. Yesli kto-to zastavit vas otkryt telefon, skrytyy uroven polnostyu nevidim - net tekhnicheskikh dokazatelstv yego sushchestvovaniya. Eto nazyvayetsya pravdopodobnym otpiratelstvom.",
+      question: "Chto takoe Private Storage?",
+      answer: "Private Storage khranit vashi konfidentsialnye fayly (fotografii, dokumenty, zametki) s shifrovaniyem na vashem ustroystve. On imeet dva urovnya: vidimyy uroven, dostupnyy s vashim obychnym PIN-kodom, i skrytyy uroven, dostupnyy tolko s otdelnym sekretnym PIN-kodom. Yesli kto-to zastavit vas otkryt telefon, skrytyy uroven polnostyu nevidim - net tekhnicheskikh dokazatelstv yego sushchestvovaniya. Eto nazyvayetsya dopolnitelnoj konfidentsialnostyu.",
     },
     {
       question: "Rabotaet li SPEAQ bez interneta?",
@@ -1458,20 +1458,20 @@ const features: Record<Lang, FaqItem[]> = {
   ],
   de: [
     {
-      question: "Was sind Ghost Groups?",
-      answer: "Ghost Groups sind unsichtbare Gruppenchats. Mitglieder konnen nicht sehen, wer sonst in der Gruppe ist. Der Server hat keinen Nachweis uber die Existenz der Gruppe. Nachrichten werden einzeln an jedes Mitglied uber separate verschlusselte Kanale gesendet. Dies schutzt Aktivisten, Journalisten und alle, die ohne sichtbare Gruppenstruktur kommunizieren mussen. Es gibt keine Gruppenmetadaten, die vorgeladen werden konnen.",
+      question: "Was sind Private Groups?",
+      answer: "Private Groups sind unsichtbare Gruppenchats. Mitglieder konnen nicht sehen, wer sonst in der Gruppe ist. Der Server hat keinen Nachweis uber die Existenz der Gruppe. Nachrichten werden einzeln an jedes Mitglied uber separate verschlusselte Kanale gesendet. Dies schutzt Aktivisten, Journalisten und alle, die ohne sichtbare Gruppenstruktur kommunizieren mussen. Es gibt keine Gruppenmetadaten, die vorgeladen werden konnen.",
     },
     {
       question: "Was ist der Zeugenmodus?",
       answer: "Der Zeugenmodus erstellt manipulationssichere Beweise. Wenn Sie etwas im Zeugenmodus aufzeichnen, wird es mit einem Zeitstempel versehen und mit SHA-256 gehasht. Der Hash beweist kryptographisch, dass der Inhalt zu diesem exakten Zeitpunkt existierte und seitdem nicht verandert wurde. Verwenden Sie dies zur Dokumentation von Menschenrechtsverletzungen, Korruption, Polizeimissbrauch oder jeder Situation, in der Beweise gesichert und verifiziert werden mussen.",
     },
     {
-      question: "Was ist der Dead Man's Switch?",
+      question: "Was ist der Safety Check-in?",
       answer: "Wenn Sie sich nicht innerhalb Ihres eingestellten Intervalls melden, wird eine vorkonfigurierte Nachricht automatisch an Ihre ausgewahlten Kontakte gesendet. Dies schutzt Journalisten, Aktivisten und Whistleblower. Wenn Ihnen etwas zustosst, werden Ihre Notfallkontakte automatisch benachrichtigt. Der Schalter ist vollstandig konfigurierbar - Sie legen das Intervall, die Nachricht und die Empfanger fest.",
     },
     {
-      question: "Was ist der Quantum Vault?",
-      answer: "Der Quantum Vault speichert Ihre sensiblen Dateien (Fotos, Dokumente, Notizen) verschlusselt auf Ihrem Gerat. Er hat zwei Schichten: eine sichtbare Schicht, die mit Ihrer normalen PIN zuganglich ist, und eine versteckte Schicht, die nur mit einer separaten geheimen PIN zuganglich ist. Wenn jemand Sie zwingt, Ihr Telefon zu offnen, ist die versteckte Schicht vollig unsichtbar - es gibt keinen technischen Beweis fur ihre Existenz. Dies nennt man plausible Abstreitbarkeit.",
+      question: "Was ist der Private Storage?",
+      answer: "Der Private Storage speichert Ihre sensiblen Dateien (Fotos, Dokumente, Notizen) verschlusselt auf Ihrem Gerat. Er hat zwei Schichten: eine sichtbare Schicht, die mit Ihrer normalen PIN zuganglich ist, und eine versteckte Schicht, die nur mit einer separaten geheimen PIN zuganglich ist. Wenn jemand Sie zwingt, Ihr Telefon zu offnen, ist die versteckte Schicht vollig unsichtbar - es gibt keinen technischen Beweis fur ihre Existenz. Dies nennt man zusatzliche Privatsphare.",
     },
     {
       question: "Funktioniert SPEAQ ohne Internet?",
@@ -1480,20 +1480,20 @@ const features: Record<Lang, FaqItem[]> = {
   ],
   sl: [
     {
-      question: "Kaj so Ghost Groups?",
-      answer: "Ghost Groups so nevidni skupinski klepeti. Chlani ne morejo videti, kdo drug je v skupini. Streznik nima zapisa o obstoju skupine. Sporocila se posiljajo posamezno vsakemu chlanu prek lochenih shifriranih kanalov. To schiti aktiviste, novinarje in vse, ki morajo komunicirati brez vidne skupinske strukture. Ni skupinskih metapodatkov, ki bi jih lahko zahtevali s sodnim nalogom.",
+      question: "Kaj so Private Groups?",
+      answer: "Private Groups so nevidni skupinski klepeti. Chlani ne morejo videti, kdo drug je v skupini. Streznik nima zapisa o obstoju skupine. Sporocila se posiljajo posamezno vsakemu chlanu prek lochenih shifriranih kanalov. To schiti aktiviste, novinarje in vse, ki morajo komunicirati brez vidne skupinske strukture. Ni skupinskih metapodatkov, ki bi jih lahko zahtevali s sodnim nalogom.",
     },
     {
       question: "Kaj je nachin Price?",
       answer: "Nachin Price ustvarja dokazila, odporna proti poseganju. Ko nekaj posnamete v nachinu Price, je casovno ozhnacheno in zgoscheno s SHA-256. Zgoscena vrednost kriptografsko dokazuje, da je vsebina obstajala v tochno tistem trenutku in od takrat ni bila spremenjena. Uporabite to za dokumentiranje krsitev clovekovih pravic, korupcije, policijskega zlorabljanja ali katerekoli situacije, kjer je treba dokazila ohraniti in preveriti.",
     },
     {
-      question: "Kaj je Dead Man's Switch?",
+      question: "Kaj je Safety Check-in?",
       answer: "Che se ne prijavite v nastavljenem intervalu, se vnaprej nastavljeno sporocilo samodejno poslje vasim izbranim stikom. To schiti novinarje, aktiviste in prijavitelje nepravilnosti. Che se vam kaj zgodi, bodo vasi nujni stiki samodejno obvescheni. Stikalo je povsem nastavljivo - nastavite interval, sporocilo in prejemnike.",
     },
     {
-      question: "Kaj je Quantum Vault?",
-      answer: "Quantum Vault hrani vase obchutljive datoteke (fotografije, dokumente, zapiske) s shifriranjem na vasi napravi. Ima dve plasti: vidno plast, dostopno z vasho obichajno PIN kodo, in skrito plast, dostopno le z locheno skrivno PIN kodo. Che vas nekdo prisili odpreti telefon, je skrita plast povsem nevidna - ni tehnichemga dokaza, da obstaja. To se imenuje verjetno zanikanje.",
+      question: "Kaj je Private Storage?",
+      answer: "Private Storage hrani vase obchutljive datoteke (fotografije, dokumente, zapiske) s shifriranjem na vasi napravi. Ima dve plasti: vidno plast, dostopno z vasho obichajno PIN kodo, in skrito plast, dostopno le z locheno skrivno PIN kodo. Che vas nekdo prisili odpreti telefon, je skrita plast povsem nevidna - ni tehnichemga dokaza, da obstaja. To se imenuje verjetno zanikanje.",
     },
     {
       question: "Ali SPEAQ deluje brez interneta?",
@@ -1502,20 +1502,20 @@ const features: Record<Lang, FaqItem[]> = {
   ],
   lg: [
     {
-      question: "Ghost Groups bye ki?",
-      answer: "Ghost Groups bye biwandiiko by'ekibinja ebitalabiika. Memmba tasobola kulaba ani omulala ali mu kibinja. Seva terina rkifo ekiraga nti ekibinja kiriwo. Obubaka butumibwa mu buli muntu ku nnyiriri enziyize ez'enjawulo. Kino kikunuulira ab'okujemereza, abawandiisi b'amawulire, na buli omu ayeetaaga okuwuliziganya awatali nkuluze y'ekibinja erabika. Tewali metadata y'ekibinja eyinza okwetaagisibwa mu kkooti.",
+      question: "Private Groups bye ki?",
+      answer: "Private Groups bye biwandiiko by'ekibinja ebitalabiika. Memmba tasobola kulaba ani omulala ali mu kibinja. Seva terina rkifo ekiraga nti ekibinja kiriwo. Obubaka butumibwa mu buli muntu ku nnyiriri enziyize ez'enjawulo. Kino kikunuulira ab'okujemereza, abawandiisi b'amawulire, na buli omu ayeetaaga okuwuliziganya awatali nkuluze y'ekibinja erabika. Tewali metadata y'ekibinja eyinza okwetaagisibwa mu kkooti.",
     },
     {
       question: "Witness Mode kye ki?",
       answer: "Witness Mode etonda obujulizi obutakyusakyusika. Bw'oterekera ekintu mu Witness Mode, kifunirwa obudde era kihashizibwa ne SHA-256. Hash ekakasa mu nkola y'ekikryptogurafu nti ebirimu byaliwo mu kiseera ekyo kituufu era tebikyuusibwa okuva olwo. Kino kikozese okuwandiisa okumenya ku eddembe ly'obuntubulamu, obubbi, okukozesa obubi kwa poliisi, oba buli mbeera mwe obujulizi bulina okutereka n'okukakasizibwa.",
     },
     {
-      question: "Dead Man's Switch kye ki?",
+      question: "Safety Check-in kye ki?",
       answer: "Bw'otogenda kufuna mu kiseera kyo ky'ooteese, obubaka obwateekeddwa butumibwa mu ngeri ey'okukyuuka eri abantu b'olondemu. Kino kikunuulira abawandiisi b'amawulire, ab'okujemereza, n'abo abalanga ebibi. Ekintu bwe kiba ku ggwe, abantu bo ab'obuyamba bategeezibwa mu ngeri ey'okukyuuka. Ekipimo kino kiteekekwa ddala - oteekawo kiseera, obubaka, n'abo abafuna.",
     },
     {
-      question: "Quantum Vault kye ki?",
-      answer: "Quantum Vault etereka fayiro zo ez'ekyama (ebifaananyi, ebiwandiiko, ebiwandiikiddwa) n'enkola y'okuziyiza ku kifo kyo. Erina ebitundu bibiri: ekitundu ekirabika ekifunibwa ne PIN yo eya bulijjo, n'ekitundu ekyekisiddwa ekifunibwa ne PIN y'ekyama ey'enjawulo. Omuntu bw'akuwalirizira okuggulawo essimu yo, ekitundu ekyekisiddwa tekirabika ddala - tewali bukakasa bwa tekiniki nti kiriwo. Kino kiyitibwa plausible deniability.",
+      question: "Private Storage kye ki?",
+      answer: "Private Storage etereka fayiro zo ez'ekyama (ebifaananyi, ebiwandiiko, ebiwandiikiddwa) n'enkola y'okuziyiza ku kifo kyo. Erina ebitundu bibiri: ekitundu ekirabika ekifunibwa ne PIN yo eya bulijjo, n'ekitundu ekyekisiddwa ekifunibwa ne PIN y'ekyama ey'enjawulo. Omuntu bw'akuwalirizira okuggulawo essimu yo, ekitundu ekyekisiddwa tekirabika ddala - tewali bukakasa bwa tekiniki nti kiriwo. Kino kiyitibwa extra privacy layer.",
     },
     {
       question: "SPEAQ ekola awatali internet?",
@@ -1524,20 +1524,20 @@ const features: Record<Lang, FaqItem[]> = {
   ],
   sw: [
     {
-      question: "Ghost Groups ni nini?",
-      answer: "Ghost Groups ni mazungumzo ya kikundi yasiyoonekana. Wanachama hawawezi kuona ni nani mwingine yuko kwenye kikundi. Seva haina rekodi ya kikundi kuwepo. Ujumbe unatumwa kibinafsi kwa kila mwanachama kupitia njia tofauti zilizosimbwa. Hii inalinda wanaharakati, waandishi wa habari, na mtu yeyote anayehitaji kuwasiliana bila muundo wa kikundi unaoonekana. Hakuna metadata ya kikundi inayoweza kuombwa mahakamani.",
+      question: "Private Groups ni nini?",
+      answer: "Private Groups ni mazungumzo ya kikundi yasiyoonekana. Wanachama hawawezi kuona ni nani mwingine yuko kwenye kikundi. Seva haina rekodi ya kikundi kuwepo. Ujumbe unatumwa kibinafsi kwa kila mwanachama kupitia njia tofauti zilizosimbwa. Hii inalinda wanaharakati, waandishi wa habari, na mtu yeyote anayehitaji kuwasiliana bila muundo wa kikundi unaoonekana. Hakuna metadata ya kikundi inayoweza kuombwa mahakamani.",
     },
     {
       question: "Hali ya Shahidi ni nini?",
       answer: "Hali ya Shahidi inaunda ushahidi usioweza kubadilishwa. Unaporekodia kitu katika Hali ya Shahidi, kinawekwa muhuri wa wakati na kupitishwa hash ya SHA-256. Hash inathibitisha kwa njia ya kisiri kwamba maudhui yalikuwepo wakati huo hasa na hayajabadilishwa tangu wakati huo. Tumia hii kwa kuandika ukiukaji wa haki za binadamu, ufisadi, matendo mabaya ya polisi, au hali yoyote ambapo ushahidi lazima uhifadhiwe na kuthibitishwa.",
     },
     {
-      question: "Dead Man's Switch ni nini?",
+      question: "Safety Check-in ni nini?",
       answer: "Ikiwa hujajisajili ndani ya muda wako uliowekwa, ujumbe uliowekwa mapema unatumwa kiotomatiki kwa mawasiliano yako uliyochagua. Hii inalinda waandishi wa habari, wanaharakati, na wafichuaji. Ikiwa kitu kinatokea kwako, mawasiliano yako ya dharura yataarifiwa kiotomatiki. Swichi inaweza kusanidiwa kabisa - unaweka muda, ujumbe, na wapokeaji.",
     },
     {
-      question: "Quantum Vault ni nini?",
-      answer: "Quantum Vault inahifadhi faili zako nyeti (picha, hati, maandishi) kwa usimbaji kwenye kifaa chako. Ina tabaka mbili: tabaka inayoonekana inayopatikana kwa PIN yako ya kawaida, na tabaka iliyofichwa inayopatikana tu kwa PIN ya siri tofauti. Mtu akikulazimisha kufungua simu yako, tabaka iliyofichwa haionekani kabisa - hakuna ushahidi wa kiufundi kwamba ipo. Hii inaitwa ukanushi wa kuaminika.",
+      question: "Private Storage ni nini?",
+      answer: "Private Storage inahifadhi faili zako nyeti (picha, hati, maandishi) kwa usimbaji kwenye kifaa chako. Ina tabaka mbili: tabaka inayoonekana inayopatikana kwa PIN yako ya kawaida, na tabaka iliyofichwa inayopatikana tu kwa PIN ya siri tofauti. Mtu akikulazimisha kufungua simu yako, tabaka iliyofichwa haionekani kabisa - hakuna ushahidi wa kiufundi kwamba ipo. Hii inaitwa ukanushi wa kuaminika.",
     },
     {
       question: "Je, SPEAQ inafanya kazi bila internet?",
