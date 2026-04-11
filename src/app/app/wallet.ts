@@ -64,7 +64,7 @@ export function addMiningReward(
     id: Date.now().toString(36) + Math.random().toString(36).substring(2, 6),
     type: "mining",
     amount,
-    description: `Mining: ${miningType}`,
+    description: `Earning: ${miningType}`,
     timestamp: Date.now(),
   };
   const newTxs = [tx, ...txs].slice(0, 500);
