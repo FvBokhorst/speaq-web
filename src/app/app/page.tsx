@@ -2886,7 +2886,7 @@ export default function SpeaqApp() {
       <div className="min-h-dvh bg-bg-deep flex flex-col">
         <ScreenHeader title={infoData.title} onBack={() => { setScreen("main"); setTab("settings"); }} lang={lang} />
         <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
-          <div className="text-center py-6"><SpeaqLogo size={80} /><h2 className="mt-4 text-xl font-heading font-bold text-text-primary">SPEAQ</h2><p className="text-sm text-text-secondary mt-1">{t("info.tagline", lang)}</p><p className="text-[10px] font-mono text-text-muted mt-1">v1.1.0 PWA (106)</p></div>
+          <div className="text-center py-6"><SpeaqLogo size={80} /><h2 className="mt-4 text-xl font-heading font-bold text-text-primary">SPEAQ</h2><p className="text-sm text-text-secondary mt-1">{t("info.tagline", lang)}</p><p className="text-[10px] font-mono text-text-muted mt-1">v1.1.0 PWA (107)</p></div>
           {infoData.sections.map((section, i) => (
             <div key={i} className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.15)]">
               <p className="text-xs font-mono text-quantum-teal uppercase tracking-wider mb-2">{section.heading}</p>
