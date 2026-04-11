@@ -104,7 +104,7 @@ const platform: Record<Lang, FaqItem[]> = {
   nl: [
     {
       question: "Wat is SPEAQ?",
-      answer: "SPEAQ is het meest beveiligde communicatie- en vrijheidsplatform ter wereld. Het combineert kwantumbestendige encryptie, censuurbestendigheid, anonieme betalingen, gedecentraliseerd minen en soevereine identiteit in een app. Chatten, bellen, betalen, browsen, opslaan, minen - alles beschermd door militaire encryptie die zelfs kwantumcomputers niet kunnen kraken.",
+      answer: "SPEAQ is het meest beveiligde communicatie- en vrijheidsplatform ter wereld. Het combineert kwantumbestendige encryptie, censuurbestendigheid, anonieme betalingen, gedecentraliseerd bijdragen en soevereine identiteit in een app. Chatten, bellen, betalen, browsen, opslaan, bijdragen - alles beschermd door geverifieerde encryptie die zelfs kwantumcomputers niet kunnen kraken.",
     },
     {
       question: "Waarom is SPEAQ gemaakt?",
@@ -126,7 +126,7 @@ const platform: Record<Lang, FaqItem[]> = {
   fr: [
     {
       question: "Qu'est-ce que SPEAQ ?",
-      answer: "SPEAQ est la plateforme de communication et de liberte la plus securisee au monde. Elle combine un chiffrement resistant aux ordinateurs quantiques, une resistance a la censure, des paiements prives, un gains decentralise et une identite souveraine dans une seule application. Discuter, appeler, payer, naviguer, stocker, contributor - le tout protege par un chiffrement de niveau militaire que meme les ordinateurs quantiques ne peuvent pas briser.",
+      answer: "SPEAQ est la plateforme de communication et de liberte la plus securisee au monde. Elle combine un chiffrement resistant aux ordinateurs quantiques, une resistance a la censure, des paiements prives, un gains decentralise et une identite souveraine dans une seule application. Discuter, appeler, payer, naviguer, stocker, contributor - le tout protege par un chiffrement verifie que meme les ordinateurs quantiques ne peuvent pas briser.",
     },
     {
       question: "Pourquoi SPEAQ a-t-il ete cree ?",
@@ -192,7 +192,7 @@ const platform: Record<Lang, FaqItem[]> = {
   de: [
     {
       question: "Was ist SPEAQ?",
-      answer: "SPEAQ ist die sicherste Kommunikations- und Freiheitsplattform der Welt. Sie kombiniert quantenresistente Verschlusselung, Zensurresistenz, private Zahlungen, dezentrales Verdienen und souverane Identitat in einer App. Chatten, telefonieren, bezahlen, surfen, speichern, minen - alles geschutzt durch Verifizierte Verschlusselung, die selbst Quantencomputer nicht knacken konnen.",
+      answer: "SPEAQ ist die sicherste Kommunikations- und Freiheitsplattform der Welt. Sie kombiniert quantenresistente Verschlusselung, Zensurresistenz, private Zahlungen, dezentrales Verdienen und souverane Identitat in einer App. Chatten, telefonieren, bezahlen, surfen, speichern, bijdragen - alles geschutzt durch Verifizierte Verschlusselung, die selbst Quantencomputer nicht knacken konnen.",
     },
     {
       question: "Warum wurde SPEAQ geschaffen?",
@@ -365,7 +365,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Quel chiffrement SPEAQ utilise-t-il ?",
-      answer: "SPEAQ utilise AES-256 pour le chiffrement des messages (la meme norme utilisee par les agences militaires et de renseignement), le protocole Double Ratchet pour la confidentialite persistante (chaque message a une cle unique), Kyber-768 pour l'echange de cles post-quantique (KEM base sur les treillis approuve par le NIST), ML-DSA-65 (FIPS 204) pour la signature des transactions de portefeuille, SPHINCS+ (FIPS 205) pour la signature des blocs de la blockchain, SHA-256 pour le hachage et HMAC-SHA256 pour l'authentification des messages.",
+      answer: "SPEAQ utilise AES-256 pour le chiffrement des messages (la meme norme utilisee par les banques du monde entier), le protocole Double Ratchet pour la confidentialite persistante (chaque message a une cle unique), Kyber-768 pour l'echange de cles post-quantique (KEM base sur les treillis approuve par le NIST), ML-DSA-65 (FIPS 204) pour la signature des transactions de portefeuille, SPHINCS+ (FIPS 205) pour la signature des blocs de la blockchain, SHA-256 pour le hachage et HMAC-SHA256 pour l'authentification des messages.",
     },
     {
       question: "Qu'est-ce que le chiffrement resistant aux quantiques et pourquoi est-ce important ?",
@@ -918,7 +918,7 @@ const earning: Record<Lang, FaqItem[]> = {
       answer: "Current earning rewards are approximately 0.02 to 0.05 QC per day (equivalent to 0.02 to 0.05 grams of gold). In many countries, this represents significant income. Early contributors earn more before halving events reduce rewards. The earlier you start, the more you accumulate.",
     },
     {
-      question: "What are the 7 ways to mine?",
+      question: "What are the 7 ways to contribute?",
       answer: "1. Relay Contribution - relay encrypted messages through the network\n2. Mesh Contribution - act as a Bluetooth/WiFi mesh node for offline connectivity\n3. Bridge Contribution - serve as a cash-to-QC exchange agent in your community\n4. Validation Contribution - validate transaction proofs on the blockchain\n5. Storage Contribution - store encrypted data fragments for the network\n6. Translation Contribution - translate the app into new languages\n7. Onboarding Contribution - bring new active users to the network",
     },
     {
@@ -944,7 +944,7 @@ const earning: Record<Lang, FaqItem[]> = {
       answer: "Huidige earningbeloningen zijn ongeveer 0,02 tot 0,05 QC per dag (equivalent aan 0,02 tot 0,05 gram goud). In veel landen is dit een aanzienlijk inkomen. Vroege contributors verdienen meer voordat halveringsgebeurtenissen de beloningen verminderen. Hoe eerder je begint, hoe meer je opbouwt.",
     },
     {
-      question: "Wat zijn de 7 manieren om te minen?",
+      question: "Wat zijn de 7 manieren om bij te dragen?",
       answer: "1. Relay Contribution - versleutelde berichten doorsturen via het netwerk\n2. Mesh Contribution - optreden als Bluetooth/WiFi mesh-knooppunt voor offline connectiviteit\n3. Bridge Contribution - dienen als contant-naar-QC wisselagent in je gemeenschap\n4. Validation Contribution - transactiebewijzen valideren op de blockchain\n5. Storage Contribution - versleutelde datafragmenten opslaan voor het netwerk\n6. Translation Contribution - de app vertalen naar nieuwe talen\n7. Onboarding Contribution - nieuwe actieve gebruikers naar het netwerk brengen",
     },
     {
@@ -967,7 +967,7 @@ const earning: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Combien puis-je gagner ?",
-      answer: "Les recompenses de gains actuelles sont d'environ 0,02 a 0,05 QC par jour (equivalent a 0,02 a 0,05 gramme d'or). Dans de nombreux pays, cela represente un revenu significatif. Les mineurs precoces gagnent davantage avant que les evenements de division par deux ne reduisent les recompenses. Plus vous commencez tot, plus vous accumulez.",
+      answer: "Les recompenses de gains actuelles sont d'environ 0,02 a 0,05 QC par jour (equivalent a 0,02 a 0,05 gramme d'or). Dans de nombreux pays, cela represente un revenu significatif. Les contributeurs precoces gagnent davantage avant que les evenements de division par deux ne reduisent les recompenses. Plus vous commencez tot, plus vous accumulez.",
     },
     {
       question: "Quelles sont les 7 facons de contributor ?",
@@ -975,7 +975,7 @@ const earning: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Qu'est-ce que le halving ?",
-      answer: "Tous les 2 100 000 QC mines par le reseau, les recompenses de gains sont divisees par deux. Cela cree une rarete croissante et protege la valeur des Q-Credits existants. Le systeme prend en charge environ 960 mineurs initialement, diminuant a chaque halving. Calendrier total de gains : plus de 40 ans avant que les 21 millions de QC soient mines. Les mineurs precoces gagnent le plus.",
+      answer: "Tous les 2 100 000 QC gagnes par le reseau, les recompenses de gains sont divisees par deux. Cela cree une rarete croissante et protege la valeur des Q-Credits existants. Le systeme prend en charge environ 960 contributeurs initialement, diminuant a chaque halving. Calendrier total de gains : plus de 40 ans avant que les 21 millions de QC soient gagnes. Les contributeurs precoces gagnent le plus.",
     },
     {
       question: "Qu'est-ce que le gains signe C+ ?",
@@ -1048,7 +1048,7 @@ const earning: Record<Lang, FaqItem[]> = {
       answer: "Aktuelle Verdienst-Belohnungen betragen ungefahr 0,02 bis 0,05 QC pro Tag (entspricht 0,02 bis 0,05 Gramm Gold). In vielen Landern stellt dies ein bedeutendes Einkommen dar. Fruhe Beitragende verdienen mehr, bevor Halbierungsereignisse die Belohnungen reduzieren. Je fruher Sie beginnen, desto mehr sammeln Sie an.",
     },
     {
-      question: "Was sind die 7 Moglichkeiten zu minen?",
+      question: "Was sind die 7 Moglichkeiten zu bijdragen?",
       answer: "1. Relay Contribution - verschlusselte Nachrichten durch das Netzwerk weiterleiten\n2. Mesh Contribution - als Bluetooth/WiFi-Mesh-Knoten fur Offline-Konnektivitat fungieren\n3. Bridge Contribution - als Bargeld-zu-QC-Tauschagentur in Ihrer Gemeinde dienen\n4. Validation Contribution - Transaktionsnachweise auf der Blockchain validieren\n5. Storage Contribution - verschlusselte Datenfragmente fur das Netzwerk speichern\n6. Translation Contribution - die App in neue Sprachen ubersetzen\n7. Onboarding Contribution - neue aktive Nutzer ins Netzwerk bringen",
     },
     {
