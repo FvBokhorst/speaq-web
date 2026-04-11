@@ -1,4 +1,4 @@
-const CACHE_NAME = "speaq-pwa-v3";
+const CACHE_NAME = "speaq-pwa-v107";
 const STATIC_ASSETS = ["/manifest.json", "/icon-192.png", "/icon-512.png"];
 
 self.addEventListener("install", (event) => {
