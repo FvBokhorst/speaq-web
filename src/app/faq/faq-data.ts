@@ -65,15 +65,15 @@ export const faqLabels: Record<Lang, FaqLabels> = {
 };
 
 const categoryTitles: Record<Lang, [string, string, string, string, string, string, string]> = {
-  en: ["Platform", "Security & Privacy", "Wallet & Q-Credits", "Mining", "Blockchain", "Features", "Technical"],
-  nl: ["Platform", "Beveiliging & Privacy", "Wallet & Q-Credits", "Mining", "Blockchain", "Functies", "Technisch"],
-  fr: ["Plateforme", "Securite et confidentialite", "Portefeuille et Q-Credits", "Minage", "Blockchain", "Fonctionnalites", "Technique"],
-  es: ["Plataforma", "Seguridad y privacidad", "Billetera y Q-Credits", "Mineria", "Blockchain", "Funciones", "Tecnico"],
+  en: ["Platform", "Security & Privacy", "Wallet & Q-Credits", "Earning", "Blockchain", "Features", "Technical"],
+  nl: ["Platform", "Beveiliging & Privacy", "Wallet & Q-Credits", "Earning", "Blockchain", "Functies", "Technisch"],
+  fr: ["Plateforme", "Securite et confidentialite", "Portefeuille et Q-Credits", "Gains", "Blockchain", "Fonctionnalites", "Technique"],
+  es: ["Plataforma", "Seguridad y privacidad", "Billetera y Q-Credits", "Ganancias", "Blockchain", "Funciones", "Tecnico"],
   ru: ["Platforma", "Bezopasnost i konfidentsialnost", "Koshelek i Q-Credits", "Mayning", "Blokcheyn", "Funktsii", "Tekhnicheskoe"],
-  de: ["Plattform", "Sicherheit & Datenschutz", "Wallet & Q-Credits", "Mining", "Blockchain", "Funktionen", "Technisch"],
-  sl: ["Platforma", "Varnost in zasebnost", "Denarnica in Q-Credits", "Rudarjenje", "Veriga blokov", "Funkcije", "Tehnicno"],
-  lg: ["Pulatifomu", "Obukuumi n'ebyama", "Wallet ne Q-Credits", "Okusimba", "Blockchain", "Ebikola", "Tekiniki"],
-  sw: ["Jukwaa", "Usalama na faragha", "Pochi na Q-Credits", "Uchimbaji", "Blockchain", "Vipengele", "Kiufundi"],
+  de: ["Plattform", "Sicherheit & Datenschutz", "Wallet & Q-Credits", "Earning", "Blockchain", "Funktionen", "Technisch"],
+  sl: ["Platforma", "Varnost in zasebnost", "Denarnica in Q-Credits", "Zasluzek", "Veriga blokov", "Funkcije", "Tehnicno"],
+  lg: ["Pulatifomu", "Obukuumi n'ebyama", "Wallet ne Q-Credits", "Okufuna", "Blockchain", "Ebikola", "Tekiniki"],
+  sw: ["Jukwaa", "Usalama na faragha", "Pochi na Q-Credits", "Kupata", "Blockchain", "Vipengele", "Kiufundi"],
 };
 
 // ─── PLATFORM ───────────────────────────────────────────────────────────────────
@@ -82,7 +82,7 @@ const platform: Record<Lang, FaqItem[]> = {
   en: [
     {
       question: "What is SPEAQ?",
-      answer: "SPEAQ is the most secure communication and freedom platform in the world. It combines quantum-resistant encryption, censorship resistance, private payments, decentralized mining, and sovereign identity in one app. Chat, call, pay, browse, store, mine - all protected by verified encryption that even quantum computers cannot break.",
+      answer: "SPEAQ is the most secure communication and freedom platform in the world. It combines quantum-resistant encryption, censorship resistance, private payments, decentralized earning, and sovereign identity in one app. Chat, call, pay, browse, store, earn - all protected by verified encryption that even quantum computers cannot break.",
     },
     {
       question: "Why was SPEAQ created?",
@@ -90,7 +90,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "How is SPEAQ different from WhatsApp, Signal, or Telegram?",
-      answer: "WhatsApp is owned by Meta and collects extensive metadata. Telegram does not encrypt group chats by default. Signal is good but still requires a phone number and has no built-in payments or mining. SPEAQ requires no phone number, no email, no real name. It adds a sovereign wallet with gold-backed Q-Credits, Proof of Contribution mining, a Private Storage with extra privacy layer, Private Groups, Witness Mode, Safety Check-in, and mesh networking. SPEAQ is not just a messenger - it is a freedom platform.",
+      answer: "WhatsApp is owned by Meta and collects extensive metadata. Telegram does not encrypt group chats by default. Signal is good but still requires a phone number and has no built-in payments or earning. SPEAQ requires no phone number, no email, no real name. It adds a sovereign wallet with gold-backed Q-Credits, Proof of Contribution earning, a Private Storage with extra privacy layer, Private Groups, Witness Mode, Safety Check-in, and mesh networking. SPEAQ is not just a messenger - it is a freedom platform.",
     },
     {
       question: "Do I need to register with my phone number or email?",
@@ -98,7 +98,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Is SPEAQ free?",
-      answer: "Yes. SPEAQ is free to download and use. All core features - messaging, voice and video calls, file sharing, Private Storage, Private Groups, Witness Mode, and Safety Check-in - are free. You can also earn Q-Credits through Proof of Contribution mining at no cost.",
+      answer: "Yes. SPEAQ is free to download and use. All core features - messaging, voice and video calls, file sharing, Private Storage, Private Groups, Witness Mode, and Safety Check-in - are free. You can also earn Q-Credits through Proof of Contribution earning at no cost.",
     },
   ],
   nl: [
@@ -112,7 +112,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Hoe verschilt SPEAQ van WhatsApp, Signal of Telegram?",
-      answer: "WhatsApp is eigendom van Meta en verzamelt uitgebreide metadata. Telegram versleutelt groepschats niet standaard. Signal is goed maar vereist nog steeds een telefoonnummer en heeft geen ingebouwde betalingen of mining. SPEAQ vereist geen telefoonnummer, geen e-mail, geen echte naam. Het voegt een soevereine wallet toe met door goud gedekte Q-Credits, Proof of Contribution mining, een Private Storage met extra privacylaag, Private Groups, Witness Mode, Safety Check-in en mesh-netwerken. SPEAQ is niet zomaar een messenger - het is een vrijheidsplatform.",
+      answer: "WhatsApp is eigendom van Meta en verzamelt uitgebreide metadata. Telegram versleutelt groepschats niet standaard. Signal is goed maar vereist nog steeds een telefoonnummer en heeft geen ingebouwde betalingen of earning. SPEAQ vereist geen telefoonnummer, geen e-mail, geen echte naam. Het voegt een soevereine wallet toe met door goud gedekte Q-Credits, Proof of Contribution earning, een Private Storage met extra privacylaag, Private Groups, Witness Mode, Safety Check-in en mesh-netwerken. SPEAQ is niet zomaar een messenger - het is een vrijheidsplatform.",
     },
     {
       question: "Moet ik me registreren met mijn telefoonnummer of e-mail?",
@@ -120,13 +120,13 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Is SPEAQ gratis?",
-      answer: "Ja. SPEAQ is gratis te downloaden en te gebruiken. Alle kernfuncties - berichten, spraak- en videogesprekken, bestandsdeling, Private Storage, Private Groups, Witness Mode en Safety Check-in - zijn gratis. Je kunt ook Q-Credits verdienen via Proof of Contribution mining zonder kosten.",
+      answer: "Ja. SPEAQ is gratis te downloaden en te gebruiken. Alle kernfuncties - berichten, spraak- en videogesprekken, bestandsdeling, Private Storage, Private Groups, Witness Mode en Safety Check-in - zijn gratis. Je kunt ook Q-Credits verdienen via Proof of Contribution earning zonder kosten.",
     },
   ],
   fr: [
     {
       question: "Qu'est-ce que SPEAQ ?",
-      answer: "SPEAQ est la plateforme de communication et de liberte la plus securisee au monde. Elle combine un chiffrement resistant aux ordinateurs quantiques, une resistance a la censure, des paiements prives, un minage decentralise et une identite souveraine dans une seule application. Discuter, appeler, payer, naviguer, stocker, miner - le tout protege par un chiffrement de niveau militaire que meme les ordinateurs quantiques ne peuvent pas briser.",
+      answer: "SPEAQ est la plateforme de communication et de liberte la plus securisee au monde. Elle combine un chiffrement resistant aux ordinateurs quantiques, une resistance a la censure, des paiements prives, un gains decentralise et une identite souveraine dans une seule application. Discuter, appeler, payer, naviguer, stocker, contributor - le tout protege par un chiffrement de niveau militaire que meme les ordinateurs quantiques ne peuvent pas briser.",
     },
     {
       question: "Pourquoi SPEAQ a-t-il ete cree ?",
@@ -134,7 +134,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "En quoi SPEAQ est-il different de WhatsApp, Signal ou Telegram ?",
-      answer: "WhatsApp appartient a Meta et collecte des metadonnees etendues. Telegram ne chiffre pas les discussions de groupe par defaut. Signal est bon mais necessite toujours un numero de telephone et n'a pas de paiements ni de minage integres. SPEAQ ne necessite ni numero de telephone, ni e-mail, ni vrai nom. Il ajoute un portefeuille souverain avec des Q-Credits adosses a l'or, le minage Proof of Contribution, un Private Storage avec couche de confidentialite, des Private Groups, le mode Temoin, le Safety Check-in et un reseau maille. SPEAQ n'est pas qu'une messagerie - c'est une plateforme de liberte.",
+      answer: "WhatsApp appartient a Meta et collecte des metadonnees etendues. Telegram ne chiffre pas les discussions de groupe par defaut. Signal est bon mais necessite toujours un numero de telephone et n'a pas de paiements ni de gains integres. SPEAQ ne necessite ni numero de telephone, ni e-mail, ni vrai nom. Il ajoute un portefeuille souverain avec des Q-Credits adosses a l'or, le gains Proof of Contribution, un Private Storage avec couche de confidentialite, des Private Groups, le mode Temoin, le Safety Check-in et un reseau maille. SPEAQ n'est pas qu'une messagerie - c'est une plateforme de liberte.",
     },
     {
       question: "Dois-je m'inscrire avec mon numero de telephone ou mon e-mail ?",
@@ -142,13 +142,13 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "SPEAQ est-il gratuit ?",
-      answer: "Oui. SPEAQ est gratuit a telecharger et a utiliser. Toutes les fonctionnalites principales - messagerie, appels vocaux et video, partage de fichiers, Private Storage, Private Groups, mode Temoin et Safety Check-in - sont gratuites. Vous pouvez egalement gagner des Q-Credits grace au minage Proof of Contribution sans aucun cout.",
+      answer: "Oui. SPEAQ est gratuit a telecharger et a utiliser. Toutes les fonctionnalites principales - messagerie, appels vocaux et video, partage de fichiers, Private Storage, Private Groups, mode Temoin et Safety Check-in - sont gratuites. Vous pouvez egalement gagner des Q-Credits grace au gains Proof of Contribution sans aucun cout.",
     },
   ],
   es: [
     {
       question: "Que es SPEAQ?",
-      answer: "SPEAQ es la plataforma de comunicacion y libertad mas segura del mundo. Combina cifrado resistente a computadoras cuanticas, resistencia a la censura, pagos privados, mineria descentralizada e identidad soberana en una sola aplicacion. Chatear, llamar, pagar, navegar, almacenar, minar - todo protegido por cifrado de grado militar que ni siquiera las computadoras cuanticas pueden romper.",
+      answer: "SPEAQ es la plataforma de comunicacion y libertad mas segura del mundo. Combina cifrado resistente a computadoras cuanticas, resistencia a la censura, pagos privados, ganancias descentralizada e identidad soberana en una sola aplicacion. Chatear, llamar, pagar, navegar, almacenar, minar - todo protegido por cifrado de grado militar que ni siquiera las computadoras cuanticas pueden romper.",
     },
     {
       question: "Por que se creo SPEAQ?",
@@ -156,7 +156,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "En que se diferencia SPEAQ de WhatsApp, Signal o Telegram?",
-      answer: "WhatsApp es propiedad de Meta y recopila metadatos extensos. Telegram no cifra los chats grupales por defecto. Signal es bueno pero todavia requiere un numero de telefono y no tiene pagos ni mineria integrados. SPEAQ no requiere numero de telefono, ni correo electronico, ni nombre real. Agrega una billetera soberana con Q-Credits respaldados por oro, mineria Proof of Contribution, un Private Storage con capa de privacidad, Private Groups, modo Testigo, Safety Check-in y red mesh. SPEAQ no es solo un mensajero - es una plataforma de libertad.",
+      answer: "WhatsApp es propiedad de Meta y recopila metadatos extensos. Telegram no cifra los chats grupales por defecto. Signal es bueno pero todavia requiere un numero de telefono y no tiene pagos ni ganancias integrados. SPEAQ no requiere numero de telefono, ni correo electronico, ni nombre real. Agrega una billetera soberana con Q-Credits respaldados por oro, ganancias Proof of Contribution, un Private Storage con capa de privacidad, Private Groups, modo Testigo, Safety Check-in y red mesh. SPEAQ no es solo un mensajero - es una plataforma de libertad.",
     },
     {
       question: "Necesito registrarme con mi numero de telefono o correo electronico?",
@@ -164,7 +164,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Es SPEAQ gratuito?",
-      answer: "Si. SPEAQ es gratuito para descargar y usar. Todas las funciones principales - mensajeria, llamadas de voz y video, uso compartido de archivos, Private Storage, Private Groups, modo Testigo y Safety Check-in - son gratuitas. Tambien puedes ganar Q-Credits a traves de la mineria Proof of Contribution sin costo alguno.",
+      answer: "Si. SPEAQ es gratuito para descargar y usar. Todas las funciones principales - mensajeria, llamadas de voz y video, uso compartido de archivos, Private Storage, Private Groups, modo Testigo y Safety Check-in - son gratuitas. Tambien puedes ganar Q-Credits a traves de la ganancias Proof of Contribution sin costo alguno.",
     },
   ],
   ru: [
@@ -192,7 +192,7 @@ const platform: Record<Lang, FaqItem[]> = {
   de: [
     {
       question: "Was ist SPEAQ?",
-      answer: "SPEAQ ist die sicherste Kommunikations- und Freiheitsplattform der Welt. Sie kombiniert quantenresistente Verschlusselung, Zensurresistenz, private Zahlungen, dezentrales Mining und souverane Identitat in einer App. Chatten, telefonieren, bezahlen, surfen, speichern, minen - alles geschutzt durch Verifizierte Verschlusselung, die selbst Quantencomputer nicht knacken konnen.",
+      answer: "SPEAQ ist die sicherste Kommunikations- und Freiheitsplattform der Welt. Sie kombiniert quantenresistente Verschlusselung, Zensurresistenz, private Zahlungen, dezentrales Verdienen und souverane Identitat in einer App. Chatten, telefonieren, bezahlen, surfen, speichern, minen - alles geschutzt durch Verifizierte Verschlusselung, die selbst Quantencomputer nicht knacken konnen.",
     },
     {
       question: "Warum wurde SPEAQ geschaffen?",
@@ -200,7 +200,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Wie unterscheidet sich SPEAQ von WhatsApp, Signal oder Telegram?",
-      answer: "WhatsApp gehort Meta und sammelt umfangreiche Metadaten. Telegram verschlusselt Gruppenchats nicht standardmassig. Signal ist gut, erfordert aber immer noch eine Telefonnummer und hat keine integrierten Zahlungen oder Mining. SPEAQ erfordert keine Telefonnummer, keine E-Mail, keinen echten Namen. Es bietet eine souverane Wallet mit goldgedeckten Q-Credits, Proof of Contribution Mining, einen Private Storage mit zusatzlicher Privatsphare, Private Groups, Zeugenmodus, Safety Check-in und Mesh-Netzwerke. SPEAQ ist nicht nur ein Messenger - es ist eine Freiheitsplattform.",
+      answer: "WhatsApp gehort Meta und sammelt umfangreiche Metadaten. Telegram verschlusselt Gruppenchats nicht standardmassig. Signal ist gut, erfordert aber immer noch eine Telefonnummer und hat keine integrierten Zahlungen oder Earning. SPEAQ erfordert keine Telefonnummer, keine E-Mail, keinen echten Namen. Es bietet eine souverane Wallet mit goldgedeckten Q-Credits, Proof of Contribution, einen Private Storage mit zusatzlicher Privatsphare, Private Groups, Zeugenmodus, Safety Check-in und Mesh-Netzwerke. SPEAQ ist nicht nur ein Messenger - es ist eine Freiheitsplattform.",
     },
     {
       question: "Muss ich mich mit meiner Telefonnummer oder E-Mail registrieren?",
@@ -208,13 +208,13 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Ist SPEAQ kostenlos?",
-      answer: "Ja. SPEAQ kann kostenlos heruntergeladen und genutzt werden. Alle Kernfunktionen - Nachrichten, Sprach- und Videoanrufe, Dateifreigabe, Private Storage, Private Groups, Zeugenmodus und Safety Check-in - sind kostenlos. Sie konnen auch Q-Credits durch Proof of Contribution Mining ohne Kosten verdienen.",
+      answer: "Ja. SPEAQ kann kostenlos heruntergeladen und genutzt werden. Alle Kernfunktionen - Nachrichten, Sprach- und Videoanrufe, Dateifreigabe, Private Storage, Private Groups, Zeugenmodus und Safety Check-in - sind kostenlos. Sie konnen auch Q-Credits durch Proof of Contribution ohne Kosten verdienen.",
     },
   ],
   sl: [
     {
       question: "Kaj je SPEAQ?",
-      answer: "SPEAQ je najvarnejsa komunikacijska platforma in platforma svobode na svetu. Zdruzuje kvantno odporno sifriranje, odpornost proti cenzuri, zasebna placila, decentralizirano rudarjenje in suvereno identiteto v eni aplikaciji. Klepetajte, klichite, placujte, brskajte, shranjujte, rudarite - vse zasciteno z vojaskim sifriranjem, ki ga niti kvantni racunalniki ne morejo zlomiti.",
+      answer: "SPEAQ je najvarnejsa komunikacijska platforma in platforma svobode na svetu. Zdruzuje kvantno odporno sifriranje, odpornost proti cenzuri, zasebna placila, decentralizirano zasluzek in suvereno identiteto v eni aplikaciji. Klepetajte, klichite, placujte, brskajte, shranjujte, rudarite - vse zasciteno z vojaskim sifriranjem, ki ga niti kvantni racunalniki ne morejo zlomiti.",
     },
     {
       question: "Zakaj je bil SPEAQ ustvarjen?",
@@ -222,7 +222,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Kako se SPEAQ razlikuje od WhatsApp, Signal ali Telegram?",
-      answer: "WhatsApp je v lasti podjetja Meta in zbira obsezne metapodatke. Telegram privzeto ne sifrira skupinskih klepetov. Signal je dober, a se vedno zahteva telefonsko stevilko in nima vgrajenih placil ali rudarjenja. SPEAQ ne zahteva telefonske stevilke, e-poste ali pravega imena. Dodaja suvereno denarnico z zlatom podprtimi Q-Credits, rudarjenje Proof of Contribution, Private Storage z verjetnim zanikanjem, Private Groups, nacin Price, Safety Check-in in omrezje mesh. SPEAQ ni le sporocilnik - je platforma svobode.",
+      answer: "WhatsApp je v lasti podjetja Meta in zbira obsezne metapodatke. Telegram privzeto ne sifrira skupinskih klepetov. Signal je dober, a se vedno zahteva telefonsko stevilko in nima vgrajenih placil ali rudarjenja. SPEAQ ne zahteva telefonske stevilke, e-poste ali pravega imena. Dodaja suvereno denarnico z zlatom podprtimi Q-Credits, zasluzek Proof of Contribution, Private Storage z verjetnim zanikanjem, Private Groups, nacin Price, Safety Check-in in omrezje mesh. SPEAQ ni le sporocilnik - je platforma svobode.",
     },
     {
       question: "Ali se moram registrirati s telefonsko stevilko ali e-posto?",
@@ -230,13 +230,13 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Ali je SPEAQ brezplacen?",
-      answer: "Da. SPEAQ je brezplacen za prenos in uporabo. Vse osnovne funkcije - sporocanje, glasovni in video klici, deljenje datotek, Private Storage, Private Groups, nacin Price in Safety Check-in - so brezplacne. Prav tako lahko zasluzite Q-Credits z rudarjenjem Proof of Contribution brez stroskov.",
+      answer: "Da. SPEAQ je brezplacen za prenos in uporabo. Vse osnovne funkcije - sporocanje, glasovni in video klici, deljenje datotek, Private Storage, Private Groups, nacin Price in Safety Check-in - so brezplacne. Prav tako lahko zasluzite Q-Credits z zasluzekm Proof of Contribution brez stroskov.",
     },
   ],
   lg: [
     {
       question: "SPEAQ kye ki?",
-      answer: "SPEAQ ye pulatifomu y'empuliziganya n'eddembe esinga obukuumi ku nsi yonna. Egatta awamu enkola y'okuziyiza ekwatagana ne kkomppyuta z'ekikwantimu, okweziyiza censorship, okusasula mu kyama, okusimba okutasaasaanyiziddwa, n'obumanyirivu obw'obwannannyini mu appu emu. Wogera, kuba, sasula, lambula, tereka, simba - byonna bikunziziddwa enkola y'okuziyiza ey'omutindo gwa magye nga n'ekkomppyuta z'ekikwantimu teziyinza kubimenyaamenya.",
+      answer: "SPEAQ ye pulatifomu y'empuliziganya n'eddembe esinga obukuumi ku nsi yonna. Egatta awamu enkola y'okuziyiza ekwatagana ne kkomppyuta z'ekikwantimu, okweziyiza censorship, okusasula mu kyama, okufuna okutasaasaanyiziddwa, n'obumanyirivu obw'obwannannyini mu appu emu. Wogera, kuba, sasula, lambula, tereka, simba - byonna bikunziziddwa enkola y'okuziyiza ey'omutindo gwa magye nga n'ekkomppyuta z'ekikwantimu teziyinza kubimenyaamenya.",
     },
     {
       question: "Lwaki SPEAQ yatondebwa?",
@@ -244,7 +244,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "SPEAQ eyawukana etya ku WhatsApp, Signal, oba Telegram?",
-      answer: "WhatsApp ya Meta era ekuŋŋaanya metadata ennyingi. Telegram tekola nkola y'okuziyiza mu biwandiiko by'ekibinja mu butandisi. Signal nnungi naye ekyetaagisa ennamba y'essimu era terina kusasula oba okusimba okuzimbiddwamu. SPEAQ tekyetaagisa nnamba ya ssimu, email, oba erinnya ly'amazima. Eyongera wallet ey'obwannannyini n'e Q-Credits ezisigamiziddwa ku zabu, okusimba Proof of Contribution, Private Storage n'okusobola okugaana, Private Groups, Witness Mode, Safety Check-in, n'emikutu gya mesh. SPEAQ si messenger bwokka - ye pulatifomu y'eddembe.",
+      answer: "WhatsApp ya Meta era ekuŋŋaanya metadata ennyingi. Telegram tekola nkola y'okuziyiza mu biwandiiko by'ekibinja mu butandisi. Signal nnungi naye ekyetaagisa ennamba y'essimu era terina kusasula oba okufuna okuzimbiddwamu. SPEAQ tekyetaagisa nnamba ya ssimu, email, oba erinnya ly'amazima. Eyongera wallet ey'obwannannyini n'e Q-Credits ezisigamiziddwa ku zabu, okufuna Proof of Contribution, Private Storage n'okusobola okugaana, Private Groups, Witness Mode, Safety Check-in, n'emikutu gya mesh. SPEAQ si messenger bwokka - ye pulatifomu y'eddembe.",
     },
     {
       question: "Nneetaaga okwewandiisa n'ennamba yange ey'essimu oba email?",
@@ -258,7 +258,7 @@ const platform: Record<Lang, FaqItem[]> = {
   sw: [
     {
       question: "SPEAQ ni nini?",
-      answer: "SPEAQ ni jukwaa la mawasiliano na uhuru lenye usalama zaidi duniani. Linachanganya usimbaji unaostahimili kompyuta za quantum, upinzani wa udhibiti, malipo ya faragha, uchimbaji usio na mamlaka kuu, na utambulisho huru katika programu moja. Soga, piga simu, lipa, vinjari, hifadhi, chimba - yote yamelindwa na usimbaji wa kiwango cha kijeshi ambao hata kompyuta za quantum haziwezi kuvunja.",
+      answer: "SPEAQ ni jukwaa la mawasiliano na uhuru lenye usalama zaidi duniani. Linachanganya usimbaji unaostahimili kompyuta za quantum, upinzani wa udhibiti, malipo ya faragha, kupata usio na mamlaka kuu, na utambulisho huru katika programu moja. Soga, piga simu, lipa, vinjari, hifadhi, chimba - yote yamelindwa na usimbaji wa kiwango cha kijeshi ambao hata kompyuta za quantum haziwezi kuvunja.",
     },
     {
       question: "Kwa nini SPEAQ iliundwa?",
@@ -266,7 +266,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "SPEAQ inatofautiana vipi na WhatsApp, Signal, au Telegram?",
-      answer: "WhatsApp inamilikiwa na Meta na inakusanya metadata nyingi. Telegram haisimbaji mazungumzo ya vikundi kwa chaguo-msingi. Signal ni nzuri lakini bado inahitaji nambari ya simu na haina malipo au uchimbaji uliojengwa ndani. SPEAQ haihitaji nambari ya simu, barua pepe, au jina halisi. Inaongeza pochi huru yenye Q-Credits zinazoungwa mkono na dhahabu, uchimbaji wa Proof of Contribution, Private Storage yenye ukanushi wa kuaminika, Private Groups, Hali ya Shahidi, Safety Check-in, na mtandao wa mesh. SPEAQ si mjumbe tu - ni jukwaa la uhuru.",
+      answer: "WhatsApp inamilikiwa na Meta na inakusanya metadata nyingi. Telegram haisimbaji mazungumzo ya vikundi kwa chaguo-msingi. Signal ni nzuri lakini bado inahitaji nambari ya simu na haina malipo au kupata uliojengwa ndani. SPEAQ haihitaji nambari ya simu, barua pepe, au jina halisi. Inaongeza pochi huru yenye Q-Credits zinazoungwa mkono na dhahabu, kupata wa Proof of Contribution, Private Storage yenye ukanushi wa kuaminika, Private Groups, Hali ya Shahidi, Safety Check-in, na mtandao wa mesh. SPEAQ si mjumbe tu - ni jukwaa la uhuru.",
     },
     {
       question: "Je, ninahitaji kusajiliwa na nambari yangu ya simu au barua pepe?",
@@ -274,7 +274,7 @@ const platform: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Je, SPEAQ ni bure?",
-      answer: "Ndiyo. SPEAQ ni bure kupakua na kutumia. Vipengele vyote vya msingi - ujumbe, simu za sauti na video, kushiriki faili, Private Storage, Private Groups, Hali ya Shahidi, na Safety Check-in - ni bure. Unaweza pia kupata Q-Credits kupitia uchimbaji wa Proof of Contribution bila gharama yoyote.",
+      answer: "Ndiyo. SPEAQ ni bure kupakua na kutumia. Vipengele vyote vya msingi - ujumbe, simu za sauti na video, kushiriki faili, Private Storage, Private Groups, Hali ya Shahidi, na Safety Check-in - ni bure. Unaweza pia kupata Q-Credits kupitia kupata wa Proof of Contribution bila gharama yoyote.",
     },
   ],
 };
@@ -285,7 +285,7 @@ const security: Record<Lang, FaqItem[]> = {
   en: [
     {
       question: "How secure is SPEAQ?",
-      answer: "SPEAQ uses 9 layers of security, including AES-256 encryption, the Double Ratchet protocol for forward secrecy, Kyber-768 post-quantum key exchange, sealed sender relay, and quantum random number generation. Every message, call, file, and payment is encrypted before it leaves your device. The relay server sees only encrypted blobs - it cannot read content, identify communicating parties, or determine what is being sent.",
+      answer: "SPEAQ uses 9 layers of security, including AES-256 encryption, the Double Ratchet protocol for forward secrecy, Kyber-768 post-quantum key exchange, sealed sender relay, and quantum random number generation. Every message, call, file, and payment is encrypted before it leaves your device. The relay server sees only encrypted blobs - it cannot read content, identify communicating parties, or deterearn what is being sent.",
     },
     {
       question: "What encryption does SPEAQ use?",
@@ -361,7 +361,7 @@ const security: Record<Lang, FaqItem[]> = {
   fr: [
     {
       question: "A quel point SPEAQ est-il securise ?",
-      answer: "SPEAQ utilise 9 couches de securite, notamment le chiffrement AES-256, le protocole Double Ratchet pour la confidentialite persistante, l'echange de cles post-quantique Kyber-768, le relais a expediteur scelle et la generation de nombres aleatoires quantiques. Chaque message, appel, fichier et paiement est chiffre avant de quitter votre appareil. Le serveur relais ne voit que des blobs chiffres - il ne peut pas lire le contenu, identifier les parties communicantes ou determiner ce qui est envoye.",
+      answer: "SPEAQ utilise 9 couches de securite, notamment le chiffrement AES-256, le protocole Double Ratchet pour la confidentialite persistante, l'echange de cles post-quantique Kyber-768, le relais a expediteur scelle et la generation de nombres aleatoires quantiques. Chaque message, appel, fichier et paiement est chiffre avant de quitter votre appareil. Le serveur relais ne voit que des blobs chiffres - il ne peut pas lire le contenu, identifier les parties communicantes ou detercontributor ce qui est envoye.",
     },
     {
       question: "Quel chiffrement SPEAQ utilise-t-il ?",
@@ -903,109 +903,109 @@ const wallet: Record<Lang, FaqItem[]> = {
 
 // ─── MINING ─────────────────────────────────────────────────────────────────────
 
-const mining: Record<Lang, FaqItem[]> = {
+const earning: Record<Lang, FaqItem[]> = {
   en: [
     {
       question: "What is Proof of Contribution?",
-      answer: "Proof of Contribution is SPEAQ's mining mechanism. Instead of wasting electricity solving mathematical puzzles (like Bitcoin), you earn Q-Credits by contributing useful work to the network: relaying messages, validating transactions, storing encrypted data, translating the app, onboarding new users, and more.",
+      answer: "Proof of Contribution is SPEAQ's earning mechanism. Instead of wasting electricity solving mathematical puzzles (like Bitcoin), you earn Q-Credits by contributing useful work to the network: relaying messages, validating transactions, storing encrypted data, translating the app, onboarding new users, and more.",
     },
     {
-      question: "How is this different from Bitcoin mining?",
-      answer: "Bitcoin mining requires expensive hardware and enormous amounts of electricity to solve meaningless mathematical puzzles. SPEAQ mining runs on your phone and rewards you for doing useful work that strengthens the network. No special hardware needed. No electricity wasted. Your contribution has real value.",
+      question: "How is this different from Bitcoin earning?",
+      answer: "Bitcoin earning requires expensive hardware and enormous amounts of electricity to solve meaningless mathematical puzzles. SPEAQ earning runs on your phone and rewards you for doing useful work that strengthens the network. No special hardware needed. No electricity wasted. Your contribution has real value.",
     },
     {
       question: "How much can I earn?",
-      answer: "Current mining rewards are approximately 0.02 to 0.05 QC per day (equivalent to 0.02 to 0.05 grams of gold). In many countries, this represents significant income. Early miners earn more before halving events reduce rewards. The earlier you start, the more you accumulate.",
+      answer: "Current earning rewards are approximately 0.02 to 0.05 QC per day (equivalent to 0.02 to 0.05 grams of gold). In many countries, this represents significant income. Early contributors earn more before halving events reduce rewards. The earlier you start, the more you accumulate.",
     },
     {
       question: "What are the 7 ways to mine?",
-      answer: "1. Relay Mining - relay encrypted messages through the network\n2. Mesh Mining - act as a Bluetooth/WiFi mesh node for offline connectivity\n3. Bridge Mining - serve as a cash-to-QC exchange agent in your community\n4. Validation Mining - validate transaction proofs on the blockchain\n5. Storage Mining - store encrypted data fragments for the network\n6. Translation Mining - translate the app into new languages\n7. Onboarding Mining - bring new active users to the network",
+      answer: "1. Relay Contribution - relay encrypted messages through the network\n2. Mesh Contribution - act as a Bluetooth/WiFi mesh node for offline connectivity\n3. Bridge Contribution - serve as a cash-to-QC exchange agent in your community\n4. Validation Contribution - validate transaction proofs on the blockchain\n5. Storage Contribution - store encrypted data fragments for the network\n6. Translation Contribution - translate the app into new languages\n7. Onboarding Contribution - bring new active users to the network",
     },
     {
       question: "What is halving?",
-      answer: "Every 2,100,000 QC mined by the network, mining rewards are cut in half. This creates increasing scarcity and protects the value of existing Q-Credits. The system supports approximately 960 miners initially, decreasing with each halving. Total mining timeline: 40+ years before all 21 million QC are mined. Early miners earn the most.",
+      answer: "Every 2,100,000 QC earned by the network, earning rewards are cut in half. This creates increasing scarcity and protects the value of existing Q-Credits. The system supports approximately 960 contributors initially, decreasing with each halving. Total earning timeline: 40+ years before all 21 million QC are earned. Early contributors earn the most.",
     },
     {
-      question: "What is C+ signed mining?",
-      answer: "Before the SPEAQ Chain blockchain launches, all mining happens locally on your device. Every mining reward is double-signed: (1) you sign with your private key, proving your identity, and (2) the relay server co-signs as a witness, proving the work actually happened. Both signatures are stored in your mining ledger. When the blockchain launches, only entries with both signatures are accepted. This makes fraud impossible - you cannot fake the relay's signature, and the relay only signs when you actually contribute.",
+      question: "What is C+ signed earning?",
+      answer: "Before the SPEAQ Chain blockchain launches, all earning happens locally on your device. Every earning reward is double-signed: (1) you sign with your private key, proving your identity, and (2) the relay server co-signs as a witness, proving the work actually happened. Both signatures are stored in your earning ledger. When the blockchain launches, only entries with both signatures are accepted. This makes fraud impossible - you cannot fake the relay's signature, and the relay only signs when you actually contribute.",
     },
   ],
   nl: [
     {
       question: "Wat is Proof of Contribution?",
-      answer: "Proof of Contribution is het miningmechanisme van SPEAQ. In plaats van elektriciteit te verspillen aan het oplossen van wiskundige puzzels (zoals Bitcoin), verdien je Q-Credits door nuttig werk bij te dragen aan het netwerk: berichten doorsturen, transacties valideren, versleutelde data opslaan, de app vertalen, nieuwe gebruikers verwelkomen en meer.",
+      answer: "Proof of Contribution is het earningmechanisme van SPEAQ. In plaats van elektriciteit te verspillen aan het oplossen van wiskundige puzzels (zoals Bitcoin), verdien je Q-Credits door nuttig werk bij te dragen aan het netwerk: berichten doorsturen, transacties valideren, versleutelde data opslaan, de app vertalen, nieuwe gebruikers verwelkomen en meer.",
     },
     {
-      question: "Hoe verschilt dit van Bitcoin mining?",
-      answer: "Bitcoin mining vereist dure hardware en enorme hoeveelheden elektriciteit om zinloze wiskundige puzzels op te lossen. SPEAQ mining draait op je telefoon en beloont je voor nuttig werk dat het netwerk versterkt. Geen speciale hardware nodig. Geen elektriciteit verspild. Jouw bijdrage heeft echte waarde.",
+      question: "Hoe verschilt dit van Bitcoin earning?",
+      answer: "Bitcoin earning vereist dure hardware en enorme hoeveelheden elektriciteit om zinloze wiskundige puzzels op te lossen. SPEAQ earning draait op je telefoon en beloont je voor nuttig werk dat het netwerk versterkt. Geen speciale hardware nodig. Geen elektriciteit verspild. Jouw bijdrage heeft echte waarde.",
     },
     {
       question: "Hoeveel kan ik verdienen?",
-      answer: "Huidige miningbeloningen zijn ongeveer 0,02 tot 0,05 QC per dag (equivalent aan 0,02 tot 0,05 gram goud). In veel landen is dit een aanzienlijk inkomen. Vroege miners verdienen meer voordat halveringsgebeurtenissen de beloningen verminderen. Hoe eerder je begint, hoe meer je opbouwt.",
+      answer: "Huidige earningbeloningen zijn ongeveer 0,02 tot 0,05 QC per dag (equivalent aan 0,02 tot 0,05 gram goud). In veel landen is dit een aanzienlijk inkomen. Vroege contributors verdienen meer voordat halveringsgebeurtenissen de beloningen verminderen. Hoe eerder je begint, hoe meer je opbouwt.",
     },
     {
       question: "Wat zijn de 7 manieren om te minen?",
-      answer: "1. Relay Mining - versleutelde berichten doorsturen via het netwerk\n2. Mesh Mining - optreden als Bluetooth/WiFi mesh-knooppunt voor offline connectiviteit\n3. Bridge Mining - dienen als contant-naar-QC wisselagent in je gemeenschap\n4. Validation Mining - transactiebewijzen valideren op de blockchain\n5. Storage Mining - versleutelde datafragmenten opslaan voor het netwerk\n6. Translation Mining - de app vertalen naar nieuwe talen\n7. Onboarding Mining - nieuwe actieve gebruikers naar het netwerk brengen",
+      answer: "1. Relay Contribution - versleutelde berichten doorsturen via het netwerk\n2. Mesh Contribution - optreden als Bluetooth/WiFi mesh-knooppunt voor offline connectiviteit\n3. Bridge Contribution - dienen als contant-naar-QC wisselagent in je gemeenschap\n4. Validation Contribution - transactiebewijzen valideren op de blockchain\n5. Storage Contribution - versleutelde datafragmenten opslaan voor het netwerk\n6. Translation Contribution - de app vertalen naar nieuwe talen\n7. Onboarding Contribution - nieuwe actieve gebruikers naar het netwerk brengen",
     },
     {
       question: "Wat is halvering?",
-      answer: "Elke 2.100.000 QC die door het netwerk worden gemined, worden de miningbeloningen gehalveerd. Dit creiert toenemende schaarste en beschermt de waarde van bestaande Q-Credits. Het systeem ondersteunt aanvankelijk ongeveer 960 miners, afnemend bij elke halvering. Totale miningtijdlijn: 40+ jaar voordat alle 21 miljoen QC zijn gemined. Vroege miners verdienen het meest.",
+      answer: "Elke 2.100.000 QC die door het netwerk worden geearned, worden de earningbeloningen gehalveerd. Dit creiert toenemende schaarste en beschermt de waarde van bestaande Q-Credits. Het systeem ondersteunt aanvankelijk ongeveer 960 contributors, afnemend bij elke halvering. Totale earningtijdlijn: 40+ jaar voordat alle 21 miljoen QC zijn geearned. Vroege contributors verdienen het meest.",
     },
     {
-      question: "Wat is C+ ondertekende mining?",
-      answer: "Voordat de SPEAQ Chain blockchain wordt gelanceerd, vindt alle mining lokaal op je apparaat plaats. Elke miningbeloning wordt dubbel ondertekend: (1) jij ondertekent met je privesleutel, wat je identiteit bewijst, en (2) de relay-server mede-ondertekent als getuige, wat bewijst dat het werk daadwerkelijk heeft plaatsgevonden. Beide handtekeningen worden opgeslagen in je mining-grootboek. Wanneer de blockchain wordt gelanceerd, worden alleen items met beide handtekeningen geaccepteerd. Dit maakt fraude onmogelijk - je kunt de handtekening van de relay niet vervalsen, en de relay ondertekent alleen wanneer je daadwerkelijk bijdraagt.",
+      question: "Wat is C+ ondertekende earning?",
+      answer: "Voordat de SPEAQ Chain blockchain wordt gelanceerd, vindt alle earning lokaal op je apparaat plaats. Elke earningbeloning wordt dubbel ondertekend: (1) jij ondertekent met je privesleutel, wat je identiteit bewijst, en (2) de relay-server mede-ondertekent als getuige, wat bewijst dat het werk daadwerkelijk heeft plaatsgevonden. Beide handtekeningen worden opgeslagen in je earning-grootboek. Wanneer de blockchain wordt gelanceerd, worden alleen items met beide handtekeningen geaccepteerd. Dit maakt fraude onmogelijk - je kunt de handtekening van de relay niet vervalsen, en de relay ondertekent alleen wanneer je daadwerkelijk bijdraagt.",
     },
   ],
   fr: [
     {
       question: "Qu'est-ce que la Preuve de Contribution ?",
-      answer: "La Preuve de Contribution est le mecanisme de minage de SPEAQ. Au lieu de gaspiller de l'electricite a resoudre des puzzles mathematiques (comme Bitcoin), vous gagnez des Q-Credits en contribuant un travail utile au reseau : relayer des messages, valider des transactions, stocker des donnees chiffrees, traduire l'application, accueillir de nouveaux utilisateurs, et plus encore.",
+      answer: "La Preuve de Contribution est le mecanisme de gains de SPEAQ. Au lieu de gaspiller de l'electricite a resoudre des puzzles mathematiques (comme Bitcoin), vous gagnez des Q-Credits en contribuant un travail utile au reseau : relayer des messages, valider des transactions, stocker des donnees chiffrees, traduire l'application, accueillir de nouveaux utilisateurs, et plus encore.",
     },
     {
-      question: "En quoi est-ce different du minage de Bitcoin ?",
-      answer: "Le minage de Bitcoin necessite du materiel couteux et d'enormes quantites d'electricite pour resoudre des puzzles mathematiques inutiles. Le minage SPEAQ fonctionne sur votre telephone et vous recompense pour un travail utile qui renforce le reseau. Pas de materiel special necessaire. Pas d'electricite gaspillee. Votre contribution a une valeur reelle.",
+      question: "En quoi est-ce different du gains de Bitcoin ?",
+      answer: "Le gains de Bitcoin necessite du materiel couteux et d'enormes quantites d'electricite pour resoudre des puzzles mathematiques inutiles. Le gains SPEAQ fonctionne sur votre telephone et vous recompense pour un travail utile qui renforce le reseau. Pas de materiel special necessaire. Pas d'electricite gaspillee. Votre contribution a une valeur reelle.",
     },
     {
       question: "Combien puis-je gagner ?",
-      answer: "Les recompenses de minage actuelles sont d'environ 0,02 a 0,05 QC par jour (equivalent a 0,02 a 0,05 gramme d'or). Dans de nombreux pays, cela represente un revenu significatif. Les mineurs precoces gagnent davantage avant que les evenements de division par deux ne reduisent les recompenses. Plus vous commencez tot, plus vous accumulez.",
+      answer: "Les recompenses de gains actuelles sont d'environ 0,02 a 0,05 QC par jour (equivalent a 0,02 a 0,05 gramme d'or). Dans de nombreux pays, cela represente un revenu significatif. Les mineurs precoces gagnent davantage avant que les evenements de division par deux ne reduisent les recompenses. Plus vous commencez tot, plus vous accumulez.",
     },
     {
-      question: "Quelles sont les 7 facons de miner ?",
-      answer: "1. Relay Mining - relayer des messages chiffres a travers le reseau\n2. Mesh Mining - agir comme noeud mesh Bluetooth/WiFi pour la connectivite hors ligne\n3. Bridge Mining - servir d'agent d'echange especes-QC dans votre communaute\n4. Validation Mining - valider les preuves de transaction sur la blockchain\n5. Storage Mining - stocker des fragments de donnees chiffrees pour le reseau\n6. Translation Mining - traduire l'application dans de nouvelles langues\n7. Onboarding Mining - amener de nouveaux utilisateurs actifs sur le reseau",
+      question: "Quelles sont les 7 facons de contributor ?",
+      answer: "1. Relay Contribution - relayer des messages chiffres a travers le reseau\n2. Mesh Contribution - agir comme noeud mesh Bluetooth/WiFi pour la connectivite hors ligne\n3. Bridge Contribution - servir d'agent d'echange especes-QC dans votre communaute\n4. Validation Contribution - valider les preuves de transaction sur la blockchain\n5. Storage Contribution - stocker des fragments de donnees chiffrees pour le reseau\n6. Translation Contribution - traduire l'application dans de nouvelles langues\n7. Onboarding Contribution - amener de nouveaux utilisateurs actifs sur le reseau",
     },
     {
       question: "Qu'est-ce que le halving ?",
-      answer: "Tous les 2 100 000 QC mines par le reseau, les recompenses de minage sont divisees par deux. Cela cree une rarete croissante et protege la valeur des Q-Credits existants. Le systeme prend en charge environ 960 mineurs initialement, diminuant a chaque halving. Calendrier total de minage : plus de 40 ans avant que les 21 millions de QC soient mines. Les mineurs precoces gagnent le plus.",
+      answer: "Tous les 2 100 000 QC mines par le reseau, les recompenses de gains sont divisees par deux. Cela cree une rarete croissante et protege la valeur des Q-Credits existants. Le systeme prend en charge environ 960 mineurs initialement, diminuant a chaque halving. Calendrier total de gains : plus de 40 ans avant que les 21 millions de QC soient mines. Les mineurs precoces gagnent le plus.",
     },
     {
-      question: "Qu'est-ce que le minage signe C+ ?",
-      answer: "Avant le lancement de la blockchain SPEAQ Chain, tout le minage se fait localement sur votre appareil. Chaque recompense de minage est doublement signee : (1) vous signez avec votre cle privee, prouvant votre identite, et (2) le serveur relais cosigne en tant que temoin, prouvant que le travail a reellement eu lieu. Les deux signatures sont stockees dans votre registre de minage. Lors du lancement de la blockchain, seules les entrees avec les deux signatures sont acceptees. Cela rend la fraude impossible - vous ne pouvez pas falsifier la signature du relais, et le relais ne signe que lorsque vous contribuez reellement.",
+      question: "Qu'est-ce que le gains signe C+ ?",
+      answer: "Avant le lancement de la blockchain SPEAQ Chain, tout le gains se fait localement sur votre appareil. Chaque recompense de gains est doublement signee : (1) vous signez avec votre cle privee, prouvant votre identite, et (2) le serveur relais cosigne en tant que temoin, prouvant que le travail a reellement eu lieu. Les deux signatures sont stockees dans votre registre de gains. Lors du lancement de la blockchain, seules les entrees avec les deux signatures sont acceptees. Cela rend la fraude impossible - vous ne pouvez pas falsifier la signature du relais, et le relais ne signe que lorsque vous contribuez reellement.",
     },
   ],
   es: [
     {
       question: "Que es la Prueba de Contribucion?",
-      answer: "La Prueba de Contribucion es el mecanismo de mineria de SPEAQ. En lugar de desperdiciar electricidad resolviendo rompecabezas matematicos (como Bitcoin), ganas Q-Credits contribuyendo trabajo util a la red: retransmitiendo mensajes, validando transacciones, almacenando datos cifrados, traduciendo la aplicacion, incorporando nuevos usuarios y mas.",
+      answer: "La Prueba de Contribucion es el mecanismo de ganancias de SPEAQ. En lugar de desperdiciar electricidad resolviendo rompecabezas matematicos (como Bitcoin), ganas Q-Credits contribuyendo trabajo util a la red: retransmitiendo mensajes, validando transacciones, almacenando datos cifrados, traduciendo la aplicacion, incorporando nuevos usuarios y mas.",
     },
     {
-      question: "En que se diferencia de la mineria de Bitcoin?",
-      answer: "La mineria de Bitcoin requiere hardware costoso y enormes cantidades de electricidad para resolver rompecabezas matematicos sin sentido. La mineria de SPEAQ funciona en tu telefono y te recompensa por hacer trabajo util que fortalece la red. No se necesita hardware especial. No se desperdicia electricidad. Tu contribucion tiene valor real.",
+      question: "En que se diferencia de la ganancias de Bitcoin?",
+      answer: "La ganancias de Bitcoin requiere hardware costoso y enormes cantidades de electricidad para resolver rompecabezas matematicos sin sentido. La ganancias de SPEAQ funciona en tu telefono y te recompensa por hacer trabajo util que fortalece la red. No se necesita hardware especial. No se desperdicia electricidad. Tu contribucion tiene valor real.",
     },
     {
       question: "Cuanto puedo ganar?",
-      answer: "Las recompensas de mineria actuales son aproximadamente de 0,02 a 0,05 QC por dia (equivalente a 0,02 a 0,05 gramos de oro). En muchos paises, esto representa un ingreso significativo. Los mineros tempranos ganan mas antes de que los eventos de reduccion a la mitad reduzcan las recompensas. Cuanto antes empieces, mas acumulas.",
+      answer: "Las recompensas de ganancias actuales son aproximadamente de 0,02 a 0,05 QC por dia (equivalente a 0,02 a 0,05 gramos de oro). En muchos paises, esto representa un ingreso significativo. Los contributoros tempranos ganan mas antes de que los eventos de reduccion a la mitad reduzcan las recompensas. Cuanto antes empieces, mas acumulas.",
     },
     {
       question: "Cuales son las 7 formas de minar?",
-      answer: "1. Relay Mining - retransmitir mensajes cifrados a traves de la red\n2. Mesh Mining - actuar como nodo mesh Bluetooth/WiFi para conectividad sin internet\n3. Bridge Mining - servir como agente de intercambio de efectivo a QC en tu comunidad\n4. Validation Mining - validar pruebas de transacciones en la blockchain\n5. Storage Mining - almacenar fragmentos de datos cifrados para la red\n6. Translation Mining - traducir la aplicacion a nuevos idiomas\n7. Onboarding Mining - traer nuevos usuarios activos a la red",
+      answer: "1. Relay Contribution - retransmitir mensajes cifrados a traves de la red\n2. Mesh Contribution - actuar como nodo mesh Bluetooth/WiFi para conectividad sin internet\n3. Bridge Contribution - servir como agente de intercambio de efectivo a QC en tu comunidad\n4. Validation Contribution - validar pruebas de transacciones en la blockchain\n5. Storage Contribution - almacenar fragmentos de datos cifrados para la red\n6. Translation Contribution - traducir la aplicacion a nuevos idiomas\n7. Onboarding Contribution - traer nuevos usuarios activos a la red",
     },
     {
       question: "Que es el halving?",
-      answer: "Cada 2.100.000 QC minados por la red, las recompensas de mineria se reducen a la mitad. Esto crea una escasez creciente y protege el valor de los Q-Credits existentes. El sistema soporta aproximadamente 960 mineros inicialmente, disminuyendo con cada halving. Linea de tiempo total de mineria: mas de 40 anos antes de que todos los 21 millones de QC sean minados. Los mineros tempranos ganan mas.",
+      answer: "Cada 2.100.000 QC minados por la red, las recompensas de ganancias se reducen a la mitad. Esto crea una escasez creciente y protege el valor de los Q-Credits existentes. El sistema soporta aproximadamente 960 contributoros inicialmente, disminuyendo con cada halving. Linea de tiempo total de ganancias: mas de 40 anos antes de que todos los 21 millones de QC sean minados. Los contributoros tempranos ganan mas.",
     },
     {
-      question: "Que es la mineria firmada C+?",
-      answer: "Antes del lanzamiento de la blockchain SPEAQ Chain, toda la mineria ocurre localmente en tu dispositivo. Cada recompensa de mineria tiene doble firma: (1) tu firmas con tu clave privada, demostrando tu identidad, y (2) el servidor de retransmision cofirma como testigo, demostrando que el trabajo realmente ocurrio. Ambas firmas se almacenan en tu libro de mineria. Cuando se lance la blockchain, solo se aceptan las entradas con ambas firmas. Esto hace imposible el fraude - no puedes falsificar la firma del relay, y el relay solo firma cuando realmente contribuyes.",
+      question: "Que es la ganancias firmada C+?",
+      answer: "Antes del lanzamiento de la blockchain SPEAQ Chain, toda la ganancias ocurre localmente en tu dispositivo. Cada recompensa de ganancias tiene doble firma: (1) tu firmas con tu clave privada, demostrando tu identidad, y (2) el servidor de retransmision cofirma como testigo, demostrando que el trabajo realmente ocurrio. Ambas firmas se almacenan en tu libro de ganancias. Cuando se lance la blockchain, solo se aceptan las entradas con ambas firmas. Esto hace imposible el fraude - no puedes falsificar la firma del relay, y el relay solo firma cuando realmente contribuyes.",
     },
   ],
   ru: [
@@ -1023,7 +1023,7 @@ const mining: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Kakiye 7 sposobov mayninga sushchestvuyut?",
-      answer: "1. Relay Mining - retranslyatsiya zashifrovannykh soobshcheniy cherez set\n2. Mesh Mining - rabota v kachestve uzla Bluetooth/WiFi mesh dlya oflayn-svyazi\n3. Bridge Mining - rabota v kachestve agenta po obmenu nalichnykh na QC v vashem soobshchestve\n4. Validation Mining - validatsiya dokazatelstv tranzaktsiy v blokcheyne\n5. Storage Mining - khranenie fragmentov zashifrovannykh dannykh dlya seti\n6. Translation Mining - perevod prilozheniya na novye yazyki\n7. Onboarding Mining - privlechenie novykh aktivnykh polzovateley v set",
+      answer: "1. Relay Contribution - retranslyatsiya zashifrovannykh soobshcheniy cherez set\n2. Mesh Contribution - rabota v kachestve uzla Bluetooth/WiFi mesh dlya oflayn-svyazi\n3. Bridge Contribution - rabota v kachestve agenta po obmenu nalichnykh na QC v vashem soobshchestve\n4. Validation Contribution - validatsiya dokazatelstv tranzaktsiy v blokcheyne\n5. Storage Contribution - khranenie fragmentov zashifrovannykh dannykh dlya seti\n6. Translation Contribution - perevod prilozheniya na novye yazyki\n7. Onboarding Contribution - privlechenie novykh aktivnykh polzovateley v set",
     },
     {
       question: "Chto takoe khalving?",
@@ -1037,27 +1037,27 @@ const mining: Record<Lang, FaqItem[]> = {
   de: [
     {
       question: "Was ist Proof of Contribution?",
-      answer: "Proof of Contribution ist der Mining-Mechanismus von SPEAQ. Anstatt Strom zu verschwenden, um mathematische Ratsel zu losen (wie Bitcoin), verdienen Sie Q-Credits, indem Sie nutzliche Arbeit zum Netzwerk beitragen: Nachrichten weiterleiten, Transaktionen validieren, verschlusselte Daten speichern, die App ubersetzen, neue Nutzer einbinden und mehr.",
+      answer: "Proof of Contribution ist der Verdienst-Mechanismus von SPEAQ. Anstatt Strom zu verschwenden, um mathematische Ratsel zu losen (wie Bitcoin), verdienen Sie Q-Credits, indem Sie nutzliche Arbeit zum Netzwerk beitragen: Nachrichten weiterleiten, Transaktionen validieren, verschlusselte Daten speichern, die App ubersetzen, neue Nutzer einbinden und mehr.",
     },
     {
-      question: "Wie unterscheidet sich das vom Bitcoin-Mining?",
-      answer: "Bitcoin-Mining erfordert teure Hardware und enorme Mengen an Strom, um sinnlose mathematische Ratsel zu losen. SPEAQ-Mining lauft auf Ihrem Telefon und belohnt Sie fur nutzliche Arbeit, die das Netzwerk starkt. Keine spezielle Hardware erforderlich. Kein Strom verschwendet. Ihr Beitrag hat echten Wert.",
+      question: "Wie unterscheidet sich das vom Bitcoin-Schurfen?",
+      answer: "Bitcoin-Schurfen erfordert teure Hardware und enorme Mengen an Strom, um sinnlose mathematische Ratsel zu losen. SPEAQ-Verdienst lauft auf Ihrem Telefon und belohnt Sie fur nutzliche Arbeit, die das Netzwerk starkt. Keine spezielle Hardware erforderlich. Kein Strom verschwendet. Ihr Beitrag hat echten Wert.",
     },
     {
       question: "Wie viel kann ich verdienen?",
-      answer: "Aktuelle Mining-Belohnungen betragen ungefahr 0,02 bis 0,05 QC pro Tag (entspricht 0,02 bis 0,05 Gramm Gold). In vielen Landern stellt dies ein bedeutendes Einkommen dar. Fruhe Miner verdienen mehr, bevor Halbierungsereignisse die Belohnungen reduzieren. Je fruher Sie beginnen, desto mehr sammeln Sie an.",
+      answer: "Aktuelle Verdienst-Belohnungen betragen ungefahr 0,02 bis 0,05 QC pro Tag (entspricht 0,02 bis 0,05 Gramm Gold). In vielen Landern stellt dies ein bedeutendes Einkommen dar. Fruhe Beitragende verdienen mehr, bevor Halbierungsereignisse die Belohnungen reduzieren. Je fruher Sie beginnen, desto mehr sammeln Sie an.",
     },
     {
       question: "Was sind die 7 Moglichkeiten zu minen?",
-      answer: "1. Relay Mining - verschlusselte Nachrichten durch das Netzwerk weiterleiten\n2. Mesh Mining - als Bluetooth/WiFi-Mesh-Knoten fur Offline-Konnektivitat fungieren\n3. Bridge Mining - als Bargeld-zu-QC-Tauschagentur in Ihrer Gemeinde dienen\n4. Validation Mining - Transaktionsnachweise auf der Blockchain validieren\n5. Storage Mining - verschlusselte Datenfragmente fur das Netzwerk speichern\n6. Translation Mining - die App in neue Sprachen ubersetzen\n7. Onboarding Mining - neue aktive Nutzer ins Netzwerk bringen",
+      answer: "1. Relay Contribution - verschlusselte Nachrichten durch das Netzwerk weiterleiten\n2. Mesh Contribution - als Bluetooth/WiFi-Mesh-Knoten fur Offline-Konnektivitat fungieren\n3. Bridge Contribution - als Bargeld-zu-QC-Tauschagentur in Ihrer Gemeinde dienen\n4. Validation Contribution - Transaktionsnachweise auf der Blockchain validieren\n5. Storage Contribution - verschlusselte Datenfragmente fur das Netzwerk speichern\n6. Translation Contribution - die App in neue Sprachen ubersetzen\n7. Onboarding Contribution - neue aktive Nutzer ins Netzwerk bringen",
     },
     {
       question: "Was ist Halving?",
-      answer: "Alle 2.100.000 QC, die vom Netzwerk gemined werden, werden die Mining-Belohnungen halbiert. Dies schafft zunehmende Knappheit und schutzt den Wert bestehender Q-Credits. Das System unterstutzt anfanglich etwa 960 Miner, abnehmend mit jedem Halving. Gesamte Mining-Zeitlinie: uber 40 Jahre, bevor alle 21 Millionen QC gemined sind. Fruhe Miner verdienen am meisten.",
+      answer: "Alle 2.100.000 QC, die vom Netzwerk verdient werden, werden die Verdienst-Belohnungen halbiert. Dies schafft zunehmende Knappheit und schutzt den Wert bestehender Q-Credits. Das System unterstutzt anfanglich etwa 960 Beitragende, abnehmend mit jedem Halving. Gesamte Verdienst-Zeitlinie: uber 40 Jahre, bevor alle 21 Millionen QC verdient sind. Fruhe Beitragende verdienen am meisten.",
     },
     {
-      question: "Was ist C+ signiertes Mining?",
-      answer: "Vor dem Start der SPEAQ Chain Blockchain findet alles Mining lokal auf Ihrem Gerat statt. Jede Mining-Belohnung wird doppelt signiert: (1) Sie signieren mit Ihrem privaten Schlussel, was Ihre Identitat beweist, und (2) der Relay-Server mit-signiert als Zeuge, was beweist, dass die Arbeit tatsachlich stattgefunden hat. Beide Signaturen werden in Ihrem Mining-Hauptbuch gespeichert. Beim Start der Blockchain werden nur Eintrage mit beiden Signaturen akzeptiert. Das macht Betrug unmoglich - Sie konnen die Signatur des Relays nicht falschen, und das Relay signiert nur, wenn Sie tatsachlich beitragen.",
+      question: "Was ist C+ signiertes Verdienen?",
+      answer: "Vor dem Start der SPEAQ Chain Blockchain findet alles Verdienst lokal auf Ihrem Gerat statt. Jede Verdienst-Belohnung wird doppelt signiert: (1) Sie signieren mit Ihrem privaten Schlussel, was Ihre Identitat beweist, und (2) der Relay-Server mit-signiert als Zeuge, was beweist, dass die Arbeit tatsachlich stattgefunden hat. Beide Signaturen werden in Ihrem Verdienst-Hauptbuch gespeichert. Beim Start der Blockchain werden nur Eintrage mit beiden Signaturen akzeptiert. Das macht Betrug unmoglich - Sie konnen die Signatur des Relays nicht falschen, und das Relay signiert nur, wenn Sie tatsachlich beitragen.",
     },
   ],
   sl: [
@@ -1067,75 +1067,75 @@ const mining: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Kako se to razlikuje od rudarjenja Bitcoin?",
-      answer: "Rudarjenje Bitcoin zahteva drago opremo in ogromne kolichine elektrike za reshevanje nesmiselnih matematichnih ugank. Rudarjenje SPEAQ deluje na vashem telefonu in vas nagrajuje za koristno delo, ki krepini omrezje. Brez posebne opreme. Brez zapravljene elektrike. Vas prispevek ima resnichno vrednost.",
+      answer: "Zasluzek Bitcoin zahteva drago opremo in ogromne kolichine elektrike za reshevanje nesmiselnih matematichnih ugank. Zasluzek SPEAQ deluje na vashem telefonu in vas nagrajuje za koristno delo, ki krepini omrezje. Brez posebne opreme. Brez zapravljene elektrike. Vas prispevek ima resnichno vrednost.",
     },
     {
       question: "Koliko lahko zasluzim?",
-      answer: "Trenutne nagrade za rudarjenje so priblizno 0,02 do 0,05 QC na dan (kar ustreza 0,02 do 0,05 grama zlata). V mnogih drzavah to predstavlja znaten prihodek. Zgodnji rudarji zasluzijo vech, preden dogodki razpolovitve zmanjshajo nagrade. Prej ko zachnete, vech nakopichite.",
+      answer: "Trenutne nagrade za zasluzek so priblizno 0,02 do 0,05 QC na dan (kar ustreza 0,02 do 0,05 grama zlata). V mnogih drzavah to predstavlja znaten prihodek. Zgodnji rudarji zasluzijo vech, preden dogodki razpolovitve zmanjshajo nagrade. Prej ko zachnete, vech nakopichite.",
     },
     {
       question: "Katerih 7 nachinov rudarjenja obstaja?",
-      answer: "1. Relay Mining - posredovanje shifriranih sporocil prek omrezja\n2. Mesh Mining - delovanje kot Bluetooth/WiFi mesh vozhliche za povezljivost brez spleta\n3. Bridge Mining - delovanje kot agent za zamenjavo gotovine v QC v vashi skupnosti\n4. Validation Mining - potrjevanje dokazov transakcij na verigi blokov\n5. Storage Mining - shranjevanje shifriranih podatkovnih fragmentov za omrezje\n6. Translation Mining - prevajanje aplikacije v nove jezike\n7. Onboarding Mining - pripeljite nove aktivne uporabnike v omrezje",
+      answer: "1. Relay Contribution - posredovanje shifriranih sporocil prek omrezja\n2. Mesh Contribution - delovanje kot Bluetooth/WiFi mesh vozhliche za povezljivost brez spleta\n3. Bridge Contribution - delovanje kot agent za zamenjavo gotovine v QC v vashi skupnosti\n4. Validation Contribution - potrjevanje dokazov transakcij na verigi blokov\n5. Storage Contribution - shranjevanje shifriranih podatkovnih fragmentov za omrezje\n6. Translation Contribution - prevajanje aplikacije v nove jezike\n7. Onboarding Contribution - pripeljite nove aktivne uporabnike v omrezje",
     },
     {
       question: "Kaj je razpolovitev?",
-      answer: "Vsakih 2.100.000 QC, ki jih omrezje izrudari, se nagrade za rudarjenje prepolovijo. To ustvarja naraschajoco redkost in schiti vrednost obstojecih Q-Credits. Sistem podpira priblizno 960 rudarjev na zachetku, ki se zmanjshuje z vsako razpolovitvijo. Skupna chasovnica rudarjenja: vech kot 40 let, preden je vseh 21 milijonov QC izrudarjenih. Zgodnji rudarji zasluzijo najvech.",
+      answer: "Vsakih 2.100.000 QC, ki jih omrezje izrudari, se nagrade za zasluzek prepolovijo. To ustvarja naraschajoco redkost in schiti vrednost obstojecih Q-Credits. Sistem podpira priblizno 960 rudarjev na zachetku, ki se zmanjshuje z vsako razpolovitvijo. Skupna chasovnica rudarjenja: vech kot 40 let, preden je vseh 21 milijonov QC izrudarjenih. Zgodnji rudarji zasluzijo najvech.",
     },
     {
-      question: "Kaj je C+ podpisano rudarjenje?",
-      answer: "Pred zagonom verige blokov SPEAQ Chain se vse rudarjenje izvaja lokalno na vasi napravi. Vsaka nagrada za rudarjenje je dvojno podpisana: (1) vi podpishete s svojim zasebnim kljuchem, kar dokazuje vasho identiteto, in (2) posredovalni streznik sopodpishe kot pricha, kar dokazuje, da se je delo dejansko zgodilo. Oba podpisa sta shranjena v vasem rudarskem dnevniku. Ko se veriga blokov zagene, so sprejeti samo vnosi z obema podpisoma. To onemogocha goljufijo - ne morete ponarediti podpisa posredovalnika, posrednik pa podpishe samo, ko dejansko prispevate.",
+      question: "Kaj je C+ podpisano zasluzek?",
+      answer: "Pred zagonom verige blokov SPEAQ Chain se vse zasluzek izvaja lokalno na vasi napravi. Vsaka nagrada za zasluzek je dvojno podpisana: (1) vi podpishete s svojim zasebnim kljuchem, kar dokazuje vasho identiteto, in (2) posredovalni streznik sopodpishe kot pricha, kar dokazuje, da se je delo dejansko zgodilo. Oba podpisa sta shranjena v vasem rudarskem dnevniku. Ko se veriga blokov zagene, so sprejeti samo vnosi z obema podpisoma. To onemogocha goljufijo - ne morete ponarediti podpisa posredovalnika, posrednik pa podpishe samo, ko dejansko prispevate.",
     },
   ],
   lg: [
     {
       question: "Proof of Contribution kye ki?",
-      answer: "Proof of Contribution ye nkola y'okusimba eya SPEAQ. Mu kifo ky'okusaanyawo amasannyalaze ng'osolvinga puzzles za mathematiki (nga Bitcoin), ofuna Q-Credits ng'oteekayo omulimu ogugasa ku mukutu: okuserengesa obubaka, okukakasa transactions, okutereka data enziyize, okuvvuunula appu, okuleeta abakozesa abapya, n'ebirala.",
+      answer: "Proof of Contribution ye nkola y'okufuna eya SPEAQ. Mu kifo ky'okusaanyawo amasannyalaze ng'osolvinga puzzles za mathematiki (nga Bitcoin), ofuna Q-Credits ng'oteekayo omulimu ogugasa ku mukutu: okuserengesa obubaka, okukakasa transactions, okutereka data enziyize, okuvvuunula appu, okuleeta abakozesa abapya, n'ebirala.",
     },
     {
       question: "Kino kyawukana kitya ku kusimba kwa Bitcoin?",
-      answer: "Okusimba kwa Bitcoin kyetaaga ebyuma eby'obbeeyi n'amasannyalaze amangi ennyo okusolvinga puzzles za mathematiki ezitalina makulu. Okusimba kwa SPEAQ kukola ku ssimu yo era kukuwa empeera olw'okukola omulimu ogugasa oguzzaawo omukutu. Tewali byuma byenjawulo bikyetagisa. Tewali masannyalaze gasaanyizibwa. Ky'oteeka kirina omuwendo ogw'amazima.",
+      answer: "Okufuna kwa Bitcoin kyetaaga ebyuma eby'obbeeyi n'amasannyalaze amangi ennyo okusolvinga puzzles za mathematiki ezitalina makulu. Okufuna kwa SPEAQ kukola ku ssimu yo era kukuwa empeera olw'okukola omulimu ogugasa oguzzaawo omukutu. Tewali byuma byenjawulo bikyetagisa. Tewali masannyalaze gasaanyizibwa. Ky'oteeka kirina omuwendo ogw'amazima.",
     },
     {
       question: "Nsobola kufuna mmeka?",
-      answer: "Empeera z'okusimba ez'omu kiseera kino ziri wakati wa 0.02 okutuuka ku 0.05 QC olunaku (ekigerannyisibwa na 0.02 okutuuka ku 0.05 guraamu za zabu). Mu nsi nnyingi, kino kisigamizira ennyingiza ey'omugaso. Abasimba abasooka bafuna ennyo ng'ebifo by'okugabanyaamu ebitannatuuka. Bw'osooka mangu, bw'otereka ennyo.",
+      answer: "Empeera z'okufuna ez'omu kiseera kino ziri wakati wa 0.02 okutuuka ku 0.05 QC olunaku (ekigerannyisibwa na 0.02 okutuuka ku 0.05 guraamu za zabu). Mu nsi nnyingi, kino kisigamizira ennyingiza ey'omugaso. Abasimba abasooka bafuna ennyo ng'ebifo by'okugabanyaamu ebitannatuuka. Bw'osooka mangu, bw'otereka ennyo.",
     },
     {
-      question: "Engeri 7 ez'okusimba ziri ki?",
-      answer: "1. Relay Mining - okuserengesa obubaka obuziyize mu mukutu\n2. Mesh Mining - okukola nga node ya Bluetooth/WiFi mesh olw'okuyungibwa awatali internet\n3. Bridge Mining - okukola ng'omukozi w'okukyusa ssente eza mu ngalo mu QC mu kitundu kyo\n4. Validation Mining - okukakasa ebikakasibwa by'entunda ku blockchain\n5. Storage Mining - okutereka ebitundu by'adata enziyize ku mukutu\n6. Translation Mining - okuvvuunula appu mu nnimi empya\n7. Onboarding Mining - okuleeta abakozesa abapya abakola ku mukutu",
+      question: "Engeri 7 ez'okufuna ziri ki?",
+      answer: "1. Relay Contribution - okuserengesa obubaka obuziyize mu mukutu\n2. Mesh Contribution - okukola nga node ya Bluetooth/WiFi mesh olw'okuyungibwa awatali internet\n3. Bridge Contribution - okukola ng'omukozi w'okukyusa ssente eza mu ngalo mu QC mu kitundu kyo\n4. Validation Contribution - okukakasa ebikakasibwa by'entunda ku blockchain\n5. Storage Contribution - okutereka ebitundu by'adata enziyize ku mukutu\n6. Translation Contribution - okuvvuunula appu mu nnimi empya\n7. Onboarding Contribution - okuleeta abakozesa abapya abakola ku mukutu",
     },
     {
       question: "Halving kye ki?",
-      answer: "Buli 2,100,000 QC ezisimbiddwa omukutu, empeera z'okusimba zigabanyizibwa mu bibiri. Kino kitonda obukeekerezi obweyongera era kikunuulira omuwendo gwa Q-Credits eziriwo. Sisitemu ewagira abasimba nga 960 mu ntandikwa, okukendeeranga buli halving. Obudde bwonna obw'okusimba: emyaka 40+ ng'a Q-Credits zonna 21 million tezinnasimbwa. Abasimba abasooka basinga okufuna.",
+      answer: "Buli 2,100,000 QC ezisimbiddwa omukutu, empeera z'okufuna zigabanyizibwa mu bibiri. Kino kitonda obukeekerezi obweyongera era kikunuulira omuwendo gwa Q-Credits eziriwo. Sisitemu ewagira abasimba nga 960 mu ntandikwa, okukendeeranga buli halving. Obudde bwonna obw'okufuna: emyaka 40+ ng'a Q-Credits zonna 21 million tezinnasimbwa. Abasimba abasooka basinga okufuna.",
     },
     {
-      question: "C+ signed mining kye ki?",
-      answer: "Ng'a blockchain ya SPEAQ Chain tennalondebwa, okusimba kwonna kukola ku kifo kyo. Buli mpeera y'okusimba esayinibwa emirundi ebiri: (1) ggwe osayina n'ekisumuluzo kyo eky'ekyama, ng'okakasa obumanyirivu bwo, era (2) seva erabira esayina wamu ng'omujulizi, ng'ekakasa nti omulimu gwakolebwa ddala. Okusayina kwombi kuterekebbwa mu ledger yo ey'okusimba. Blockchain bw'enaatandika, entries ezilina okusayina kwombi byokka ze zenzikirizebbwa. Kino kisalako obulimba - toyinza kulyasemba okusayina kwa relay, era relay esayina bw'okoze ddala.",
+      question: "C+ signed earning kye ki?",
+      answer: "Ng'a blockchain ya SPEAQ Chain tennalondebwa, okufuna kwonna kukola ku kifo kyo. Buli mpeera y'okufuna esayinibwa emirundi ebiri: (1) ggwe osayina n'ekisumuluzo kyo eky'ekyama, ng'okakasa obumanyirivu bwo, era (2) seva erabira esayina wamu ng'omujulizi, ng'ekakasa nti omulimu gwakolebwa ddala. Okusayina kwombi kuterekebbwa mu ledger yo ey'okufuna. Blockchain bw'enaatandika, entries ezilina okusayina kwombi byokka ze zenzikirizebbwa. Kino kisalako obulimba - toyinza kulyasemba okusayina kwa relay, era relay esayina bw'okoze ddala.",
     },
   ],
   sw: [
     {
       question: "Uthibitisho wa Mchango ni nini?",
-      answer: "Uthibitisho wa Mchango ni utaratibu wa uchimbaji wa SPEAQ. Badala ya kupoteza umeme kutatua mafumbo ya hesabu (kama Bitcoin), unapata Q-Credits kwa kuchangia kazi muhimu kwa mtandao: kusambaza ujumbe, kuthibitisha miamala, kuhifadhi data iliyosimbwa, kutafsiri programu, kuingiza watumiaji wapya, na zaidi.",
+      answer: "Uthibitisho wa Mchango ni utaratibu wa kupata wa SPEAQ. Badala ya kupoteza umeme kutatua mafumbo ya hesabu (kama Bitcoin), unapata Q-Credits kwa kuchangia kazi muhimu kwa mtandao: kusambaza ujumbe, kuthibitisha miamala, kuhifadhi data iliyosimbwa, kutafsiri programu, kuingiza watumiaji wapya, na zaidi.",
     },
     {
-      question: "Hii inatofautiana vipi na uchimbaji wa Bitcoin?",
-      answer: "Uchimbaji wa Bitcoin unahitaji vifaa vya gharama kubwa na kiasi kikubwa cha umeme kutatua mafumbo ya hesabu yasiyo na maana. Uchimbaji wa SPEAQ unafanya kazi kwenye simu yako na unakuthawabisha kwa kufanya kazi muhimu inayoimarisha mtandao. Hakuna vifaa maalum vinavyohitajika. Hakuna umeme unaopotezwa. Mchango wako una thamani halisi.",
+      question: "Hii inatofautiana vipi na kupata wa Bitcoin?",
+      answer: "Kupata wa Bitcoin unahitaji vifaa vya gharama kubwa na kiasi kikubwa cha umeme kutatua mafumbo ya hesabu yasiyo na maana. Kupata wa SPEAQ unafanya kazi kwenye simu yako na unakuthawabisha kwa kufanya kazi muhimu inayoimarisha mtandao. Hakuna vifaa maalum vinavyohitajika. Hakuna umeme unaopotezwa. Mchango wako una thamani halisi.",
     },
     {
       question: "Ninaweza kupata kiasi gani?",
-      answer: "Zawadi za sasa za uchimbaji ni takriban 0.02 hadi 0.05 QC kwa siku (sawa na 0.02 hadi 0.05 gramu za dhahabu). Katika nchi nyingi, hii inawakilisha mapato muhimu. Wachimbaji wa mapema wanapata zaidi kabla ya matukio ya kugawanya kupunguza zawadi. Kadri unavyoanza mapema, ndivyo unavyokusanya zaidi.",
+      answer: "Zawadi za sasa za kupata ni takriban 0.02 hadi 0.05 QC kwa siku (sawa na 0.02 hadi 0.05 gramu za dhahabu). Katika nchi nyingi, hii inawakilisha mapato muhimu. Wachimbaji wa mapema wanapata zaidi kabla ya matukio ya kugawanya kupunguza zawadi. Kadri unavyoanza mapema, ndivyo unavyokusanya zaidi.",
     },
     {
       question: "Njia 7 za kuchimba ni zipi?",
-      answer: "1. Relay Mining - kusambaza ujumbe uliosimbwa kupitia mtandao\n2. Mesh Mining - kufanya kazi kama nodi ya Bluetooth/WiFi mesh kwa muunganisho nje ya mtandao\n3. Bridge Mining - kufanya kazi kama wakala wa kubadilisha pesa taslimu kuwa QC katika jamii yako\n4. Validation Mining - kuthibitisha uthibitisho wa miamala kwenye blockchain\n5. Storage Mining - kuhifadhi vipande vya data vilivyosimbwa kwa mtandao\n6. Translation Mining - kutafsiri programu katika lugha mpya\n7. Onboarding Mining - kuleta watumiaji wapya hai kwenye mtandao",
+      answer: "1. Relay Contribution - kusambaza ujumbe uliosimbwa kupitia mtandao\n2. Mesh Contribution - kufanya kazi kama nodi ya Bluetooth/WiFi mesh kwa muunganisho nje ya mtandao\n3. Bridge Contribution - kufanya kazi kama wakala wa kubadilisha pesa taslimu kuwa QC katika jamii yako\n4. Validation Contribution - kuthibitisha uthibitisho wa miamala kwenye blockchain\n5. Storage Contribution - kuhifadhi vipande vya data vilivyosimbwa kwa mtandao\n6. Translation Contribution - kutafsiri programu katika lugha mpya\n7. Onboarding Contribution - kuleta watumiaji wapya hai kwenye mtandao",
     },
     {
       question: "Kugawanya ni nini?",
-      answer: "Kila QC 2,100,000 zinazochimbwa na mtandao, zawadi za uchimbaji zinapunguzwa kwa nusu. Hii inaunda uhaba unaongezeka na kulinda thamani ya Q-Credits zilizopo. Mfumo unasaidia takriban wachimbaji 960 mwanzoni, ukipungua na kila kugawanya. Muda wa jumla wa uchimbaji: miaka 40+ kabla ya QC milioni 21 zote kuchimbwa. Wachimbaji wa mapema wanapata zaidi.",
+      answer: "Kila QC 2,100,000 zinazochimbwa na mtandao, zawadi za kupata zinapunguzwa kwa nusu. Hii inaunda uhaba unaongezeka na kulinda thamani ya Q-Credits zilizopo. Mfumo unasaidia takriban wachimbaji 960 mwanzoni, ukipungua na kila kugawanya. Muda wa jumla wa kupata: miaka 40+ kabla ya QC milioni 21 zote kuchimbwa. Wachimbaji wa mapema wanapata zaidi.",
     },
     {
-      question: "Uchimbaji uliosainiwa C+ ni nini?",
-      answer: "Kabla ya blockchain ya SPEAQ Chain kuzinduliwa, uchimbaji wote unafanyika ndani ya kifaa chako. Kila zawadi ya uchimbaji inasainiwa mara mbili: (1) unasaini kwa funguo yako ya faragha, ukithibitisha utambulisho wako, na (2) seva ya relay inasaini pamoja kama shahidi, ikithibitisha kazi kweli ilitokea. Saini zote mbili zinahifadhiwa katika daftari lako la uchimbaji. Blockchain inapozinduliwa, maingizo yenye saini zote mbili pekee yanakubaliwa. Hii inafanya udanganyifu kuwa hauwezekani - huwezi kughushi saini ya relay, na relay inasaini tu unapochangia kweli.",
+      question: "Kupata uliosainiwa C+ ni nini?",
+      answer: "Kabla ya blockchain ya SPEAQ Chain kuzinduliwa, kupata wote unafanyika ndani ya kifaa chako. Kila zawadi ya kupata inasainiwa mara mbili: (1) unasaini kwa funguo yako ya faragha, ukithibitisha utambulisho wako, na (2) seva ya relay inasaini pamoja kama shahidi, ikithibitisha kazi kweli ilitokea. Saini zote mbili zinahifadhiwa katika daftari lako la kupata. Blockchain inapozinduliwa, maingizo yenye saini zote mbili pekee yanakubaliwa. Hii inafanya udanganyifu kuwa hauwezekani - huwezi kughushi saini ya relay, na relay inasaini tu unapochangia kweli.",
     },
   ],
 };
@@ -1721,7 +1721,7 @@ export function getFaqData(lang: Lang): FaqCategory[] {
     { title: titles[0], items: platform[lang] },
     { title: titles[1], items: security[lang] },
     { title: titles[2], items: wallet[lang] },
-    { title: titles[3], items: mining[lang] },
+    { title: titles[3], items: earning[lang] },
     { title: titles[4], items: blockchain[lang] },
     { title: titles[5], items: features[lang] },
     { title: titles[6], items: technical[lang] },

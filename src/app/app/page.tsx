@@ -125,7 +125,7 @@ const appStrings: Record<string, Record<string, string>> = {
   "tab.chats": { en: "Chats", nl: "Chats", fr: "Discussions", es: "Chats", ru: "Chaty", de: "Chats", sl: "Klepeti", lg: "Byokwogerako", sw: "Mazungumzo" },
   "tab.contacts": { en: "Contacts", nl: "Contacten", fr: "Contacts", es: "Contactos", ru: "Kontakty", de: "Kontakte", sl: "Stiki", lg: "Abantu", sw: "Wasiliani" },
   "tab.wallet": { en: "Wallet", nl: "Wallet", fr: "Portefeuille", es: "Billetera", ru: "Koshelek", de: "Wallet", sl: "Denarnica", lg: "Wallet", sw: "Mkoba" },
-  "tab.mining": { en: "Earn", nl: "Verdien", fr: "Gagner", es: "Ganar", ru: "Zarabotat", de: "Verdienen", sl: "Zasluzek", lg: "Funa", sw: "Pata" },
+  "tab.earning": { en: "Earn", nl: "Verdien", fr: "Gagner", es: "Ganar", ru: "Zarabotat", de: "Verdienen", sl: "Zasluzek", lg: "Funa", sw: "Pata" },
   "tab.more": { en: "More", nl: "Meer", fr: "Plus", es: "Mas", ru: "Eshche", de: "Mehr", sl: "Vec", lg: "Ebisingawo", sw: "Zaidi" },
   "tab.settings": { en: "Settings", nl: "Instellingen", fr: "Parametres", es: "Ajustes", ru: "Nastrojki", de: "Einstellungen", sl: "Nastavitve", lg: "Entegeka", sw: "Mipangilio" },
   "chat.secured": { en: "Secure", ru: "Zashchishcheno", nl: "Beveiligd", fr: "Securise", es: "Seguro", de: "Gesichert", sl: "Zasciteno", lg: "Ekuumiddwa", sw: "Salama" },
@@ -149,16 +149,16 @@ const appStrings: Record<string, Record<string, string>> = {
   "wallet.transactions": { en: "Transactions", ru: "Tranzaktsii", nl: "Transacties", fr: "Transactions", es: "Transacciones", de: "Transaktionen", sl: "Transakcije", lg: "Entambuza", sw: "Shughuli" },
   "wallet.goldValue": { en: "Gold Value", ru: "Stoimost zolota", nl: "Goudwaarde", fr: "Valeur Or", es: "Valor Oro", de: "Goldwert", sl: "Vrednost zlata", lg: "Omuwendo gw'ezaabu", sw: "Thamani ya dhahabu" },
   "wallet.projects": { en: "Projects", ru: "Proekty", nl: "Projecten", fr: "Projets", es: "Proyectos", de: "Projekte", sl: "Projekti", lg: "Pulojekiti", sw: "Miradi" },
-  // Mining
-  "mining.title": { en: "Earn Credits", ru: "Setevoj majning", nl: "Verdien Credits", fr: "Gagner des Credits", es: "Ganar Creditos", de: "Credits Verdienen", sl: "Omrezno rudarjenje", lg: "Okusimba ku network", sw: "Uchimbaji wa mtandao" },
-  "mining.start": { en: "Start Earning", ru: "Nachat majning", nl: "Start Verdienen", fr: "Demarrer", es: "Iniciar", de: "Starten", sl: "Zacni rudariti", lg: "Tandika okusimba", sw: "Anza uchimbaji" },
-  "mining.stop": { en: "Stop Earning", ru: "Ostanovit majning", nl: "Stop Verdienen", fr: "Arreter", es: "Detener", de: "Stoppen", sl: "Ustavi rudarjenje", lg: "Yimiriza okusimba", sw: "Simamisha uchimbaji" },
-  "mining.today": { en: "Today", ru: "Segodnya", nl: "Vandaag", fr: "Aujourd'hui", es: "Hoy", de: "Heute", sl: "Danes", lg: "Leero", sw: "Leo" },
-  "mining.total": { en: "Total Earned", ru: "Vsego zarabotano", nl: "Totaal Verdiend", fr: "Total Gagne", es: "Total Ganado", de: "Gesamt Verdient", sl: "Skupaj zasluzeno", lg: "Byonna ebifuniddwa", sw: "Jumla iliyopatikana" },
-  "mining.level": { en: "Miner Level", ru: "Uroven majnera", nl: "Miner Level", fr: "Niveau Mineur", es: "Nivel Minero", de: "Miner Level", sl: "Raven rudarja", lg: "Omutendera gw'omusimbi", sw: "Kiwango cha mchimbaji" },
-  "mining.streak": { en: "Day Streak", ru: "Dnej podryad", nl: "Dag Streak", fr: "Serie Jours", es: "Racha Dias", de: "Tage Serie", sl: "Zaporedni dnevi", lg: "Ennaku ez'omulundi", sw: "Mfululizo wa siku" },
-  "mining.estimated": { en: "Est. Daily", ru: "Ots. v den", nl: "Gesch. Dagelijks", fr: "Est. Quotidien", es: "Est. Diario", de: "Gesch. Taglich", sl: "Oc. dnevno", lg: "Eky'olunaku", sw: "Kadiri ya kila siku" },
-  "mining.supply": { en: "Supply Info", ru: "Informatsiya o zapasakh", nl: "Voorraad Info", fr: "Info Offre", es: "Info Suministro", de: "Vorrat Info", sl: "Info o zalogi", lg: "Ebikwata ku biwaanike", sw: "Maelezo ya ugavi" },
+  // Earning
+  "earning.title": { en: "Earn Credits", ru: "Zarabotat Kredity", nl: "Verdien Credits", fr: "Gagner des Credits", es: "Ganar Creditos", de: "Credits Verdienen", sl: "Zasluzite Kredite", lg: "Funa Credits", sw: "Pata Mikopo" },
+  "earning.start": { en: "Start Earning", ru: "Nachat zarabatyvat", nl: "Start Verdienen", fr: "Demarrer", es: "Iniciar", de: "Starten", sl: "Zacni zasluzevati", lg: "Tandika okufuna", sw: "Anza kupata" },
+  "earning.stop": { en: "Stop Earning", ru: "Ostanovit zarabotok", nl: "Stop Verdienen", fr: "Arreter", es: "Detener", de: "Stoppen", sl: "Ustavi zasluzek", lg: "Yimiriza okufuna", sw: "Simamisha kupata" },
+  "earning.today": { en: "Today", ru: "Segodnya", nl: "Vandaag", fr: "Aujourd'hui", es: "Hoy", de: "Heute", sl: "Danes", lg: "Leero", sw: "Leo" },
+  "earning.total": { en: "Total Earned", ru: "Vsego zarabotano", nl: "Totaal Verdiend", fr: "Total Gagne", es: "Total Ganado", de: "Gesamt Verdient", sl: "Skupaj zasluzeno", lg: "Byonna ebifuniddwa", sw: "Jumla iliyopatikana" },
+  "earning.level": { en: "Contributor Level", ru: "Uroven uchastnika", nl: "Bijdrager Level", fr: "Niveau Contributeur", es: "Nivel Contribuidor", de: "Beitragslevel", sl: "Raven prispevka", lg: "Omutendera gw'omuyambi", sw: "Kiwango cha mchangiaji" },
+  "earning.streak": { en: "Day Streak", ru: "Dnej podryad", nl: "Dag Streak", fr: "Serie Jours", es: "Racha Dias", de: "Tage Serie", sl: "Zaporedni dnevi", lg: "Ennaku ez'omulundi", sw: "Mfululizo wa siku" },
+  "earning.estimated": { en: "Est. Daily", ru: "Ots. v den", nl: "Gesch. Dagelijks", fr: "Est. Quotidien", es: "Est. Diario", de: "Gesch. Taglich", sl: "Oc. dnevno", lg: "Eky'olunaku", sw: "Kadiri ya kila siku" },
+  "earning.supply": { en: "Supply Info", ru: "Informatsiya o zapasakh", nl: "Voorraad Info", fr: "Info Offre", es: "Info Suministro", de: "Vorrat Info", sl: "Info o zalogi", lg: "Ebikwata ku biwaanike", sw: "Maelezo ya ugavi" },
   // Groups
   "groups.title": { en: "Groups", ru: "Gruppy", nl: "Groepen", fr: "Groupes", es: "Grupos", de: "Gruppen", sl: "Skupine", lg: "Ebibinja", sw: "Vikundi" },
   "groups.create": { en: "Create Group", ru: "Sozdat gruppu", nl: "Groep Aanmaken", fr: "Creer un Groupe", es: "Crear Grupo", de: "Gruppe Erstellen", sl: "Ustvari skupino", lg: "Tonda ekibinja", sw: "Unda kikundi" },
@@ -175,7 +175,7 @@ const appStrings: Record<string, Record<string, string>> = {
   // Call
   "call.title": { en: "Voice Call", ru: "Golosovoj vyzov", nl: "Spraakoproep", fr: "Appel Vocal", es: "Llamada de Voz", de: "Sprachanruf", sl: "Glasovni klic", lg: "Okuyita kw'eddoboozi", sw: "Simu ya sauti" },
   "call.calling": { en: "Calling...", ru: "Vyzov...", nl: "Bellen...", fr: "Appel en cours...", es: "Llamando...", de: "Anrufen...", sl: "Klicanje...", lg: "Okuyita...", sw: "Kupiga simu..." },
-  "call.end": { en: "End Call", ru: "Zavershit vyzov", nl: "Beeindig Oproep", fr: "Terminer", es: "Finalizar", de: "Beenden", sl: "Koncaj klic", lg: "Ggalawo okuyita", sw: "Maliza simu" },
+  "call.end": { en: "End Call", ru: "Zavershit vyzov", nl: "Beeindig Oproep", fr: "Tercontributor", es: "Finalizar", de: "Beenden", sl: "Koncaj klic", lg: "Ggalawo okuyita", sw: "Maliza simu" },
   // Info
   "info.title": { en: "About SPEAQ", ru: "O SPEAQ", nl: "Over SPEAQ", fr: "A propos de SPEAQ", es: "Acerca de SPEAQ", de: "Uber SPEAQ", sl: "O SPEAQ", lg: "Ebikwata ku SPEAQ", sw: "Kuhusu SPEAQ" },
   "info.version": { en: "Version", ru: "Versiya", nl: "Versie", fr: "Version", es: "Version", de: "Version", sl: "Razlicica", lg: "Ekika", sw: "Toleo" },
@@ -247,24 +247,24 @@ const appStrings: Record<string, Record<string, string>> = {
   "onb.skip": { en: "Skip", nl: "Overslaan", fr: "Passer", es: "Omitir", ru: "Propustit", de: "Uberspringen", sl: "Preskoci", lg: "Buuka", sw: "Ruka" },
   "onb.next": { en: "Next", nl: "Volgende", fr: "Suivant", es: "Siguiente", ru: "Dalee", de: "Weiter", sl: "Naprej", lg: "Ekiddako", sw: "Ifuatayo" },
   "onb.getStarted": { en: "Get Started", nl: "Aan de slag", fr: "Commencer", es: "Comenzar", ru: "Nachat", de: "Los geht's", sl: "Zacni", lg: "Tandika", sw: "Anza" },
-  // Mining detail
-  "mining.active": { en: "Earning Active", nl: "Verdienen Actief", fr: "Gains Actifs", es: "Ganancias Activas", ru: "Majning aktiven", de: "Verdienst Aktiv", sl: "Rudarjenje aktivno", lg: "Okusimba kutandika", sw: "Uchimbaji unaendelea" },
-  "mining.paused": { en: "Mining Paused", nl: "Mining Gepauzeerd", fr: "Minage en Pause", es: "Mineria Pausada", ru: "Majning na pauze", de: "Mining Pausiert", sl: "Rudarjenje zaustavljeno", lg: "Okusimba kwayimiriziddwa", sw: "Uchimbaji umesimamishwa" },
-  "mining.earning": { en: "Earning Q-Credits for the network", nl: "Q-Credits verdienen voor het netwerk", fr: "Gagner des Q-Credits pour le reseau", es: "Ganando Q-Credits para la red", ru: "Zarabotok Q-Credits dlya seti", de: "Q-Credits fur das Netzwerk verdienen", sl: "Zasluzek Q-Credits za omrezje", lg: "Okufuna Q-Credits ku network", sw: "Kupata Q-Credits kwa mtandao" },
-  "mining.tapStart": { en: "Tap to start earning", nl: "Tik om te beginnen met verdienen", fr: "Appuyez pour commencer a gagner", es: "Toque para comenzar a ganar", ru: "Nazhmite chtoby nachat zarabatyvat", de: "Tippen um zu verdienen", sl: "Tapnite za zacetek zasluzka", lg: "Nyiga okutandika okufuna", sw: "Gusa kuanza kupata" },
-  "mining.types": { en: "Mining Types", nl: "Mining Types", fr: "Types de Minage", es: "Tipos de Mineria", ru: "Tipy majninga", de: "Mining Typen", sl: "Tipi rudarjenja", lg: "Ebika by'okusimba", sw: "Aina za uchimbaji" },
-  "mining.recentRewards": { en: "Recent Rewards", nl: "Recente Beloningen", fr: "Recompenses Recentes", es: "Recompensas Recientes", ru: "Nedavnie nagrady", de: "Neueste Belohnungen", sl: "Nedavne nagrade", lg: "Empeera ez'omu biseera", sw: "Tuzo za hivi karibuni" },
-  "mining.noRewards": { en: "No rewards yet. Start mining!", nl: "Nog geen beloningen. Start mining!", fr: "Pas encore de recompenses.", es: "Sin recompensas aun.", ru: "Net nagrad. Nachnite majning!", de: "Noch keine Belohnungen.", sl: "Se ni nagrad.", lg: "Tewali mpeera. Tandika okusimba!", sw: "Hakuna tuzo bado. Anza uchimbaji!" },
-  "mining.contribution": { en: "Your Contribution", nl: "Jouw Bijdrage", fr: "Votre Contribution", es: "Tu Contribucion", ru: "Vash vklad", de: "Dein Beitrag", sl: "Vas prispevek", lg: "Ekigendererwa kyo", sw: "Mchango wako" },
-  "mining.relayed": { en: "Messages Relayed", nl: "Berichten Doorgestuurd", fr: "Messages Relayes", es: "Mensajes Retransmitidos", ru: "Peredano soobshchenij", de: "Weitergeleitete Nachrichten", sl: "Posredovana sporocila", lg: "Obubaka obuwereddwa", sw: "Ujumbe uliopitishwa" },
-  "mining.validated": { en: "Proofs Validated", nl: "Bewijzen Gevalideerd", fr: "Preuves Validees", es: "Pruebas Validadas", ru: "Provereno dokazatelstv", de: "Beweise Validiert", sl: "Preverjeni dokazi", lg: "Obujulizi obukakasiddwa", sw: "Uthibitisho uliothibitishwa" },
-  "mining.stored": { en: "Storage Used", nl: "Opslag Gebruikt", fr: "Stockage Utilise", es: "Almacenamiento Usado", ru: "Ispolzovano khranilishcha", de: "Speicher Verwendet", sl: "Uporabljena shramba", lg: "Ekitundu eky'okutereka", sw: "Hifadhi iliyotumika" },
-  "mining.onboarded": { en: "Users Onboarded", nl: "Gebruikers Aangemeld", fr: "Utilisateurs Integres", es: "Usuarios Incorporados", ru: "Polzovatelej dobavleno", de: "Benutzer Eingebunden", sl: "Vkljuceni uporabniki", lg: "Abakozesa abayingiziddwa", sw: "Watumiaji walioingizwa" },
+  // Earning detail
+  "earning.active": { en: "Earning Active", nl: "Verdienen Actief", fr: "Gains Actifs", es: "Ganancias Activas", ru: "Zarabotok aktiven", de: "Verdienst Aktiv", sl: "Zasluzek aktiven", lg: "Okufuna kutandika", sw: "Kupata kunaendelea" },
+  "earning.paused": { en: "Earning Paused", nl: "Verdienen Gepauzeerd", fr: "Gains en Pause", es: "Ganancias Pausadas", ru: "Zarabotok na pauze", de: "Verdienst Pausiert", sl: "Zasluzek zaustavljen", lg: "Okufuna kwayimiriziddwa", sw: "Kupata kumesimamishwa" },
+  "earning.earning": { en: "Earning Q-Credits for the network", nl: "Q-Credits verdienen voor het netwerk", fr: "Gagner des Q-Credits pour le reseau", es: "Ganando Q-Credits para la red", ru: "Zarabotok Q-Credits dlya seti", de: "Q-Credits fur das Netzwerk verdienen", sl: "Zasluzek Q-Credits za omrezje", lg: "Okufuna Q-Credits ku network", sw: "Kupata Q-Credits kwa mtandao" },
+  "earning.tapStart": { en: "Tap to start earning", nl: "Tik om te beginnen met verdienen", fr: "Appuyez pour commencer a gagner", es: "Toque para comenzar a ganar", ru: "Nazhmite chtoby nachat zarabatyvat", de: "Tippen um zu verdienen", sl: "Tapnite za zacetek zasluzka", lg: "Nyiga okutandika okufuna", sw: "Gusa kuanza kupata" },
+  "earning.types": { en: "Contribution Types", nl: "Contribution Types", fr: "Types de Contribution", es: "Tipos de Contribucion", ru: "Tipy vklada", de: "Beitragstypen", sl: "Tipi prispevkov", lg: "Ebika by'okuyamba", sw: "Aina za mchango" },
+  "earning.recentRewards": { en: "Recent Rewards", nl: "Recente Beloningen", fr: "Recompenses Recentes", es: "Recompensas Recientes", ru: "Nedavnie nagrady", de: "Neueste Belohnungen", sl: "Nedavne nagrade", lg: "Empeera ez'omu biseera", sw: "Tuzo za hivi karibuni" },
+  "earning.noRewards": { en: "No rewards yet. Start earning!", nl: "Nog geen beloningen. Start earning!", fr: "Pas encore de recompenses.", es: "Sin recompensas aun.", ru: "Net nagrad. Nachnite zarabotok!", de: "Noch keine Belohnungen.", sl: "Se ni nagrad.", lg: "Tewali mpeera. Tandika okufuna!", sw: "Hakuna tuzo bado. Anza kupata!" },
+  "earning.contribution": { en: "Your Contribution", nl: "Jouw Bijdrage", fr: "Votre Contribution", es: "Tu Contribucion", ru: "Vash vklad", de: "Dein Beitrag", sl: "Vas prispevek", lg: "Ekigendererwa kyo", sw: "Mchango wako" },
+  "earning.relayed": { en: "Messages Relayed", nl: "Berichten Doorgestuurd", fr: "Messages Relayes", es: "Mensajes Retransmitidos", ru: "Peredano soobshchenij", de: "Weitergeleitete Nachrichten", sl: "Posredovana sporocila", lg: "Obubaka obuwereddwa", sw: "Ujumbe uliopitishwa" },
+  "earning.validated": { en: "Proofs Validated", nl: "Bewijzen Gevalideerd", fr: "Preuves Validees", es: "Pruebas Validadas", ru: "Provereno dokazatelstv", de: "Beweise Validiert", sl: "Preverjeni dokazi", lg: "Obujulizi obukakasiddwa", sw: "Uthibitisho uliothibitishwa" },
+  "earning.stored": { en: "Storage Used", nl: "Opslag Gebruikt", fr: "Stockage Utilise", es: "Almacenamiento Usado", ru: "Ispolzovano khranilishcha", de: "Speicher Verwendet", sl: "Uporabljena shramba", lg: "Ekitundu eky'okutereka", sw: "Hifadhi iliyotumika" },
+  "earning.onboarded": { en: "Users Onboarded", nl: "Gebruikers Aangemeld", fr: "Utilisateurs Integres", es: "Usuarios Incorporados", ru: "Polzovatelej dobavleno", de: "Benutzer Eingebunden", sl: "Vkljuceni uporabniki", lg: "Abakozesa abayingiziddwa", sw: "Watumiaji walioingizwa" },
   "ui.groups": { en: "Groups", nl: "Groepen", fr: "Groupes", es: "Grupos", ru: "Gruppy", de: "Gruppen", sl: "Skupine", lg: "Ebibinja", sw: "Vikundi" },
   "ui.scan": { en: "Scan", nl: "Scan", fr: "Scanner", es: "Escanear", ru: "Skanirovat", de: "Scannen", sl: "Skeniraj", lg: "Sikaana", sw: "Changanua" },
   "ui.add": { en: "+ Add", nl: "+ Toevoegen", fr: "+ Ajouter", es: "+ Agregar", ru: "+ Dobavit", de: "+ Hinzufugen", sl: "+ Dodaj", lg: "+ Gatta", sw: "+ Ongeza" },
   "ui.details": { en: "Details", nl: "Details", fr: "Details", es: "Detalles", ru: "Podrobnosti", de: "Details", sl: "Podrobnosti", lg: "Ebisingawo", sw: "Maelezo" },
-  "ui.miningDetails": { en: "Mining Details", nl: "Mining Details", fr: "Details Minage", es: "Detalles Mineria", ru: "Podrobnosti majninga", de: "Mining Details", sl: "Podrobnosti rudarjenja", lg: "Ebisingawo by'okusimba", sw: "Maelezo ya uchimbaji" },
+  "ui.miningDetails": { en: "Earning Details", nl: "Earning Details", fr: "Details Gains", es: "Detalles Ganancias", ru: "Podrobnosti zarabotoka", de: "Earning Details", sl: "Podrobnosti rudarjenja", lg: "Ebisingawo by'okufuna", sw: "Maelezo ya kupata" },
   "ui.newProject": { en: "New Project", nl: "Nieuw Project", fr: "Nouveau Projet", es: "Nuevo Proyecto", ru: "Novyj proekt", de: "Neues Projekt", sl: "Nov projekt", lg: "Pulojekiti empya", sw: "Mradi mpya" },
   "ui.projectName": { en: "Project name", nl: "Projectnaam", fr: "Nom du projet", es: "Nombre del proyecto", ru: "Nazvanie proekta", de: "Projektname", sl: "Ime projekta", lg: "Erinnya ly'omupulojekiti", sw: "Jina la mradi" },
   "ui.descOptional": { en: "Description (optional)", nl: "Beschrijving (optioneel)", fr: "Description (optionnel)", es: "Descripcion (opcional)", ru: "Opisanie (neobyzatelno)", de: "Beschreibung (optional)", sl: "Opis (neobvezno)", lg: "Ennyinyonnyola (si kyetaagisibwa)", sw: "Maelezo (si lazima)" },
@@ -290,20 +290,20 @@ const appStrings: Record<string, Record<string, string>> = {
   "chat.typing": { en: "typing...", nl: "typt...", fr: "ecrit...", es: "escribiendo...", ru: "pechataut...", de: "tippt...", sl: "tipka...", lg: "awandiika...", sw: "anaandika..." },
   "chat.encBanner": { en: "Kyber-768 + AES-256-GCM + Double Ratchet", nl: "Kyber-768 + AES-256-GCM + Double Ratchet", fr: "Kyber-768 + AES-256-GCM + Double Ratchet", es: "Kyber-768 + AES-256-GCM + Double Ratchet", ru: "Kyber-768 + AES-256-GCM + Double Ratchet", de: "Kyber-768 + AES-256-GCM + Double Ratchet", sl: "Kyber-768 + AES-256-GCM + Double Ratchet", lg: "Kyber-768 + AES-256-GCM + Double Ratchet", sw: "Kyber-768 + AES-256-GCM + Double Ratchet" },
   "chat.voiceExpired": { en: "Voice (needs file server)", nl: "Spraak (file server nodig)", fr: "Voix (serveur requis)", es: "Voz (servidor requerido)", ru: "Golos (nuzhen server)", de: "Sprache (Server benotigt)", sl: "Glas (streznik potreben)", lg: "Eddoboozi (server yeetaagisa)", sw: "Sauti (seva inahitajika)" },
-  "wallet.mined": { en: "Mined", nl: "Gemijnd", fr: "Mine", es: "Minado", ru: "Dobyte", de: "Gemint", sl: "Pridobljeno", lg: "Ebisimbiddwa", sw: "Iliyochimbwa" },
+  "wallet.earned": { en: "Mined", nl: "Gemijnd", fr: "Mine", es: "Minado", ru: "Dobyte", de: "Gemint", sl: "Pridobljeno", lg: "Ebisimbiddwa", sw: "Iliyochimbwa" },
   "wallet.sent": { en: "Sent", nl: "Verzonden", fr: "Envoye", es: "Enviado", ru: "Otpravleno", de: "Gesendet", sl: "Poslano", lg: "Ewereddwa", sw: "Imetumwa" },
   "wallet.received": { en: "Received", nl: "Ontvangen", fr: "Recu", es: "Recibido", ru: "Polucheno", de: "Empfangen", sl: "Prejeto", lg: "Efunidde", sw: "Imepokelewa" },
   "wallet.available": { en: "Available", nl: "Beschikbaar", fr: "Disponible", es: "Disponible", ru: "Dostupno", de: "Verfugbar", sl: "Na voljo", lg: "Ebiriwo", sw: "Inapatikana" },
   "wallet.recipient": { en: "Recipient SPEAQ ID", nl: "Ontvanger SPEAQ ID", fr: "ID SPEAQ du destinataire", es: "SPEAQ ID del destinatario", ru: "SPEAQ ID poluchatelya", de: "Empfanger SPEAQ ID", sl: "SPEAQ ID prejemnika", lg: "SPEAQ ID y'afuna", sw: "SPEAQ ID ya mpokeaji" },
   "wallet.selectContact": { en: "Select contact...", nl: "Selecteer contact...", fr: "Choisir un contact...", es: "Seleccionar contacto...", ru: "Vybrat kontakt...", de: "Kontakt wahlen...", sl: "Izberi stik...", lg: "Londa omuntu...", sw: "Chagua anwani..." },
   "wallet.amountQC": { en: "Amount (QC)", nl: "Bedrag (QC)", fr: "Montant (QC)", es: "Monto (QC)", ru: "Summa (QC)", de: "Betrag (QC)", sl: "Znesek (QC)", lg: "Omuwendo (QC)", sw: "Kiasi (QC)" },
-  "mining.miningActive": { en: "Mining active - earning QC", nl: "Mining actief - QC verdienen", fr: "Minage actif - gagner QC", es: "Mineria activa - ganando QC", ru: "Majning aktiven - zarabotok QC", de: "Mining aktiv - QC verdienen", sl: "Rudarjenje aktivno - zasluzek QC", lg: "Okusimba kutandika - okufuna QC", sw: "Uchimbaji unaendelea - kupata QC" },
-  "mining.maxSupply": { en: "Max Supply", nl: "Max Voorraad", fr: "Offre Max", es: "Suministro Max", ru: "Maks zapas", de: "Max Vorrat", sl: "Maks zaloga", lg: "Obungi obusinga", sw: "Ugavi wa juu" },
-  "mining.totalMined": { en: "Total Mined", nl: "Totaal Gemijnd", fr: "Total Mine", es: "Total Minado", ru: "Vsego dobyte", de: "Gesamt Gemint", sl: "Skupaj pridobljeno", lg: "Byonna ebisimbiddwa", sw: "Jumla iliyochimbwa" },
-  "mining.remaining": { en: "Remaining", nl: "Resterend", fr: "Restant", es: "Restante", ru: "Ostalos", de: "Verbleibend", sl: "Preostalo", lg: "Ebyasigaddewo", sw: "Iliyobaki" },
-  "mining.halving": { en: "Halving", nl: "Halvering", fr: "Halving", es: "Halving", ru: "Kholving", de: "Halving", sl: "Razpolovitev", lg: "Okugawanya mu bibiri", sw: "Kugawanya nusu" },
-  "mining.nativeOnly": { en: "Native only", nl: "Alleen native", fr: "Natif seulement", es: "Solo nativo", ru: "Tolko nativnoe", de: "Nur nativ", sl: "Samo domorodno", lg: "Eky'omu app yokka", sw: "Asili tu" },
-  "mining.manual": { en: "Manual", nl: "Handmatig", fr: "Manuel", es: "Manual", ru: "Vruchnuyu", de: "Manuell", sl: "Rocno", lg: "Mu ngalo", sw: "Kwa mkono" },
+  "earning.miningActive": { en: "Earning active - earning QC", nl: "Verdienen actief - QC verdienen", fr: "Gains actif - gagner QC", es: "Ganancias activa - ganando QC", ru: "Zarabotok aktiven - zarabotok QC", de: "Verdienst aktiv - QC verdienen", sl: "Zasluzek aktivno - zasluzek QC", lg: "Okufuna kutandika - okufuna QC", sw: "Kupata unaendelea - kupata QC" },
+  "earning.maxSupply": { en: "Max Supply", nl: "Max Voorraad", fr: "Offre Max", es: "Suministro Max", ru: "Maks zapas", de: "Max Vorrat", sl: "Maks zaloga", lg: "Obungi obusinga", sw: "Ugavi wa juu" },
+  "earning.totalMined": { en: "Total Mined", nl: "Totaal Gemijnd", fr: "Total Mine", es: "Total Minado", ru: "Vsego dobyte", de: "Gesamt Gemint", sl: "Skupaj pridobljeno", lg: "Byonna ebisimbiddwa", sw: "Jumla iliyochimbwa" },
+  "earning.remaining": { en: "Remaining", nl: "Resterend", fr: "Restant", es: "Restante", ru: "Ostalos", de: "Verbleibend", sl: "Preostalo", lg: "Ebyasigaddewo", sw: "Iliyobaki" },
+  "earning.halving": { en: "Halving", nl: "Halvering", fr: "Halving", es: "Halving", ru: "Kholving", de: "Halving", sl: "Razpolovitev", lg: "Okugawanya mu bibiri", sw: "Kugawanya nusu" },
+  "earning.nativeOnly": { en: "Native only", nl: "Alleen native", fr: "Natif seulement", es: "Solo nativo", ru: "Tolko nativnoe", de: "Nur nativ", sl: "Samo domorodno", lg: "Eky'omu app yokka", sw: "Asili tu" },
+  "earning.manual": { en: "Manual", nl: "Handmatig", fr: "Manuel", es: "Manual", ru: "Vruchnuyu", de: "Manuell", sl: "Rocno", lg: "Mu ngalo", sw: "Kwa mkono" },
   "ghost.alias": { en: "Your alias", nl: "Jouw alias", fr: "Votre alias", es: "Tu alias", ru: "Vash psevdonim", de: "Dein Alias", sl: "Tvoj vzdevek", lg: "Erinnya lyo elyekyama", sw: "Jina lako la siri" },
   "ghost.notSet": { en: "Not set", nl: "Niet ingesteld", fr: "Non defini", es: "No establecido", ru: "Ne ustanovlen", de: "Nicht gesetzt", sl: "Ni nastavljeno", lg: "Teteekeddwa", sw: "Haijawekwa" },
   "ghost.random": { en: "Random", nl: "Willekeurig", fr: "Aleatoire", es: "Aleatorio", ru: "Sluchajnyj", de: "Zufallig", sl: "Nakljucno", lg: "Mu mbeera yonna", sw: "Nasibu" },
@@ -347,11 +347,11 @@ const appStrings: Record<string, Record<string, string>> = {
   "contacts.scanHint": { en: "Point your camera at a SPEAQ QR code", nl: "Richt je camera op een SPEAQ QR code", fr: "Dirigez votre camera vers un code QR SPEAQ", es: "Apunte su camara a un codigo QR SPEAQ", ru: "Napravte kameru na QR kod SPEAQ", de: "Richten Sie Ihre Kamera auf einen SPEAQ QR Code", sl: "Usmerite kamero na SPEAQ QR kodo", lg: "Koleza kamera yo ku QR Code ya SPEAQ", sw: "Elekeza kamera yako kwenye msimbo wa QR wa SPEAQ" },
   "contacts.qrDesc": { en: "Others scan this to start a quantum-encrypted chat with you", nl: "Anderen scannen dit om een quantum-versleuteld gesprek te starten", fr: "Les autres scannent ceci pour demarrer une conversation", es: "Otros escanean esto para iniciar un chat cifrado", ru: "Drugie skaniruyut eto chtoby nachat kvantovo-zashchishchennyj chat", de: "Andere scannen dies um einen quantenverschlusselten Chat zu starten", sl: "Drugi skenirajo to za zacetek kvantno sifriranega pogovora", lg: "Abalala basikaana kino okutandika okwogerako okukuumiddwa", sw: "Wengine wanachunguza hii kuanza mazungumzo yaliyosimbwa" },
   "contacts.emptyHint": { en: "Tap + Add to add a contact by SPEAQ ID", nl: "Tik + Toevoegen om een contact toe te voegen via SPEAQ ID", fr: "Appuyez + Ajouter pour ajouter un contact", es: "Toque + Agregar para agregar un contacto", ru: "Nazhmite + Dobavit chtoby dobavit kontakt", de: "Tippen Sie + Hinzufugen um einen Kontakt hinzuzufugen", sl: "Tapnite + Dodaj za dodajanje stika", lg: "Nyiga + Gatta okugatta omuntu", sw: "Gusa + Ongeza kuongeza anwani" },
-  "info.miningTitle": { en: "How Mining Works", nl: "Hoe Mining Werkt", fr: "Comment Fonctionne le Minage", es: "Como Funciona la Mineria", ru: "Kak rabotaet majning", de: "Wie Mining Funktioniert", sl: "Kako deluje rudarjenje", lg: "Okusimba kukola kutya", sw: "Jinsi Uchimbaji Unavyofanya Kazi" },
-  "info.miningP1": { en: "SPEAQ uses Proof of Contribution mining. You earn Q-Credits by helping the network - not by wasting energy like Bitcoin.", nl: "SPEAQ gebruikt Proof of Contribution mining. Je verdient Q-Credits door het netwerk te helpen - niet door energie te verspillen zoals Bitcoin.", fr: "SPEAQ utilise le minage par Preuve de Contribution. Vous gagnez des Q-Credits en aidant le reseau.", es: "SPEAQ utiliza mineria por Prueba de Contribucion. Ganas Q-Credits ayudando a la red.", ru: "SPEAQ ispolzuet majning Proof of Contribution. Vy zarabatyvaete Q-Credits pomogaya seti.", de: "SPEAQ nutzt Proof of Contribution Mining. Sie verdienen Q-Credits indem Sie dem Netzwerk helfen.", sl: "SPEAQ uporablja rudarjenje s Proof of Contribution. Zasluzite Q-Credits s pomocjo omrezju.", lg: "SPEAQ ekozesa Proof of Contribution. Ofuna Q-Credits ng'oyamba network.", sw: "SPEAQ inatumia uchimbaji wa Uthibitisho wa Mchango. Unapata Q-Credits kwa kusaidia mtandao." },
-  "info.miningTypes": { en: "7 Mining Types: Relay (forward messages), Validation (verify proofs), Storage (store encrypted data), Mesh (Bluetooth node), Bridge (cash agent), Translation (translate app), Onboarding (invite users).", nl: "7 Mining Types: Relay (berichten doorsturen), Validatie (bewijzen verifieren), Opslag (versleutelde data bewaren), Mesh (Bluetooth node), Bridge (cash agent), Vertaling (app vertalen), Onboarding (gebruikers uitnodigen).", fr: "7 Types de Minage: Relais, Validation, Stockage, Mesh, Pont, Traduction, Integration.", es: "7 Tipos de Mineria: Retransmision, Validacion, Almacenamiento, Mesh, Puente, Traduccion, Incorporacion.", ru: "7 tipov majninga: Retranslyatsiya, Validatsiya, Khranenie, Mesh, Most, Perevod, Registratsiya.", de: "7 Mining-Typen: Relay, Validierung, Speicherung, Mesh, Bridge, Ubersetzung, Onboarding.", sl: "7 tipov rudarjenja: Prenos, Preverjanje, Shranjevanje, Mesh, Most, Prevajanje, Vkljucevanje.", lg: "Ebika 7 by'okusimba: Relay, Okukakasa, Okutereka, Mesh, Bridge, Okuvvuunula, Okuyingiza.", sw: "Aina 7 za uchimbaji: Relay, Uthibitisho, Hifadhi, Mesh, Daraja, Tafsiri, Usajili." },
-  "info.miningRates": { en: "Daily earnings: ~0.02-0.05 QC/day (~5-8% annual yield, comparable to staking platforms). Rewards halve every 2,100,000 QC mined.", nl: "Dagelijkse verdiensten: ~0.02-0.05 QC/dag (~5-8% jaarlijks rendement, vergelijkbaar met staking platforms). Beloningen halveren elke 2.100.000 QC gemijnd.", fr: "Gains quotidiens: ~0.02-0.05 QC/jour (~5-8% rendement annuel). Les recompenses diminuent de moitie tous les 2.100.000 QC mines.", es: "Ganancias diarias: ~0.02-0.05 QC/dia (~5-8% rendimiento anual). Las recompensas se reducen a la mitad cada 2.100.000 QC minados.", ru: "Dnevnoj dokhod: ~0.02-0.05 QC/den (~5-8% godovoj dokhod). Nagrady umenshayutsya vdvoe kazhdye 2.100.000 QC.", de: "Tagliche Einnahmen: ~0.02-0.05 QC/Tag (~5-8% jahrliche Rendite). Belohnungen halbieren sich alle 2.100.000 QC.", sl: "Dnevni zasluzek: ~0.02-0.05 QC/dan (~5-8% letni donos). Nagrade se razpolovijo vsakih 2.100.000 QC.", lg: "Empeera ez'olunaku: ~0.02-0.05 QC/olunaku (~5-8% omwaka). Empeera zeegabanyizibwa buli 2,100,000 QC.", sw: "Mapato ya kila siku: ~0.02-0.05 QC/siku (~5-8% kwa mwaka). Tuzo hupungua nusu kila QC 2,100,000." },
-  "info.miningProof": { en: "Proof System (C+): Every mining reward is double-signed. You sign with your private key (proves identity). The relay server co-signs as witness (proves the work happened). Both signatures are stored in your mining ledger. When the blockchain launches, only double-signed entries are accepted. This makes fraud impossible.", nl: "Bewijs Systeem (C+): Elke mining beloning wordt dubbel gesigned. Jij signeert met je private key (bewijst identiteit). De relay server tekent mee als getuige (bewijst dat het werk is gedaan). Beide handtekeningen worden opgeslagen in je mining ledger. Bij blockchain launch worden alleen dubbel-gesignde entries geaccepteerd. Fraude is onmogelijk.", fr: "Systeme de Preuve (C+): Chaque recompense est doublement signee. Vous signez avec votre cle privee. Le serveur relais co-signe comme temoin. Les deux signatures sont stockees. Lors du lancement de la blockchain, seules les entrees doublement signees sont acceptees.", es: "Sistema de Prueba (C+): Cada recompensa se firma dos veces. Tu firmas con tu clave privada. El servidor relay co-firma como testigo. Ambas firmas se almacenan. Al lanzar la blockchain, solo se aceptan entradas con doble firma.", ru: "Sistema dokazatelstv (C+): Kazhdaya nagrada podpisyvaetsya dvazhdy. Vy podpisyvaete svoim privatnym klyuchom. Server-retranslyator sopodspisyvaet kak svidetel. Obe podpisi sokhranyayutsya. Pri zapuske blokchejna prinimayutsya tolko zapisi s dvojnoj podpisyu.", de: "Beweis-System (C+): Jede Mining-Belohnung wird doppelt signiert. Sie signieren mit Ihrem privaten Schlussel. Der Relay-Server signiert als Zeuge mit. Beide Signaturen werden gespeichert. Beim Blockchain-Start werden nur doppelt signierte Eintrage akzeptiert.", sl: "Dokazni sistem (C+): Vsaka nagrada je dvojno podpisana. Vi podpisete s svojim zasebnim kljucem. Streznik za prenos sopodpise kot prica. Oba podpisa sta shranjena. Ob zagonu verige blokov so sprejeti samo dvojno podpisani vnosi.", lg: "Enkola y'Obujulizi (C+): Buli mpeera esainibwa emirundi ebiri. Osainiira ne key yo ey'ekyama. Relay server esainiira ng'omujulizi. Obusaini bubiri buterekeddwa. Blockchain bw'etandika, entries ez'obusaini bubiri zokka ze zikkirizibwa.", sw: "Mfumo wa Uthibitisho (C+): Kila tuzo inasainiwa mara mbili. Unasaini na ufunguo wako wa siri. Seva ya relay inasaini kama shahidi. Saini zote mbili zinahifadhiwa. Blockchain inapoanzishwa, maingizo yenye saini mbili tu yanakubaliwa." },
+  "info.earningTitle": { en: "How Earning Works", nl: "Hoe Verdienen Werkt", fr: "Comment Fonctionne le Gains", es: "Como Funciona la Ganancias", ru: "Kak rabotaet zarabotok", de: "Wie Verdienen Funktioniert", sl: "Kako deluje zasluzek", lg: "Okufuna kukola kutya", sw: "Jinsi Kupata Unavyofanya Kazi" },
+  "info.earningP1": { en: "SPEAQ uses Proof of Contribution earning. You earn Q-Credits by helping the network - not by wasting energy like Bitcoin.", nl: "SPEAQ gebruikt Proof of Contribution earning. Je verdient Q-Credits door het netwerk te helpen - niet door energie te verspillen zoals Bitcoin.", fr: "SPEAQ utilise le gains par Preuve de Contribution. Vous gagnez des Q-Credits en aidant le reseau.", es: "SPEAQ utiliza ganancias por Prueba de Contribucion. Ganas Q-Credits ayudando a la red.", ru: "SPEAQ ispolzuet zarabotok Proof of Contribution. Vy zarabatyvaete Q-Credits pomogaya seti.", de: "SPEAQ nutzt Proof of Contribution. Sie verdienen Q-Credits indem Sie dem Netzwerk helfen.", sl: "SPEAQ uporablja zasluzek s Proof of Contribution. Zasluzite Q-Credits s pomocjo omrezju.", lg: "SPEAQ ekozesa Proof of Contribution. Ofuna Q-Credits ng'oyamba network.", sw: "SPEAQ inatumia kupata wa Uthibitisho wa Mchango. Unapata Q-Credits kwa kusaidia mtandao." },
+  "info.earningTypes": { en: "7 Earning Types: Relay (forward messages), Validation (verify proofs), Storage (store encrypted data), Mesh (Bluetooth node), Bridge (cash agent), Translation (translate app), Onboarding (invite users).", nl: "7 Earning Types: Relay (berichten doorsturen), Validatie (bewijzen verifieren), Opslag (versleutelde data bewaren), Mesh (Bluetooth node), Bridge (cash agent), Vertaling (app vertalen), Onboarding (gebruikers uitnodigen).", fr: "7 Types de Gains: Relais, Validation, Stockage, Mesh, Pont, Traduction, Integration.", es: "7 Tipos de Ganancias: Retransmision, Validacion, Almacenamiento, Mesh, Puente, Traduccion, Incorporacion.", ru: "7 tipov zarabotoka: Retranslyatsiya, Validatsiya, Khranenie, Mesh, Most, Perevod, Registratsiya.", de: "7 Earning-Typen: Relay, Validierung, Speicherung, Mesh, Bridge, Ubersetzung, Onboarding.", sl: "7 tipov rudarjenja: Prenos, Preverjanje, Shranjevanje, Mesh, Most, Prevajanje, Vkljucevanje.", lg: "Ebika 7 by'okufuna: Relay, Okukakasa, Okutereka, Mesh, Bridge, Okuvvuunula, Okuyingiza.", sw: "Aina 7 za kupata: Relay, Uthibitisho, Hifadhi, Mesh, Daraja, Tafsiri, Usajili." },
+  "info.earningRates": { en: "Daily earnings: ~0.02-0.05 QC/day (~5-8% annual yield, comparable to staking platforms). Rewards halve every 2,100,000 QC earned.", nl: "Dagelijkse verdiensten: ~0.02-0.05 QC/dag (~5-8% jaarlijks rendement, vergelijkbaar met staking platforms). Beloningen halveren elke 2.100.000 QC gemijnd.", fr: "Gains quotidiens: ~0.02-0.05 QC/jour (~5-8% rendement annuel). Les recompenses diminuent de moitie tous les 2.100.000 QC mines.", es: "Ganancias diarias: ~0.02-0.05 QC/dia (~5-8% rendimiento anual). Las recompensas se reducen a la mitad cada 2.100.000 QC minados.", ru: "Dnevnoj dokhod: ~0.02-0.05 QC/den (~5-8% godovoj dokhod). Nagrady umenshayutsya vdvoe kazhdye 2.100.000 QC.", de: "Tagliche Einnahmen: ~0.02-0.05 QC/Tag (~5-8% jahrliche Rendite). Belohnungen halbieren sich alle 2.100.000 QC.", sl: "Dnevni zasluzek: ~0.02-0.05 QC/dan (~5-8% letni donos). Nagrade se razpolovijo vsakih 2.100.000 QC.", lg: "Empeera ez'olunaku: ~0.02-0.05 QC/olunaku (~5-8% omwaka). Empeera zeegabanyizibwa buli 2,100,000 QC.", sw: "Mapato ya kila siku: ~0.02-0.05 QC/siku (~5-8% kwa mwaka). Tuzo hupungua nusu kila QC 2,100,000." },
+  "info.earningProof": { en: "Proof System (C+): Every earning reward is double-signed. You sign with your private key (proves identity). The relay server co-signs as witness (proves the work happened). Both signatures are stored in your earning ledger. When the blockchain launches, only double-signed entries are accepted. This makes fraud impossible.", nl: "Bewijs Systeem (C+): Elke verdien beloning wordt dubbel gesigned. Jij signeert met je private key (bewijst identiteit). De relay server tekent mee als getuige (bewijst dat het werk is gedaan). Beide handtekeningen worden opgeslagen in je earning ledger. Bij blockchain launch worden alleen dubbel-gesignde entries geaccepteerd. Fraude is onmogelijk.", fr: "Systeme de Preuve (C+): Chaque recompense est doublement signee. Vous signez avec votre cle privee. Le serveur relais co-signe comme temoin. Les deux signatures sont stockees. Lors du lancement de la blockchain, seules les entrees doublement signees sont acceptees.", es: "Sistema de Prueba (C+): Cada recompensa se firma dos veces. Tu firmas con tu clave privada. El servidor relay co-firma como testigo. Ambas firmas se almacenan. Al lanzar la blockchain, solo se aceptan entradas con doble firma.", ru: "Sistema dokazatelstv (C+): Kazhdaya nagrada podpisyvaetsya dvazhdy. Vy podpisyvaete svoim privatnym klyuchom. Server-retranslyator sopodspisyvaet kak svidetel. Obe podpisi sokhranyayutsya. Pri zapuske blokchejna prinimayutsya tolko zapisi s dvojnoj podpisyu.", de: "Beweis-System (C+): Jede Verdienst-Belohnung wird doppelt signiert. Sie signieren mit Ihrem privaten Schlussel. Der Relay-Server signiert als Zeuge mit. Beide Signaturen werden gespeichert. Beim Blockchain-Start werden nur doppelt signierte Eintrage akzeptiert.", sl: "Dokazni sistem (C+): Vsaka nagrada je dvojno podpisana. Vi podpisete s svojim zasebnim kljucem. Streznik za prenos sopodpise kot prica. Oba podpisa sta shranjena. Ob zagonu verige blokov so sprejeti samo dvojno podpisani vnosi.", lg: "Enkola y'Obujulizi (C+): Buli mpeera esainibwa emirundi ebiri. Osainiira ne key yo ey'ekyama. Relay server esainiira ng'omujulizi. Obusaini bubiri buterekeddwa. Blockchain bw'etandika, entries ez'obusaini bubiri zokka ze zikkirizibwa.", sw: "Mfumo wa Uthibitisho (C+): Kila tuzo inasainiwa mara mbili. Unasaini na ufunguo wako wa siri. Seva ya relay inasaini kama shahidi. Saini zote mbili zinahifadhiwa. Blockchain inapoanzishwa, maingizo yenye saini mbili tu yanakubaliwa." },
   "info.securityDesc": { en: "AES-256-GCM encryption via Web Crypto API. Kyber-768 quantum-resistant key exchange. Double Ratchet forward secrecy. Signed key exchange (ECDSA P-256) prevents man-in-the-middle attacks. Zero-knowledge architecture - no one can read your messages, not even SPEAQ.", nl: "AES-256-GCM versleuteling via Web Crypto API. Kyber-768 quantum-resistente key exchange. Double Ratchet forward secrecy. Gesigneerde key exchange (ECDSA P-256) voorkomt man-in-the-middle aanvallen. Zero-knowledge architectuur - niemand kan je berichten lezen, zelfs SPEAQ niet.", fr: "Chiffrement AES-256-GCM. Echange de cles Kyber-768 resistant au quantique. Confidentialite persistante Double Ratchet. Echange de cles signe (ECDSA P-256). Architecture zero-knowledge.", es: "Cifrado AES-256-GCM. Intercambio de claves Kyber-768 resistente al cuantico. Secreto perfecto Double Ratchet. Intercambio de claves firmado (ECDSA P-256). Arquitectura zero-knowledge.", ru: "Shifrovanie AES-256-GCM. Kvantovo-ustojchivyj obmen klyuchami Kyber-768. Pryamaya sekretnost Double Ratchet. Podpisannyj obmen klyuchami (ECDSA P-256). Arkhitektura nulevogo znaniya.", de: "AES-256-GCM Verschlusselung. Kyber-768 quantenresistenter Schlusselaustausch. Double Ratchet Vorwartssicherheit. Signierter Schlusselaustausch (ECDSA P-256). Zero-Knowledge Architektur.", sl: "AES-256-GCM sifriranje. Kyber-768 kvantno odporna izmenjava kljucev. Double Ratchet posredna tajnost. Podpisana izmenjava kljucev (ECDSA P-256). Zero-knowledge arhitektura.", lg: "AES-256-GCM enkuuma. Kyber-768 okukyusa kw'obusumuluzo. Double Ratchet ekyama eky'omu maaso. Okusainiira obusumuluzo (ECDSA P-256). Zero-knowledge architecture.", sw: "Usimbaji AES-256-GCM. Kubadilishana funguo Kyber-768 zinazostahimili quantum. Usiri wa mbele wa Double Ratchet. Kubadilishana funguo iliyosainiwa (ECDSA P-256). Usanifu wa zero-knowledge." },
   "mod.chat": { en: "Chat", nl: "Chat", fr: "Discussion", es: "Chat", ru: "Chat", de: "Chat", sl: "Klepet", lg: "Okwogerako", sw: "Mazungumzo" },
   "mod.chatDesc": { en: "End-to-end encrypted messaging", nl: "End-to-end versleuteld berichtenverkeer", fr: "Messagerie chiffree de bout en bout", es: "Mensajeria cifrada de extremo a extremo", ru: "Skvoznoe shifrovanie soobshchenij", de: "Ende-zu-Ende-verschlusselte Nachrichten", sl: "Sifrirana sporocila od konca do konca", lg: "Obubaka obukuumiddwa ddala", sw: "Ujumbe uliofichwa mwanzo hadi mwisho" },
@@ -359,8 +359,8 @@ const appStrings: Record<string, Record<string, string>> = {
   "mod.callDesc": { en: "WebRTC voice & video calls", nl: "WebRTC spraak- en videogesprekken", fr: "Appels vocaux et video WebRTC", es: "Llamadas de voz y video WebRTC", ru: "Golosovye i video zvonki WebRTC", de: "WebRTC Sprach- und Videoanrufe", sl: "WebRTC glasovni in video klici", lg: "Okuyita kw'eddoboozi ne video WebRTC", sw: "Simu za sauti na video za WebRTC" },
   "mod.pay": { en: "Pay", nl: "Betalen", fr: "Payer", es: "Pagar", ru: "Oplata", de: "Bezahlen", sl: "Placilo", lg: "Okusasula", sw: "Lipa" },
   "mod.payDesc": { en: "Q-Credits gold-pegged currency", nl: "Q-Credits goud-gekoppelde valuta", fr: "Q-Credits monnaie indexee sur l'or", es: "Q-Credits moneda vinculada al oro", ru: "Q-Credits valyuta privyazannaya k zolotu", de: "Q-Credits goldgebundene Wahrung", sl: "Q-Credits valuta vezana na zlato", lg: "Q-Credits ensimbi ez'ezaabbu", sw: "Q-Credits sarafu iliyofungwa na dhahabu" },
-  "mod.mining": { en: "Mining", nl: "Mining", fr: "Minage", es: "Mineria", ru: "Majning", de: "Mining", sl: "Rudarjenje", lg: "Okusimba", sw: "Uchimbaji" },
-  "mod.miningDesc": { en: "Proof of Contribution rewards", nl: "Proof of Contribution beloningen", fr: "Recompenses Preuve de Contribution", es: "Recompensas Prueba de Contribucion", ru: "Nagrady Proof of Contribution", de: "Proof of Contribution Belohnungen", sl: "Nagrade Proof of Contribution", lg: "Empeera za Proof of Contribution", sw: "Tuzo za Uthibitisho wa Mchango" },
+  "mod.earning": { en: "Earn", nl: "Verdienen", fr: "Gains", es: "Ganancias", ru: "Zarabotok", de: "Verdienen", sl: "Zasluzek", lg: "Okufuna", sw: "Kupata" },
+  "mod.earningDesc": { en: "Proof of Contribution rewards", nl: "Proof of Contribution beloningen", fr: "Recompenses Preuve de Contribution", es: "Recompensas Prueba de Contribucion", ru: "Nagrady Proof of Contribution", de: "Proof of Contribution Belohnungen", sl: "Nagrade Proof of Contribution", lg: "Empeera za Proof of Contribution", sw: "Tuzo za Uthibitisho wa Mchango" },
   "mod.groups": { en: "Groups", nl: "Groepen", fr: "Groupes", es: "Grupos", ru: "Gruppy", de: "Gruppen", sl: "Skupine", lg: "Ebibinja", sw: "Vikundi" },
   "mod.groupsDesc": { en: "Encrypted group conversations", nl: "Versleutelde groepsgesprekken", fr: "Conversations de groupe chiffrees", es: "Conversaciones grupales cifradas", ru: "Zashchishchennye gruppovye besedy", de: "Verschlusselte Gruppengesprache", sl: "Sifrirani skupinski pogovori", lg: "Emboozi z'ekibinja ezikuumiddwa", sw: "Mazungumzo ya kikundi yaliyofichwa" },
   "mod.ghost": { en: "Private Groups", nl: "Prive Groepen", fr: "Groupes Prives", es: "Grupos Privados", ru: "Chastnye gruppy", de: "Private Gruppen", sl: "Zasebne skupine", lg: "Ebibinja ebitabika", sw: "Vikundi vya roho" },
@@ -563,11 +563,11 @@ export default function SpeaqApp() {
   const [newProjectDesc, setNewProjectDesc] = useState("");
   const [showNewProject, setShowNewProject] = useState(false);
 
-  // Mining state
+  // Earning state
   const [miningStats, setMiningStats] = useState<MiningStats | null>(null);
   const [miningRewards, setMiningRewards] = useState<MiningReward[]>([]);
   const [miningActive, setMiningActive] = useState(false);
-  const miningInterval = useRef<ReturnType<typeof setInterval> | null>(null);
+  const earningInterval = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Groups state
   const [groups, setGroups] = useState<Group[]>([]);
@@ -846,11 +846,11 @@ export default function SpeaqApp() {
   // Scroll to bottom
   useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages, activeContact, groupMessages, activeGroup, ghostMessages]);
 
-  // Mining interval
+  // Earning interval
   useEffect(() => {
     if (miningActive && miningStats) {
       localStorage.setItem("speaq_mining_active", "true");
-      miningInterval.current = setInterval(() => {
+      earningInterval.current = setInterval(() => {
         setMiningStats((prev) => {
           if (!prev) return prev;
           const result = simulateMiningCycle(prev, miningRewards);
@@ -865,10 +865,10 @@ export default function SpeaqApp() {
           return result.stats;
         });
       }, 30000);
-      return () => { if (miningInterval.current) clearInterval(miningInterval.current); };
+      return () => { if (earningInterval.current) clearInterval(earningInterval.current); };
     } else {
       localStorage.setItem("speaq_mining_active", "false");
-      if (miningInterval.current) { clearInterval(miningInterval.current); miningInterval.current = null; }
+      if (earningInterval.current) { clearInterval(earningInterval.current); earningInterval.current = null; }
     }
   }, [miningActive]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -1039,15 +1039,15 @@ export default function SpeaqApp() {
         }
       }
 
-      // ACK with mining receipt (C+ system)
-      if (msg.type === "ACK" && msg.miningReceipt && msg.receiptData && identity) {
+      // ACK with earning receipt (C+ system)
+      if (msg.type === "ACK" && msg.earningReceipt && msg.receiptData && identity) {
         const entry: MiningLedgerEntry = {
           speaqId: identity.speaqId,
           miningType: "relay",
           amount: 0.0001,
           timestamp: Date.now(),
           minerSignature: signingKeys.current ? await signData(msg.receiptData, signingKeys.current.privateKey) : "",
-          relaySignature: msg.miningReceipt,
+          relaySignature: msg.earningReceipt,
           receiptData: msg.receiptData,
         };
         addLedgerEntry(entry);
@@ -1416,14 +1416,14 @@ export default function SpeaqApp() {
   const getLastMessage = (cid: string): string => { const m = messages[cid]; return m && m.length > 0 ? m[m.length - 1].text : ""; };
   const getLastTimestamp = (cid: string): number => { const m = messages[cid]; return m && m.length > 0 ? m[m.length - 1].timestamp : 0; };
 
-  // Mining handlers
+  // Earning handlers
   const toggleMining = () => {
     if (miningActive) {
       setMiningActive(false);
     } else {
       setMiningStats((prev) => {
         const s = prev || loadStats();
-        const updated = { ...s, activeTypes: [...WEB_MINING_TYPES] as MiningType[], miningStarted: Date.now() };
+        const updated = { ...s, activeTypes: [...WEB_MINING_TYPES] as MiningType[], earningStarted: Date.now() };
         saveStats(updated);
         return updated;
       });
@@ -2162,7 +2162,7 @@ export default function SpeaqApp() {
           {/* Stats */}
           <div className="grid grid-cols-3 gap-2">
             <div className="bg-bg-card rounded-lg p-3 border border-[rgba(100,116,139,0.1)] text-center">
-              <p className="text-[10px] font-mono text-text-muted">{t("wallet.mined", lang)}</p>
+              <p className="text-[10px] font-mono text-text-muted">{t("wallet.earned", lang)}</p>
               <p className="text-sm font-body font-semibold text-text-primary">{wallet.totalMined.toFixed(4)}</p>
             </div>
             <div className="bg-bg-card rounded-lg p-3 border border-[rgba(100,116,139,0.1)] text-center">
@@ -2265,14 +2265,14 @@ export default function SpeaqApp() {
               </p>
             </div>
           ))}
-          {txs.length === 0 && <p className="text-sm text-text-muted text-center py-8">No transactions yet. Start mining to earn Q-Credits.</p>}
+          {txs.length === 0 && <p className="text-sm text-text-muted text-center py-8">No transactions yet. Start earning to earn Q-Credits.</p>}
         </div>
       </div>
     );
   }
 
   // =========================================================================
-  // RENDER: Mining Detail
+  // RENDER: Earning Detail
   // =========================================================================
   if (screen === "miningDetail") {
     const stats = miningStats || loadStats();
@@ -2280,41 +2280,41 @@ export default function SpeaqApp() {
     const estDaily = getEstimatedDaily(stats.activeTypes, stats.totalEarned);
     return (
       <div className="min-h-dvh bg-bg-deep flex flex-col">
-        <ScreenHeader title={t("mining.title", lang)} onBack={() => setScreen("main")} lang={lang} />
+        <ScreenHeader title={t("earning.title", lang)} onBack={() => setScreen("main")} lang={lang} />
         <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
           {/* Start/Stop */}
           <button onClick={toggleMining}
             className={`w-full py-4 rounded-xl font-body font-bold text-lg transition-all min-h-[56px] ${miningActive ? "bg-resistance-red/20 text-resistance-red border border-resistance-red/30" : "bg-voice-gold/20 text-voice-gold border border-voice-gold/30"}`}>
-            {miningActive ? t("mining.stop", lang) : t("mining.start", lang)}
+            {miningActive ? t("earning.stop", lang) : t("earning.start", lang)}
           </button>
-          {miningActive && <div className="flex items-center justify-center gap-2"><div className="w-2 h-2 rounded-full bg-quantum-teal animate-pulse" /><span className="text-xs font-mono text-quantum-teal">Mining active</span></div>}
+          {miningActive && <div className="flex items-center justify-center gap-2"><div className="w-2 h-2 rounded-full bg-quantum-teal animate-pulse" /><span className="text-xs font-mono text-quantum-teal">Earning active</span></div>}
           {/* Stats grid */}
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.1)]">
-              <p className="text-[10px] font-mono text-text-muted uppercase">{t("mining.today", lang)}</p>
+              <p className="text-[10px] font-mono text-text-muted uppercase">{t("earning.today", lang)}</p>
               <p className="text-lg font-heading font-bold text-voice-gold">{stats.todayEarned.toFixed(5)} QC</p>
             </div>
             <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.1)]">
-              <p className="text-[10px] font-mono text-text-muted uppercase">{t("mining.total", lang)}</p>
+              <p className="text-[10px] font-mono text-text-muted uppercase">{t("earning.total", lang)}</p>
               <p className="text-lg font-heading font-bold text-text-primary">{stats.totalEarned.toFixed(4)} QC</p>
             </div>
             <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.1)]">
-              <p className="text-[10px] font-mono text-text-muted uppercase">{t("mining.level", lang)}</p>
+              <p className="text-[10px] font-mono text-text-muted uppercase">{t("earning.level", lang)}</p>
               <p className="text-lg font-heading font-bold text-quantum-teal">Lv.{stats.level}</p>
             </div>
             <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.1)]">
-              <p className="text-[10px] font-mono text-text-muted uppercase">{t("mining.streak", lang)}</p>
+              <p className="text-[10px] font-mono text-text-muted uppercase">{t("earning.streak", lang)}</p>
               <p className="text-lg font-heading font-bold text-text-primary">{stats.streak} days</p>
             </div>
           </div>
           {/* Estimated daily */}
           <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.15)]">
-            <p className="text-xs font-mono text-text-muted uppercase mb-1">{t("mining.estimated", lang)}</p>
+            <p className="text-xs font-mono text-text-muted uppercase mb-1">{t("earning.estimated", lang)}</p>
             <p className="text-sm font-body text-text-primary">{estDaily.toFixed(5)} QC/day ({(estDaily * 365).toFixed(2)} QC/year)</p>
           </div>
-          {/* Mining types */}
+          {/* Earning types */}
           <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.15)]">
-            <p className="text-xs font-mono text-quantum-teal uppercase tracking-wider mb-3">{ t("mining.types", lang) }</p>
+            <p className="text-xs font-mono text-quantum-teal uppercase tracking-wider mb-3">{ t("earning.types", lang) }</p>
             {(Object.keys(REWARD_RATES) as MiningType[]).map((type) => {
               const rate = REWARD_RATES[type];
               const isActive = stats.activeTypes.includes(type);
@@ -2334,18 +2334,18 @@ export default function SpeaqApp() {
           </div>
           {/* Supply info */}
           <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.15)]">
-            <p className="text-xs font-mono text-quantum-teal uppercase tracking-wider mb-2">{t("mining.supply", lang)}</p>
+            <p className="text-xs font-mono text-quantum-teal uppercase tracking-wider mb-2">{t("earning.supply", lang)}</p>
             <div className="space-y-1">
-              <div className="flex justify-between text-xs"><span className="text-text-muted">{t("mining.maxSupply", lang)}</span><span className="text-text-primary font-mono">{supply.maxSupply.toLocaleString()} QC</span></div>
-              <div className="flex justify-between text-xs"><span className="text-text-muted">{t("mining.totalMined", lang)}</span><span className="text-text-primary font-mono">{supply.totalMined.toFixed(4)} QC</span></div>
-              <div className="flex justify-between text-xs"><span className="text-text-muted">{t("mining.remaining", lang)}</span><span className="text-text-primary font-mono">{supply.remaining.toLocaleString()} QC</span></div>
-              <div className="flex justify-between text-xs"><span className="text-text-muted">{t("mining.halving", lang)}</span><span className="text-text-primary font-mono">#{supply.currentHalving} ({(supply.halvingProgress * 100).toFixed(4)}%)</span></div>
+              <div className="flex justify-between text-xs"><span className="text-text-muted">{t("earning.maxSupply", lang)}</span><span className="text-text-primary font-mono">{supply.maxSupply.toLocaleString()} QC</span></div>
+              <div className="flex justify-between text-xs"><span className="text-text-muted">{t("earning.totalMined", lang)}</span><span className="text-text-primary font-mono">{supply.totalMined.toFixed(4)} QC</span></div>
+              <div className="flex justify-between text-xs"><span className="text-text-muted">{t("earning.remaining", lang)}</span><span className="text-text-primary font-mono">{supply.remaining.toLocaleString()} QC</span></div>
+              <div className="flex justify-between text-xs"><span className="text-text-muted">{t("earning.halving", lang)}</span><span className="text-text-primary font-mono">#{supply.currentHalving} ({(supply.halvingProgress * 100).toFixed(4)}%)</span></div>
               <div className="w-full bg-bg-elevated rounded-full h-1.5 mt-2"><div className="bg-voice-gold rounded-full h-1.5" style={{ width: `${Math.min(supply.halvingProgress * 100, 100)}%` }} /></div>
             </div>
           </div>
           {/* Recent rewards */}
           <div>
-            <p className="text-xs font-mono text-text-muted uppercase tracking-wider mb-2">{ t("mining.recentRewards", lang) }</p>
+            <p className="text-xs font-mono text-text-muted uppercase tracking-wider mb-2">{ t("earning.recentRewards", lang) }</p>
             {miningRewards.slice(-10).reverse().map((r) => (
               <div key={r.id} className="flex items-center justify-between py-2 border-b border-[rgba(100,116,139,0.06)]">
                 <div>
@@ -2355,7 +2355,7 @@ export default function SpeaqApp() {
                 <p className="text-xs font-mono text-quantum-teal">+{r.amount.toFixed(5)} QC</p>
               </div>
             ))}
-            {miningRewards.length === 0 && <p className="text-xs text-text-muted text-center py-4">No rewards yet. Start mining!</p>}
+            {miningRewards.length === 0 && <p className="text-xs text-text-muted text-center py-4">No rewards yet. Start earning!</p>}
           </div>
         </div>
       </div>
@@ -3071,7 +3071,7 @@ export default function SpeaqApp() {
           <div>
             <p className="text-[10px] font-mono text-text-muted uppercase tracking-wider mb-2 px-2">{t("adv.title", lang)}</p>
             <div className="bg-bg-card rounded-xl border border-[rgba(100,116,139,0.15)] divide-y divide-[rgba(100,116,139,0.1)]">
-              <button onClick={() => setScreen("miningDetail")} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{t("tab.mining", lang)}</span><span className="text-sm text-voice-gold">{t("settings.open", lang)}</span></button>
+              <button onClick={() => setScreen("miningDetail")} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{t("tab.earning", lang)}</span><span className="text-sm text-voice-gold">{t("settings.open", lang)}</span></button>
               <button onClick={() => setScreen("advanced")} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{t("ui.ghostWitness", lang)}</span><span className="text-sm text-voice-gold">{t("settings.open", lang)}</span></button>
             </div>
           </div>
@@ -3449,16 +3449,16 @@ The Netherlands`}</div>
           <div className="px-4 py-6 space-y-4">
             <button onClick={toggleMining}
               className={`w-full py-4 rounded-xl font-body font-bold text-lg transition-all min-h-[56px] ${miningActive ? "bg-resistance-red/20 text-resistance-red border border-resistance-red/30" : "bg-voice-gold/20 text-voice-gold border border-voice-gold/30"}`}>
-              {miningActive ? t("mining.stop", lang) : t("mining.start", lang)}
+              {miningActive ? t("earning.stop", lang) : t("earning.start", lang)}
             </button>
-            {miningActive && <div className="flex items-center justify-center gap-2"><div className="w-2 h-2 rounded-full bg-quantum-teal animate-pulse" /><span className="text-xs font-mono text-quantum-teal">{t("mining.miningActive", lang)}</span></div>}
+            {miningActive && <div className="flex items-center justify-center gap-2"><div className="w-2 h-2 rounded-full bg-quantum-teal animate-pulse" /><span className="text-xs font-mono text-quantum-teal">{t("earning.miningActive", lang)}</span></div>}
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.1)]">
-                <p className="text-[10px] font-mono text-text-muted uppercase">{t("mining.today", lang)}</p>
+                <p className="text-[10px] font-mono text-text-muted uppercase">{t("earning.today", lang)}</p>
                 <p className="text-lg font-heading font-bold text-voice-gold">{(miningStats?.todayEarned || 0).toFixed(5)}</p>
               </div>
               <div className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.1)]">
-                <p className="text-[10px] font-mono text-text-muted uppercase">{t("mining.total", lang)}</p>
+                <p className="text-[10px] font-mono text-text-muted uppercase">{t("earning.total", lang)}</p>
                 <p className="text-lg font-heading font-bold text-text-primary">{(miningStats?.totalEarned || 0).toFixed(4)}</p>
               </div>
             </div>
