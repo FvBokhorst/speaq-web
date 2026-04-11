@@ -1722,11 +1722,11 @@ export default function SpeaqApp() {
   // =========================================================================
   if (screen === "onboarding") {
     const slides = [
-      { icon: "Q", title: "Quantum Encrypted", sub: "Every message, call, and payment is protected by post-quantum cryptography. Even future quantum computers cannot break it." },
+      { icon: "Q", title: "Private & Secure", sub: "Every message, call, and payment is protected by verified encryption standards (NIST). Your conversations stay private." },
       { icon: "C", title: "Chat & Call Freely", sub: "Text, voice, and video calls with end-to-end encryption. No phone number required. No data stored on servers." },
-      { icon: "$", title: "Pay Without Banks", sub: "Send and receive Q-Credits backed by gold. No bank account needed. Instant, borderless, private." },
-      { icon: "G", title: "Ghost Groups & Witness", sub: "Invisible groups where members don't see each other. Tamper-proof witness recording for evidence." },
-      { icon: "M", title: "Mine by Contributing", sub: "Earn Q-Credits by helping the network. Relay messages, validate proofs, store data, onboard users." },
+      { icon: "$", title: "Send Money Instantly", sub: "Send and receive Q-Credits to anyone, anywhere. No bank account needed. No fees between users." },
+      { icon: "G", title: "Private Groups & Records", sub: "Create private groups for your community. Record important moments with verified timestamps." },
+      { icon: "M", title: "Earn by Contributing", sub: "Earn credits by helping the network grow. Relay messages, invite friends, contribute translations." },
     ];
     const slide = slides[onboardingSlide];
     return (

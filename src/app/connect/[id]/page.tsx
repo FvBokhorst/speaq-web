@@ -71,7 +71,7 @@ export default function ConnectPage() {
           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
           </svg>
-          <span className="text-[10px] font-mono uppercase tracking-wider">Quantum Encrypted</span>
+          <span className="text-[10px] font-mono uppercase tracking-wider">Verified Encryption</span>
         </div>
 
         {/* Footer links */}
