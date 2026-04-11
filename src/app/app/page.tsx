@@ -399,7 +399,7 @@ function saveJSON(key: string, value: unknown): void {
 }
 
 // ---------------------------------------------------------------------------
-// SVG Icons (no emoji -- NOOIT)
+// SVG Icons (no emoji. NOOIT)
 // ---------------------------------------------------------------------------
 
 function IconChat({ className = "w-5 h-5" }: { className?: string }) {
@@ -507,7 +507,7 @@ const RELAY_URL = "wss://speaq-relay-244491980730.europe-west1.run.app";
 // Sub-screen header helper
 // ---------------------------------------------------------------------------
 
-// Contact avatar -- shows photo if available, otherwise initial letter
+// Contact avatar. shows photo if available, otherwise initial letter
 function ContactAvatar({ name, speaqId, size = 40, photos }: { name: string; speaqId: string; size?: number; photos: Record<string, string> }) {
   const photo = photos[speaqId];
   if (photo) {
@@ -973,7 +973,7 @@ export default function SpeaqApp() {
       // Handle call signaling
       if (msg.type === "CALL_OFFER" && msg.from) {
         const contact = contacts.find(c => c.speaqId === msg.from) || { speaqId: msg.from, name: msg.from.substring(0, 8), addedAt: Date.now() };
-        // Don't use confirm() -- it blocks WebSocket and drops ICE candidates
+        // Don't use confirm(). it blocks WebSocket and drops ICE candidates
         setIsVideoCall(!!msg.video);
         setIncomingCall({ from: msg.from, name: (contact as Contact).name, sdp: msg.sdp });
         setCallContact(contact as Contact);
@@ -1109,7 +1109,7 @@ export default function SpeaqApp() {
       .then((url: string) => setQrScanUrl(url)).catch(() => {});
   };
 
-  // PIN handlers -- uses PBKDF2 with 600,000 iterations (native app uses 100,000 with CryptoJS)
+  // PIN handlers. uses PBKDF2 with 600,000 iterations (native app uses 100,000 with CryptoJS)
   const hashPin = async (pin: string): Promise<string> => {
     return hashPinPBKDF2(pin, identity?.speaqId || "default");
   };
@@ -1352,7 +1352,7 @@ export default function SpeaqApp() {
       // Send as JSON with message number so receiver can ratchet-decrypt
       blob = JSON.stringify({ mn: result.messageNumber, ct: result.ciphertext });
     } else {
-      // No ratchet yet -- initiate Kyber key exchange AND send with legacy encryption
+      // No ratchet yet. initiate Kyber key exchange AND send with legacy encryption
       // The key exchange runs in background; future messages will use ratchet
       if (!pendingKeyExchanges.current[activeContact.speaqId] && kyberKeys.current) {
         // Generate fresh keypair for this exchange + sign it
@@ -1956,7 +1956,7 @@ export default function SpeaqApp() {
               const dataUrl = msg.text.slice(nameEnd + 1, -7);
               content = <a href={dataUrl} download={fileName} className="flex items-center gap-2 text-voice-gold underline text-sm"><span className="text-lg font-heading font-bold">F</span>{fileName}</a>;
             } else if (isVoice) {
-              // Format: [voice:5s:msgId] -- extract duration and msgId
+              // Format: [voice:5s:msgId]. extract duration and msgId
               const inner = msg.text.slice(7, -1); // "5s:abc123" or "5s"
               const colonIdx = inner.indexOf(":");
               const duration = colonIdx > -1 ? inner.slice(0, colonIdx) : inner;
@@ -3050,7 +3050,7 @@ export default function SpeaqApp() {
             </div>
           </div>
 
-          {/* Language section -- dropdown list like native app */}
+          {/* Language section. dropdown list like native app */}
           <div>
             <p className="text-[10px] font-mono text-text-muted uppercase tracking-wider mb-2 px-2">{t("settings.language", lang)}</p>
             <div className="bg-bg-card rounded-xl border border-[rgba(100,116,139,0.15)] divide-y divide-[rgba(100,116,139,0.1)]">
@@ -3092,7 +3092,7 @@ export default function SpeaqApp() {
             <p className="text-[10px] font-mono text-text-muted uppercase tracking-wider mb-2 px-2">{ t("settings.about", lang) }</p>
             <div className="bg-bg-card rounded-xl border border-[rgba(100,116,139,0.15)] divide-y divide-[rgba(100,116,139,0.1)]">
               <button onClick={() => setScreen("info")} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.howItWorks", lang) }</span><span className="text-sm text-voice-gold">i</span></button>
-              <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">{t("settings.version", lang)}</span><span className="text-sm text-text-muted">1.1.0 (PWA 106)</span></div>
+              <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">{t("settings.version", lang)}</span><span className="text-sm text-text-muted">1.1.0 (PWA 108)</span></div>
               <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">Platform</span><span className="text-sm text-text-muted">{t("ui.platform", lang)}</span></div>
               <a href="https://thespeaq.com" target="_blank" rel="noopener noreferrer" className="flex justify-between px-4 py-3 min-h-[44px]"><span className="text-sm text-text-primary">{t("settings.website", lang)}</span><span className="text-xs font-mono text-voice-gold">thespeaq.com</span></a>
             </div>
@@ -3191,7 +3191,7 @@ The Netherlands`}</div>
         {/* ---- CONTACTS TAB ---- */}
         {tab === "contacts" && (
           <div className="px-4 py-4 space-y-4">
-            {/* Action buttons row -- matches native app: Groups / Scan / +Add */}
+            {/* Action buttons row. matches native app: Groups / Scan / +Add */}
             <div className="flex gap-2">
               <button onClick={() => setScreen("groups")} className="flex-1 py-2.5 rounded-lg bg-bg-card border border-voice-gold/30 text-voice-gold font-body font-semibold text-xs min-h-[44px]">{t("ui.groups", lang)}</button>
               <button onClick={startScanner} className="flex-1 py-2.5 rounded-lg bg-bg-card border border-quantum-teal/30 text-quantum-teal font-body font-semibold text-xs min-h-[44px]">{t("ui.scan", lang)}</button>
@@ -3547,7 +3547,7 @@ The Netherlands`}</div>
                 className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.resetPin", lang) }</span><span className="text-sm text-voice-gold">{ t("settings.change", lang) }</span></button>
             </div>
 
-            {/* Language -- dropdown list like native */}
+            {/* Language. dropdown list like native */}
             <p className="text-[10px] font-mono text-text-muted uppercase tracking-wider px-2 mt-4">{t("settings.language", lang)}</p>
             <div className="bg-bg-card rounded-xl border border-[rgba(100,116,139,0.15)] divide-y divide-[rgba(100,116,139,0.1)]">
               <button onClick={() => setShowLangPicker(!showLangPicker)} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]">
@@ -3593,7 +3593,7 @@ The Netherlands`}</div>
             <p className="text-[10px] font-mono text-text-muted uppercase tracking-wider px-2 mt-4">{ t("settings.about", lang) }</p>
             <div className="bg-bg-card rounded-xl border border-[rgba(100,116,139,0.15)] divide-y divide-[rgba(100,116,139,0.1)]">
               <button onClick={() => setScreen("info")} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.howItWorks", lang) }</span><span className="text-sm text-voice-gold">i</span></button>
-              <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">{t("settings.version", lang)}</span><span className="text-sm text-text-muted">1.1.0 (PWA 106)</span></div>
+              <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">{t("settings.version", lang)}</span><span className="text-sm text-text-muted">1.1.0 (PWA 108)</span></div>
               <a href="https://thespeaq.com" target="_blank" rel="noopener noreferrer" className="flex justify-between px-4 py-3 min-h-[44px]"><span className="text-sm text-text-primary">{t("settings.website", lang)}</span><span className="text-xs font-mono text-voice-gold">thespeaq.com</span></a>
             </div>
           </div>
