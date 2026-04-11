@@ -417,7 +417,7 @@
 <h3>1.1 The Question</h3>
 <p>SPEAQ was born from a simple question: <strong>why should anyone have the power to decide whether two people can talk to each other?</strong></p>
 <p>Not a government. Not a corporation. Not an algorithm. No one.</p>
-<p>If you have someone you love in another country, in another timezone, under another regime - you should be able to speak with them. Always. Without permission. Without surveillance. Without the possibility that someone, somewhere, flips a switch and silences you both.</p>
+<p>If you have someone you love in another country, in another timezone, under another regime - you should be able to speak with them. Always. Without permission. Without data sharing. Without the possibility that someone, somewhere, flips a switch and silences you both.</p>
 <p>This is not a theoretical concern. It happens today. Entire countries are disconnected from the global internet. Messaging platforms are blocked. Calls are monitored. People lose contact with their families, their partners, their communities - not because of technology, but because of power.</p>
 <p>SPEAQ exists because we refuse to accept that.</p>
 
@@ -455,8 +455,8 @@
 <p>SPEAQ does not ask for your name, email, phone number, or any identifier. Your identity is a cryptographic keypair generated on your device. You are known only by your SPEAQ ID - a string of characters that is not linked to anything in the physical world.</p>
 <p>Why this matters: registration creates a database. A database can be breached, subpoenaed, or sold. No registration means no database. No database means nothing to breach.</p>
 
-<h3>2.2 Zero Knowledge</h3>
-<p>The SPEAQ relay server operates on a zero-knowledge principle. It sees only encrypted data moving between addresses. It cannot:</p>
+<h3>2.2 Privacy First</h3>
+<p>The SPEAQ relay server operates on a privacy-first principle. It sees only encrypted data moving between addresses. It cannot:</p>
 <ul>
   <li>Read messages</li>
   <li>Identify senders or receivers</li>
@@ -529,7 +529,7 @@
   <tr><td>Smallest unit</td><td>1 Spark (1 QC = 100,000,000 Sparks)</td></tr>
   <tr><td>Block interval</td><td>30 seconds</td></tr>
   <tr><td>Initial block reward</td><td>0.5 QC</td></tr>
-  <tr><td>Halving interval</td><td>Every 2,100,000 QC mined</td></tr>
+  <tr><td>Halving interval</td><td>Every 2,100,000 QC earned</td></tr>
   <tr><td>Gold reference</td><td>1 QC = 0.01 gram of gold (reference value, not physical reserve)</td></tr>
   <tr><td>Consensus</td><td>Proof of Contribution (DPoC)</td></tr>
   <tr><td>Blockchain storage</td><td>RocksDB (persistent on disk)</td></tr>
@@ -634,7 +634,7 @@
 
 <table>
   <tr><th>Allocation</th><th>Percentage</th><th>Purpose</th></tr>
-  <tr><td>Mining rewards</td><td>85%</td><td>Earned by network contributors over time</td></tr>
+  <tr><td>Earning rewards</td><td>85%</td><td>Earned by network contributors over time</td></tr>
   <tr><td>Freedom Fund</td><td>5%</td><td>Community-governed fund for projects that expand access</td></tr>
   <tr><td>Founders</td><td>5%</td><td>4-year vesting, aligned with long-term network health</td></tr>
   <tr><td>Development</td><td>3%</td><td>Ongoing platform maintenance and security</td></tr>
@@ -719,7 +719,7 @@
   <li><strong>No metadata on relay</strong>: The relay server cannot see transaction amounts, sender, or recipient</li>
   <li><strong>End-to-end signed</strong>: Every transaction is cryptographically signed and verified by the blockchain network</li>
 </ul>
-<p><em>Advanced transaction privacy features (ring signatures, stealth addresses, zero-knowledge proofs) are planned for a future protocol upgrade.</em></p>
+<p><em>Advanced transaction privacy features (ring signatures, stealth addresses, privacy-first proofs) are planned for a future protocol upgrade.</em></p>
 
 <div class="divider"></div>
 
@@ -777,7 +777,7 @@
   <tr><th>Component</th><th>Version</th><th>Status</th></tr>
   <tr><td>PWA (thespeaq.com)</td><td>v102</td><td class="yes">LIVE</td></tr>
   <tr><td>Native iOS App</td><td>build 102</td><td>Ready for TestFlight</td></tr>
-  <tr><td>Blockchain Node</td><td>1.0.0</td><td class="yes">LIVE, mining</td></tr>
+  <tr><td>Blockchain Node</td><td>1.0.0</td><td class="yes">LIVE, earning</td></tr>
   <tr><td>Relay Server</td><td>0.1.0</td><td class="yes">LIVE</td></tr>
 </table>
 
@@ -792,10 +792,10 @@
   <li><strong>Network Rewards:</strong> Server-side Proof of Contribution rewards</li>
   <li><strong>Contacts:</strong> QR code connect, SPEAQ ID matching, profile photos</li>
   <li><strong>Security:</strong> PIN protection, dark/light mode, encrypted local storage</li>
-  <li><strong>Ghost Groups:</strong> Anonymous messaging with aliases, no member list visible</li>
-  <li><strong>Quantum Vault:</strong> Encrypted storage with hidden layer (plausible deniability) - two PINs, invisible hidden layer</li>
+  <li><strong>Private Groups:</strong> Anonymous messaging with aliases, no member list visible</li>
+  <li><strong>Private Storage:</strong> Encrypted storage with hidden layer (extra privacy layer) - two PINs, invisible hidden layer</li>
   <li><strong>Witness Mode:</strong> Tamper-proof evidence with SHA-256 cryptographic hash, GPS location, and timestamp</li>
-  <li><strong>Dead Man's Switch:</strong> Auto-alert system connected to relay server, configurable timeout, recipient selection</li>
+  <li><strong>Safety Check-in:</strong> Auto-alert system connected to relay server, configurable timeout, recipient selection</li>
   <li><strong>Groups:</strong> Encrypted group messaging, each message encrypted per member via relay</li>
   <li><strong>Information:</strong> 16-section "How SPEAQ Works" guide, 41-question FAQ in 9 languages</li>
 </ul>

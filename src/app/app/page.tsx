@@ -1781,7 +1781,7 @@ export default function SpeaqApp() {
         <div className="grid grid-cols-3 gap-2 w-60">
           {["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "del"].map((key) => (
             <button key={key}
-              onClick={() => { if (key === "del") handlePinDelete(); else handlePinDigit(key); }}
+              onClick={() => { if (key === "del") handlePinDelete(); else if (key === "*") return; else handlePinDigit(key); }}
               className="h-14 rounded-xl flex items-center justify-center text-2xl font-body transition-all min-h-[56px] bg-bg-card hover:bg-bg-elevated active:bg-bg-elevated text-text-primary">
               {key === "del" ? <span className="text-lg text-text-muted">&#8592;</span> : key}
             </button>
