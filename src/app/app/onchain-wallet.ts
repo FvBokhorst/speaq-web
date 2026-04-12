@@ -144,7 +144,7 @@ export async function importWalletBackup(backupJson: string, pin: string): Promi
   return wallet;
 }
 
-const CHAIN_API = "http://136.117.234.208:9334";
+const CHAIN_API = process.env.NEXT_PUBLIC_SPEAQ_NODE_URL || "http://localhost:9334";
 
 // Send an on-chain transaction (signed with sovereign keys)
 export async function sendOnChainTransaction(

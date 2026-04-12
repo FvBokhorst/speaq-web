@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const RELAY_URL = "https://speaq-relay-244491980730.europe-west1.run.app";
+const RELAY_URL = process.env.SPEAQ_RELAY_URL || "http://localhost:3001";
 
 export async function GET(request: NextRequest) {
   const pin = request.nextUrl.searchParams.get("pin");

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const INCIDENTS_URL = "http://136.117.234.208:9336";
+const INCIDENTS_URL = process.env.SPEAQ_INCIDENTS_URL || "http://localhost:9336";
 
 export async function GET() {
   try {

@@ -800,7 +800,7 @@ export default function SpeaqApp() {
   useEffect(() => {
     if (tab !== "wallet" || screen !== "main") return;
     const fetchChain = () => {
-      fetch("http://136.117.234.208:9334/api/status")
+      fetch((process.env.NEXT_PUBLIC_SPEAQ_NODE_URL || "http://localhost:9334") + "/api/status")
         .then((r) => r.json())
         .then((d) => setChainData(d))
         .catch(() => {});

@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
 
-const NODE_URL = "http://136.117.234.208:9334";
-const STATS_URL = "http://136.117.234.208:9335";
-const INCIDENTS_URL = "http://136.117.234.208:9336";
-const RELAY_URL = "https://speaq-relay-244491980730.europe-west1.run.app";
+const NODE_URL = process.env.SPEAQ_NODE_URL || "http://localhost:9334";
+const STATS_URL = process.env.SPEAQ_STATS_URL || "http://localhost:9335";
+const INCIDENTS_URL = process.env.SPEAQ_INCIDENTS_URL || "http://localhost:9336";
+const RELAY_URL = process.env.SPEAQ_RELAY_URL || "http://localhost:3001";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const secret = searchParams.get("secret");
-  if (secret !== process.env.CRON_SECRET && secret !== "speaq-health-2026") {
+  if (secret !== process.env.CRON_SECRET) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

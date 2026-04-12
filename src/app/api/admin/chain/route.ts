@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const NODE_URL = "http://136.117.234.208:9334";
+const NODE_URL = process.env.SPEAQ_NODE_URL || "http://localhost:9334";
 
 export async function GET() {
   try {
