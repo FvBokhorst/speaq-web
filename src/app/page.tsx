@@ -287,7 +287,7 @@ export default function Home() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Card 1: Quantum Chat */}
+            {/* Card 1: Secure Chat */}
             <ScrollReveal delay={100}>
             <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover">
               <div className="absolute top-0 left-0 w-1 h-full bg-voice-gold rounded-l-2xl" />
@@ -305,7 +305,7 @@ export default function Home() {
             </div>
 
             </ScrollReveal>
-            {/* Card 2: Quantum Call */}
+            {/* Card 2: Secure Call */}
             <ScrollReveal delay={200}>
             <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover">
               <div className="absolute top-0 left-0 w-1 h-full bg-voice-gold rounded-l-2xl" />
@@ -323,7 +323,7 @@ export default function Home() {
             </div>
 
             </ScrollReveal>
-            {/* Card 3: Quantum Pay */}
+            {/* Card 3: Send Money */}
             <ScrollReveal delay={300}>
             <div className="relative bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-2xl p-8 card-hover">
               <div className="absolute top-0 left-0 w-1 h-full bg-voice-gold rounded-l-2xl" />

@@ -23,9 +23,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SPEAQ - Quantum Freedom Platform",
+  title: "SPEAQ - Communication & Freedom Platform",
   description:
-    "The right to be heard, protected by technology no one can break. Quantum-encrypted messaging, calling, payments, and more.",
+    "Chat, call, send money, and earn rewards. Protected by verified encryption (NIST-certified). Your data, your control.",
   manifest: "/manifest.json",
   icons: {
     icon: "/favicon.ico",
