@@ -99,7 +99,7 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-medium text-text-primary mb-4">
-              Zero Knowledge Architecture
+              Privacy-First Architecture
             </h2>
             <p>
               SPEAQ uses a sealed-sender relay system. The server facilitates

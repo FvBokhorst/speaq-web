@@ -108,7 +108,7 @@ export default function Home() {
             {[
               { label: "Features", href: "#features" },
               { label: "Security", href: "#security" },
-              { label: "Zero Knowledge", href: "#zero-knowledge" },
+              { label: "Your Data, Your Control", href: "#zero-knowledge" },
               { label: "Q-Credits", href: "#qcredits" },
               { label: "Get SPEAQ", href: "#download" },
               { label: "FAQ", href: "/faq" },
