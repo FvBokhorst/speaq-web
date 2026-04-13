@@ -735,7 +735,14 @@ export default function SpeaqApp() {
     if (localStorage.getItem("speaq_mining_active") === "true") setMiningActive(true);
 
     const savedLang = localStorage.getItem("speaq_lang");
-    if (savedLang && languages.some((l) => l.code === savedLang)) setLang(savedLang as Lang);
+    if (savedLang && languages.some((l) => l.code === savedLang)) {
+      setLang(savedLang as Lang);
+    } else {
+      // Auto-detect browser language as fallback
+      const browserLang = navigator.language?.split("-")[0] || "en";
+      const matched = languages.find((l) => l.code === browserLang);
+      if (matched) { setLang(matched.code); localStorage.setItem("speaq_lang", matched.code); }
+    }
 
     // Theme (check both key formats for compat with landing page)
     const savedTheme = (localStorage.getItem("speaq_theme") || localStorage.getItem("speaq-theme")) as "system" | "dark" | "light" | null;
