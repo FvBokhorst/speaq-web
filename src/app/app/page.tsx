@@ -300,7 +300,8 @@ const appStrings: Record<string, Record<string, string>> = {
   "wallet.amountQC": { en: "Amount (QC)", nl: "Bedrag (QC)", fr: "Montant (QC)", es: "Monto (QC)", ru: "Summa (QC)", de: "Betrag (QC)", sl: "Znesek (QC)", lg: "Omuwendo (QC)", sw: "Kiasi (QC)" },
   "earning.miningActive": { en: "Earning active - earning QC", nl: "Verdienen actief - QC verdienen", fr: "Gains actif - gagner QC", es: "Ganancias activa - ganando QC", ru: "Zarabotok aktiven - zarabotok QC", de: "Verdienst aktiv - QC verdienen", sl: "Zasluzek aktivno - zasluzek QC", lg: "Okufuna kutandika - okufuna QC", sw: "Kupata unaendelea - kupata QC" },
   "earning.maxSupply": { en: "Max Supply", nl: "Max Voorraad", fr: "Offre Max", es: "Suministro Max", ru: "Maks zapas", de: "Max Vorrat", sl: "Maks zaloga", lg: "Obungi obusinga", sw: "Ugavi wa juu" },
-  "earning.totalMined": { en: "Total Earned", nl: "Totaal Verdiend", fr: "Total Gagne", es: "Total Ganado", ru: "Vsego zarabotano", de: "Gesamt Verdient", sl: "Skupaj zasluzeno", lg: "Byonna ebifuniddwa", sw: "Jumla iliyopatikana" },
+  "earning.totalMined": { en: "Network Mined", nl: "Netwerk Gemined", fr: "Mine Reseau", es: "Minado Red", ru: "Dobito v seti", de: "Netzwerk Gemined", sl: "Omrezje rudarjeno", lg: "Omukutu gwokuzimba", sw: "Mtandao uliochimbwa" },
+  "earning.yourEarnings": { en: "Your Earnings", nl: "Jouw Verdiensten", fr: "Vos Gains", es: "Tus Ganancias", ru: "Vashi zarabotki", de: "Deine Verdienste", sl: "Tvoji zasluzki", lg: "Ebyo byo ofunye", sw: "Mapato yako" },
   "earning.remaining": { en: "Remaining", nl: "Resterend", fr: "Restant", es: "Restante", ru: "Ostalos", de: "Verbleibend", sl: "Preostalo", lg: "Ebyasigaddewo", sw: "Iliyobaki" },
   "earning.halving": { en: "Halving", nl: "Halvering", fr: "Halving", es: "Halving", ru: "Kholving", de: "Halving", sl: "Razpolovitev", lg: "Okugawanya mu bibiri", sw: "Kugawanya nusu" },
   "earning.nativeOnly": { en: "Native only", nl: "Alleen native", fr: "Natif seulement", es: "Solo nativo", ru: "Tolko nativnoe", de: "Nur nativ", sl: "Samo domorodno", lg: "Eky'omu app yokka", sw: "Asili tu" },
@@ -554,7 +555,7 @@ export default function SpeaqApp() {
 
   // Wallet state
   const [wallet, setWalletState] = useState<WalletState>({ balance: 0, totalReceived: 0, totalSent: 0, totalMined: 0 });
-  const [chainData, setChainData] = useState<{ chain_height: number; genesis_hash: string; connected_peers: number; version: string } | null>(null);
+  const [chainData, setChainData] = useState<{ chain_height: number; genesis_hash: string; connected_peers: number; version: string; balance?: number } | null>(null);
   const [onChainWallet, setOnChainWallet] = useState<OnChainWallet | null>(null);
   const [txs, setTxs] = useState<Transaction[]>([]);
   const [sendAmount, setSendAmount] = useState("");
@@ -796,13 +797,14 @@ export default function SpeaqApp() {
     try { setOnChainWallet(getOrCreateOnChainWallet()); } catch {}
   }, [identity]);
 
-  // Fetch blockchain data when wallet tab is active
+  // Fetch blockchain data when wallet or earning tab/screen is active
   useEffect(() => {
-    if (tab !== "wallet" || screen !== "main") return;
+    const needsChain = (tab === "wallet" && screen === "main") || screen === "miningDetail";
+    if (!needsChain) return;
     const fetchChain = () => {
-      fetch((process.env.NEXT_PUBLIC_SPEAQ_NODE_URL || "http://localhost:9334") + "/api/status")
-        .then((r) => r.json())
-        .then((d) => setChainData(d))
+      fetch("/api/admin/chain")
+        .then((r) => r.ok ? r.json() : null)
+        .then((d) => { if (d) setChainData(d); })
         .catch(() => {});
     };
     fetchChain();
@@ -2277,7 +2279,8 @@ export default function SpeaqApp() {
   // =========================================================================
   if (screen === "miningDetail") {
     const stats = miningStats || loadStats();
-    const supply = getSupplyInfo(stats.totalEarned);
+    const networkMined = chainData?.balance || 0;
+    const supply = getSupplyInfo(networkMined);
     const estDaily = getEstimatedDaily(stats.activeTypes, stats.totalEarned);
     return (
       <div className="min-h-dvh bg-bg-deep flex flex-col">
@@ -2338,10 +2341,11 @@ export default function SpeaqApp() {
             <p className="text-xs font-mono text-quantum-teal uppercase tracking-wider mb-2">{t("earning.supply", lang)}</p>
             <div className="space-y-1">
               <div className="flex justify-between text-xs"><span className="text-text-muted">{t("earning.maxSupply", lang)}</span><span className="text-text-primary font-mono">{supply.maxSupply.toLocaleString()} QC</span></div>
-              <div className="flex justify-between text-xs"><span className="text-text-muted">{t("earning.totalMined", lang)}</span><span className="text-text-primary font-mono">{supply.totalMined.toFixed(4)} QC</span></div>
-              <div className="flex justify-between text-xs"><span className="text-text-muted">{t("earning.remaining", lang)}</span><span className="text-text-primary font-mono">{supply.remaining.toLocaleString()} QC</span></div>
+              <div className="flex justify-between text-xs"><span className="text-text-muted">{t("earning.totalMined", lang)}</span><span className="text-text-primary font-mono">{networkMined > 0 ? networkMined.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : "--"} QC</span></div>
+              <div className="flex justify-between text-xs"><span className="text-text-muted">{t("earning.remaining", lang)}</span><span className="text-text-primary font-mono">{networkMined > 0 ? supply.remaining.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : "--"} QC</span></div>
+              <div className="flex justify-between text-xs"><span className="text-text-muted">{t("earning.yourEarnings", lang)}</span><span className="text-quantum-teal font-mono">{stats.totalEarned.toFixed(4)} QC</span></div>
               <div className="flex justify-between text-xs"><span className="text-text-muted">{t("earning.halving", lang)}</span><span className="text-text-primary font-mono">#{supply.currentHalving} ({(supply.halvingProgress * 100).toFixed(4)}%)</span></div>
-              <div className="w-full bg-bg-elevated rounded-full h-1.5 mt-2"><div className="bg-voice-gold rounded-full h-1.5" style={{ width: `${Math.min(supply.halvingProgress * 100, 100)}%` }} /></div>
+              <div className="w-full bg-bg-elevated rounded-full h-1.5 mt-2"><div className="bg-voice-gold rounded-full h-1.5" style={{ width: `${Math.max(Math.min(supply.halvingProgress * 100, 100), 0.1)}%` }} /></div>
             </div>
           </div>
           {/* Recent rewards */}
