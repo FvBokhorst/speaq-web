@@ -3321,22 +3321,7 @@ The Netherlands`}</div>
                 </button>
               </div>
             </div>
-            {/* Blockchain Status */}
-            {chainData && (
-              <div className="bg-bg-card rounded-xl p-4 border border-quantum-teal/20">
-                <p className="text-[10px] font-mono text-quantum-teal uppercase tracking-wider mb-3">SPEAQ Chain</p>
-                <div className="grid grid-cols-2 gap-3">
-                  <div><p className="text-[10px] text-text-muted">Block Height</p><p className="text-sm font-heading font-bold text-text-primary">{chainData.chain_height.toLocaleString()}</p></div>
-                  <div><p className="text-[10px] text-text-muted">Max Supply</p><p className="text-sm font-heading font-bold text-text-primary">21,000,000 QC</p></div>
-                  <div><p className="text-[10px] text-text-muted">Version</p><p className="text-sm font-mono text-quantum-teal">{chainData.version}</p></div>
-                  <div><p className="text-[10px] text-text-muted">Network</p><p className="text-sm font-mono text-quantum-teal">{chainData.connected_peers} peers</p></div>
-                </div>
-                <div className="mt-3 pt-3 border-t border-[rgba(100,116,139,0.1)]">
-                  <p className="text-[10px] text-text-muted">Genesis</p>
-                  <p className="text-[9px] font-mono text-text-muted truncate">{chainData.genesis_hash}</p>
-                </div>
-              </div>
-            )}
+            {/* Blockchain Status -- hidden from wallet (supply info shown in Earn tab instead) */}
 
             {/* On-Chain Wallet */}
             {onChainWallet && (
