@@ -67,14 +67,14 @@ export default function PrivacyPage() {
               What We Process
             </h2>
             <p className="mb-4">
-              To operate the SPEAQ relay network, we process minimal data that
-              cannot be linked to your identity:
+              To operate the SPEAQ relay network, we process only the minimum
+              amount of data needed to deliver your messages, and nothing that
+              can be linked to your identity:
             </p>
             <ul className="list-none space-y-3">
               {[
                 "Encrypted message blobs (we cannot decrypt them)",
                 "Temporary routing information (deleted after delivery)",
-                "Anonymous usage statistics (no user identification)",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-voice-gold mt-2.5 shrink-0" />
