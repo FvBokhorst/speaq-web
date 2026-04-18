@@ -668,6 +668,23 @@ export default function Home() {
         </div></ScrollReveal>
       </section>
 
+      {/* ===== FOUNDING STORY ===== */}
+      <section className="py-24 md:py-32 border-t border-[rgba(100,116,139,0.08)]" id="story">
+        <ScrollReveal delay={100}><div className="max-w-[780px] mx-auto px-6 md:px-12">
+          <span className="section-label block mb-3 text-center">{t("founding.label", lang)}</span>
+          <h2 className="font-[family-name:var(--font-playfair)] text-3xl md:text-5xl font-medium tracking-tight leading-tight mb-12 text-center">
+            {t("founding.title", lang)}
+          </h2>
+          <div className="space-y-6 text-text-secondary text-base md:text-lg leading-relaxed">
+            <p>{t("founding.p1", lang)}</p>
+            <p>{t("founding.p2", lang)}</p>
+            <p>{t("founding.p3", lang)}</p>
+            <p>{t("founding.p4", lang)}</p>
+            <p className="italic text-text-primary">{t("founding.p5", lang)}</p>
+          </div>
+        </div></ScrollReveal>
+      </section>
+
       {/* ===== FAQ LINK ===== */}
       <section className="py-12 bg-bg-surface border-t border-[rgba(100,116,139,0.08)]">
         <div className="max-w-[1100px] mx-auto px-6 md:px-12 text-center">
