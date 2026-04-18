@@ -530,7 +530,7 @@
   <tr><td>Block interval</td><td>30 seconds</td></tr>
   <tr><td>Initial block reward</td><td>0.5 QC</td></tr>
   <tr><td>Halving interval</td><td>Every 2,100,000 QC earned</td></tr>
-  <tr><td>Gold reference</td><td>1 QC = 0.01 gram of gold (protocol floor, backed by a public live oracle — see Section 10.1)</td></tr>
+  <tr><td>Gold reference</td><td>1 QC = 0.01 gram of gold (protocol floor, backed by a public live oracle - see Section 10.1)</td></tr>
   <tr><td>Consensus</td><td>Proof of Contribution (DPoC)</td></tr>
   <tr><td>Blockchain storage</td><td>RocksDB (persistent on disk)</td></tr>
 </table>
@@ -782,7 +782,7 @@
   <tr><td>Gold Feed Oracle</td><td>0.1.0</td><td class="yes">LIVE (Cloud Run EU, /v1/price)</td></tr>
 </table>
 
-<p style="margin-top: 1em;"><em>Gold Feed Oracle:</em> the floor-peg reference (1 QC = 0.01 gram gold) is anchored by a public, multi-source price feed deployed on Google Cloud Run (europe-west1). Three independent upstream sources — Yahoo Finance gold futures, Stooq XAUUSD, and optionally goldapi.io — are polled, an outlier-rejected median is taken, and the result is exposed as a read-only JSON endpoint that any client or validator can verify. Source code and architecture documentation are published at <code>github.com/FvBokhorst/speaq-gold-feed</code>.</p>
+<p style="margin-top: 1em;"><em>Gold Feed Oracle:</em> the floor-peg reference (1 QC = 0.01 gram gold) is anchored by a public, multi-source price feed deployed on Google Cloud Run (europe-west1). Three independent upstream sources - Yahoo Finance gold futures, Stooq XAUUSD, and optionally goldapi.io - are polled, an outlier-rejected median is taken, and the result is exposed as a read-only JSON endpoint that any client or validator can verify. Source code and architecture documentation are published at <code>github.com/FvBokhorst/speaq-gold-feed</code>.</p>
 
 <h3>10.2 Available Languages</h3>
 <p>SPEAQ is available in 9 languages: English, Dutch, French, Spanish, Russian, German, Slovenian, Luganda, and Swahili.</p>
