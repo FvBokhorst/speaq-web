@@ -530,7 +530,7 @@
   <tr><td>Block interval</td><td>30 seconds</td></tr>
   <tr><td>Initial block reward</td><td>0.5 QC</td></tr>
   <tr><td>Halving interval</td><td>Every 2,100,000 QC earned</td></tr>
-  <tr><td>Gold reference</td><td>1 QC = 0.01 gram of gold (reference value, not physical reserve)</td></tr>
+  <tr><td>Gold reference</td><td>1 QC = 0.01 gram of gold (protocol floor, backed by a public live oracle — see Section 10.1)</td></tr>
   <tr><td>Consensus</td><td>Proof of Contribution (DPoC)</td></tr>
   <tr><td>Blockchain storage</td><td>RocksDB (persistent on disk)</td></tr>
 </table>
@@ -775,11 +775,14 @@
 
 <table>
   <tr><th>Component</th><th>Version</th><th>Status</th></tr>
-  <tr><td>PWA (thespeaq.com)</td><td>v102</td><td class="yes">LIVE</td></tr>
-  <tr><td>Native iOS App</td><td>build 102</td><td>Ready for TestFlight</td></tr>
+  <tr><td>PWA (thespeaq.com)</td><td>v110+</td><td class="yes">LIVE</td></tr>
+  <tr><td>Native iOS App</td><td>1.0 (build 2)</td><td>Submitted to Apple App Review (April 2026)</td></tr>
   <tr><td>Blockchain Node</td><td>1.0.0</td><td class="yes">LIVE, earning</td></tr>
   <tr><td>Relay Server</td><td>0.1.0</td><td class="yes">LIVE</td></tr>
+  <tr><td>Gold Feed Oracle</td><td>0.1.0</td><td class="yes">LIVE (Cloud Run EU, /v1/price)</td></tr>
 </table>
+
+<p style="margin-top: 1em;"><em>Gold Feed Oracle:</em> the floor-peg reference (1 QC = 0.01 gram gold) is anchored by a public, multi-source price feed deployed on Google Cloud Run (europe-west1). Three independent upstream sources — Yahoo Finance gold futures, Stooq XAUUSD, and optionally goldapi.io — are polled, an outlier-rejected median is taken, and the result is exposed as a read-only JSON endpoint that any client or validator can verify. Source code and architecture documentation are published at <code>github.com/FvBokhorst/speaq-gold-feed</code>.</p>
 
 <h3>10.2 Available Languages</h3>
 <p>SPEAQ is available in 9 languages: English, Dutch, French, Spanish, Russian, German, Slovenian, Luganda, and Swahili.</p>
@@ -791,7 +794,8 @@
   <li><strong>Sovereign Wallet:</strong> ML-DSA-65 keys, on-chain transactions with FIPS 204 signatures</li>
   <li><strong>Network Rewards:</strong> Server-side Proof of Contribution rewards</li>
   <li><strong>Contacts:</strong> QR code connect, SPEAQ ID matching, profile photos</li>
-  <li><strong>Security:</strong> PIN protection, dark/light mode, encrypted local storage</li>
+  <li><strong>Security:</strong> PIN protection, system/dark/light theme toggle (matching PWA and native), encrypted local storage</li>
+  <li><strong>Gold Oracle Display:</strong> Wallet shows a live USD/gram snapshot from the public speaq-gold-feed service next to the protocol's floor peg, independently verifiable by any user</li>
   <li><strong>Private Groups:</strong> Anonymous messaging with aliases, no member list visible</li>
   <li><strong>Private Storage:</strong> Encrypted storage with hidden layer (extra privacy layer) - two PINs, invisible hidden layer</li>
   <li><strong>Witness Mode:</strong> Tamper-proof evidence with SHA-256 cryptographic hash, GPS location, and timestamp</li>
@@ -806,7 +810,8 @@
   <li>Voice and video calling (WebRTC)</li>
   <li>BLE mesh networking for offline communication</li>
   <li>Advanced transaction privacy (ring signatures, stealth addresses)</li>
-  <li>iOS App Store and Android Google Play distribution</li>
+  <li>Android Google Play distribution (iOS App Store submitted April 2026)</li>
+  <li>Gold Feed Oracle v1.1: Dilithium-signed quotes, Firestore history archive, validator-side price inclusion in block headers</li>
 </ul>
 
 <div class="divider divider-teal"></div>
