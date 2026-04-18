@@ -7,6 +7,7 @@ import ThemeToggle from "../components/ThemeToggle";
 
 const STATS_API = "/api/admin/stats";
 const INCIDENTS_API = "/api/admin/incidents";
+const COUNTRY_STATS_API = "/api/admin/country-stats";
 const MAX_SUPPLY = 21_000_000;
 const REFRESH_INTERVAL = 30_000; // 30 seconds
 
@@ -44,6 +45,12 @@ interface AdminStats {
     uptimeSeconds: number;
     serverStartedAt: number;
   };
+}
+
+interface CountryStat {
+  code: string;
+  count: number;
+  name: string;
 }
 
 // --- Helpers ---
@@ -308,6 +315,16 @@ function IconNetwork() {
   );
 }
 
+function IconGlobe() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <line x1="2" y1="12" x2="22" y2="12" />
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+    </svg>
+  );
+}
+
 function IconLock() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -357,6 +374,7 @@ export default function AdminPage() {
   } | null>(null);
   const [incidents, setIncidents] = useState<{ id: string; type: string; source: string; timestamp: string; issues: string; services?: { node: boolean; stats: boolean; relay: boolean }; chainHeight?: number; memFreeMB?: number }[]>([]);
   const [healthLog, setHealthLog] = useState<{ timestamp: string; source: string; status: string; node: boolean; stats: boolean; relay: boolean; chainHeight: number; memFreeMB?: number; relayClients?: number }[]>([]);
+  const [countryStats, setCountryStats] = useState<CountryStat[]>([]);
 
   // Check session on mount
   useEffect(() => {
@@ -410,6 +428,14 @@ export default function AdminPage() {
       const oracleRes = await fetch("/api/gold-oracle", { cache: "no-store" });
       if (oracleRes.ok) {
         setGoldOracle(await oracleRes.json());
+      }
+    } catch {}
+    // Fetch country stats (privacy-preserving, timezone-based)
+    try {
+      const csRes = await fetch(`${COUNTRY_STATS_API}?pin=${encodeURIComponent(storedPin)}`);
+      if (csRes.ok) {
+        const csData = await csRes.json();
+        setCountryStats(csData.countries || []);
       }
     } catch {}
     setLoading(false);
@@ -593,6 +619,90 @@ export default function AdminPage() {
                   label="User Growth (30 days)"
                 />
               </div>
+            </section>
+
+            {/* Section 1b: Country Distribution */}
+            <section>
+              <div className="flex items-center gap-2 mb-4 text-quantum-teal">
+                <IconGlobe />
+                <h2 className="text-sm font-mono uppercase tracking-wider">
+                  User Distribution
+                </h2>
+                <span className="text-[10px] text-text-muted font-mono ml-2">
+                  Timezone-based — no IP tracking
+                </span>
+              </div>
+
+              {countryStats.length > 0 ? (
+                <>
+                  {/* Summary cards */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                    <StatCard
+                      label="Countries"
+                      value={countryStats.filter(c => c.code !== "XX").length}
+                      sub="Active regions"
+                    />
+                    <StatCard
+                      label="Top Country"
+                      value={countryStats[0]?.name || "-"}
+                      sub={`${countryStats[0]?.count || 0} users`}
+                    />
+                    <StatCard
+                      label="Tracked Users"
+                      value={countryStats.reduce((sum, c) => sum + c.count, 0)}
+                      sub="With country data"
+                    />
+                    <StatCard
+                      label="Unknown"
+                      value={countryStats.find(c => c.code === "XX")?.count || 0}
+                      sub="Timezone not mapped"
+                    />
+                  </div>
+
+                  {/* Country bar chart + table */}
+                  <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-lg p-4">
+                    <p className="text-text-muted text-xs font-mono uppercase tracking-wider mb-3">
+                      Users by Country
+                    </p>
+                    <div className="space-y-1.5 max-h-80 overflow-y-auto">
+                      {countryStats
+                        .filter(c => c.code !== "XX")
+                        .map((country) => {
+                          const maxCount = countryStats[0]?.count || 1;
+                          const pct = (country.count / maxCount) * 100;
+                          return (
+                            <div key={country.code} className="flex items-center gap-3 group">
+                              <span className="w-6 text-center text-xs font-mono text-text-muted shrink-0">
+                                {country.code}
+                              </span>
+                              <div className="flex-1 h-5 bg-bg-elevated rounded overflow-hidden relative">
+                                <div
+                                  className="h-full rounded transition-all duration-500"
+                                  style={{
+                                    width: `${Math.max(pct, 2)}%`,
+                                    backgroundColor: "rgba(45,212,191,0.4)",
+                                  }}
+                                />
+                                <span className="absolute inset-y-0 left-2 flex items-center text-[11px] font-mono text-text-secondary">
+                                  {country.name}
+                                </span>
+                              </div>
+                              <span className="w-12 text-right text-xs font-mono text-quantum-teal shrink-0">
+                                {country.count}
+                              </span>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className="bg-bg-card border border-[rgba(100,116,139,0.15)] rounded-lg p-4">
+                  <p className="text-text-muted text-xs font-mono">
+                    Country statistics will appear once the relay collects timezone data from connected users. No IP addresses are used.
+                  </p>
+                </div>
+              )}
             </section>
 
             {/* Section 2: Miners */}

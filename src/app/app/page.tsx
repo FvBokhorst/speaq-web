@@ -16,6 +16,7 @@ import QRCode from "qrcode";
 import jsQR from "jsqr";
 import { WavRecorder } from "./wav-recorder";
 import INFO from "./info-data";
+import { detectCountryFromTimezone } from "./timezone-country";
 import {
   loadWallet, saveWallet, loadTransactions, saveTransactions,
   addMiningReward, sendQC as walletSendQC, receiveQC, qcToGold, qcToEur, qcToSparks, getGoldPrice,
@@ -1090,7 +1091,7 @@ export default function SpeaqApp() {
     if (!identity) return;
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) return;
     const ws = new WebSocket(RELAY_URL);
-    ws.onopen = () => { setConnected(true); ws.send(JSON.stringify({ type: "AUTH", speaqId: identity.speaqId })); };
+    ws.onopen = () => { setConnected(true); ws.send(JSON.stringify({ type: "AUTH", speaqId: identity.speaqId, cc: detectCountryFromTimezone() })); };
     ws.onmessage = handleWsMessage;
     ws.onclose = () => { setConnected(false); wsRef.current = null; reconnectTimer.current = setTimeout(connectWs, 3000); };
     ws.onerror = () => { setConnected(false); };
