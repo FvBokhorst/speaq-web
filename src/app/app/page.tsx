@@ -3328,6 +3328,13 @@ The Netherlands`}</div>
               <p className="text-[10px] font-mono text-text-muted uppercase tracking-wider mb-1">{t("wallet.balance", lang)}</p>
               <p className="text-5xl font-heading font-bold text-voice-gold">{wallet.balance.toFixed(2)}</p>
               <p className="text-xs text-text-muted mt-1">~ {qcToGold(wallet.balance).toFixed(4)} gram gold</p>
+              {goldOracle ? (
+                <p className="text-[10px] text-text-muted mt-1 font-mono" title={`Sources: ${goldOracle.sourcesUsed.join(", ")}`}>
+                  Oracle: ${goldOracle.usdPerGram.toFixed(2)}/g · {goldOracle.sourcesUsed.length} src · {formatRelativeAge(goldOracle.timestamp)}
+                </p>
+              ) : (
+                <p className="text-[10px] text-text-muted mt-1 font-mono opacity-50">Oracle: offline</p>
+              )}
               {/* 3 action buttons like native: Send, Receive, Request */}
               <div className="flex gap-3 mt-4">
                 <button onClick={() => setScreen("sendQC")} className="flex-1 flex flex-col items-center gap-1 py-2 rounded-lg bg-bg-elevated min-h-[44px]">
