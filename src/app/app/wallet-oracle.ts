@@ -15,7 +15,7 @@ export type GoldOracleSnapshot = {
   sourcesFailed: string[];
 };
 
-const ORACLE_URL = "https://speaq-gold-feed-244491980730.europe-west1.run.app/v1/price";
+const ORACLE_URL = "/api/gold-oracle";
 const CACHE_KEY = "speaq_gold_oracle_cache_v1";
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 

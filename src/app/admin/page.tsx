@@ -405,9 +405,9 @@ export default function AdminPage() {
         setHealthLog(incData.healthLog || []);
       }
     } catch {}
-    // Fetch gold oracle snapshot (public endpoint, no auth needed)
+    // Fetch gold oracle snapshot via server-side proxy (avoids CORS)
     try {
-      const oracleRes = await fetch("https://speaq-gold-feed-244491980730.europe-west1.run.app/v1/price", { cache: "no-store" });
+      const oracleRes = await fetch("/api/gold-oracle", { cache: "no-store" });
       if (oracleRes.ok) {
         setGoldOracle(await oracleRes.json());
       }
