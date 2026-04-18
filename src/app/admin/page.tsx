@@ -347,6 +347,14 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [storedPin, setStoredPin] = useState("");
   const [chainData, setChainData] = useState<{ chain_height: number; balance: number; balance_sparks: number; genesis_hash: string } | null>(null);
+  const [goldOracle, setGoldOracle] = useState<{
+    price_usd_per_gram: number;
+    price_usd_per_troy_ounce: number;
+    timestamp: string;
+    sources_used: string[];
+    sources_failed: string[];
+    method: string;
+  } | null>(null);
   const [incidents, setIncidents] = useState<{ id: string; type: string; source: string; timestamp: string; issues: string; services?: { node: boolean; stats: boolean; relay: boolean }; chainHeight?: number; memFreeMB?: number }[]>([]);
   const [healthLog, setHealthLog] = useState<{ timestamp: string; source: string; status: string; node: boolean; stats: boolean; relay: boolean; chainHeight: number; memFreeMB?: number; relayClients?: number }[]>([]);
 
@@ -395,6 +403,13 @@ export default function AdminPage() {
         const incData = await incRes.json();
         setIncidents(incData.incidents || []);
         setHealthLog(incData.healthLog || []);
+      }
+    } catch {}
+    // Fetch gold oracle snapshot (public endpoint, no auth needed)
+    try {
+      const oracleRes = await fetch("https://speaq-gold-feed-244491980730.europe-west1.run.app/v1/price", { cache: "no-store" });
+      if (oracleRes.ok) {
+        setGoldOracle(await oracleRes.json());
       }
     } catch {}
     setLoading(false);
@@ -705,6 +720,66 @@ export default function AdminPage() {
                 <div className="bg-bg-card border border-[rgba(212,168,83,0.2)] rounded-lg p-4 mb-3">
                   <p className="text-voice-warm text-xs font-mono">
                     Connecting to blockchain node...
+                  </p>
+                </div>
+              )}
+            </section>
+
+            {/* Section 4b: Gold Oracle */}
+            <section>
+              <div className="flex items-center gap-2 mb-4 text-voice-gold">
+                <IconChain />
+                <h2 className="text-sm font-mono uppercase tracking-wider">
+                  Gold Oracle
+                </h2>
+              </div>
+              {goldOracle ? (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <StatCard
+                    label="USD / gram"
+                    value={`$${goldOracle.price_usd_per_gram.toFixed(2)}`}
+                    sub={`$${goldOracle.price_usd_per_troy_ounce.toFixed(2)}/oz`}
+                  />
+                  <StatCard
+                    label="Sources Active"
+                    value={String(goldOracle.sources_used.length)}
+                    sub={goldOracle.sources_used.join(" + ") || "none"}
+                  />
+                  <StatCard
+                    label="Sources Failed"
+                    value={String(goldOracle.sources_failed.length)}
+                    sub={goldOracle.sources_failed.join(" + ") || "none"}
+                  />
+                  <StatCard
+                    label="Method"
+                    value={goldOracle.method}
+                    sub={new Date(goldOracle.timestamp).toLocaleTimeString()}
+                  />
+                  <StatCard
+                    label="Floor Peg"
+                    value="0.01 g / QC"
+                    sub="protocol guarantee"
+                  />
+                  <StatCard
+                    label="Max Supply @ Peg"
+                    value="210,000 g"
+                    sub="21M QC x 0.01"
+                  />
+                  <StatCard
+                    label="Endpoint"
+                    value="/v1/price"
+                    sub="speaq-gold-feed"
+                  />
+                  <StatCard
+                    label="Signed"
+                    value="v1.1"
+                    sub="dilithium roadmap"
+                  />
+                </div>
+              ) : (
+                <div className="bg-bg-card border border-[rgba(212,168,83,0.2)] rounded-lg p-4 mb-3">
+                  <p className="text-voice-warm text-xs font-mono">
+                    Oracle unreachable. Check speaq-gold-feed on Cloud Run.
                   </p>
                 </div>
               )}
