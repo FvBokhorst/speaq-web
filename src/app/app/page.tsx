@@ -21,6 +21,7 @@ import {
   addMiningReward, sendQC as walletSendQC, receiveQC, qcToGold, qcToEur, qcToSparks, getGoldPrice,
   type WalletState, type Transaction,
 } from "./wallet";
+import { fetchLiveGoldPrice, formatRelativeAge, type GoldOracleSnapshot } from "./wallet-oracle";
 import { getOrCreateOnChainWallet, sendOnChainTransaction, exportWalletBackup, importWalletBackup, type OnChainWallet } from "./onchain-wallet";
 import {
   loadStats, saveStats, loadRewards, saveRewards,
@@ -544,6 +545,7 @@ export default function SpeaqApp() {
   const [tab, setTab] = useState<Tab>("chats");
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [activeContact, setActiveContact] = useState<Contact | null>(null);
+  const [goldOracle, setGoldOracle] = useState<GoldOracleSnapshot | null>(null);
   const [messages, setMessages] = useState<Record<string, Message[]>>({});
   const [inputText, setInputText] = useState("");
   const [newContactId, setNewContactId] = useState("");
@@ -817,6 +819,19 @@ export default function SpeaqApp() {
     fetchChain();
     const interval = setInterval(fetchChain, 30000);
     return () => clearInterval(interval);
+  }, [tab, screen]);
+
+  // Poll the public gold oracle while the wallet tab is open so the live
+  // snapshot stays fresh next to the protocol's hard floor peg.
+  useEffect(() => {
+    if (tab !== "wallet" || screen !== "main") return;
+    let cancelled = false;
+    const run = () => {
+      fetchLiveGoldPrice().then((snap) => { if (!cancelled) setGoldOracle(snap); });
+    };
+    run();
+    const interval = setInterval(run, 5 * 60 * 1000); // 5 min
+    return () => { cancelled = true; clearInterval(interval); };
   }, [tab, screen]);
 
   // Save on change
@@ -2164,6 +2179,13 @@ export default function SpeaqApp() {
             <p className="text-3xl font-heading font-bold text-voice-gold">{wallet.balance.toFixed(4)} QC</p>
             <p className="text-sm text-text-secondary mt-1">{qcToGold(wallet.balance).toFixed(4)}g gold = EUR {qcToEur(wallet.balance).toFixed(2)}</p>
             <p className="text-[10px] text-text-muted mt-1">{qcToSparks(wallet.balance).toLocaleString()} Sparks</p>
+            {goldOracle ? (
+              <p className="text-[10px] text-text-muted mt-2 font-mono" title={`Sources: ${goldOracle.sourcesUsed.join(", ")}`}>
+                Oracle: ${goldOracle.usdPerGram.toFixed(2)}/g · {goldOracle.sourcesUsed.length} src · {formatRelativeAge(goldOracle.timestamp)}
+              </p>
+            ) : (
+              <p className="text-[10px] text-text-muted mt-2 font-mono opacity-50">Oracle: offline</p>
+            )}
           </div>
           {/* Actions */}
           <div className="grid grid-cols-2 gap-3">
