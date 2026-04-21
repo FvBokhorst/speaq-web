@@ -3144,7 +3144,7 @@ export default function SpeaqApp() {
             <p className="text-[10px] font-mono text-text-muted uppercase tracking-wider mb-2 px-2">{ t("settings.about", lang) }</p>
             <div className="bg-bg-card rounded-xl border border-[rgba(100,116,139,0.15)] divide-y divide-[rgba(100,116,139,0.1)]">
               <button onClick={() => setScreen("info")} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.howItWorks", lang) }</span><span className="text-sm text-voice-gold">i</span></button>
-              <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">{t("settings.version", lang)}</span><span className="text-sm text-text-muted">1.1.0 (PWA 109)</span></div>
+              <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">{t("settings.version", lang)}</span><span className="text-sm text-text-muted">1.1.0 (PWA 110)</span></div>
               <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">Platform</span><span className="text-sm text-text-muted">{t("ui.platform", lang)}</span></div>
               <a href="https://thespeaq.com" target="_blank" rel="noopener noreferrer" className="flex justify-between px-4 py-3 min-h-[44px]"><span className="text-sm text-text-primary">{t("settings.website", lang)}</span><span className="text-xs font-mono text-voice-gold">thespeaq.com</span></a>
             </div>
@@ -3637,7 +3637,7 @@ The Netherlands`}</div>
             <p className="text-[10px] font-mono text-text-muted uppercase tracking-wider px-2 mt-4">{ t("settings.about", lang) }</p>
             <div className="bg-bg-card rounded-xl border border-[rgba(100,116,139,0.15)] divide-y divide-[rgba(100,116,139,0.1)]">
               <button onClick={() => setScreen("info")} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.howItWorks", lang) }</span><span className="text-sm text-voice-gold">i</span></button>
-              <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">{t("settings.version", lang)}</span><span className="text-sm text-text-muted">1.1.0 (PWA 109)</span></div>
+              <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">{t("settings.version", lang)}</span><span className="text-sm text-text-muted">1.1.0 (PWA 110)</span></div>
               <a href="https://thespeaq.com" target="_blank" rel="noopener noreferrer" className="flex justify-between px-4 py-3 min-h-[44px]"><span className="text-sm text-text-primary">{t("settings.website", lang)}</span><span className="text-xs font-mono text-voice-gold">thespeaq.com</span></a>
             </div>
           </div>

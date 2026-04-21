@@ -46,10 +46,30 @@ export default function NotificationPrompt({ speaqId }: Props) {
 
   if (!shouldRender) return null;
 
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
   const onEnable = async () => {
     setBusy(true);
-    const next = await requestPermissionAndSubscribe(speaqId);
-    setState(next);
+    setErrorMsg(null);
+    try {
+      if (typeof Notification === "undefined") {
+        setErrorMsg("Browser ondersteunt geen notificaties");
+        setBusy(false);
+        return;
+      }
+      if (Notification.permission === "denied") {
+        setErrorMsg("Notificaties geblokkeerd. Ga naar Instellingen -> Notificaties -> SPEAQ om te deblokkeren");
+        setBusy(false);
+        return;
+      }
+      const next = await requestPermissionAndSubscribe(speaqId);
+      setState(next);
+      if (next.status === "declined") setErrorMsg("Je hebt notificaties geweigerd in het iOS dialoog");
+      else if (next.status === "unsupported") setErrorMsg("Push niet ondersteund op dit apparaat");
+      else if (next.status !== "subscribed") setErrorMsg("Aanmelden mislukt -- VAPID key of netwerk probleem");
+    } catch (err) {
+      setErrorMsg(err instanceof Error ? err.message : "Onbekende fout");
+    }
     setBusy(false);
   };
 
@@ -136,6 +156,11 @@ export default function NotificationPrompt({ speaqId }: Props) {
           Don&apos;t ask again
         </button>
       </div>
+      {errorMsg && (
+        <div style={{ marginTop: 10, fontSize: 12, color: "#F87171", lineHeight: 1.4 }}>
+          {errorMsg}
+        </div>
+      )}
     </div>
   );
 }
