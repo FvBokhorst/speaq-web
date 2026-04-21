@@ -1,4 +1,4 @@
-const CACHE_NAME = "speaq-pwa-v108";
+const CACHE_NAME = "speaq-pwa-v110";
 const STATIC_ASSETS = ["/manifest.json", "/icon-192.png", "/icon-512.png"];
 
 self.addEventListener("install", (event) => {
@@ -36,5 +36,45 @@ self.addEventListener("fetch", (event) => {
         return response;
       })
       .catch(() => caches.match(event.request))
+  );
+});
+
+// --- Push notifications -----------------------------------------------------
+// The relay sends silent data-only payloads ("{t":"msg","ts":...}). We never
+// receive message content; the notification is intentionally generic so the
+// lock screen reveals nothing about who is talking to whom.
+
+self.addEventListener("push", (event) => {
+  const title = "SPEAQ";
+  const body = "New message";
+
+  const options = {
+    body,
+    icon: "/icon-192.png",
+    badge: "/icon-192.png",
+    tag: "speaq-msg",
+    renotify: true,
+    requireInteraction: false,
+    data: { url: "/app", ts: Date.now() },
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const target = (event.notification.data && event.notification.data.url) || "/app";
+
+  event.waitUntil(
+    (async () => {
+      const all = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+      for (const client of all) {
+        if (client.url.includes("/app")) {
+          client.focus();
+          return;
+        }
+      }
+      await self.clients.openWindow(target);
+    })()
   );
 });

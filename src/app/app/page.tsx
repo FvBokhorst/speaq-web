@@ -30,6 +30,9 @@ import {
   REWARD_RATES, WEB_MINING_TYPES, addLedgerEntry,
   type MiningStats, type MiningReward, type MiningType, type MiningLedgerEntry,
 } from "./mining";
+import NotificationPrompt from "./NotificationPrompt";
+import { playIncoming, loadMutedState } from "./in-app-sound";
+import { requestPermissionAndSubscribe, loadPushState, isPushSupported } from "./push-register";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -957,6 +960,7 @@ export default function SpeaqApp() {
             if (prev.some((c) => c.speaqId === senderId) || deletedContacts.current.has(senderId)) return prev;
             return [...prev, { speaqId: senderId, name: parsed.fromName || senderId.substring(0, 8), addedAt: Date.now() }];
           });
+          playIncoming();
           return;
         }
 
@@ -994,6 +998,7 @@ export default function SpeaqApp() {
           if (prev.some((c) => c.speaqId === senderId) || deletedContacts.current.has(senderId)) return prev;
           return [...prev, { speaqId: senderId, name: parsed.from || senderId.substring(0, 8), addedAt: Date.now() }];
         });
+        playIncoming();
       }
       // Handle call signaling
       if (msg.type === "CALL_OFFER" && msg.from) {
@@ -1105,7 +1110,19 @@ export default function SpeaqApp() {
 
   useEffect(() => {
     if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => {});
+    loadMutedState();
   }, []);
+
+  // Auto-resubscribe on mount if previously opted in -- keeps the Firestore
+  // entry fresh (lastSeenAt bump) and recovers if the browser dropped the
+  // subscription (e.g. quota clear).
+  useEffect(() => {
+    if (!identity) return;
+    if (!isPushSupported()) return;
+    const state = loadPushState();
+    if (state.status !== "subscribed") return;
+    requestPermissionAndSubscribe(identity.speaqId).catch(() => undefined);
+  }, [identity]);
 
   // ---------------------------------------------------------------------------
   // Handlers
@@ -3641,6 +3658,7 @@ The Netherlands`}</div>
           );
         })}
       </nav>
+      {identity && <NotificationPrompt speaqId={identity.speaqId} />}
     </div>
   );
 }
