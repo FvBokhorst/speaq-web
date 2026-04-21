@@ -6,7 +6,13 @@
  * the subscription lifecycle in Firestore.
  */
 
-const PUBLIC_VAPID_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || "";
+// Public VAPID key is safe to commit (it is the PUBLIC half of the keypair;
+// the private half lives only in GCP Secret Manager on the relay). Inlined
+// here because the Next.js Docker build step intermittently failed to pick
+// up .env.production during Cloud Build, leaving this key empty at runtime.
+const PUBLIC_VAPID_KEY =
+  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ||
+  "BGcuHZh4otk3cOk_IY8wXjpkW3JVJJb70jre0SO2Q9My3k-a0ckj76PCYS1TdAVJ5OPKcPDyIY6bs9jjkjPlaqw";
 const RELAY_BASE = "https://speaq-relay-244491980730.europe-west1.run.app";
 const LOCAL_FLAG_KEY = "speaq_push_state";
 
