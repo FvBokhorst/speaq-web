@@ -1,0 +1,53 @@
+# Cloud Build ignore -- mirrors .gitignore but keeps .env.production
+# so NEXT_PUBLIC_VAPID_PUBLIC_KEY can be inlined into the client bundle
+# during `next build`. Only add public NEXT_PUBLIC_* vars here; never
+# server-side secrets.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env (never ship local secrets)
+.env
+.env.local
+.env.development
+
+# git metadata
+.git
+.gitignore
+
+# backups (these only exist locally)
+public/.backup_old_icons
+
+# IDE
+.vscode
+.idea
+
+# Keep .env.production for NEXT_PUBLIC_VAPID_PUBLIC_KEY inlining.
+# DO NOT remove the leading `!` -- negation is required.
+!.env.production
