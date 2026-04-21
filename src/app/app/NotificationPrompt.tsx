@@ -3,10 +3,9 @@
 /**
  * Notification opt-in banner.
  *
- * Appears once the user has an identity + PIN unlocked. Shows three
- * options: Enable, Later (dismiss 24h), Never (persisted decline).
- * Hidden if push is unsupported, already subscribed, or recently
- * dismissed.
+ * Appears once the user has an identity. Shows three options: Enable,
+ * Later (dismiss 24h), Never (persisted decline). Hidden only when the
+ * user is already subscribed or push is unsupported.
  */
 
 import { useEffect, useState } from "react";
@@ -26,6 +25,7 @@ interface Props {
 export default function NotificationPrompt({ speaqId }: Props) {
   const [state, setState] = useState<PushLocalState>({ status: "pristine" });
   const [busy, setBusy] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isPushSupported()) {
@@ -39,14 +39,15 @@ export default function NotificationPrompt({ speaqId }: Props) {
     if (state.status === "unsupported") return false;
     if (state.status === "subscribed") return false;
     if (state.status === "declined") return false;
-    if (state.status === "dismissed" && state.until > Date.now()) return false;
-    if (typeof Notification !== "undefined" && Notification.permission === "denied") return false;
+    // dismissed state is ignored -- previous 24h hide was too aggressive
+    // when user needed to retry after a failed Enable attempt
     return true;
   })();
 
   if (!shouldRender) return null;
 
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const permissionDenied =
+    typeof Notification !== "undefined" && Notification.permission === "denied";
 
   const onEnable = async () => {
     setBusy(true);
@@ -58,15 +59,17 @@ export default function NotificationPrompt({ speaqId }: Props) {
         return;
       }
       if (Notification.permission === "denied") {
-        setErrorMsg("Notificaties geblokkeerd. Ga naar Instellingen -> Notificaties -> SPEAQ om te deblokkeren");
+        setErrorMsg(
+          "iOS blokkeert SPEAQ-notificaties. Ga naar iPhone Instellingen -> Notificaties -> SPEAQ -> zet Sta toe aan. Daarna app opnieuw openen."
+        );
         setBusy(false);
         return;
       }
       const next = await requestPermissionAndSubscribe(speaqId);
       setState(next);
-      if (next.status === "declined") setErrorMsg("Je hebt notificaties geweigerd in het iOS dialoog");
+      if (next.status === "declined") setErrorMsg("Je hebt notificaties geweigerd");
       else if (next.status === "unsupported") setErrorMsg("Push niet ondersteund op dit apparaat");
-      else if (next.status !== "subscribed") setErrorMsg("Aanmelden mislukt -- VAPID key of netwerk probleem");
+      else if (next.status !== "subscribed") setErrorMsg("Aanmelden mislukt -- VAPID of netwerk probleem");
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : "Onbekende fout");
     }
@@ -105,7 +108,9 @@ export default function NotificationPrompt({ speaqId }: Props) {
         Stay in the loop
       </div>
       <div style={{ fontSize: 13, lineHeight: 1.4, opacity: 0.85, marginBottom: 12 }}>
-        Get notified when someone sends you a message. SPEAQ never shows the message content on the lock screen -- only that something arrived.
+        {permissionDenied
+          ? "iOS blokkeert notificaties voor SPEAQ. Tik Enable voor instructies om dit te repareren."
+          : "Get notified when someone sends you a message. SPEAQ never shows the message content on the lock screen -- only that something arrived."}
       </div>
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
         <button
