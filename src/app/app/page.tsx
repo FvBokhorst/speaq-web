@@ -2214,7 +2214,7 @@ export default function SpeaqApp() {
           <div className="grid grid-cols-3 gap-2">
             <div className="bg-bg-card rounded-lg p-3 border border-[rgba(100,116,139,0.1)] text-center">
               <p className="text-[10px] font-mono text-text-muted">{t("wallet.earned", lang)}</p>
-              <p className="text-sm font-body font-semibold text-text-primary">{wallet.totalMined.toFixed(4)}</p>
+              <p className="text-sm font-body font-semibold text-text-primary">{(miningStats?.totalEarned || 0).toFixed(4)}</p>
             </div>
             <div className="bg-bg-card rounded-lg p-3 border border-[rgba(100,116,139,0.1)] text-center">
               <p className="text-[10px] font-mono text-text-muted">{t("wallet.sent", lang)}</p>
