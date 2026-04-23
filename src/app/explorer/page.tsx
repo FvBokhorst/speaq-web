@@ -87,8 +87,8 @@ export default function ExplorerPage() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
                   { label: "Chain Height", value: chain ? chain.chain_height.toLocaleString() : "-" },
-                  { label: "Total QC Mined", value: chain ? `${chain.balance.toFixed(1)} QC` : "-" },
-                  { label: "Supply Mined", value: chain ? `${percentMined}%` : "-" },
+                  { label: "Total QC Distributed", value: chain ? `${chain.balance.toFixed(1)} QC` : "-" },
+                  { label: "Supply Distributed", value: chain ? `${percentMined}%` : "-" },
                   { label: "Remaining", value: chain ? `${remaining.toLocaleString()} QC` : "-" },
                   { label: "Block Reward", value: `${blockReward} QC` },
                   { label: "Block Interval", value: "30 seconds" },
@@ -110,7 +110,7 @@ export default function ExplorerPage() {
                     style={{ width: `${Math.max(parseFloat(percentMined), 0.5)}%` }} />
                 </div>
                 <div className="flex justify-between text-[10px] text-text-muted mt-2">
-                  <span>{totalMined.toFixed(1)} QC mined</span>
+                  <span>{totalMined.toFixed(1)} QC distributed</span>
                   <span>{remaining.toLocaleString()} QC remaining</span>
                 </div>
               </div>
@@ -156,7 +156,7 @@ export default function ExplorerPage() {
                 <p className="text-[10px] font-[family-name:var(--font-jetbrains)] text-quantum-teal uppercase tracking-wider mb-3">Token Allocation</p>
                 <div className="space-y-2">
                   {[
-                    { label: "Mining Rewards", pct: 85, color: "bg-voice-gold" },
+                    { label: "Contribution Rewards", pct: 85, color: "bg-voice-gold" },
                     { label: "Freedom Fund", pct: 5, color: "bg-quantum-teal" },
                     { label: "Founders (4yr vest)", pct: 5, color: "bg-text-muted" },
                     { label: "Development", pct: 3, color: "bg-text-secondary" },

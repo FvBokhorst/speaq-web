@@ -107,16 +107,16 @@ export default function TermsPage() {
 
           <section>
             <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-medium text-text-primary mb-4">
-              Mining & Proof of Contribution
+              Proof of Contribution
             </h2>
             <p className="mb-4">
               SPEAQ Chain uses Proof of Contribution (DPoC) consensus, not Proof of Work.
-              Mining rewards are earned by contributing to the network, not by consuming energy.
+              Contribution rewards are earned by contributing to the network, not by consuming energy.
             </p>
             <ul className="list-none space-y-3 mb-4">
               {[
                 "Initial block reward: 0.5 QC per block (30-second intervals)",
-                "Halving occurs every 2,100,000 QC mined (modeled after Bitcoin)",
+                "Halving occurs every 2,100,000 QC distributed (halving schedule modeled after Bitcoin)",
                 "Maximum supply: 21,000,000 QC - hard cap, no inflation",
                 "Contribution types: message relay, proof validation, data storage, mesh networking, translation, user onboarding",
                 "Top 21 validators selected by contribution score with geographic diversity",
@@ -130,9 +130,9 @@ export default function TermsPage() {
               ))}
             </ul>
             <p>
-              Mining reward rates are determined by the protocol and decrease over time through
+              Contribution reward rates are determined by the protocol and decrease over time through
               halving events. SPEAQ does not guarantee any specific reward rate, token value,
-              or return on contribution. Past mining performance is not indicative of future results.
+              or return on contribution. Past contribution performance is not indicative of future results.
             </p>
           </section>
 
