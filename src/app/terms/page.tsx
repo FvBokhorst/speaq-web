@@ -76,12 +76,12 @@ export default function TermsPage() {
             </p>
             <ul className="list-none space-y-3">
               {[
-                "1 Q-Credit is backed by 0.01 gram of gold",
+                "1 Q-Credit is backed by 0.01 gram of gold (once mainnet launches)",
                 "Maximum supply is 21,000,000 QC",
-                "Q-Credits can be earned through mining (Proof of Contribution)",
+                "Q-Credits are earned through Proof of Contribution (see section below)",
                 "Your wallet and private keys are stored locally on your device",
                 "SPEAQ cannot access, freeze, or confiscate your Q-Credits",
-                "Transactions are verified by the network, not a central authority",
+                "Transactions will be verified by the network once mainnet launches (currently tracked locally, see Pre-Chain Status)",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-voice-gold mt-2.5 shrink-0" />
@@ -89,6 +89,50 @@ export default function TermsPage() {
                 </li>
               ))}
             </ul>
+          </section>
+
+          <section id="pre-chain-status">
+            <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-medium text-text-primary mb-4">
+              Pre-Chain Status and Migration Policy
+            </h2>
+            <p className="mb-4">
+              <strong>The SPEAQ public blockchain is not yet launched.</strong> Your current
+              Q-Credits are tracked locally on your device as a pre-chain loyalty
+              record, not as on-chain tokens. Until mainnet launches, QC has no
+              market value, is not listed on any exchange, cannot be converted to
+              or from fiat currency, and exists only as a loyalty tracker between
+              SPEAQ participants.
+            </p>
+            <p className="mb-4">
+              Contribution rewards are double-signed (by your private key and the
+              relay server as witness) and stored in your local ledger. At mainnet
+              launch, only entries with both valid signatures are eligible for
+              migration.
+            </p>
+            <p className="mb-4">
+              <strong>Migration policy (Option C - Hybrid Snapshot):</strong>
+            </p>
+            <ul className="list-none space-y-3 mb-4">
+              {[
+                "At mainnet launch (estimated Q3-Q4 2026) a snapshot is taken of all pre-chain balances",
+                "Each SPEAQ ID can submit a signed claim to convert its pre-chain balance into on-chain tokens",
+                "The per-account cap is 500 QC per SPEAQ ID (balance above this does not migrate)",
+                "Migrated tokens are funded from the Early Adopters allocation (2% of the 21,000,000 QC total supply)",
+                "Claims are cryptographically verified against the contribution ledger before being honored",
+                "Pre-chain balances above the cap, or without valid signed contributions, do not carry over",
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-voice-gold mt-2.5 shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <p>
+              Mainnet launch timing is subject to change based on development
+              progress, testnet validation, and governance readiness. Final
+              migration rules will be published at least 30 days before mainnet
+              launch in a Migration Policy document referenced from this page.
+            </p>
           </section>
 
           <section>

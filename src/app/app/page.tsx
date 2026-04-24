@@ -157,6 +157,8 @@ const appStrings: Record<string, Record<string, string>> = {
   "wallet.projects": { en: "Projects", ru: "Proekty", nl: "Projecten", fr: "Projets", es: "Proyectos", de: "Projekte", sl: "Projekti", lg: "Pulojekiti", sw: "Miradi" },
   // Earning
   "earning.title": { en: "Earn Credits", ru: "Zarabotat Kredity", nl: "Verdien Credits", fr: "Gagner des Credits", es: "Ganar Creditos", de: "Credits Verdienen", sl: "Zasluzite Kredite", lg: "Funa Credits", sw: "Pata Mikopo" },
+  "earning.preChainBanner": { en: "Pre-Chain Mode: mainnet not yet launched. Balance is tracked locally. At launch, up to 500 QC per SPEAQ ID migrates on-chain.", nl: "Pre-Chain Modus: mainnet nog niet gelanceerd. Balans wordt lokaal bijgehouden. Bij launch migreert max 500 QC per SPEAQ ID on-chain.", fr: "Mode Pre-Chaine: mainnet pas encore lance. Solde suivi localement. Au lancement, jusqu'a 500 QC par SPEAQ ID migre on-chain.", es: "Modo Pre-Chain: mainnet aun no lanzado. Saldo rastreado localmente. En el lanzamiento, hasta 500 QC por SPEAQ ID migra on-chain.", ru: "Rezhim Pre-Chain: mainnet yeshche ne zapushchen. Balans otslezhivayetsya lokalno. Pri zapuske do 500 QC na SPEAQ ID migriruyet on-chain.", de: "Pre-Chain Modus: Mainnet noch nicht gestartet. Guthaben wird lokal verfolgt. Beim Start migrieren bis zu 500 QC pro SPEAQ ID on-chain.", sl: "Pre-Chain Nacin: mainnet se ni zagnan. Stanje se sledi lokalno. Ob zagonu do 500 QC na SPEAQ ID migrira on-chain.", lg: "Pre-Chain Mode: mainnet tennatandikibwa. Balance egezebwa ku simu. Mu kutandika, okutuusa ku 500 QC buli SPEAQ ID ejja on-chain.", sw: "Hali ya Pre-Chain: mainnet bado haujaanzishwa. Salio linafuatiliwa ndani. Wakati wa uzinduzi, hadi QC 500 kwa SPEAQ ID zinahamia on-chain." },
+  "earning.preChainLearnMore": { en: "Learn more", nl: "Meer info", fr: "En savoir plus", es: "Mas info", ru: "Podrobneye", de: "Mehr Info", sl: "Vec", lg: "Okumanya ebisingawo", sw: "Jifunze zaidi" },
   "earning.start": { en: "Start Earning", ru: "Nachat zarabatyvat", nl: "Start Verdienen", fr: "Demarrer", es: "Iniciar", de: "Starten", sl: "Zacni zasluzevati", lg: "Tandika okufuna", sw: "Anza kupata" },
   "earning.stop": { en: "Stop Earning", ru: "Ostanovit zarabotok", nl: "Stop Verdienen", fr: "Arreter", es: "Detener", de: "Stoppen", sl: "Ustavi zasluzek", lg: "Yimiriza okufuna", sw: "Simamisha kupata" },
   "earning.today": { en: "Today", ru: "Segodnya", nl: "Vandaag", fr: "Aujourd'hui", es: "Hoy", de: "Heute", sl: "Danes", lg: "Leero", sw: "Leo" },
@@ -2334,6 +2336,15 @@ export default function SpeaqApp() {
       <div className="min-h-dvh bg-bg-deep flex flex-col">
         <ScreenHeader title={t("earning.title", lang)} onBack={() => setScreen("main")} lang={lang} />
         <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
+          {/* Pre-Chain Mode banner */}
+          <div className="bg-voice-gold/10 border border-voice-gold/30 rounded-xl p-3">
+            <p className="text-xs text-text-primary leading-snug">
+              {t("earning.preChainBanner", lang)}{" "}
+              <a href="/terms#pre-chain-status" className="text-voice-gold underline underline-offset-2 whitespace-nowrap">
+                {t("earning.preChainLearnMore", lang)}
+              </a>
+            </p>
+          </div>
           {/* Start/Stop */}
           <button onClick={toggleMining}
             className={`w-full py-4 rounded-xl font-body font-bold text-lg transition-all min-h-[56px] ${miningActive ? "bg-resistance-red/20 text-resistance-red border border-resistance-red/30" : "bg-voice-gold/20 text-voice-gold border border-voice-gold/30"}`}>
