@@ -2950,7 +2950,7 @@ export default function SpeaqApp() {
       <div className="min-h-dvh bg-bg-deep flex flex-col">
         <ScreenHeader title={infoData.title} onBack={() => { setScreen("main"); setTab("settings"); }} lang={lang} />
         <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
-          <div className="text-center py-6"><SpeaqLogo size={80} /><h2 className="mt-4 text-xl font-heading font-bold text-text-primary">SPEAQ</h2><p className="text-sm text-text-secondary mt-1">{t("info.tagline", lang)}</p><p className="text-[10px] font-mono text-text-muted mt-1">v1.1.0 PWA (109)</p></div>
+          <div className="text-center py-6"><SpeaqLogo size={80} /><h2 className="mt-4 text-xl font-heading font-bold text-text-primary">SPEAQ</h2><p className="text-sm text-text-secondary mt-1">{t("info.tagline", lang)}</p><p className="text-[10px] font-mono text-text-muted mt-1">v1.1.0 PWA (111)</p></div>
           {infoData.sections.map((section, i) => (
             <div key={i} className="bg-bg-card rounded-xl p-4 border border-[rgba(100,116,139,0.15)]">
               <p className="text-xs font-mono text-quantum-teal uppercase tracking-wider mb-2">{section.heading}</p>
@@ -3155,7 +3155,7 @@ export default function SpeaqApp() {
             <p className="text-[10px] font-mono text-text-muted uppercase tracking-wider mb-2 px-2">{ t("settings.about", lang) }</p>
             <div className="bg-bg-card rounded-xl border border-[rgba(100,116,139,0.15)] divide-y divide-[rgba(100,116,139,0.1)]">
               <button onClick={() => setScreen("info")} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.howItWorks", lang) }</span><span className="text-sm text-voice-gold">i</span></button>
-              <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">{t("settings.version", lang)}</span><span className="text-sm text-text-muted">1.1.0 (PWA 110)</span></div>
+              <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">{t("settings.version", lang)}</span><span className="text-sm text-text-muted">1.1.0 (PWA 111)</span></div>
               <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">Platform</span><span className="text-sm text-text-muted">{t("ui.platform", lang)}</span></div>
               <a href="https://thespeaq.com" target="_blank" rel="noopener noreferrer" className="flex justify-between px-4 py-3 min-h-[44px]"><span className="text-sm text-text-primary">{t("settings.website", lang)}</span><span className="text-xs font-mono text-voice-gold">thespeaq.com</span></a>
             </div>
@@ -3648,7 +3648,7 @@ The Netherlands`}</div>
             <p className="text-[10px] font-mono text-text-muted uppercase tracking-wider px-2 mt-4">{ t("settings.about", lang) }</p>
             <div className="bg-bg-card rounded-xl border border-[rgba(100,116,139,0.15)] divide-y divide-[rgba(100,116,139,0.1)]">
               <button onClick={() => setScreen("info")} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.howItWorks", lang) }</span><span className="text-sm text-voice-gold">i</span></button>
-              <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">{t("settings.version", lang)}</span><span className="text-sm text-text-muted">1.1.0 (PWA 110)</span></div>
+              <div className="flex justify-between px-4 py-3"><span className="text-sm text-text-primary">{t("settings.version", lang)}</span><span className="text-sm text-text-muted">1.1.0 (PWA 111)</span></div>
               <a href="https://thespeaq.com" target="_blank" rel="noopener noreferrer" className="flex justify-between px-4 py-3 min-h-[44px]"><span className="text-sm text-text-primary">{t("settings.website", lang)}</span><span className="text-xs font-mono text-voice-gold">thespeaq.com</span></a>
             </div>
           </div>
