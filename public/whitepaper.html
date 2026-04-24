@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SPEAQ Whitepaper v2.0</title>
+<title>SPEAQ Whitepaper v2.1</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -649,6 +649,37 @@
   <li>Digital literacy programs</li>
   <li>Local community networks</li>
 </ul>
+
+<h3>5.4 Pre-Chain Status and Migration Policy</h3>
+
+<p><strong>The SPEAQ public blockchain is not yet launched.</strong> The allocation schedule, block intervals, and token mechanics described in Sections 5.1 through 5.3 take effect at mainnet launch (estimated 2026 Q3-Q4).</p>
+
+<p>Until mainnet launches, user Q-Credits are tracked locally on each device as a pre-chain loyalty record. Each contribution reward is <strong>double-signed</strong>: by the user's private key (Dilithium / ML-DSA-65) and by the relay server as witness. Both signatures are required for an entry to be eligible for migration at mainnet launch.</p>
+
+<p>Pre-chain status implications:</p>
+<ul>
+  <li>QC has no market value until mainnet launches</li>
+  <li>QC is not listed on any exchange</li>
+  <li>QC cannot be converted to or from fiat currency</li>
+  <li>QC exists only as a loyalty tracker between SPEAQ participants</li>
+  <li>Transactions are not verified by a consensus network yet; they are recorded locally on each device with witness signatures</li>
+</ul>
+
+<p><strong>Migration Policy (Option C - Hybrid Snapshot):</strong></p>
+
+<table>
+  <tr><th>Step</th><th>Mechanism</th></tr>
+  <tr><td>1. Snapshot</td><td>At mainnet block height 0, a deterministic snapshot is taken of all pre-chain balances from double-signed ledger state</td></tr>
+  <tr><td>2. Claim window</td><td>Each SPEAQ ID has a 30-day window to submit a signed migration claim transaction</td></tr>
+  <tr><td>3. Per-account cap</td><td><strong>500 QC per SPEAQ ID.</strong> Ledger balance above this does not migrate</td></tr>
+  <tr><td>4. Funding source</td><td>Early contributors allocation (2% of 21,000,000 QC = 420,000 QC total pool, sized for up to ~840 early contributors at the cap)</td></tr>
+  <tr><td>5. Verification</td><td>Claims are cryptographically verified on-chain against the double-signed contribution ledger. Entries missing either signature are rejected</td></tr>
+  <tr><td>6. Forfeit</td><td>Pre-chain balances above the cap, or without valid signed contributions, do not carry over to mainnet</td></tr>
+</table>
+
+<p><strong>Why a 500 QC cap?</strong> The Early Contributors pool is 420,000 QC. A 500 QC cap allows up to 840 early adopters to migrate fully and respects genuine loyalty, while bounding the impact of local-storage manipulation. The cap is arithmetically derived from tokenomics, not arbitrary.</p>
+
+<p><strong>Transparency:</strong> Final migration rules will be published at least 30 days before mainnet launch in the Migration Policy document (SPEAQ_Migration_Policy_v1). Launch timing is subject to testnet validation, governance readiness, and community sign-off. Until mainnet launches, all users see the Pre-Chain Mode disclosure in the app (native InfoScreen, PWA Earn screen banner, and /terms page).</p>
 
 <div class="divider"></div>
 
