@@ -930,6 +930,29 @@ export default function SpeaqApp() {
   const handleWsMessage = useCallback(async (event: MessageEvent) => {
     try {
       const msg = JSON.parse(event.data);
+      // AUTH_CHALLENGE: server has a registered ECDSA pubkey for our speaqId and wants us to
+      // prove identity by signing a server-issued nonce. We sign the nonce string with our
+      // ECDSA private key (the signing key we use for KEY_EXCHANGE messages, registered via
+      // /api/v1/register) and send back AUTH_RESPONSE. If our signing keys are not available
+      // we cannot complete authentication and the server will close the session.
+      if (msg.type === "AUTH_CHALLENGE" && msg.nonce && wsRef.current) {
+        try {
+          if (!signingKeys.current) {
+            console.error("[SPEAQ] AUTH_CHALLENGE received but no signing keys in memory");
+            return;
+          }
+          const signature = await signData(msg.nonce, signingKeys.current.privateKey);
+          wsRef.current.send(JSON.stringify({ type: "AUTH_RESPONSE", signature }));
+        } catch (e) {
+          console.error("[SPEAQ] Failed to sign AUTH_CHALLENGE:", e);
+        }
+        return;
+      }
+      if (msg.type === "AUTH_OK") {
+        // Server accepted us. Log the auth mode (verified | tofu | legacy) for observability.
+        console.log("[SPEAQ] Authenticated, mode:", msg.authMode || "(unspecified)", "offlineDelivered:", msg.offlineDelivered ?? 0);
+        return;
+      }
       if ((msg.type === "RECEIVE_SEALED" || msg.type === "RECEIVE") && msg.blob && identity) {
         const fromId = msg.from;
         if (!fromId) { console.warn("[SPEAQ] No from field in message"); return; }
@@ -1119,7 +1142,30 @@ export default function SpeaqApp() {
     if (!identity) return;
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) return;
     const ws = new WebSocket(RELAY_URL);
-    ws.onopen = () => { setConnected(true); ws.send(JSON.stringify({ type: "AUTH", speaqId: identity.speaqId, cc: detectCountryFromTimezone() })); };
+    ws.onopen = async () => {
+      setConnected(true);
+      // Register our public keys with the relay (idempotent: server overwrites same speaqId entry).
+      // After this, future AUTH attempts for this speaqId require a valid signature over the
+      // challenge nonce - i.e. identity-spoofing without our private key becomes infeasible.
+      // Best effort only: if registration fails we still continue with AUTH so the user is not
+      // blocked by transient HTTP errors.
+      try {
+        if (signingKeys.current && kyberKeys.current) {
+          await fetch(`${RELAY_URL.replace("wss://", "https://")}/api/v1/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              speaqId: identity.speaqId,
+              kyberPublicKey: kyberKeys.current.publicKey,
+              signPublicKey: signingKeys.current.publicKey,
+            }),
+          });
+        }
+      } catch (e) {
+        console.warn("[SPEAQ] pubkey registration best-effort failed:", e);
+      }
+      ws.send(JSON.stringify({ type: "AUTH", speaqId: identity.speaqId, cc: detectCountryFromTimezone() }));
+    };
     ws.onmessage = handleWsMessage;
     ws.onclose = () => { setConnected(false); wsRef.current = null; reconnectTimer.current = setTimeout(connectWs, 3000); };
     ws.onerror = () => { setConnected(false); };
