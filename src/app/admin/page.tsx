@@ -818,12 +818,12 @@ export default function AdminPage() {
               {chainData ? (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   <StatCard label="Chain Height" value={chainData.chain_height.toLocaleString()} sub="blocks produced" />
-                  <StatCard label="Total QC Mined" value={chainData.balance.toFixed(2)} sub={`${(chainData.balance / 21000000 * 100).toFixed(4)}% of supply`} />
+                  <StatCard label="Node Wallet Balance" value={chainData.balance.toFixed(2)} sub="Single coinbase wallet (not network-wide total)" />
                   <StatCard label="Max Supply" value="21,000,000" sub="QC hard cap" />
-                  <StatCard label="Remaining" value={(21000000 - chainData.balance).toLocaleString()} sub="QC still to mine" />
-                  <StatCard label="Block Reward" value="0.5 QC" sub="per 30 seconds" />
+                  <StatCard label="Remaining" value={(21000000 - chainData.balance).toLocaleString()} sub="vs node wallet (placeholder)" />
+                  <StatCard label="Block Reward (config)" value="0.5 QC" sub={`config; observed avg ${(chainData.balance / Math.max(1, chainData.chain_height)).toFixed(4)} QC/block`} />
                   <StatCard label="Blocks/Day" value="2,880" sub="24h x 120 blocks/hr" />
-                  <StatCard label="QC/Day" value="1,440" sub="mining output" />
+                  <StatCard label="QC/Day (observed)" value={(86400 / 30 * (chainData.balance / Math.max(1, chainData.chain_height))).toFixed(1)} sub="from observed reward avg" />
                   <StatCard label="Node" value="ONLINE" sub="VPS Amsterdam" />
                 </div>
               ) : (
