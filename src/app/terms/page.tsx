@@ -225,8 +225,8 @@ export default function TermsPage() {
                 "ECDSA P-256 (NIST, pre-quantum) - signed key exchange between contacts",
                 "SHA-256 (NIST) - hashing of identity records and witness records",
                 "HMAC-SHA256 (NIST) - server-side mining receipt tags (relay-internal authentication, not double-signed)",
-                "WebRTC DTLS-SRTP - voice and video media encryption (signaling itself is plaintext)",
-                "FIPS 203 Kyber-768 ACTIVE (2026-04-25). FIPS 204 ML-DSA-65 implementation present for wallet signing. FIPS 205 SPHINCS+ on roadmap., CLSAG ring signatures, Pedersen commitments + Bulletproofs",
+                "WebRTC DTLS-SRTP - voice and video media encryption. PWA call signaling additionally encrypted with AES-256-GCM keys derived from the Kyber-768 shared secret (zero-knowledge against the relay). Native iOS/Android signaling parity on roadmap.",
+                "FIPS 203 Kyber-768 ACTIVE (PWA + native, 2026-04-25). FIPS 204 ML-DSA-65 ACTIVE in PWA (E1 hardening), in relay AUTH hybrid (with ECDSA P-256), and in chain block dual-signing. FIPS 205 SPHINCS+ ACTIVE in chain block dual-signing. CLSAG ring signatures, Pedersen commitments + Bulletproofs in chain.",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-quantum-teal mt-2.5 shrink-0" />

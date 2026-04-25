@@ -92,10 +92,15 @@ export default function PrivacyPage() {
               Text messages are end-to-end encrypted with AES-256-GCM (NIST
               standard) and a Double Ratchet protocol providing forward secrecy.
               Key exchange uses FIPS 203 ML-KEM-768 (NIST post-quantum, via the
-              @noble/post-quantum library) since the 2026-04-25 audit upgrade.
-              FIPS 204 ML-DSA-65 implementation is present for wallet
-              transaction signing. Voice and video media use WebRTC's standard
-              DTLS-SRTP encryption; signaling (SDP/ICE) is encrypted peer-to-peer.
+              @noble/post-quantum library) on both PWA and native, active since
+              the 2026-04-25 audit upgrade. FIPS 204 ML-DSA-65 is active in PWA
+              identity hardening, in the relay AUTH hybrid (with ECDSA P-256),
+              and in SPEAQ Chain block dual-signing. FIPS 205 SPHINCS+ (SLH-DSA)
+              is active in chain block dual-signing as a hash-based fallback.
+              Voice and video media use WebRTC's DTLS-SRTP encryption; PWA
+              signaling (SDP/ICE) is additionally encrypted with AES-256-GCM
+              using a key derived from the Kyber-768 shared secret, making call
+              signaling zero-knowledge against the relay.
             </p>
           </section>
 

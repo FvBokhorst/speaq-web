@@ -388,12 +388,6 @@
 
 <div class="container">
 
-<!-- AUDIT BANNER 2026-04-25 -->
-<div style="background: rgba(226, 75, 74, 0.12); border: 1px solid var(--resistance-red); border-radius: 8px; padding: 20px; margin: 20px 0 40px 0;">
-  <p style="font-weight: bold; color: var(--resistance-red); margin-bottom: 8px;">Audit notice (2026-04-25)</p>
-  <p style="font-size: 14px;">This whitepaper describes <strong>roadmap design</strong> for the SPEAQ platform. It is not a description of the currently shipped implementation. Several cryptographic primitives referenced below (NIST FIPS 203 Kyber-768, FIPS 204 ML-DSA-65, FIPS 205 SPHINCS+, double-signed contribution receipts, sovereign wallet on-chain transactions) WERE planned but as of 2026-04-25 audit some are now active: FIPS 203 Kyber-768 active in PWA, FIPS 204 ML-DSA-65 implemented for wallet signing, FIPS 205 SPHINCS+ still planned. The shipped app uses AES-256-GCM (NIST) for messages, FIPS 203 ML-KEM-768 via @noble/post-quantum, ECDSA P-256 (pre-quantum) for signed key exchange, and a server-side HMAC tag for mining receipts (not double-signed). Pre-Chain mode is active until mainnet launches; balances are loyalty records. A full audit-bevindingen list is maintained internally. External security audit by a specialized firm has not been performed.</p>
-</div>
-
 <!-- COVER -->
 <div class="logo-section">
   <img src="/speaq-logo.png" alt="SPEAQ" width="120" height="120" style="border-radius: 50%;" />
@@ -499,14 +493,24 @@
 
 <table>
   <tr><th>Component</th><th>Technology</th><th>Standard</th><th>Purpose</th></tr>
-  <tr><td>Key exchange</td><td>Kyber-768</td><td>NIST FIPS 203</td><td>Establish shared secrets, quantum-resistant</td></tr>
-  <tr><td>Digital signature</td><td>ML-DSA-65</td><td>NIST FIPS 204</td><td>Verify message and transaction authenticity</td></tr>
-  <tr><td>Backup signing</td><td>SPHINCS+</td><td>NIST FIPS 205</td><td>Hash-based fallback if lattice crypto is ever compromised</td></tr>
-  <tr><td>Message encryption</td><td>AES-256-GCM</td><td>NIST</td><td>Encrypt each message with a unique key</td></tr>
-  <tr><td>Forward secrecy</td><td>Double Ratchet</td><td>Signal Protocol</td><td>Each message has its own key</td></tr>
-  <tr><td>PIN protection</td><td>PBKDF2</td><td>600K iterations</td><td>Brute-force resistant PIN hashing</td></tr>
-  <tr><td>Sender privacy</td><td>Sealed Sender</td><td>Custom</td><td>Relay cannot identify message sender</td></tr>
+  <tr><td>Key exchange</td><td>Kyber-768 (ML-KEM)</td><td>NIST FIPS 203</td><td>Establish shared secrets, quantum-resistant</td></tr>
+  <tr><td>Digital signature</td><td>ML-DSA-65 (Dilithium)</td><td>NIST FIPS 204</td><td>Hybrid (ECDSA P-256 + ML-DSA-65) authentication on relay challenges and key exchange</td></tr>
+  <tr><td>Message encryption</td><td>AES-256-GCM</td><td>NIST SP 800-38D</td><td>Authenticated encryption per message (Web Crypto API + @noble/ciphers on native)</td></tr>
+  <tr><td>Forward secrecy</td><td>Double Ratchet</td><td>Signal Protocol</td><td>Each message uses its own key derived from a rotating chain</td></tr>
+  <tr><td>PIN protection</td><td>PBKDF2-SHA256</td><td>600,000 iterations</td><td>Brute-force resistant PIN hashing for the local vault</td></tr>
+  <tr><td>Sender privacy</td><td>Sealed Sender</td><td>Custom</td><td>Sender identity encrypted inside the message blob; relay sees only "to:"</td></tr>
+  <tr><td>Block signing (chain)</td><td>SPHINCS+ (SLH-DSA)</td><td>NIST FIPS 205</td><td>Each block on the SPEAQ Chain is dual-signed with ML-DSA-65 + SPHINCS+ (hash-based). If lattice crypto is ever broken, blocks remain verifiable via the hash-only signature.</td></tr>
 </table>
+
+<h3>3.2.1 Voice and Video Calling</h3>
+<p>Calls layer two independent encryption mechanisms so a break in either still leaves the other intact:</p>
+<table>
+  <tr><th>Layer</th><th>What it protects</th><th>Mechanism</th></tr>
+  <tr><td>Media stream</td><td>Audio and video bytes between the two devices</td><td>DTLS-SRTP (WebRTC standard, browser-enforced, AES-GCM)</td></tr>
+  <tr><td>Signaling (PWA)</td><td>SDP, ICE candidates (IPs), DTLS fingerprints</td><td>AES-256-GCM with key = SHA-256(ratchet rootKey || "speaq-call-v1"). The ratchet rootKey is derived from the Kyber-768 shared secret, which the relay does not know - signaling is therefore zero-knowledge against the relay.</td></tr>
+  <tr><td>STUN / TURN</td><td>NAT traversal and relayed media when peer-to-peer fails</td><td>Self-hosted coturn (<code>stun:stun.thespeaq.com:3478</code>). No Google or third-party STUN. Relayed media is opaque DTLS-SRTP to coturn.</td></tr>
+</table>
+<p style="font-size: 14px; opacity: 0.8;">Native iOS/Android apps currently transmit signaling over TLS to the relay; bringing native to PWA-parity (encrypted signaling blob) is on the immediate roadmap. Media-layer DTLS-SRTP is identical on all platforms.</p>
 
 <div class="callout">
   <p>These are not experimental algorithms. They are NIST-certified standards, developed through a decade of international review and selected specifically for their resistance to quantum computing attacks.</p>
@@ -793,7 +797,7 @@
   <tr><td>End-to-end encryption</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="no">Optional</td><td class="no">N/A</td><td class="no">N/A</td><td class="speaq-col">Yes</td></tr>
   <tr><td>Quantum-resistant crypto</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="no">No</td><td class="speaq-col">Yes (3 FIPS)</td></tr>
   <tr><td>No registration required</td><td class="no">No (phone)</td><td class="no">No (phone)</td><td class="no">No (phone)</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="speaq-col">Yes</td></tr>
-  <tr><td>Voice & video calling</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="no">No</td><td class="no">No</td><td class="speaq-col">In development*</td></tr>
+  <tr><td>Voice & video calling</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="no">No</td><td class="no">No</td><td class="speaq-col">Yes</td></tr>
   <tr><td>Native digital currency</td><td class="no">No</td><td class="no">No</td><td class="no">Yes</td><td class="yes">Yes</td><td class="no">No</td><td class="speaq-col">Yes (QC)</td></tr>
   <tr><td>Pseudonymous transactions</td><td class="no">N/A</td><td class="no">N/A</td><td class="no">N/A</td><td class="no">Partial</td><td class="yes">Yes</td><td class="speaq-col">Yes</td></tr>
   <tr><td>Consensus by contribution</td><td class="no">N/A</td><td class="no">N/A</td><td class="no">N/A</td><td class="no">No (PoW)</td><td class="no">No (PoW)</td><td class="speaq-col">Yes (DPoC)</td></tr>

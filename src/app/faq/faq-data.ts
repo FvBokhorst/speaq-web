@@ -289,7 +289,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "What encryption does SPEAQ use?",
-      answer: "Active today: AES-256-GCM for message encryption (NIST), Double Ratchet for forward secrecy (every message has a unique key), FIPS 203 ML-KEM-768 via @noble/post-quantum (NIST post-quantum standard), ECDSA P-256 signed key exchange (NIST, but pre-quantum), SHA-256 for hashing (NIST), HMAC-SHA256 for relay-side mining receipts (NIST). On the roadmap: replacing the custom lattice scheme with a verified FIPS 203 implementation, and adding ML-DSA (FIPS 204) signatures for wallet transactions. SPHINCS+ and ML-DSA are NOT currently implemented.",
+      answer: "Active today: AES-256-GCM for message encryption (NIST), Double Ratchet for forward secrecy (every message has a unique key), FIPS 203 ML-KEM-768 via @noble/post-quantum (NIST post-quantum standard, both PWA and native), FIPS 204 ML-DSA-65 hybrid (with ECDSA P-256) for relay AUTH challenge-response and PQ key-exchange signatures, FIPS 205 SPHINCS+ (SLH-DSA) for chain block dual-signing (each block is signed with both ML-DSA-65 and SPHINCS+), SHA-256 for hashing (NIST), HMAC-SHA256 for relay-side mining receipts (NIST), DTLS-SRTP for voice/video media. Voice/video signaling on the PWA is encrypted with AES-256-GCM keys derived from the Kyber-768 shared secret (zero-knowledge against the relay). Native iOS/Android signaling parity is on the immediate roadmap.",
     },
     {
       question: "What is quantum-resistant encryption and why does it matter?",
@@ -327,7 +327,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Welke encryptie gebruikt SPEAQ?",
-      answer: "Nu actief: AES-256-GCM berichten-versleuteling (NIST), Double Ratchet voor forward secrecy (elk bericht heeft een verse afgeleide sleutel), FIPS 203 ML-KEM-768 (NIST, via @noble/post-quantum), ECDSA P-256 gesigneerde sleuteluitwisseling (NIST, pre-quantum), SHA-256 voor hashing (NIST), HMAC-SHA256 voor server-side mining-receipts (NIST). Op de roadmap: vervangen van het eigen schema door geverifieerde FIPS 203 implementatie, ML-DSA (FIPS 204) signatures voor wallet-transacties. SPHINCS+ en ML-DSA zijn NIET aanwezig in de huidige implementatie.",
+      answer: "Nu actief: AES-256-GCM berichten-versleuteling (NIST), Double Ratchet voor forward secrecy (elk bericht heeft een verse afgeleide sleutel), FIPS 203 ML-KEM-768 (NIST, via @noble/post-quantum, in zowel PWA als native), FIPS 204 ML-DSA-65 hybride (samen met ECDSA P-256) voor relay AUTH challenge-response en PQ-sleuteluitwisseling, FIPS 205 SPHINCS+ (SLH-DSA) voor dubbele block-signing op de SPEAQ Chain (elk block draagt zowel een ML-DSA-65 als een SPHINCS+ handtekening), SHA-256 voor hashing (NIST), HMAC-SHA256 voor server-side mining-receipts (NIST), DTLS-SRTP voor voice/video media. Voice/video signaling op de PWA is versleuteld met AES-256-GCM sleutels afgeleid van de Kyber-768 shared secret (zero-knowledge tegen de relay). Pariteit voor native iOS/Android signaling staat op de roadmap.",
     },
     {
       question: "Wat is kwantumbestendige encryptie en waarom is het belangrijk?",
@@ -365,7 +365,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Quel chiffrement SPEAQ utilise-t-il ?",
-      answer: "SPEAQ utilise AES-256 pour le chiffrement des messages (la meme norme utilisee par les banques du monde entier), le protocole Double Ratchet pour la confidentialite persistante (chaque message a une cle unique), Kyber-768 pour l'echange de cles post-quantique (KEM base sur les treillis approuve par le NIST), [PREVU, non encore implemente] [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) pour les signatures de portefeuille, [PREVU, non encore implemente] [PLANNED, not yet implemented] SPHINCS+ (FIPS 205), SHA-256 pour le hachage et HMAC-SHA256 pour l'authentification des messages.",
+      answer: "SPEAQ utilise AES-256 pour le chiffrement des messages (la meme norme utilisee par les banques du monde entier), le protocole Double Ratchet pour la confidentialite persistante (chaque message a une cle unique), Kyber-768 pour l'echange de cles post-quantique (KEM base sur les treillis approuve par le NIST), ML-DSA-65 (FIPS 204) pour les signatures de portefeuille, SPHINCS+ (FIPS 205), SHA-256 pour le hachage et HMAC-SHA256 pour l'authentification des messages.",
     },
     {
       question: "Qu'est-ce que le chiffrement resistant aux quantiques et pourquoi est-ce important ?",
@@ -393,7 +393,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Quelles sont les couches de securite de SPEAQ ?",
-      answer: "SPEAQ dispose de 9 couches de securite :\n\n1. Obfuscation + Mesh - Resistance a l'analyse du trafic grace au reseau maille et a l'obfuscation des donnees\n2. Sealed Sender - Le serveur ne peut pas voir qui a envoye un message\n3. AES-256 + Double Ratchet - Chiffrement verifie avec confidentialite persistante pour chaque message\n4. HMAC-SHA256 - Authentification des messages pour empecher la falsification\n5. Kyber-768 - Echange de cles post-quantique resistant aux ordinateurs quantiques\n6. QRNG - Generation de nombres aleatoires quantiques pour un veritable hasard\n7. [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) - Signatures numeriques resistantes aux quantiques pour les transactions de portefeuille\n8. [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) - Signatures basees sur le hachage pour la signature des blocs de la blockchain\n9. Couche de confidentialite supplementaire pour fichiers sensibles",
+      answer: "SPEAQ dispose de 9 couches de securite :\n\n1. Obfuscation + Mesh - Resistance a l'analyse du trafic grace au reseau maille et a l'obfuscation des donnees\n2. Sealed Sender - Le serveur ne peut pas voir qui a envoye un message\n3. AES-256 + Double Ratchet - Chiffrement verifie avec confidentialite persistante pour chaque message\n4. HMAC-SHA256 - Authentification des messages pour empecher la falsification\n5. Kyber-768 - Echange de cles post-quantique resistant aux ordinateurs quantiques\n6. QRNG - Generation de nombres aleatoires quantiques pour un veritable hasard\n7. ML-DSA-65 (FIPS 204) - Signatures numeriques resistantes aux quantiques pour les transactions de portefeuille\n8. SPHINCS+ (FIPS 205) - Signatures basees sur le hachage pour la signature des blocs de la blockchain\n9. Couche de confidentialite supplementaire pour fichiers sensibles",
     },
   ],
   es: [
@@ -403,7 +403,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Que cifrado utiliza SPEAQ?",
-      answer: "SPEAQ utiliza AES-256 para el cifrado de mensajes (el mismo estandar usado por agencias militares y de inteligencia), el protocolo Double Ratchet para secreto perfecto hacia adelante (cada mensaje tiene una clave unica), Kyber-768 para intercambio de claves post-cuantico (KEM basado en reticulados aprobado por NIST), [PLANIFICADO, aun no implementado] [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) para firmas de billetera, [PLANIFICADO, aun no implementado] [PLANNED, not yet implemented] SPHINCS+ (FIPS 205), SHA-256 para hashing y HMAC-SHA256 para autenticacion de mensajes.",
+      answer: "SPEAQ utiliza AES-256 para el cifrado de mensajes (el mismo estandar usado por agencias militares y de inteligencia), el protocolo Double Ratchet para secreto perfecto hacia adelante (cada mensaje tiene una clave unica), Kyber-768 para intercambio de claves post-cuantico (KEM basado en reticulados aprobado por NIST), ML-DSA-65 (FIPS 204) para firmas de billetera, SPHINCS+ (FIPS 205), SHA-256 para hashing y HMAC-SHA256 para autenticacion de mensajes.",
     },
     {
       question: "Que es el cifrado resistente a computadoras cuanticas y por que importa?",
@@ -431,7 +431,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Cuales son las capas de seguridad en SPEAQ?",
-      answer: "SPEAQ tiene 9 capas de seguridad:\n\n1. Ofuscacion + Mesh - Resistencia al analisis de trafico mediante redes mesh y ofuscacion de datos\n2. Sealed Sender - El servidor no puede ver quien envio un mensaje\n3. AES-256 + Double Ratchet - Cifrado verificado con secreto perfecto hacia adelante para cada mensaje\n4. HMAC-SHA256 - Autenticacion de mensajes para prevenir manipulacion\n5. Kyber-768 - Intercambio de claves post-cuantico resistente a computadoras cuanticas\n6. QRNG - Generacion de numeros aleatorios cuanticos para aleatoriedad verdadera\n7. [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) - Firmas digitales resistentes a cuanticas para transacciones de billetera\n8. [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) - Firmas basadas en hash para firmar bloques de blockchain\n9. Capa de privacidad adicional - Capa de boveda oculta sin prueba tecnica de existencia",
+      answer: "SPEAQ tiene 9 capas de seguridad:\n\n1. Ofuscacion + Mesh - Resistencia al analisis de trafico mediante redes mesh y ofuscacion de datos\n2. Sealed Sender - El servidor no puede ver quien envio un mensaje\n3. AES-256 + Double Ratchet - Cifrado verificado con secreto perfecto hacia adelante para cada mensaje\n4. HMAC-SHA256 - Autenticacion de mensajes para prevenir manipulacion\n5. Kyber-768 - Intercambio de claves post-cuantico resistente a computadoras cuanticas\n6. QRNG - Generacion de numeros aleatorios cuanticos para aleatoriedad verdadera\n7. ML-DSA-65 (FIPS 204) - Firmas digitales resistentes a cuanticas para transacciones de billetera\n8. SPHINCS+ (FIPS 205) - Firmas basadas en hash para firmar bloques de blockchain\n9. Capa de privacidad adicional - Capa de boveda oculta sin prueba tecnica de existencia",
     },
   ],
   ru: [
@@ -441,7 +441,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Kakoe shifrovanie ispolzuet SPEAQ?",
-      answer: "SPEAQ ispolzuet AES-256 dlya shifrovaniya soobshcheniy (tot zhe standart, chto ispolzuyetsya voennymi i razvedyvatelnymi sluzhbami), protokol Double Ratchet dlya pryamoy sekretnosti (kazhdoe soobshchenie imeet unikalnyy klyuch), Kyber-768 dlya postkvantovogo obmena klyuchami (KEM na osnove reshetok, odobrennyy NIST), [ZAPLANIROVANO, ne realizovano] [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) dlya podpisaniya tranzaktsiy, [ZAPLANIROVANO] [PLANNED, not yet implemented] SPHINCS+ (FIPS 205), SHA-256 dlya kheshirovaniya i HMAC-SHA256 dlya autentifikatsii soobshcheniy.",
+      answer: "SPEAQ ispolzuet AES-256 dlya shifrovaniya soobshcheniy (tot zhe standart, chto ispolzuyetsya voennymi i razvedyvatelnymi sluzhbami), protokol Double Ratchet dlya pryamoy sekretnosti (kazhdoe soobshchenie imeet unikalnyy klyuch), Kyber-768 dlya postkvantovogo obmena klyuchami (KEM na osnove reshetok, odobrennyy NIST), ML-DSA-65 (FIPS 204) dlya podpisaniya tranzaktsiy, SPHINCS+ (FIPS 205), SHA-256 dlya kheshirovaniya i HMAC-SHA256 dlya autentifikatsii soobshcheniy.",
     },
     {
       question: "Chto takoe kvantovoustomchivoe shifrovanie i pochemu eto vazhno?",
@@ -469,7 +469,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Kakiye urovni bezopasnosti yest v SPEAQ?",
-      answer: "SPEAQ imeet 9 urovney bezopasnosti:\n\n1. Obfuskatsiya + Mesh - Ustoychivost k analizu trafika cherez mesh-seti i obfuskatsiyu dannykh\n2. Sealed Sender - Server ne mozhet videt, kto otpravil soobshchenie\n3. AES-256 + Double Ratchet - Shifrovanie voennogo urovnya s pryamoy sekretnostyu dlya kazhdogo soobshcheniya\n4. HMAC-SHA256 - Autentifikatsiya soobshcheniy dlya predotvrashcheniya poddelki\n5. Kyber-768 - Postkvantovyy obmen klyuchami, ustoychivy k kvantovym kompyuteram\n6. QRNG - Generatsiya kvantovykh sluchaynykh chisel dlya istinnoy sluchaynosti\n7. [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) - Kvantovoustomchivye tsifrovye podpisi dlya tranzaktsiy koshelka\n8. [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) - Podpisi na osnove kheshey dlya podpisaniya blokov blokcheyna\n9. Pravdopodobnoe otpiratelstvo - Skrytyy uroven khranilishcha bez tekhnicheskikh dokazatelstv sushchestvovaniya",
+      answer: "SPEAQ imeet 9 urovney bezopasnosti:\n\n1. Obfuskatsiya + Mesh - Ustoychivost k analizu trafika cherez mesh-seti i obfuskatsiyu dannykh\n2. Sealed Sender - Server ne mozhet videt, kto otpravil soobshchenie\n3. AES-256 + Double Ratchet - Shifrovanie voennogo urovnya s pryamoy sekretnostyu dlya kazhdogo soobshcheniya\n4. HMAC-SHA256 - Autentifikatsiya soobshcheniy dlya predotvrashcheniya poddelki\n5. Kyber-768 - Postkvantovyy obmen klyuchami, ustoychivy k kvantovym kompyuteram\n6. QRNG - Generatsiya kvantovykh sluchaynykh chisel dlya istinnoy sluchaynosti\n7. ML-DSA-65 (FIPS 204) - Kvantovoustomchivye tsifrovye podpisi dlya tranzaktsiy koshelka\n8. SPHINCS+ (FIPS 205) - Podpisi na osnove kheshey dlya podpisaniya blokov blokcheyna\n9. Pravdopodobnoe otpiratelstvo - Skrytyy uroven khranilishcha bez tekhnicheskikh dokazatelstv sushchestvovaniya",
     },
   ],
   de: [
@@ -479,7 +479,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Welche Verschlusselung verwendet SPEAQ?",
-      answer: "SPEAQ verwendet AES-256 fur die Nachrichtenverschlusselung (derselbe Standard wie bei Militar- und Geheimdiensten), das Double-Ratchet-Protokoll fur Vorwartsgeheimnis (jede Nachricht hat einen einzigartigen Schlussel), Kyber-768 fur Post-Quanten-Schlusselaustausch (NIST-genehmigtes gitterbasiertes KEM), [GEPLANT, noch nicht implementiert] [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) fur Wallet-Signaturen, [GEPLANT, noch nicht implementiert] [PLANNED, not yet implemented] SPHINCS+ (FIPS 205), SHA-256 fur Hashing und HMAC-SHA256 fur die Nachrichtenauthentifizierung.",
+      answer: "SPEAQ verwendet AES-256 fur die Nachrichtenverschlusselung (derselbe Standard wie bei Militar- und Geheimdiensten), das Double-Ratchet-Protokoll fur Vorwartsgeheimnis (jede Nachricht hat einen einzigartigen Schlussel), Kyber-768 fur Post-Quanten-Schlusselaustausch (NIST-genehmigtes gitterbasiertes KEM), ML-DSA-65 (FIPS 204) fur Wallet-Signaturen, SPHINCS+ (FIPS 205), SHA-256 fur Hashing und HMAC-SHA256 fur die Nachrichtenauthentifizierung.",
     },
     {
       question: "Was ist quantenresistente Verschlusselung und warum ist sie wichtig?",
@@ -507,7 +507,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Welche Sicherheitsschichten hat SPEAQ?",
-      answer: "SPEAQ hat 9 Sicherheitsschichten:\n\n1. Verschleierung + Mesh - Widerstand gegen Verkehrsanalyse durch Mesh-Netzwerke und Datenverschleierung\n2. Sealed Sender - Server kann nicht sehen, wer eine Nachricht gesendet hat\n3. AES-256 + Double Ratchet - Verifizierte Verschlusselung mit Vorwartsgeheimnis fur jede Nachricht\n4. HMAC-SHA256 - Nachrichtenauthentifizierung zur Verhinderung von Manipulation\n5. Kyber-768 - Post-Quanten-Schlusselaustausch resistent gegen Quantencomputer\n6. QRNG - Quantenzufallige Zahlengenerierung fur echte Zufalligkeit\n7. [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) - Quantenresistente digitale Signaturen fur Wallet-Transaktionen\n8. [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) - Hash-basierte Signaturen fur Blockchain-Block-Signierung\n9. Zusatzliche Privatsphare - Versteckte Tresorschicht ohne technischen Existenznachweis",
+      answer: "SPEAQ hat 9 Sicherheitsschichten:\n\n1. Verschleierung + Mesh - Widerstand gegen Verkehrsanalyse durch Mesh-Netzwerke und Datenverschleierung\n2. Sealed Sender - Server kann nicht sehen, wer eine Nachricht gesendet hat\n3. AES-256 + Double Ratchet - Verifizierte Verschlusselung mit Vorwartsgeheimnis fur jede Nachricht\n4. HMAC-SHA256 - Nachrichtenauthentifizierung zur Verhinderung von Manipulation\n5. Kyber-768 - Post-Quanten-Schlusselaustausch resistent gegen Quantencomputer\n6. QRNG - Quantenzufallige Zahlengenerierung fur echte Zufalligkeit\n7. ML-DSA-65 (FIPS 204) - Quantenresistente digitale Signaturen fur Wallet-Transaktionen\n8. SPHINCS+ (FIPS 205) - Hash-basierte Signaturen fur Blockchain-Block-Signierung\n9. Zusatzliche Privatsphare - Versteckte Tresorschicht ohne technischen Existenznachweis",
     },
   ],
   sl: [
@@ -517,7 +517,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Katero sifriranje uporablja SPEAQ?",
-      answer: "SPEAQ uporablja AES-256 za sifriranje sporocil (enak standard kot ga uporabljajo vojaske in obvescevalne agencije), protokol Double Ratchet za vnaprejsnjo skrivnost (vsako sporocilo ima edinstven kljuc), Kyber-768 za postkvantno izmenjavo kljuchev (NIST-odobren mrezhno osnovan KEM), [NACHRTOVANO, se ni implementirano] [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) za denarnico-podpise, [NACHRTOVANO] [PLANNED, not yet implemented] SPHINCS+ (FIPS 205), SHA-256 za zgoschevanje in HMAC-SHA256 za avtentikacijo sporocil.",
+      answer: "SPEAQ uporablja AES-256 za sifriranje sporocil (enak standard kot ga uporabljajo vojaske in obvescevalne agencije), protokol Double Ratchet za vnaprejsnjo skrivnost (vsako sporocilo ima edinstven kljuc), Kyber-768 za postkvantno izmenjavo kljuchev (NIST-odobren mrezhno osnovan KEM), ML-DSA-65 (FIPS 204) za denarnico-podpise, SPHINCS+ (FIPS 205), SHA-256 za zgoschevanje in HMAC-SHA256 za avtentikacijo sporocil.",
     },
     {
       question: "Kaj je kvantno odporno sifriranje in zakaj je pomembno?",
@@ -545,7 +545,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Katere so varnostne plasti v SPEAQ?",
-      answer: "SPEAQ ima 9 varnostnih plasti:\n\n1. Zameglitev + Mesh - Odpornost proti analizi prometa z omrezjem mesh in zameglitvijo podatkov\n2. Sealed Sender - Streznik ne more videti, kdo je poslal sporocilo\n3. AES-256 + Double Ratchet - Vojasko sifriranje z vnaprejsnjo skrivnostjo za vsako sporocilo\n4. HMAC-SHA256 - Avtentikacija sporocil za preprechevanje ponarejanja\n5. Kyber-768 - Postkvantna izmenjava kljuchev, odporna proti kvantnim racunalnikom\n6. QRNG - Kvantna generacija nakljuchnih stevilk za pravo nakljuchnost\n7. [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) - Kvantno odporne digitalne podpise za transakcije denarnice\n8. [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) - Podpisi na osnovi zgoscevanja za podpisovanje blokov verige blokov\n9. Verjetno zanikanje - Skrita plast trezorja brez tehnicnega dokaza o obstoju",
+      answer: "SPEAQ ima 9 varnostnih plasti:\n\n1. Zameglitev + Mesh - Odpornost proti analizi prometa z omrezjem mesh in zameglitvijo podatkov\n2. Sealed Sender - Streznik ne more videti, kdo je poslal sporocilo\n3. AES-256 + Double Ratchet - Vojasko sifriranje z vnaprejsnjo skrivnostjo za vsako sporocilo\n4. HMAC-SHA256 - Avtentikacija sporocil za preprechevanje ponarejanja\n5. Kyber-768 - Postkvantna izmenjava kljuchev, odporna proti kvantnim racunalnikom\n6. QRNG - Kvantna generacija nakljuchnih stevilk za pravo nakljuchnost\n7. ML-DSA-65 (FIPS 204) - Kvantno odporne digitalne podpise za transakcije denarnice\n8. SPHINCS+ (FIPS 205) - Podpisi na osnovi zgoscevanja za podpisovanje blokov verige blokov\n9. Verjetno zanikanje - Skrita plast trezorja brez tehnicnega dokaza o obstoju",
     },
   ],
   lg: [
@@ -555,7 +555,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Enkola ki ey'okuziyiza SPEAQ gy'ekozesa?",
-      answer: "SPEAQ ekozesa AES-256 okuziyiza obubaka (ekikola kye kimu nga kya magye n'eby'obuteeso), empeereza ya Double Ratchet olw'obukyama obw'omu maaso (buli bubaka bulina ekisumuluzo ekyenjawulo), Kyber-768 olw'okukyusakyusa ebisumuluzo ebikwatagana ne kkomppyuta z'ekikwantimu (KEM esigamiziddwa ku lattice, ekakasiziddwa NIST), [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) okusayina eby'enfuna mu wallet, [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) okusayina blocks za blockchain, SHA-256 olw'okukola hash, ne HMAC-SHA256 olw'okukakasa obubaka.",
+      answer: "SPEAQ ekozesa AES-256 okuziyiza obubaka (ekikola kye kimu nga kya magye n'eby'obuteeso), empeereza ya Double Ratchet olw'obukyama obw'omu maaso (buli bubaka bulina ekisumuluzo ekyenjawulo), Kyber-768 olw'okukyusakyusa ebisumuluzo ebikwatagana ne kkomppyuta z'ekikwantimu (KEM esigamiziddwa ku lattice, ekakasiziddwa NIST), ML-DSA-65 (FIPS 204) okusayina eby'enfuna mu wallet, SPHINCS+ (FIPS 205) okusayina blocks za blockchain, SHA-256 olw'okukola hash, ne HMAC-SHA256 olw'okukakasa obubaka.",
     },
     {
       question: "Enkola y'okuziyiza ekwatagana ne kkomppyuta z'ekikwantimu kye ki era lwaki kikulu?",
@@ -583,7 +583,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Ebitundu by'obukuumi mu SPEAQ bye biruwa?",
-      answer: "SPEAQ erina ebitundu 9 eby'obukuumi:\n\n1. Obfuscation + Mesh - Okweziyiza okwekenneenya kwa traffic okuyita mu mikutu gya mesh n'obfuscation y'adata\n2. Sealed Sender - Seva tesobola kulaba ani eyatumye obubaka\n3. AES-256 + Double Ratchet - Enkola y'okuziyiza ey'amagye n'obukyama obw'omu maaso ku buli bubaka\n4. HMAC-SHA256 - Okukakasa obubaka okuziyiza okukyusakyusa\n5. Kyber-768 - Okukyusakyusa ebisumuluzo okw'omu maaso okukwatagana ne kkomppyuta z'ekikwantimu\n6. QRNG - Okukola ennamba z'akasirise eza kwantimu olw'akasirise ak'amazima\n7. [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) - Okusayina kwe digital okukwatagana ne kwantimu ku by'enfuna mu wallet\n8. [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) - Okusayina okusigamiziddwa ku hash ku blocks za blockchain\n9. Extra Privacy Layer - Ekitundu eky'ekyama ekitaliiko bukakasa bwa tekiniki nti kiliwo",
+      answer: "SPEAQ erina ebitundu 9 eby'obukuumi:\n\n1. Obfuscation + Mesh - Okweziyiza okwekenneenya kwa traffic okuyita mu mikutu gya mesh n'obfuscation y'adata\n2. Sealed Sender - Seva tesobola kulaba ani eyatumye obubaka\n3. AES-256 + Double Ratchet - Enkola y'okuziyiza ey'amagye n'obukyama obw'omu maaso ku buli bubaka\n4. HMAC-SHA256 - Okukakasa obubaka okuziyiza okukyusakyusa\n5. Kyber-768 - Okukyusakyusa ebisumuluzo okw'omu maaso okukwatagana ne kkomppyuta z'ekikwantimu\n6. QRNG - Okukola ennamba z'akasirise eza kwantimu olw'akasirise ak'amazima\n7. ML-DSA-65 (FIPS 204) - Okusayina kwe digital okukwatagana ne kwantimu ku by'enfuna mu wallet\n8. SPHINCS+ (FIPS 205) - Okusayina okusigamiziddwa ku hash ku blocks za blockchain\n9. Extra Privacy Layer - Ekitundu eky'ekyama ekitaliiko bukakasa bwa tekiniki nti kiliwo",
     },
   ],
   sw: [
@@ -593,7 +593,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "SPEAQ inatumia usimbaji gani?",
-      answer: "SPEAQ inatumia AES-256 kwa usimbaji wa ujumbe (kiwango sawa kinachotumiwa na mashirika ya kijeshi na ujasusi), itifaki ya Double Ratchet kwa usiri wa mbele (kila ujumbe una funguo ya kipekee), Kyber-768 kwa kubadilishana funguo za baada ya quantum (KEM inayotegemea lattice iliyoidhinishwa na NIST), [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) kwa kusaini miamala ya pochi, [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) kwa kusaini vitalu vya blockchain, SHA-256 kwa hashing, na HMAC-SHA256 kwa uthibitisho wa ujumbe.",
+      answer: "SPEAQ inatumia AES-256 kwa usimbaji wa ujumbe (kiwango sawa kinachotumiwa na mashirika ya kijeshi na ujasusi), itifaki ya Double Ratchet kwa usiri wa mbele (kila ujumbe una funguo ya kipekee), Kyber-768 kwa kubadilishana funguo za baada ya quantum (KEM inayotegemea lattice iliyoidhinishwa na NIST), ML-DSA-65 (FIPS 204) kwa kusaini miamala ya pochi, SPHINCS+ (FIPS 205) kwa kusaini vitalu vya blockchain, SHA-256 kwa hashing, na HMAC-SHA256 kwa uthibitisho wa ujumbe.",
     },
     {
       question: "Usimbaji unaostahimili quantum ni nini na kwa nini ni muhimu?",
@@ -621,7 +621,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Ni tabaka zipi za usalama katika SPEAQ?",
-      answer: "SPEAQ ina tabaka 9 za usalama:\n\n1. Uficho + Mesh - Upinzani wa uchambuzi wa trafiki kupitia mtandao wa mesh na uficho wa data\n2. Sealed Sender - Seva haiwezi kuona nani aliyetuma ujumbe\n3. AES-256 + Double Ratchet - Usimbaji wa kiwango cha kijeshi wenye usiri wa mbele kwa kila ujumbe\n4. HMAC-SHA256 - Uthibitisho wa ujumbe kuzuia uharibifu\n5. Kyber-768 - Kubadilishana funguo za baada ya quantum kinachostahimili kompyuta za quantum\n6. QRNG - Uzalishaji wa nambari za nasibu za quantum kwa nasibu ya kweli\n7. [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) - Saini za kidijitali zinazostahimili quantum kwa miamala ya pochi\n8. [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) - Saini zinazotegemea hash kwa kusaini vitalu vya blockchain\n9. Ukanushi wa kuaminika - Tabaka ya hazina iliyofichwa bila ushahidi wa kiufundi wa kuwepo",
+      answer: "SPEAQ ina tabaka 9 za usalama:\n\n1. Uficho + Mesh - Upinzani wa uchambuzi wa trafiki kupitia mtandao wa mesh na uficho wa data\n2. Sealed Sender - Seva haiwezi kuona nani aliyetuma ujumbe\n3. AES-256 + Double Ratchet - Usimbaji wa kiwango cha kijeshi wenye usiri wa mbele kwa kila ujumbe\n4. HMAC-SHA256 - Uthibitisho wa ujumbe kuzuia uharibifu\n5. Kyber-768 - Kubadilishana funguo za baada ya quantum kinachostahimili kompyuta za quantum\n6. QRNG - Uzalishaji wa nambari za nasibu za quantum kwa nasibu ya kweli\n7. ML-DSA-65 (FIPS 204) - Saini za kidijitali zinazostahimili quantum kwa miamala ya pochi\n8. SPHINCS+ (FIPS 205) - Saini zinazotegemea hash kwa kusaini vitalu vya blockchain\n9. Ukanushi wa kuaminika - Tabaka ya hazina iliyofichwa bila ushahidi wa kiufundi wa kuwepo",
     },
   ],
 };
@@ -647,7 +647,7 @@ const wallet: Record<Lang, FaqItem[]> = {
       answer: "Your SPEAQ wallet is sovereign - it operates entirely on your device. Your private keys are generated locally and never leave your device. Not even SPEAQ can access them. No intermediary, no central authority, no backdoor. You have full control over your Q-Credits. No one can freeze, confiscate, or block your funds.",
     },
     {
-      question: "What is [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204)?",
+      question: "What is ML-DSA-65 (FIPS 204)?",
       answer: "ML-DSA-65 is a NIST-approved post-quantum digital signature algorithm (FIPS 204). SPEAQ generates an ML-DSA-65 signing keypair on your device when you first open the wallet. This keypair is your sovereign on-chain identity. When you send Q-Credits, the transaction is signed with your personal quantum-resistant key and verified by the blockchain network. Even quantum computers cannot forge your signature.",
     },
     {
@@ -677,7 +677,7 @@ const wallet: Record<Lang, FaqItem[]> = {
       answer: "Je SPEAQ-wallet is soeverein - hij werkt volledig op je apparaat. Je privesleutels worden lokaal gegenereerd en verlaten nooit je apparaat. Zelfs SPEAQ kan er niet bij. Geen tussenpersoon, geen centrale autoriteit, geen achterdeur. Je hebt volledige controle over je Q-Credits. Niemand kan je tegoeden bevriezen, in beslag nemen of blokkeren.",
     },
     {
-      question: "Wat is [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204)?",
+      question: "Wat is ML-DSA-65 (FIPS 204)?",
       answer: "ML-DSA-65 is een door NIST goedgekeurd post-quantum digitaal handtekeningalgoritme (FIPS 204). SPEAQ genereert een ML-DSA-65 handtekeningsleutelpaar op je apparaat wanneer je de wallet voor het eerst opent. Dit sleutelpaar is je soevereine on-chain identiteit. Wanneer je Q-Credits verstuurt, wordt de transactie ondertekend met je persoonlijke kwantumbestendige sleutel en geverifieerd door het blockchain-netwerk. Zelfs kwantumcomputers kunnen je handtekening niet vervalsen.",
     },
     {
@@ -707,7 +707,7 @@ const wallet: Record<Lang, FaqItem[]> = {
       answer: "Votre portefeuille SPEAQ est souverain - il fonctionne entierement sur votre appareil. Vos cles privees sont generees localement et ne quittent jamais votre appareil. Meme SPEAQ ne peut pas y acceder. Pas d'intermediaire, pas d'autorite centrale, pas de porte derobee. Vous avez le controle total de vos Q-Credits. Personne ne peut geler, confisquer ou bloquer vos fonds.",
     },
     {
-      question: "Qu'est-ce que [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) ?",
+      question: "Qu'est-ce que ML-DSA-65 (FIPS 204) ?",
       answer: "ML-DSA-65 est un algorithme de signature numerique post-quantique approuve par le NIST (FIPS 204). SPEAQ genere une paire de cles de signature ML-DSA-65 sur votre appareil lorsque vous ouvrez le portefeuille pour la premiere fois. Cette paire de cles est votre identite souveraine sur la chaine. Lorsque vous envoyez des Q-Credits, la transaction est signee avec votre cle personnelle resistante aux quantiques et verifiee par le reseau blockchain. Meme les ordinateurs quantiques ne peuvent pas falsifier votre signature.",
     },
     {
@@ -737,7 +737,7 @@ const wallet: Record<Lang, FaqItem[]> = {
       answer: "Tu billetera SPEAQ es soberana - opera completamente en tu dispositivo. Tus claves privadas se generan localmente y nunca salen de tu dispositivo. Ni siquiera SPEAQ puede acceder a ellas. Sin intermediarios, sin autoridad central, sin puerta trasera. Tienes control total sobre tus Q-Credits. Nadie puede congelar, confiscar o bloquear tus fondos.",
     },
     {
-      question: "Que es [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204)?",
+      question: "Que es ML-DSA-65 (FIPS 204)?",
       answer: "ML-DSA-65 es un algoritmo de firma digital post-cuantico aprobado por NIST (FIPS 204). SPEAQ genera un par de claves de firma ML-DSA-65 en tu dispositivo cuando abres la billetera por primera vez. Este par de claves es tu identidad soberana en la cadena. Cuando envias Q-Credits, la transaccion se firma con tu clave personal resistente a cuanticas y es verificada por la red blockchain. Ni siquiera las computadoras cuanticas pueden falsificar tu firma.",
     },
     {
@@ -767,7 +767,7 @@ const wallet: Record<Lang, FaqItem[]> = {
       answer: "Vash koshelek SPEAQ suveren - on rabotaet polnostyu na vashem ustroystve. Vashi privatnye klyuchi generiruyutsya lokalno i nikogda ne pokidayut vashe ustroystvo. Dazhe SPEAQ ne mozhet poluchit k nim dostup. Nikakikh posrednikov, nikakoy tsentralnoy vlasti, nikakikh zadnikh dverey. U vas polnyy kontrol nad vashimi Q-Credits. Nikto ne mozhet zamorozit, konfiskovat ili zablokirovat vashi sredstva.",
     },
     {
-      question: "Chto takoe [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204)?",
+      question: "Chto takoe ML-DSA-65 (FIPS 204)?",
       answer: "ML-DSA-65 - eto odobrennyy NIST postkvantovyy algoritm tsifrovoy podpisi (FIPS 204). SPEAQ generiruet paru klyuchey podpisi ML-DSA-65 na vashem ustroystve, kogda vy vpervye otkryvaete koshelek. Eta para klyuchey - vasha suverennaya identichnost v blokcheyne. Kogda vy otpravlyaete Q-Credits, tranzaktsiya podpisyvaetsya vashim lichnym kvantovoustomchivym klyuchom i proveryaetsya setyu blokcheyna. Dazhe kvantovye kompyutery ne mogut poddelat vashu podpis.",
     },
     {
@@ -797,7 +797,7 @@ const wallet: Record<Lang, FaqItem[]> = {
       answer: "Ihre SPEAQ-Wallet ist souveran - sie arbeitet vollstandig auf Ihrem Gerat. Ihre privaten Schlussel werden lokal generiert und verlassen nie Ihr Gerat. Nicht einmal SPEAQ kann darauf zugreifen. Kein Vermittler, keine zentrale Behorde, keine Hintertur. Sie haben die volle Kontrolle uber Ihre Q-Credits. Niemand kann Ihre Mittel einfrieren, beschlagnahmen oder blockieren.",
     },
     {
-      question: "Was ist [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204)?",
+      question: "Was ist ML-DSA-65 (FIPS 204)?",
       answer: "ML-DSA-65 ist ein von NIST genehmigter Post-Quanten-Algorithmus fur digitale Signaturen (FIPS 204). SPEAQ generiert ein ML-DSA-65 Signaturschlusselpaar auf Ihrem Gerat, wenn Sie die Wallet zum ersten Mal offnen. Dieses Schlusselpaar ist Ihre souverane On-Chain-Identitat. Wenn Sie Q-Credits senden, wird die Transaktion mit Ihrem personlichen quantenresistenten Schlussel signiert und vom Blockchain-Netzwerk verifiziert. Selbst Quantencomputer konnen Ihre Signatur nicht falschen.",
     },
     {
@@ -827,7 +827,7 @@ const wallet: Record<Lang, FaqItem[]> = {
       answer: "Vasa SPEAQ denarnica je suverena - deluje povsem na vasi napravi. Vasi zasebni kljuchi se generirajo lokalno in nikoli ne zapustijo vase naprave. Niti SPEAQ ne more dostopati do njih. Brez posrednika, brez centralne oblasti, brez zadnjih vrat. Imate popoln nadzor nad svojimi Q-Credits. Nihche ne more zamrzniti, zaschi ali blokirati vasih sredstev.",
     },
     {
-      question: "Kaj je [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204)?",
+      question: "Kaj je ML-DSA-65 (FIPS 204)?",
       answer: "ML-DSA-65 je NIST-odobren postkvantni algoritem digitalnega podpisa (FIPS 204). SPEAQ generira par kljuchev za podpisovanje ML-DSA-65 na vasi napravi, ko prvicho odprete denarnico. Ta par kljuchev je vasa suverena identiteta na verigi. Ko posiljate Q-Credits, se transakcija podpise z vasim osebnim kvantno odpornim kljuchem in jo preveri omrezje verige blokov. Niti kvantni racunalniki ne morejo ponarediti vasega podpisa.",
     },
     {
@@ -857,7 +857,7 @@ const wallet: Record<Lang, FaqItem[]> = {
       answer: "Wallet yo eya SPEAQ ya bwannannyini - ekola yonna ku kifo kyo. Ebisumuluzo byo eby'ekyama bikola mu kifo kyo era tebivaamu. Ne SPEAQ teyinza kubifuna. Tewali mu makkati, tewali bw'obuyinza obukulembeddwa, tewali nnyiriri y'emabega. Olina obufuzi obujjuvu ku Q-Credits zo. Tewali ayinza okusitula, okutwala, oba okuziyiza ssente zo.",
     },
     {
-      question: "[PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) kye ki?",
+      question: "ML-DSA-65 (FIPS 204) kye ki?",
       answer: "ML-DSA-65 ye algorithm y'okusayina ey'omu maaso ey'ekikwantimu ekakasiziddwa NIST (FIPS 204). SPEAQ ekola keypair y'okusayina eya ML-DSA-65 ku kifo kyo ng'oggula wallet omulundi ogusooka. Keypair eno ye bumanyirivu bwo obw'obwannannyini ku chain. Bw'otuma Q-Credits, transaction esayinibwa n'ekisumuluzo kyo eky'obwannannyini ekikwatagana ne kwantimu era ekakasizibwa omukutu gwa blockchain. Ne kkomppyuta z'ekikwantimu teziyinza kuvviira okusayina kwo.",
     },
     {
@@ -887,7 +887,7 @@ const wallet: Record<Lang, FaqItem[]> = {
       answer: "Pochi yako ya SPEAQ ni huru - inafanya kazi kabisa kwenye kifaa chako. Funguo zako za faragha zinatengenezwa ndani na hazitoki kwenye kifaa chako kamwe. Hata SPEAQ haiwezi kuzifikia. Hakuna mpatanishi, hakuna mamlaka kuu, hakuna mlango wa nyuma. Una udhibiti kamili wa Q-Credits zako. Hakuna mtu anayeweza kufungia, kunyang'anya, au kuzuia fedha zako.",
     },
     {
-      question: "[PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) ni nini?",
+      question: "ML-DSA-65 (FIPS 204) ni nini?",
       answer: "ML-DSA-65 ni algoriti ya saini ya kidijitali ya baada ya quantum iliyoidhinishwa na NIST (FIPS 204). SPEAQ inatengeneza jozi ya funguo za kusaini za ML-DSA-65 kwenye kifaa chako unapofungua pochi kwa mara ya kwanza. Jozi hii ya funguo ni utambulisho wako huru kwenye mnyororo. Unapotuma Q-Credits, muamala unasainiwa na funguo yako ya kibinafsi inayostahimili quantum na kuthibitishwa na mtandao wa blockchain. Hata kompyuta za quantum haziwezi kughushi saini yako.",
     },
     {
@@ -1146,7 +1146,7 @@ const blockchain: Record<Lang, FaqItem[]> = {
   en: [
     {
       question: "Does SPEAQ have its own blockchain?",
-      answer: "Yes. SPEAQ has its own quantum-resistant blockchain called SPEAQ Chain. It is purpose-built for secure communication and sovereign finance. Blocks are produced every 30 seconds by validators selected through Proof of Contribution. Each block is dual-signed with [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) and [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) for maximum quantum resistance.",
+      answer: "Yes. SPEAQ has its own quantum-resistant blockchain called SPEAQ Chain. It is purpose-built for secure communication and sovereign finance. Blocks are produced every 30 seconds by validators selected through Proof of Contribution. Each block is dual-signed with ML-DSA-65 (FIPS 204) and SPHINCS+ (FIPS 205) for maximum quantum resistance.",
     },
     {
       question: "Why build a new blockchain instead of using Ethereum or Bitcoin?",
@@ -1154,7 +1154,7 @@ const blockchain: Record<Lang, FaqItem[]> = {
     },
     {
       question: "How are blocks produced?",
-      answer: "Blocks are produced every 30 seconds by validators selected through Proof of Contribution. Each block is dual-signed with [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) for transaction-level signatures and [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) for block-level signatures. This dual-signature approach provides defense in depth - even if one algorithm is compromised, the other remains secure.",
+      answer: "Blocks are produced every 30 seconds by validators selected through Proof of Contribution. Each block is dual-signed with ML-DSA-65 (FIPS 204) for transaction-level signatures and SPHINCS+ (FIPS 205) for block-level signatures. This dual-signature approach provides defense in depth - even if one algorithm is compromised, the other remains secure.",
     },
     {
       question: "How does validator selection work?",
@@ -1168,7 +1168,7 @@ const blockchain: Record<Lang, FaqItem[]> = {
   nl: [
     {
       question: "Heeft SPEAQ een eigen blockchain?",
-      answer: "Ja. SPEAQ heeft een eigen kwantumbestendige blockchain genaamd SPEAQ Chain. Het is speciaal gebouwd voor veilige communicatie en soevereine financien. Blokken worden elke 30 seconden geproduceerd door validators die geselecteerd zijn via Proof of Contribution. Elk blok is dubbel ondertekend met [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) en [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) voor maximale kwantumbestendigheid.",
+      answer: "Ja. SPEAQ heeft een eigen kwantumbestendige blockchain genaamd SPEAQ Chain. Het is speciaal gebouwd voor veilige communicatie en soevereine financien. Blokken worden elke 30 seconden geproduceerd door validators die geselecteerd zijn via Proof of Contribution. Elk blok is dubbel ondertekend met ML-DSA-65 (FIPS 204) en SPHINCS+ (FIPS 205) voor maximale kwantumbestendigheid.",
     },
     {
       question: "Waarom een nieuwe blockchain bouwen in plaats van Ethereum of Bitcoin te gebruiken?",
@@ -1176,7 +1176,7 @@ const blockchain: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Hoe worden blokken geproduceerd?",
-      answer: "Blokken worden elke 30 seconden geproduceerd door validators die geselecteerd zijn via Proof of Contribution. Elk blok is dubbel ondertekend met [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) voor handtekeningen op transactieniveau en [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) voor handtekeningen op blokniveau. Deze dubbele-handtekeningbenadering biedt diepgaande verdediging - zelfs als een algoritme gecompromitteerd is, blijft het andere veilig.",
+      answer: "Blokken worden elke 30 seconden geproduceerd door validators die geselecteerd zijn via Proof of Contribution. Elk blok is dubbel ondertekend met ML-DSA-65 (FIPS 204) voor handtekeningen op transactieniveau en SPHINCS+ (FIPS 205) voor handtekeningen op blokniveau. Deze dubbele-handtekeningbenadering biedt diepgaande verdediging - zelfs als een algoritme gecompromitteerd is, blijft het andere veilig.",
     },
     {
       question: "Hoe werkt validatorselectie?",
@@ -1190,7 +1190,7 @@ const blockchain: Record<Lang, FaqItem[]> = {
   fr: [
     {
       question: "SPEAQ a-t-il sa propre blockchain ?",
-      answer: "Oui. SPEAQ possede sa propre blockchain resistante aux quantiques appelee SPEAQ Chain. Elle est specialement concue pour la communication securisee et la finance souveraine. Les blocs sont produits toutes les 30 secondes par des validateurs selectionnes via la Preuve de Contribution. Chaque bloc est doublement signe avec [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) et [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) pour une resistance maximale aux quantiques.",
+      answer: "Oui. SPEAQ possede sa propre blockchain resistante aux quantiques appelee SPEAQ Chain. Elle est specialement concue pour la communication securisee et la finance souveraine. Les blocs sont produits toutes les 30 secondes par des validateurs selectionnes via la Preuve de Contribution. Chaque bloc est doublement signe avec ML-DSA-65 (FIPS 204) et SPHINCS+ (FIPS 205) pour une resistance maximale aux quantiques.",
     },
     {
       question: "Pourquoi construire une nouvelle blockchain au lieu d'utiliser Ethereum ou Bitcoin ?",
@@ -1198,7 +1198,7 @@ const blockchain: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Comment les blocs sont-ils produits ?",
-      answer: "Les blocs sont produits toutes les 30 secondes par des validateurs selectionnes via la Preuve de Contribution. Chaque bloc est doublement signe avec [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) pour les signatures au niveau des transactions et [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) pour les signatures au niveau des blocs. Cette approche de double signature fournit une defense en profondeur - meme si un algorithme est compromis, l'autre reste securise.",
+      answer: "Les blocs sont produits toutes les 30 secondes par des validateurs selectionnes via la Preuve de Contribution. Chaque bloc est doublement signe avec ML-DSA-65 (FIPS 204) pour les signatures au niveau des transactions et SPHINCS+ (FIPS 205) pour les signatures au niveau des blocs. Cette approche de double signature fournit une defense en profondeur - meme si un algorithme est compromis, l'autre reste securise.",
     },
     {
       question: "Comment fonctionne la selection des validateurs ?",
@@ -1212,7 +1212,7 @@ const blockchain: Record<Lang, FaqItem[]> = {
   es: [
     {
       question: "Tiene SPEAQ su propia blockchain?",
-      answer: "Si. SPEAQ tiene su propia blockchain resistente a cuanticas llamada SPEAQ Chain. Esta especificamente construida para comunicacion segura y finanzas soberanas. Los bloques se producen cada 30 segundos por validadores seleccionados a traves de Prueba de Contribucion. Cada bloque tiene doble firma con [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) y [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) para maxima resistencia cuantica.",
+      answer: "Si. SPEAQ tiene su propia blockchain resistente a cuanticas llamada SPEAQ Chain. Esta especificamente construida para comunicacion segura y finanzas soberanas. Los bloques se producen cada 30 segundos por validadores seleccionados a traves de Prueba de Contribucion. Cada bloque tiene doble firma con ML-DSA-65 (FIPS 204) y SPHINCS+ (FIPS 205) para maxima resistencia cuantica.",
     },
     {
       question: "Por que construir una nueva blockchain en lugar de usar Ethereum o Bitcoin?",
@@ -1220,7 +1220,7 @@ const blockchain: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Como se producen los bloques?",
-      answer: "Los bloques se producen cada 30 segundos por validadores seleccionados a traves de Prueba de Contribucion. Cada bloque tiene doble firma con [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) para firmas a nivel de transaccion y [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) para firmas a nivel de bloque. Este enfoque de doble firma proporciona defensa en profundidad - incluso si un algoritmo se ve comprometido, el otro permanece seguro.",
+      answer: "Los bloques se producen cada 30 segundos por validadores seleccionados a traves de Prueba de Contribucion. Cada bloque tiene doble firma con ML-DSA-65 (FIPS 204) para firmas a nivel de transaccion y SPHINCS+ (FIPS 205) para firmas a nivel de bloque. Este enfoque de doble firma proporciona defensa en profundidad - incluso si un algoritmo se ve comprometido, el otro permanece seguro.",
     },
     {
       question: "Como funciona la seleccion de validadores?",
@@ -1234,7 +1234,7 @@ const blockchain: Record<Lang, FaqItem[]> = {
   ru: [
     {
       question: "Yest li u SPEAQ sobstvennyy blokcheyn?",
-      answer: "Da. SPEAQ imeet sobstvennyy kvantovoustomchivyy blokcheyn pod nazvaniem SPEAQ Chain. On spetsialno sozdan dlya bezopasnoy svyazi i suverennykh finansov. Bloki sozdayutsya kazhdye 30 sekund validatorami, vybrannymi cherez Proof of Contribution. Kazhdyy blok podpisyvaetsya dvazhdy s pomoshchyu [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) i [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) dlya maksimalnoy kvantovoustomchivosti.",
+      answer: "Da. SPEAQ imeet sobstvennyy kvantovoustomchivyy blokcheyn pod nazvaniem SPEAQ Chain. On spetsialno sozdan dlya bezopasnoy svyazi i suverennykh finansov. Bloki sozdayutsya kazhdye 30 sekund validatorami, vybrannymi cherez Proof of Contribution. Kazhdyy blok podpisyvaetsya dvazhdy s pomoshchyu ML-DSA-65 (FIPS 204) i SPHINCS+ (FIPS 205) dlya maksimalnoy kvantovoustomchivosti.",
     },
     {
       question: "Zachem stroit novyy blokcheyn vmesto ispolzovaniya Ethereum ili Bitcoin?",
@@ -1242,7 +1242,7 @@ const blockchain: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Kak sozdayutsya bloki?",
-      answer: "Bloki sozdayutsya kazhdye 30 sekund validatorami, vybrannymi cherez Proof of Contribution. Kazhdyy blok podpisyvaetsya dvazhdy: [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) dlya podpisey na urovne tranzaktsiy i [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) dlya podpisey na urovne blokov. Etot podkhod s dvoynoy podpisyu obespechyvaet glubinnuyu zashchitu - dazhe yesli odin algoritm budet skompromettirovan, drugoy ostanetsya bezopasnym.",
+      answer: "Bloki sozdayutsya kazhdye 30 sekund validatorami, vybrannymi cherez Proof of Contribution. Kazhdyy blok podpisyvaetsya dvazhdy: ML-DSA-65 (FIPS 204) dlya podpisey na urovne tranzaktsiy i SPHINCS+ (FIPS 205) dlya podpisey na urovne blokov. Etot podkhod s dvoynoy podpisyu obespechyvaet glubinnuyu zashchitu - dazhe yesli odin algoritm budet skompromettirovan, drugoy ostanetsya bezopasnym.",
     },
     {
       question: "Kak rabotaet vybor validatorov?",
@@ -1256,7 +1256,7 @@ const blockchain: Record<Lang, FaqItem[]> = {
   de: [
     {
       question: "Hat SPEAQ eine eigene Blockchain?",
-      answer: "Ja. SPEAQ hat eine eigene quantenresistente Blockchain namens SPEAQ Chain. Sie ist speziell fur sichere Kommunikation und souverane Finanzen gebaut. Blocke werden alle 30 Sekunden von Validatoren produziert, die uber Proof of Contribution ausgewahlt werden. Jeder Block wird doppelt signiert mit [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) und [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) fur maximale Quantenresistenz.",
+      answer: "Ja. SPEAQ hat eine eigene quantenresistente Blockchain namens SPEAQ Chain. Sie ist speziell fur sichere Kommunikation und souverane Finanzen gebaut. Blocke werden alle 30 Sekunden von Validatoren produziert, die uber Proof of Contribution ausgewahlt werden. Jeder Block wird doppelt signiert mit ML-DSA-65 (FIPS 204) und SPHINCS+ (FIPS 205) fur maximale Quantenresistenz.",
     },
     {
       question: "Warum eine neue Blockchain bauen, anstatt Ethereum oder Bitcoin zu verwenden?",
@@ -1264,7 +1264,7 @@ const blockchain: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Wie werden Blocke produziert?",
-      answer: "Blocke werden alle 30 Sekunden von Validatoren produziert, die uber Proof of Contribution ausgewahlt werden. Jeder Block wird doppelt signiert mit [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) fur Signaturen auf Transaktionsebene und [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) fur Signaturen auf Blockebene. Dieser Doppelsignatur-Ansatz bietet Tiefenverteidigung - selbst wenn ein Algorithmus kompromittiert wird, bleibt der andere sicher.",
+      answer: "Blocke werden alle 30 Sekunden von Validatoren produziert, die uber Proof of Contribution ausgewahlt werden. Jeder Block wird doppelt signiert mit ML-DSA-65 (FIPS 204) fur Signaturen auf Transaktionsebene und SPHINCS+ (FIPS 205) fur Signaturen auf Blockebene. Dieser Doppelsignatur-Ansatz bietet Tiefenverteidigung - selbst wenn ein Algorithmus kompromittiert wird, bleibt der andere sicher.",
     },
     {
       question: "Wie funktioniert die Validatorauswahl?",
@@ -1278,7 +1278,7 @@ const blockchain: Record<Lang, FaqItem[]> = {
   sl: [
     {
       question: "Ali ima SPEAQ svojo verigo blokov?",
-      answer: "Da. SPEAQ ima svojo kvantno odporno verigo blokov, imenovano SPEAQ Chain. Namensko je zgrajena za varno komunikacijo in suverene finance. Bloki se proizvajajo vsakih 30 sekund s strani validatorjev, izbranih prek Dokaza prispevka. Vsak blok je dvojno podpisan z [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) in [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) za najvechjo kvantno odpornost.",
+      answer: "Da. SPEAQ ima svojo kvantno odporno verigo blokov, imenovano SPEAQ Chain. Namensko je zgrajena za varno komunikacijo in suverene finance. Bloki se proizvajajo vsakih 30 sekund s strani validatorjev, izbranih prek Dokaza prispevka. Vsak blok je dvojno podpisan z ML-DSA-65 (FIPS 204) in SPHINCS+ (FIPS 205) za najvechjo kvantno odpornost.",
     },
     {
       question: "Zakaj graditi novo verigo blokov namesto uporabe Ethereum ali Bitcoin?",
@@ -1286,7 +1286,7 @@ const blockchain: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Kako se bloki proizvajajo?",
-      answer: "Bloki se proizvajajo vsakih 30 sekund s strani validatorjev, izbranih prek Dokaza prispevka. Vsak blok je dvojno podpisan z [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) za podpise na ravni transakcij in [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) za podpise na ravni blokov. Ta pristop z dvojnim podpisom zagotavlja obrambo v globino - tudi che je en algoritem kompromitiran, drugi ostane varen.",
+      answer: "Bloki se proizvajajo vsakih 30 sekund s strani validatorjev, izbranih prek Dokaza prispevka. Vsak blok je dvojno podpisan z ML-DSA-65 (FIPS 204) za podpise na ravni transakcij in SPHINCS+ (FIPS 205) za podpise na ravni blokov. Ta pristop z dvojnim podpisom zagotavlja obrambo v globino - tudi che je en algoritem kompromitiran, drugi ostane varen.",
     },
     {
       question: "Kako deluje izbira validatorjev?",
@@ -1300,7 +1300,7 @@ const blockchain: Record<Lang, FaqItem[]> = {
   lg: [
     {
       question: "SPEAQ erina blockchain yaayo?",
-      answer: "Yee. SPEAQ erina blockchain yaayo ekwatagana ne kkomppyuta z'ekikwantimu eyitibwa SPEAQ Chain. Yazimbibwa enduusi olw'empuliziganya ey'obukuumi n'eby'enfuna eby'obwannannyini. Blocks zikola buli sekkendi 30 validators abalonddeddwa okuyita mu Proof of Contribution. Buli block esayiniddwa emirundi ebiri ne [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) ne [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) olw'okukwatagana ne kwantimu okw'ekitundu eky'waggulu.",
+      answer: "Yee. SPEAQ erina blockchain yaayo ekwatagana ne kkomppyuta z'ekikwantimu eyitibwa SPEAQ Chain. Yazimbibwa enduusi olw'empuliziganya ey'obukuumi n'eby'enfuna eby'obwannannyini. Blocks zikola buli sekkendi 30 validators abalonddeddwa okuyita mu Proof of Contribution. Buli block esayiniddwa emirundi ebiri ne ML-DSA-65 (FIPS 204) ne SPHINCS+ (FIPS 205) olw'okukwatagana ne kwantimu okw'ekitundu eky'waggulu.",
     },
     {
       question: "Lwaki ozimba blockchain empya mu kifo ky'okukozesa Ethereum oba Bitcoin?",
@@ -1308,7 +1308,7 @@ const blockchain: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Blocks zikola ztya?",
-      answer: "Blocks zikola buli sekkendi 30 validators abalonddeddwa okuyita mu Proof of Contribution. Buli block esayiniddwa emirundi ebiri ne [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) ku transaction n'e [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) ku block. Enkola eno ey'okusayina emirundi ebiri ewaayo okukuumibwa okw'omunda - wadde algorithm emu n'eyonoonebwa, endala ekuumibwa.",
+      answer: "Blocks zikola buli sekkendi 30 validators abalonddeddwa okuyita mu Proof of Contribution. Buli block esayiniddwa emirundi ebiri ne ML-DSA-65 (FIPS 204) ku transaction n'e SPHINCS+ (FIPS 205) ku block. Enkola eno ey'okusayina emirundi ebiri ewaayo okukuumibwa okw'omunda - wadde algorithm emu n'eyonoonebwa, endala ekuumibwa.",
     },
     {
       question: "Okulondebwa kwa validators kukola kutya?",
@@ -1322,7 +1322,7 @@ const blockchain: Record<Lang, FaqItem[]> = {
   sw: [
     {
       question: "Je, SPEAQ ina blockchain yake yenyewe?",
-      answer: "Ndiyo. SPEAQ ina blockchain yake yenyewe inayostahimili quantum inayoitwa SPEAQ Chain. Imejengwa mahsusi kwa mawasiliano salama na fedha huru. Vitalu vinaundwa kila sekunde 30 na wathibitishaji waliochaguliwa kupitia Uthibitisho wa Mchango. Kila kitalu kina saini mbili za [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) na [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) kwa upinzani wa juu wa quantum.",
+      answer: "Ndiyo. SPEAQ ina blockchain yake yenyewe inayostahimili quantum inayoitwa SPEAQ Chain. Imejengwa mahsusi kwa mawasiliano salama na fedha huru. Vitalu vinaundwa kila sekunde 30 na wathibitishaji waliochaguliwa kupitia Uthibitisho wa Mchango. Kila kitalu kina saini mbili za ML-DSA-65 (FIPS 204) na SPHINCS+ (FIPS 205) kwa upinzani wa juu wa quantum.",
     },
     {
       question: "Kwa nini kujenga blockchain mpya badala ya kutumia Ethereum au Bitcoin?",
@@ -1330,7 +1330,7 @@ const blockchain: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Vitalu vinaundwaje?",
-      answer: "Vitalu vinaundwa kila sekunde 30 na wathibitishaji waliochaguliwa kupitia Uthibitisho wa Mchango. Kila kitalu kina saini mbili za [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) kwa saini za kiwango cha muamala na [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) kwa saini za kiwango cha kitalu. Mbinu hii ya saini mbili inatoa ulinzi wa kina - hata algoriti moja ikiathiriwa, nyingine inabaki salama.",
+      answer: "Vitalu vinaundwa kila sekunde 30 na wathibitishaji waliochaguliwa kupitia Uthibitisho wa Mchango. Kila kitalu kina saini mbili za ML-DSA-65 (FIPS 204) kwa saini za kiwango cha muamala na SPHINCS+ (FIPS 205) kwa saini za kiwango cha kitalu. Mbinu hii ya saini mbili inatoa ulinzi wa kina - hata algoriti moja ikiathiriwa, nyingine inabaki salama.",
     },
     {
       question: "Uchaguzi wa wathibitishaji unafanyaje kazi?",
@@ -1552,7 +1552,7 @@ const technical: Record<Lang, FaqItem[]> = {
   en: [
     {
       question: "What NIST certifications does SPEAQ use?",
-      answer: "SPEAQ implements multiple NIST-approved post-quantum cryptographic standards: Kyber-768 (FIPS 203) for key encapsulation, [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) for digital signatures on wallet transactions, and [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) for hash-based signatures on blockchain blocks. These are the same standards recommended for protecting classified government communications.",
+      answer: "SPEAQ implements multiple NIST-approved post-quantum cryptographic standards: Kyber-768 (FIPS 203) for key encapsulation, ML-DSA-65 (FIPS 204) for digital signatures on wallet transactions, and SPHINCS+ (FIPS 205) for hash-based signatures on blockchain blocks. These are the same standards recommended for protecting classified government communications.",
     },
     {
       question: "Has the protocol been formally verified?",
@@ -1570,7 +1570,7 @@ const technical: Record<Lang, FaqItem[]> = {
   nl: [
     {
       question: "Welke NIST-certificeringen gebruikt SPEAQ?",
-      answer: "SPEAQ implementeert meerdere door NIST goedgekeurde post-quantum cryptografische standaarden: Kyber-768 (FIPS 203) voor sleutelinkapseling, [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) voor digitale handtekeningen bij wallet-transacties en [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) voor hash-gebaseerde handtekeningen op blockchain-blokken. Dit zijn dezelfde standaarden die aanbevolen worden voor het beschermen van geclassificeerde overheidscommunicatie.",
+      answer: "SPEAQ implementeert meerdere door NIST goedgekeurde post-quantum cryptografische standaarden: Kyber-768 (FIPS 203) voor sleutelinkapseling, ML-DSA-65 (FIPS 204) voor digitale handtekeningen bij wallet-transacties en SPHINCS+ (FIPS 205) voor hash-gebaseerde handtekeningen op blockchain-blokken. Dit zijn dezelfde standaarden die aanbevolen worden voor het beschermen van geclassificeerde overheidscommunicatie.",
     },
     {
       question: "Is het protocol formeel geverifieerd?",
@@ -1588,7 +1588,7 @@ const technical: Record<Lang, FaqItem[]> = {
   fr: [
     {
       question: "Quelles certifications NIST SPEAQ utilise-t-il ?",
-      answer: "SPEAQ implemente plusieurs normes cryptographiques post-quantiques approuvees par le NIST : Kyber-768 (FIPS 203) pour l'encapsulation de cles, [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) pour les signatures numeriques sur les transactions de portefeuille, et [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) pour les signatures basees sur le hachage sur les blocs de la blockchain. Ce sont les memes normes recommandees pour proteger les communications gouvernementales classifiees.",
+      answer: "SPEAQ implemente plusieurs normes cryptographiques post-quantiques approuvees par le NIST : Kyber-768 (FIPS 203) pour l'encapsulation de cles, ML-DSA-65 (FIPS 204) pour les signatures numeriques sur les transactions de portefeuille, et SPHINCS+ (FIPS 205) pour les signatures basees sur le hachage sur les blocs de la blockchain. Ce sont les memes normes recommandees pour proteger les communications gouvernementales classifiees.",
     },
     {
       question: "Le protocole a-t-il ete formellement verifie ?",
@@ -1606,7 +1606,7 @@ const technical: Record<Lang, FaqItem[]> = {
   es: [
     {
       question: "Que certificaciones NIST utiliza SPEAQ?",
-      answer: "SPEAQ implementa multiples estandares criptograficos post-cuanticos aprobados por NIST: Kyber-768 (FIPS 203) para encapsulacion de claves, [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) para firmas digitales en transacciones de billetera, y [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) para firmas basadas en hash en bloques de blockchain. Estos son los mismos estandares recomendados para proteger comunicaciones gubernamentales clasificadas.",
+      answer: "SPEAQ implementa multiples estandares criptograficos post-cuanticos aprobados por NIST: Kyber-768 (FIPS 203) para encapsulacion de claves, ML-DSA-65 (FIPS 204) para firmas digitales en transacciones de billetera, y SPHINCS+ (FIPS 205) para firmas basadas en hash en bloques de blockchain. Estos son los mismos estandares recomendados para proteger comunicaciones gubernamentales clasificadas.",
     },
     {
       question: "Ha sido el protocolo formalmente verificado?",
@@ -1624,7 +1624,7 @@ const technical: Record<Lang, FaqItem[]> = {
   ru: [
     {
       question: "Kakie sertifikaty NIST ispolzuet SPEAQ?",
-      answer: "SPEAQ realizuet neskolko postkvantovykh kriptograficheskikh standartov, odobrennykh NIST: Kyber-768 (FIPS 203) dlya inkapsulatsii klyuchey, [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) dlya tsifrovykh podpisey na tranzaktsiyakh koshelka i [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) dlya podpisey na osnove kheshey na blokakh blokcheyna. Eto te zhe standarty, kotorye rekomenduyutsya dlya zashchity sekretnykh pravitelstvennykh kommunikatsiy.",
+      answer: "SPEAQ realizuet neskolko postkvantovykh kriptograficheskikh standartov, odobrennykh NIST: Kyber-768 (FIPS 203) dlya inkapsulatsii klyuchey, ML-DSA-65 (FIPS 204) dlya tsifrovykh podpisey na tranzaktsiyakh koshelka i SPHINCS+ (FIPS 205) dlya podpisey na osnove kheshey na blokakh blokcheyna. Eto te zhe standarty, kotorye rekomenduyutsya dlya zashchity sekretnykh pravitelstvennykh kommunikatsiy.",
     },
     {
       question: "Byl li protokol formalno verificirovan?",
@@ -1642,7 +1642,7 @@ const technical: Record<Lang, FaqItem[]> = {
   de: [
     {
       question: "Welche NIST-Zertifizierungen verwendet SPEAQ?",
-      answer: "SPEAQ implementiert mehrere von NIST genehmigte Post-Quanten-kryptographische Standards: Kyber-768 (FIPS 203) fur Schlusselverkapselung, [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) fur digitale Signaturen bei Wallet-Transaktionen und [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) fur hash-basierte Signaturen auf Blockchain-Blocken. Dies sind dieselben Standards, die zum Schutz klassifizierter Regierungskommunikation empfohlen werden.",
+      answer: "SPEAQ implementiert mehrere von NIST genehmigte Post-Quanten-kryptographische Standards: Kyber-768 (FIPS 203) fur Schlusselverkapselung, ML-DSA-65 (FIPS 204) fur digitale Signaturen bei Wallet-Transaktionen und SPHINCS+ (FIPS 205) fur hash-basierte Signaturen auf Blockchain-Blocken. Dies sind dieselben Standards, die zum Schutz klassifizierter Regierungskommunikation empfohlen werden.",
     },
     {
       question: "Wurde das Protokoll formal verifiziert?",
@@ -1660,7 +1660,7 @@ const technical: Record<Lang, FaqItem[]> = {
   sl: [
     {
       question: "Katere certifikate NIST uporablja SPEAQ?",
-      answer: "SPEAQ implementira vech postkvantnih kriptografskih standardov, odobrenih s strani NIST: Kyber-768 (FIPS 203) za enkapsulacijo kljuchev, [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) za digitalne podpise pri transakcijah denarnice in [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) za podpise na osnovi zgoscevanja na blokih verige blokov. To so isti standardi, priporocheni za zaschito tajnih vladnih komunikacij.",
+      answer: "SPEAQ implementira vech postkvantnih kriptografskih standardov, odobrenih s strani NIST: Kyber-768 (FIPS 203) za enkapsulacijo kljuchev, ML-DSA-65 (FIPS 204) za digitalne podpise pri transakcijah denarnice in SPHINCS+ (FIPS 205) za podpise na osnovi zgoscevanja na blokih verige blokov. To so isti standardi, priporocheni za zaschito tajnih vladnih komunikacij.",
     },
     {
       question: "Ali je bil protokol formalno preverjen?",
@@ -1678,7 +1678,7 @@ const technical: Record<Lang, FaqItem[]> = {
   lg: [
     {
       question: "SPEAQ ekozesa ebikakasibwa ki ebya NIST?",
-      answer: "SPEAQ ekozesa standdaadi eziwera ez'omu maaso ez'ekikwantimu, ezikakasiziddwa NIST: Kyber-768 (FIPS 203) olw'okusiba ebisumuluzo, [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) olw'okusayina kwe digital ku by'enfuna mu wallet, ne [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) olw'okusayina okusigamiziddwa ku hash ku blocks za blockchain. Zino ze standdaadi zemu eziwebwa okukuuma empuliziganya za gavumenti ez'ekyama.",
+      answer: "SPEAQ ekozesa standdaadi eziwera ez'omu maaso ez'ekikwantimu, ezikakasiziddwa NIST: Kyber-768 (FIPS 203) olw'okusiba ebisumuluzo, ML-DSA-65 (FIPS 204) olw'okusayina kwe digital ku by'enfuna mu wallet, ne SPHINCS+ (FIPS 205) olw'okusayina okusigamiziddwa ku hash ku blocks za blockchain. Zino ze standdaadi zemu eziwebwa okukuuma empuliziganya za gavumenti ez'ekyama.",
     },
     {
       question: "Empeereza yakakasizibwa mu ngeri ensungiddwa?",
@@ -1696,7 +1696,7 @@ const technical: Record<Lang, FaqItem[]> = {
   sw: [
     {
       question: "SPEAQ inatumia vyeti vipi vya NIST?",
-      answer: "SPEAQ inatekeleza viwango vingi vya kriptografia vya baada ya quantum vilivyoidhinishwa na NIST: Kyber-768 (FIPS 203) kwa ufungaji wa funguo, [PLANNED, not yet implemented] ML-DSA-65 (FIPS 204) kwa saini za kidijitali kwenye miamala ya pochi, na [PLANNED, not yet implemented] SPHINCS+ (FIPS 205) kwa saini zinazotegemea hash kwenye vitalu vya blockchain. Hivi ni viwango sawa vinavyopendekezwa kwa kulinda mawasiliano ya siri ya serikali.",
+      answer: "SPEAQ inatekeleza viwango vingi vya kriptografia vya baada ya quantum vilivyoidhinishwa na NIST: Kyber-768 (FIPS 203) kwa ufungaji wa funguo, ML-DSA-65 (FIPS 204) kwa saini za kidijitali kwenye miamala ya pochi, na SPHINCS+ (FIPS 205) kwa saini zinazotegemea hash kwenye vitalu vya blockchain. Hivi ni viwango sawa vinavyopendekezwa kwa kulinda mawasiliano ya siri ya serikali.",
     },
     {
       question: "Je, itifaki imethibitishwa rasmi?",
