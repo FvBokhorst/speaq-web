@@ -84,6 +84,10 @@ interface WitnessRecord {
   timestamp: number;
   location?: { lat: number; lng: number };
   description: string;
+  // Server-side anchor: filled in if the relay successfully anchored the hash. Provides
+  // an independent timestamp + signature that the relay saw this hash at anchorTs.
+  anchor?: { anchorTs: number; signature: string };
+  anchorError?: string;
 }
 
 interface WalletProject {
@@ -1046,19 +1050,52 @@ export default function SpeaqApp() {
         });
         playIncoming();
       }
-      // Handle call signaling
-      if (msg.type === "CALL_OFFER" && msg.from) {
+      // Handle call signaling. SDP + ICE candidates may arrive encrypted (msg.blob) or as
+      // legacy plaintext (msg.sdp / msg.candidate). New senders always encrypt with deriveKey
+      // shared between the two peers. Backwards-compat: a plaintext path remains until all
+      // peers are upgraded; a console.warn flags the legacy path so we can spot stragglers.
+      if (msg.type === "CALL_OFFER" && msg.from && identity) {
+        let sdp = msg.sdp as string | undefined;
+        let video = !!msg.video;
+        if (msg.blob) {
+          try {
+            const key = await deriveKey(identity.speaqId, msg.from);
+            const plain = JSON.parse(await decrypt(key, msg.blob)) as { sdp: string; video?: boolean };
+            sdp = plain.sdp;
+            video = !!plain.video;
+          } catch (e) { console.error("[SPEAQ] CALL_OFFER decrypt failed:", e); return; }
+        } else if (sdp) {
+          console.warn("[SPEAQ] CALL_OFFER received in legacy plaintext mode from", msg.from);
+        }
+        if (!sdp) { console.error("[SPEAQ] CALL_OFFER without usable SDP, ignoring"); return; }
         const contact = contacts.find(c => c.speaqId === msg.from) || { speaqId: msg.from, name: msg.from.substring(0, 8), addedAt: Date.now() };
-        // Don't use confirm(). it blocks WebSocket and drops ICE candidates
-        setIsVideoCall(!!msg.video);
-        setIncomingCall({ from: msg.from, name: (contact as Contact).name, sdp: msg.sdp });
+        setIsVideoCall(video);
+        setIncomingCall({ from: msg.from, name: (contact as Contact).name, sdp });
         setCallContact(contact as Contact);
       }
-      if (msg.type === "CALL_ANSWER" && msg.sdp && peerConnection.current) {
-        await peerConnection.current.setRemoteDescription(new RTCSessionDescription({ type: "answer", sdp: msg.sdp }));
+      if (msg.type === "CALL_ANSWER" && peerConnection.current && identity && msg.from) {
+        let sdp = msg.sdp as string | undefined;
+        if (msg.blob) {
+          try {
+            const key = await deriveKey(identity.speaqId, msg.from);
+            sdp = (JSON.parse(await decrypt(key, msg.blob)) as { sdp: string }).sdp;
+          } catch (e) { console.error("[SPEAQ] CALL_ANSWER decrypt failed:", e); return; }
+        } else if (sdp) {
+          console.warn("[SPEAQ] CALL_ANSWER received in legacy plaintext mode");
+        }
+        if (sdp) await peerConnection.current.setRemoteDescription(new RTCSessionDescription({ type: "answer", sdp }));
       }
-      if (msg.type === "ICE_CANDIDATE" && msg.candidate && peerConnection.current) {
-        await peerConnection.current.addIceCandidate(new RTCIceCandidate(msg.candidate));
+      if (msg.type === "ICE_CANDIDATE" && peerConnection.current && identity && msg.from) {
+        let candidate = msg.candidate;
+        if (msg.blob) {
+          try {
+            const key = await deriveKey(identity.speaqId, msg.from);
+            candidate = (JSON.parse(await decrypt(key, msg.blob)) as { candidate: RTCIceCandidateInit }).candidate;
+          } catch (e) { console.error("[SPEAQ] ICE_CANDIDATE decrypt failed:", e); return; }
+        } else if (candidate) {
+          console.warn("[SPEAQ] ICE_CANDIDATE received in legacy plaintext mode");
+        }
+        if (candidate) await peerConnection.current.addIceCandidate(new RTCIceCandidate(candidate));
       }
       if (msg.type === "CALL_END") {
         endCall();
@@ -1667,12 +1704,18 @@ export default function SpeaqApp() {
         localVideoRef.current.srcObject = localStream.current;
         localVideoRef.current.play().catch(() => {});
       }
-      const pc = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.l.google.com:19302" }] });
+      const pc = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.thespeaq.com:3478" }, { urls: "stun:136.109.120.222:3478" }] });
       peerConnection.current = pc;
       localStream.current.getTracks().forEach((track) => pc.addTrack(track, localStream.current!));
-      pc.onicecandidate = (e) => {
+      // Pre-derive a shared session key so all signaling for this call uses the same key.
+      // Same key as chat (deriveKey(self, peer)) so no separate exchange is needed.
+      const sigKey = await deriveKey(identity.speaqId, contact.speaqId);
+      pc.onicecandidate = async (e) => {
         if (e.candidate && wsRef.current) {
-          wsRef.current.send(JSON.stringify({ type: "ICE_CANDIDATE", to: contact.speaqId, candidate: e.candidate }));
+          try {
+            const blob = await encrypt(sigKey, JSON.stringify({ candidate: e.candidate }));
+            wsRef.current.send(JSON.stringify({ type: "ICE_CANDIDATE", to: contact.speaqId, blob }));
+          } catch (err) { console.error("[SPEAQ] ICE encrypt failed:", err); }
         }
       };
       pc.ontrack = (e) => {
@@ -1688,7 +1731,8 @@ export default function SpeaqApp() {
       };
       const offer = await pc.createOffer();
       await pc.setLocalDescription(offer);
-      wsRef.current.send(JSON.stringify({ type: "CALL_OFFER", to: contact.speaqId, sdp: offer.sdp, video }));
+      const offerBlob = await encrypt(sigKey, JSON.stringify({ sdp: offer.sdp, video }));
+      wsRef.current.send(JSON.stringify({ type: "CALL_OFFER", to: contact.speaqId, blob: offerBlob }));
     } catch (err) {
       console.error("Call failed:", err);
       alert("Could not access microphone");
@@ -1698,16 +1742,23 @@ export default function SpeaqApp() {
 
   const handleCallAnswer = async (sdp: string, from: string, wantVideo = false) => {
     try {
+      if (!identity) return;
       localStream.current = await navigator.mediaDevices.getUserMedia({ audio: true, video: wantVideo });
       if (wantVideo && localVideoRef.current) {
         localVideoRef.current.srcObject = localStream.current;
         localVideoRef.current.play().catch(() => {});
       }
-      const pc = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.l.google.com:19302" }] });
+      const pc = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.thespeaq.com:3478" }, { urls: "stun:136.109.120.222:3478" }] });
       peerConnection.current = pc;
       localStream.current.getTracks().forEach((track) => pc.addTrack(track, localStream.current!));
-      pc.onicecandidate = (e) => {
-        if (e.candidate && wsRef.current) wsRef.current.send(JSON.stringify({ type: "ICE_CANDIDATE", to: from, candidate: e.candidate }));
+      const sigKey = await deriveKey(identity.speaqId, from);
+      pc.onicecandidate = async (e) => {
+        if (e.candidate && wsRef.current) {
+          try {
+            const blob = await encrypt(sigKey, JSON.stringify({ candidate: e.candidate }));
+            wsRef.current.send(JSON.stringify({ type: "ICE_CANDIDATE", to: from, blob }));
+          } catch (err) { console.error("[SPEAQ] ICE encrypt failed:", err); }
+        }
       };
       pc.ontrack = (e) => {
         if (remoteAudioRef.current) {
@@ -1722,7 +1773,10 @@ export default function SpeaqApp() {
       await pc.setRemoteDescription(new RTCSessionDescription({ type: "offer", sdp }));
       const answer = await pc.createAnswer();
       await pc.setLocalDescription(answer);
-      if (wsRef.current) wsRef.current.send(JSON.stringify({ type: "CALL_ANSWER", to: from, sdp: answer.sdp }));
+      if (wsRef.current) {
+        const answerBlob = await encrypt(sigKey, JSON.stringify({ sdp: answer.sdp }));
+        wsRef.current.send(JSON.stringify({ type: "CALL_ANSWER", to: from, blob: answerBlob }));
+      }
       setCallActive(true);
       setCallDuration(0);
       callTimer.current = setInterval(() => setCallDuration((d) => d + 1), 1000);
@@ -1745,7 +1799,7 @@ export default function SpeaqApp() {
 
   // Witness handler - creates tamper-proof evidence with real SHA-256
   const createWitnessRecord = async () => {
-    if (!witnessDesc.trim()) return;
+    if (!witnessDesc.trim() || !identity) return;
     const ts = Date.now();
     const payload = `SPEAQ-WITNESS:${ts}:${witnessDesc.trim()}`;
     const hashBuffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(payload));
@@ -1756,6 +1810,25 @@ export default function SpeaqApp() {
       timestamp: ts,
       description: witnessDesc.trim(),
     };
+    // Server-side anchor: ask the relay to record this hash with its own timestamp + HMAC.
+    // The anchor proves the relay saw this hash at anchorTs - so a record cannot be
+    // back-dated locally after the fact. Fire-and-forget; failure does not block the record
+    // from being saved locally (the local SHA-256 still has its own value).
+    try {
+      const r = await fetch(`${RELAY_URL.replace("wss://", "https://")}/api/v1/witness/anchor`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ speaqId: identity.speaqId, hash: hashHex }),
+      });
+      if (r.ok) {
+        const data = await r.json() as { anchor: { anchorTs: number; signature: string } };
+        if (data.anchor) record.anchor = { anchorTs: data.anchor.anchorTs, signature: data.anchor.signature };
+      } else {
+        record.anchorError = `HTTP ${r.status}`;
+      }
+    } catch (e) {
+      record.anchorError = e instanceof Error ? e.message : "Anchor fetch failed";
+    }
     // Try to get location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
