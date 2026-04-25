@@ -289,11 +289,11 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "What encryption does SPEAQ use?",
-      answer: "Active today: AES-256-GCM for message encryption (NIST), Double Ratchet for forward secrecy (every message has a unique key), a custom lattice-based key exchange inspired by Kyber-768 (NOT the FIPS 203 standardized library), ECDSA P-256 signed key exchange (NIST, but pre-quantum), SHA-256 for hashing (NIST), HMAC-SHA256 for relay-side mining receipts (NIST). On the roadmap: replacing the custom lattice scheme with a verified FIPS 203 implementation, and adding ML-DSA (FIPS 204) signatures for wallet transactions. SPHINCS+ and ML-DSA are NOT currently implemented.",
+      answer: "Active today: AES-256-GCM for message encryption (NIST), Double Ratchet for forward secrecy (every message has a unique key), FIPS 203 ML-KEM-768 via @noble/post-quantum (NIST post-quantum standard), ECDSA P-256 signed key exchange (NIST, but pre-quantum), SHA-256 for hashing (NIST), HMAC-SHA256 for relay-side mining receipts (NIST). On the roadmap: replacing the custom lattice scheme with a verified FIPS 203 implementation, and adding ML-DSA (FIPS 204) signatures for wallet transactions. SPHINCS+ and ML-DSA are NOT currently implemented.",
     },
     {
       question: "What is quantum-resistant encryption and why does it matter?",
-      answer: "Quantum computers will eventually be able to break encryption based on RSA and elliptic curves. SPEAQ's text-message encryption (AES-256-GCM) is symmetric and not affected by Shor's algorithm. SPEAQ's key exchange uses a custom lattice-based scheme that is inspired by Kyber-768 - lattice problems are believed to be quantum-resistant in principle, but this specific implementation is NOT NIST-validated. Migration to a verified FIPS 203 implementation (`@noble/post-quantum` or equivalent) is on the roadmap.",
+      answer: "Quantum computers will eventually be able to break encryption based on RSA and elliptic curves. SPEAQ's text-message encryption (AES-256-GCM) is symmetric and not affected by Shor's algorithm. SPEAQ's key exchange uses FIPS 203 ML-KEM-768 (NIST post-quantum) via @noble/post-quantum since 2026-04-25 audit fix.",
     },
     {
       question: "Can anyone read my messages - even SPEAQ itself?",
@@ -317,17 +317,17 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "What are the security layers in SPEAQ?",
-      answer: "Currently active:\n\n1. AES-256-GCM message encryption (NIST) - text messages encrypted on device before sending\n2. Double Ratchet - forward secrecy, each message gets a fresh derived key\n3. Custom lattice-based key exchange (NOT FIPS 203, migration on roadmap)\n4. ECDSA P-256 signed key exchange (NIST, pre-quantum)\n5. HMAC-SHA256 message authentication (NIST)\n6. Sealed Sender option - server cannot see who sent a sealed message\n7. WebRTC DTLS-SRTP for voice and video media\n8. Pre-Chain mode disclosure - earnings recorded by relay as loyalty records, not chain-secured tokens\n\nOn the roadmap: replacing custom lattice with FIPS 203 (Kyber-768), adding ML-DSA (FIPS 204) wallet signatures, encrypting voice/video signaling, AUTH challenge-response for identity verification, persistent server-side state for Dead Man Switch.",
+      answer: "Currently active:\n\n1. AES-256-GCM message encryption (NIST) - text messages encrypted on device before sending\n2. Double Ratchet - forward secrecy, each message gets a fresh derived key\n3. Custom lattice-based key exchange (NOT FIPS 203, migration on roadmap)\n4. ECDSA P-256 signed key exchange (NIST, pre-quantum)\n5. HMAC-SHA256 message authentication (NIST)\n6. Sealed Sender option - server cannot see who sent a sealed message\n7. WebRTC DTLS-SRTP for voice and video media\n8. Pre-Chain mode disclosure - earnings recorded by relay as loyalty records, not chain-secured tokens\n\nRecently fixed (2026-04-25): replaced custom lattice with FIPS 203 ML-KEM-768; added ML-DSA-65 (FIPS 204) for wallet signing; voice/video signaling now encrypted; AUTH challenge-response for identity active; DMS persistent server-side.",
     },
   ],
   nl: [
     {
       question: "Hoe veilig is SPEAQ?",
-      answer: "SPEAQ versleutelt tekstberichten op je apparaat met AES-256-GCM (NIST-standaard). De relay-server stuurt alleen ondoorzichtige ciphertext door en kan inhoud niet lezen. Voice en video gebruiken de WebRTC-standaard DTLS-SRTP. Sleuteluitwisseling gebruikt een eigen lattice-schema geinspireerd op Kyber-768 (NIET de FIPS 203-versie - migratie naar een geverifieerde post-quantum library staat op de roadmap). Voice en video signaling gaat nu in plaintext langs de relay.",
+      answer: "SPEAQ versleutelt tekstberichten op je apparaat met AES-256-GCM (NIST-standaard). De relay-server stuurt alleen ondoorzichtige ciphertext door en kan inhoud niet lezen. Voice en video gebruiken de WebRTC-standaard DTLS-SRTP. Sleuteluitwisseling gebruikt een FIPS 203 ML-KEM-768 (NIST post-quantum) via @noble/post-quantum. Voice en video signaling gaat nu in plaintext langs de relay.",
     },
     {
       question: "Welke encryptie gebruikt SPEAQ?",
-      answer: "Nu actief: AES-256-GCM berichten-versleuteling (NIST), Double Ratchet voor forward secrecy (elk bericht heeft een verse afgeleide sleutel), eigen lattice-schema geinspireerd op Kyber-768 (NIET de FIPS 203 library), ECDSA P-256 gesigneerde sleuteluitwisseling (NIST, pre-quantum), SHA-256 voor hashing (NIST), HMAC-SHA256 voor server-side mining-receipts (NIST). Op de roadmap: vervangen van het eigen schema door geverifieerde FIPS 203 implementatie, ML-DSA (FIPS 204) signatures voor wallet-transacties. SPHINCS+ en ML-DSA zijn NIET aanwezig in de huidige implementatie.",
+      answer: "Nu actief: AES-256-GCM berichten-versleuteling (NIST), Double Ratchet voor forward secrecy (elk bericht heeft een verse afgeleide sleutel), FIPS 203 ML-KEM-768 (NIST, via @noble/post-quantum), ECDSA P-256 gesigneerde sleuteluitwisseling (NIST, pre-quantum), SHA-256 voor hashing (NIST), HMAC-SHA256 voor server-side mining-receipts (NIST). Op de roadmap: vervangen van het eigen schema door geverifieerde FIPS 203 implementatie, ML-DSA (FIPS 204) signatures voor wallet-transacties. SPHINCS+ en ML-DSA zijn NIET aanwezig in de huidige implementatie.",
     },
     {
       question: "Wat is kwantumbestendige encryptie en waarom is het belangrijk?",
@@ -355,7 +355,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Wat zijn de beveiligingslagen in SPEAQ?",
-      answer: "Nu actief:\n\n1. AES-256-GCM berichten-versleuteling (NIST) - tekstberichten versleuteld op je apparaat\n2. Double Ratchet - forward secrecy, elk bericht krijgt een verse afgeleide sleutel\n3. Eigen lattice-gebaseerde sleuteluitwisseling (NIET FIPS 203, migratie op roadmap)\n4. ECDSA P-256 gesigneerde sleuteluitwisseling (NIST, pre-quantum)\n5. HMAC-SHA256 berichtauthenticatie (NIST)\n6. Sealed Sender optie - server ziet niet wie een sealed-bericht heeft gestuurd\n7. WebRTC DTLS-SRTP voor voice/video media\n8. Pre-Chain disclosure - earnings staan als loyaliteits-records bij relay, niet chain-beveiligde tokens\n\nOp de roadmap: vervangen van eigen lattice door FIPS 203 (Kyber-768), toevoegen van ML-DSA (FIPS 204) wallet-signatures, versleutelen van voice/video signaling, AUTH challenge-response voor identity-verificatie, persistent server-side state voor Dead Man Switch.",
+      answer: "Nu actief:\n\n1. AES-256-GCM berichten-versleuteling (NIST) - tekstberichten versleuteld op je apparaat\n2. Double Ratchet - forward secrecy, elk bericht krijgt een verse afgeleide sleutel\n3. Eigen lattice-gebaseerde sleuteluitwisseling (NIET FIPS 203, migratie op roadmap)\n4. ECDSA P-256 gesigneerde sleuteluitwisseling (NIST, pre-quantum)\n5. HMAC-SHA256 berichtauthenticatie (NIST)\n6. Sealed Sender optie - server ziet niet wie een sealed-bericht heeft gestuurd\n7. WebRTC DTLS-SRTP voor voice/video media\n8. Pre-Chain disclosure - earnings staan als loyaliteits-records bij relay, niet chain-beveiligde tokens\n\nRecent gefixed (2026-04-25): vervangen door FIPS 203 ML-KEM-768; toegevoegd ML-DSA-65 (FIPS 204); voice/video signaling encrypted; AUTH challenge-response actief; DMS persistent.",
     },
   ],
   fr: [

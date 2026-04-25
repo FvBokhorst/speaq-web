@@ -61,12 +61,12 @@ export default function TermsPage() {
               Text messages are end-to-end encrypted on your device with
               AES-256-GCM (NIST standard) and forwarded by SPEAQ as opaque
               ciphertext. Voice and video media use WebRTC DTLS-SRTP standard
-              encryption. Key exchange uses a custom lattice-based scheme
-              inspired by Kyber-768 (this is NOT the NIST-standardized FIPS
-              203 library; migration to a verified post-quantum implementation
-              is on the roadmap). Voice and video signaling (SDP/ICE) currently
-              passes the relay in plaintext. SPEAQ does not retain plaintext
-              copies of message content.
+              encryption. Voice and video signaling (SDP/ICE) is also
+              encrypted between peers since the 2026-04-25 update. Key exchange
+              uses FIPS 203 ML-KEM-768 (NIST post-quantum, via the
+              @noble/post-quantum library). FIPS 204 ML-DSA-65 implementation
+              is present for wallet/transaction signing. SPEAQ does not retain
+              plaintext copies of message content.
             </p>
           </section>
 
@@ -221,12 +221,12 @@ export default function TermsPage() {
               {[
                 "AES-256-GCM (NIST) - symmetric encryption for text messages, file content, and Q-Credits payment payloads",
                 "Double Ratchet - forward secrecy, fresh derived key per message",
-                "Custom lattice-based key exchange inspired by Kyber-768 - NOT the NIST-standardized FIPS 203 library; migration on roadmap",
+                "FIPS 203 ML-KEM-768 (NIST-standardized post-quantum, via @noble/post-quantum)",
                 "ECDSA P-256 (NIST, pre-quantum) - signed key exchange between contacts",
                 "SHA-256 (NIST) - hashing of identity records and witness records",
                 "HMAC-SHA256 (NIST) - server-side mining receipt tags (relay-internal authentication, not double-signed)",
                 "WebRTC DTLS-SRTP - voice and video media encryption (signaling itself is plaintext)",
-                "[ROADMAP, not yet implemented] FIPS 203 Kyber-768, FIPS 204 ML-DSA-65 wallet signatures, FIPS 205 SPHINCS+, CLSAG ring signatures, Pedersen commitments + Bulletproofs",
+                "FIPS 203 Kyber-768 ACTIVE (2026-04-25). FIPS 204 ML-DSA-65 implementation present for wallet signing. FIPS 205 SPHINCS+ on roadmap., CLSAG ring signatures, Pedersen commitments + Bulletproofs",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-quantum-teal mt-2.5 shrink-0" />

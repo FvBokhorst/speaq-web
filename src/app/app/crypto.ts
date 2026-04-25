@@ -151,52 +151,80 @@ export interface KyberKeyPair {
   privateKey: string;
 }
 
+// Audit fix D1 (2026-04-25): replaced custom ring-LWE scheme with FIPS 203 ML-KEM-768
+// from @noble/post-quantum. The previous implementation was Kyber-768-INSPIRED (single
+// polynomial Module-LWE, eta=3) and was NOT NIST-validated. This switches to the
+// reference NIST-standardized algorithm from a peer-reviewed library.
+//
+// Public/private keys are now base64-encoded raw bytes:
+//   publicKey:  1184 bytes (encapsulation key)
+//   privateKey: 2400 bytes (decapsulation key)
+//   ciphertext: 1088 bytes
+//   sharedSecret: 32 bytes (returned as 64-char hex string for ratchet compatibility)
+//
+// MIGRATION: existing localStorage `speaq_kyber_keys` from the old scheme are NOT
+// compatible (different format). On page load, page.tsx detects malformed/old keys and
+// regenerates with ml_kem768. Existing per-contact ratchet states (saved sharedSecret)
+// remain valid for decrypting OLD messages because the Double Ratchet uses the secret
+// directly, not the Kyber keys. New key exchanges use the new keys end-to-end.
+import { ml_kem768 } from "@noble/post-quantum/ml-kem.js";
+
+function bytesToB64(b: Uint8Array): string {
+  let s = "";
+  for (let i = 0; i < b.length; i += 8192) {
+    s += String.fromCharCode.apply(null, Array.from(b.subarray(i, i + 8192)));
+  }
+  return btoa(s);
+}
+function b64ToBytes(s: string): Uint8Array {
+  const bin = atob(s);
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+
 export async function generateKyberKeyPair(): Promise<KyberKeyPair> {
-  const seedHex = toHex(randomBytes(32));
-  const a = await polyFromSeed(seedHex);
-  const s = sampleCBD(3);
-  const e = sampleCBD(3);
-  const b = polyAdd(polyMul(a, s), e);
-  const pubData = seedHex + ":" + polyToBase64(b);
-  return { publicKey: btoa(pubData), privateKey: btoa(polyToBase64(s)) };
+  const seed = crypto.getRandomValues(new Uint8Array(64));
+  const kp = ml_kem768.keygen(seed);
+  return { publicKey: bytesToB64(kp.publicKey), privateKey: bytesToB64(kp.secretKey) };
 }
 
 export async function kyberEncapsulate(publicKeyB64: string): Promise<{ ciphertext: string; sharedSecret: string }> {
-  const pubData = atob(publicKeyB64);
-  const sepIdx = pubData.indexOf(":");
-  const seed = pubData.substring(0, sepIdx);
-  const b = polyFromBase64(pubData.substring(sepIdx + 1));
-  const a = await polyFromSeed(seed);
-  const r = sampleCBD(3), e1 = sampleCBD(3), e2 = sampleCBD(3);
-  const msgBytes = randomBytes(32);
-  const msgPoly = new Int16Array(LATTICE_N);
-  for (let i = 0; i < 256; i++) {
-    msgPoly[i] = ((msgBytes[i >> 3] >> (i & 7)) & 1) ? Math.round(LATTICE_Q / 2) : 0;
+  const pub = b64ToBytes(publicKeyB64);
+  if (pub.length !== 1184) {
+    throw new Error(`kyberEncapsulate: public key must be 1184 bytes (FIPS 203 ML-KEM-768), got ${pub.length}. Old-format key detected - peer needs to regenerate.`);
   }
-  const u = polyAdd(polyMul(a, r), e1);
-  const v = polyAdd(polyAdd(polyMul(b, r), e2), msgPoly);
-  const uComp = compressToBytes(u, 10);
-  const vComp = compressToBytes(v, 4);
-  const ct = new Uint8Array(uComp.length + vComp.length);
-  ct.set(uComp); ct.set(vComp, uComp.length);
-  return { ciphertext: uint8ToBase64(ct), sharedSecret: await sha256(toHex(msgBytes)) };
+  const enc = ml_kem768.encapsulate(pub);
+  return {
+    ciphertext: bytesToB64(enc.cipherText),
+    sharedSecret: toHex(enc.sharedSecret),
+  };
 }
 
 export async function kyberDecapsulate(ciphertextB64: string, privateKeyB64: string): Promise<string> {
-  const s = polyFromBase64(atob(privateKeyB64));
-  const ctRaw = Uint8Array.from(atob(ciphertextB64), (c) => c.charCodeAt(0));
-  const uSize = (LATTICE_N * 10) / 8;
-  const u = decompressFromBytes(ctRaw.slice(0, uSize), 10);
-  const v = decompressFromBytes(ctRaw.slice(uSize, uSize + (LATTICE_N * 4) / 8), 4);
-  const noisy = polySub(v, polyMul(s, u));
-  const msgBytes = new Uint8Array(32);
-  for (let i = 0; i < 256; i++) {
-    const coeff = noisy[i];
-    const dist0 = Math.min(coeff, LATTICE_Q - coeff);
-    const distHalf = Math.abs(coeff - Math.round(LATTICE_Q / 2));
-    if (dist0 > distHalf) msgBytes[i >> 3] |= 1 << (i & 7);
+  const ct = b64ToBytes(ciphertextB64);
+  const sk = b64ToBytes(privateKeyB64);
+  if (sk.length !== 2400) {
+    throw new Error(`kyberDecapsulate: private key must be 2400 bytes (FIPS 203 ML-KEM-768), got ${sk.length}. Old-format key - regenerate locally.`);
   }
-  return sha256(toHex(msgBytes));
+  if (ct.length !== 1088) {
+    throw new Error(`kyberDecapsulate: ciphertext must be 1088 bytes, got ${ct.length}. Sender used incompatible scheme.`);
+  }
+  const ss = ml_kem768.decapsulate(ct, sk);
+  return toHex(ss);
+}
+
+// Helper: detect old-format Kyber keys so the app can prompt regeneration.
+// Old format was base64 of "seedHex:b64polyB" structure; new format is raw 1184 bytes.
+export function isLegacyKyberKey(publicKeyB64: string): boolean {
+  try {
+    const bytes = b64ToBytes(publicKeyB64);
+    if (bytes.length === 1184) return false; // new format
+    // Old format size varies; treat anything not 1184 as legacy.
+    return true;
+  } catch {
+    return true;
+  }
 }
 
 // ============================================================
@@ -309,6 +337,23 @@ export async function hashPinPBKDF2(pin: string, speaqId: string): Promise<strin
     256
   );
   return toHex(new Uint8Array(derived));
+}
+
+// Identity-backup-specific: derive an AES-GCM key from PIN + a per-backup random salt.
+// Used by exportIdentityBackup / importIdentityBackup so backups are portable across devices
+// (different speaqId-based salts would prevent restoring on a fresh device).
+export async function deriveBackupKeyFromSalt(pin: string, salt: Uint8Array): Promise<CryptoKey> {
+  const encoder = new TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey(
+    "raw", encoder.encode(`SPEAQ-IDENTITY-BACKUP:${pin}`), "PBKDF2", false, ["deriveKey"]
+  );
+  return crypto.subtle.deriveKey(
+    { name: "PBKDF2", salt: salt as BufferSource, iterations: 600000, hash: "SHA-256" },
+    keyMaterial,
+    { name: "AES-GCM", length: 256 },
+    false,
+    ["encrypt", "decrypt"]
+  );
 }
 
 // Vault-specific: derive an AES-GCM key from PIN + speaqId (separate salt namespace from auth-PIN hashing).
@@ -431,6 +476,74 @@ export async function verifySignature(data: string, signatureB64: string, public
   } catch {
     return false;
   }
+}
+
+// =================================================================================
+// ML-DSA-65 (FIPS 204 Dilithium) signatures - audit fix D2 (2026-04-25)
+// =================================================================================
+// Post-quantum digital signatures from @noble/post-quantum, NIST FIPS 204 standard.
+// ECDSA P-256 (above) remains the active signing scheme for browser-relay AUTH and
+// peer KEY_EXCHANGE because it integrates with Web Crypto API and is supported by
+// the relay's existing verification path. ML-DSA-65 below is the post-quantum
+// equivalent intended for on-chain wallet transaction signing - the speaq-chain
+// (Rust) already verifies Dilithium signatures on transactions, so this PWA-side
+// API allows the browser/PWA to sign on-chain operations with FIPS 204 keys.
+//
+// Sizes: publicKey 1952 bytes, secretKey 4032 bytes, signature 3309 bytes (raw).
+// All values are base64-encoded for storage/transport.
+
+import { ml_dsa65 } from "@noble/post-quantum/ml-dsa.js";
+
+export interface MlDsaKeyPair {
+  publicKey: string;   // base64 of 1952 bytes
+  privateKey: string;  // base64 of 4032 bytes
+}
+
+export function generateMlDsaKeyPair(): MlDsaKeyPair {
+  const seed = crypto.getRandomValues(new Uint8Array(32));
+  const kp = ml_dsa65.keygen(seed);
+  return { publicKey: bytesToB64(kp.publicKey), privateKey: bytesToB64(kp.secretKey) };
+}
+
+export function mlDsaSign(message: string | Uint8Array, privateKeyB64: string): string {
+  const sk = b64ToBytes(privateKeyB64);
+  if (sk.length !== 4032) throw new Error(`ML-DSA-65 secretKey must be 4032 bytes, got ${sk.length}`);
+  const msg = typeof message === "string" ? new TextEncoder().encode(message) : message;
+  const sig = ml_dsa65.sign(sk, msg);
+  return bytesToB64(sig);
+}
+
+export function mlDsaVerify(message: string | Uint8Array, signatureB64: string, publicKeyB64: string): boolean {
+  try {
+    const pk = b64ToBytes(publicKeyB64);
+    if (pk.length !== 1952) return false;
+    const sig = b64ToBytes(signatureB64);
+    if (sig.length !== 3309) return false;
+    const msg = typeof message === "string" ? new TextEncoder().encode(message) : message;
+    return ml_dsa65.verify(pk, msg, sig);
+  } catch {
+    return false;
+  }
+}
+
+// Save/load ML-DSA keys for the local user. Separate storage from ECDSA keys so the
+// two signing schemes can coexist (ECDSA for AUTH/KEY_EXCHANGE, ML-DSA for on-chain
+// transactions). Generated lazily on first use.
+export function saveMlDsaKeys(keys: MlDsaKeyPair): void {
+  localStorage.setItem("speaq_mldsa_keys", JSON.stringify(keys));
+}
+export function loadMlDsaKeys(): MlDsaKeyPair | null {
+  try {
+    const s = localStorage.getItem("speaq_mldsa_keys");
+    return s ? JSON.parse(s) : null;
+  } catch { return null; }
+}
+export function getOrCreateMlDsaKeys(): MlDsaKeyPair {
+  const existing = loadMlDsaKeys();
+  if (existing && existing.publicKey && existing.privateKey) return existing;
+  const fresh = generateMlDsaKeyPair();
+  saveMlDsaKeys(fresh);
+  return fresh;
 }
 
 // Save/load signing keys

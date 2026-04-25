@@ -91,12 +91,11 @@ export default function PrivacyPage() {
             <p>
               Text messages are end-to-end encrypted with AES-256-GCM (NIST
               standard) and a Double Ratchet protocol providing forward secrecy.
-              Key exchange uses a custom lattice-based scheme inspired by
-              Kyber-768; this is NOT the NIST-standardized FIPS 203
-              implementation. Migration to a verified post-quantum library is
-              on the roadmap. Voice and video media use WebRTC's standard
-              DTLS-SRTP encryption; signaling (SDP/ICE) currently passes the
-              relay in plaintext.
+              Key exchange uses FIPS 203 ML-KEM-768 (NIST post-quantum, via the
+              @noble/post-quantum library) since the 2026-04-25 audit upgrade.
+              FIPS 204 ML-DSA-65 implementation is present for wallet
+              transaction signing. Voice and video media use WebRTC's standard
+              DTLS-SRTP encryption; signaling (SDP/ICE) is encrypted peer-to-peer.
             </p>
           </section>
 

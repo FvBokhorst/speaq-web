@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import {
   generateId, deriveKey, encrypt, decrypt, hashPinPBKDF2,
-  deriveVaultKey, encryptWithKey, decryptWithKey,
-  generateKyberKeyPair, kyberEncapsulate, kyberDecapsulate,
+  deriveVaultKey, encryptWithKey, decryptWithKey, deriveBackupKeyFromSalt,
+  generateKyberKeyPair, kyberEncapsulate, kyberDecapsulate, isLegacyKyberKey,
   initRatchet, ratchetEncrypt, ratchetDecrypt,
   saveRatchetState, loadRatchetState,
   type KyberKeyPair, type RatchetState,
@@ -367,7 +367,7 @@ const appStrings: Record<string, Record<string, string>> = {
   "info.earningTypes": { en: "7 Earning Types: Relay (forward messages), Validation (verify proofs), Storage (store encrypted data), Mesh (Bluetooth node), Bridge (cash agent), Translation (translate app), Onboarding (invite users).", nl: "7 Earning Types: Relay (berichten doorsturen), Validatie (bewijzen verifieren), Opslag (versleutelde data bewaren), Mesh (Bluetooth node), Bridge (cash agent), Vertaling (app vertalen), Onboarding (gebruikers uitnodigen).", fr: "7 Types de Gains: Relais, Validation, Stockage, Mesh, Pont, Traduction, Integration.", es: "7 Tipos de Ganancias: Retransmision, Validacion, Almacenamiento, Mesh, Puente, Traduccion, Incorporacion.", ru: "7 tipov zarabotoka: Retranslyatsiya, Validatsiya, Khranenie, Mesh, Most, Perevod, Registratsiya.", de: "7 Earning-Typen: Relay, Validierung, Speicherung, Mesh, Bridge, Ubersetzung, Onboarding.", sl: "7 tipov rudarjenja: Prenos, Preverjanje, Shranjevanje, Mesh, Most, Prevajanje, Vkljucevanje.", lg: "Ebika 7 by'okufuna: Relay, Okukakasa, Okutereka, Mesh, Bridge, Okuvvuunula, Okuyingiza.", sw: "Aina 7 za kupata: Relay, Uthibitisho, Hifadhi, Mesh, Daraja, Tafsiri, Usajili." },
   "info.earningRates": { en: "Daily earnings: ~0.02-0.05 QC/day (~5-8% annual yield, comparable to staking platforms). Rewards halve every 2,100,000 QC earned.", nl: "Dagelijkse verdiensten: ~0.02-0.05 QC/dag (~5-8% jaarlijks rendement, vergelijkbaar met staking platforms). Beloningen halveren elke 2.100.000 QC verdiend.", fr: "Gains quotidiens: ~0.02-0.05 QC/jour (~5-8% rendement annuel). Les recompenses diminuent de moitie tous les 2.100.000 QC gagnes.", es: "Ganancias diarias: ~0.02-0.05 QC/dia (~5-8% rendimiento anual). Las recompensas se reducen a la mitad cada 2.100.000 QC ganados.", ru: "Dnevnoj dokhod: ~0.02-0.05 QC/den (~5-8% godovoj dokhod). Nagrady umenshayutsya vdvoe kazhdye 2.100.000 QC.", de: "Tagliche Einnahmen: ~0.02-0.05 QC/Tag (~5-8% jahrliche Rendite). Belohnungen halbieren sich alle 2.100.000 QC.", sl: "Dnevni zasluzek: ~0.02-0.05 QC/dan (~5-8% letni donos). Nagrade se razpolovijo vsakih 2.100.000 QC.", lg: "Empeera ez'olunaku: ~0.02-0.05 QC/olunaku (~5-8% omwaka). Empeera zeegabanyizibwa buli 2,100,000 QC.", sw: "Mapato ya kila siku: ~0.02-0.05 QC/siku (~5-8% kwa mwaka). Tuzo hupungua nusu kila QC 2,100,000." },
   "info.earningProof": { en: "Pre-Chain ledger (current state): Earning rewards are recorded by the relay server with an HMAC tag. This is a server-side log, not a cryptographic proof. A double-signed proof system (you sign + relay co-signs) is on the roadmap toward mainnet. Until mainnet launches, treat earning balances as pre-chain loyalty records, not chain-secured tokens.", nl: "Pre-Chain ledger (huidige staat): verdien-beloningen worden door de relay-server geregistreerd met een HMAC-tag. Dat is een server-side log, geen cryptografisch bewijs. Een dubbel-getekend bewijs-systeem (jij tekent + relay tekent mee) staat op de roadmap richting mainnet. Tot mainnet-launch zijn earning saldi pre-chain loyaliteits-records, geen chain-beveiligde tokens.", fr: "Registre Pre-Chain (etat actuel): les recompenses sont enregistrees par le serveur relais avec une etiquette HMAC. C'est un journal cote serveur, pas une preuve cryptographique. Un systeme de double signature est sur la feuille de route vers le mainnet. Jusqu'au lancement, les soldes sont des enregistrements de fidelite, pas des tokens securises par la chaine.", es: "Registro Pre-Chain (estado actual): las recompensas son registradas por el servidor relay con una etiqueta HMAC. Es un registro del servidor, no una prueba criptografica. Un sistema de doble firma esta en la hoja de ruta hacia mainnet. Hasta el lanzamiento, los saldos son registros de fidelidad pre-chain, no tokens asegurados por la cadena.", ru: "Pre-Chain reestr (tekushchee sostoyanie): nagrady reglistriruyutsya serverom relay s HMAC-metkoj. Eto serverniy zhurnal, ne kriptograficheskoe dokazatelstvo. Sistema dvojnoj podpisi v plane razvitiya k mainnet. Do zapuska balansy yavlyayutsya pre-chain zapisyami loyalnosti, ne tokenami zashchishchennymi tsepyu.", de: "Pre-Chain Ledger (aktueller Zustand): Belohnungen werden vom Relay-Server mit einem HMAC-Tag erfasst. Dies ist ein Server-Log, kein kryptographischer Beweis. Ein Doppelsignatur-System steht auf der Roadmap zum Mainnet. Bis zum Start sind Salden Pre-Chain Treuepunkte, keine Chain-gesicherten Token.", sl: "Pre-Chain knjiga (trenutno stanje): nagrade belezi streznik za prenos s HMAC-oznako. To je dnevnik na strani streznika, ne kriptografski dokaz. Sistem dvojnega podpisa je na karti razvoja proti glavnemu omrezju. Do zagona so stanja pre-chain zvestobni zapisi, ne z verigo zavarovani zetoni.", lg: "Pre-Chain ledger (embeera ya kati): empeera ziwandikibwa relay server n'akabonero ka HMAC. Kuno kuwandiika kwa server, si bukakafu bwa cryptographic. Sisitemu y'obusaini obw'amalundi abiri eri ku roadmap. Mainnet bw'etandika, embeera nzigirira pre-chain loyalty records.", sw: "Daftari la Pre-Chain (hali ya sasa): zawadi zinaorodheshwa na seva ya relay kwa lebo ya HMAC. Hili ni rekodi ya seva, sio uthibitisho wa cryptographic. Mfumo wa saini mbili uko kwenye ramani ya barabara kuelekea mainnet. Hadi uzinduzi, salio ni rekodi za uaminifu za pre-chain, sio token zilizolindwa na mlolongo." },
-  "info.securityDesc": { en: "AES-256-GCM message encryption via the browser's Web Crypto API. The relay sees only opaque ciphertext, not message content. Voice and video media use WebRTC's standard DTLS-SRTP. Key exchange uses a custom lattice-based scheme inspired by Kyber-768; this is NOT the NIST-standardized FIPS 203 implementation, and a migration to a verified post-quantum library is on the roadmap. Calls signaling (SDP/ICE) currently passes the relay in plaintext.", nl: "AES-256-GCM berichten-versleuteling via de Web Crypto API van de browser. De relay ziet alleen ondoorzichtige ciphertext, niet de inhoud. Voice en video gebruiken de WebRTC-standaard DTLS-SRTP. Sleuteluitwisseling gebruikt een eigen lattice-schema geinspireerd op Kyber-768; dit is GEEN NIST-gestandaardiseerde FIPS 203 implementatie, en migratie naar een geverifieerde post-quantum library staat op de roadmap. Voice/video signaling (SDP/ICE) gaat nu in plaintext langs de relay.", fr: "Chiffrement AES-256-GCM via Web Crypto API. Le relais ne voit que du texte chiffre opaque. Voix et video utilisent le DTLS-SRTP standard de WebRTC. L'echange de cles utilise un schema lattice maison inspire par Kyber-768; ce n'est PAS une implementation FIPS 203 certifiee NIST, une migration est sur la feuille de route. La signalisation des appels (SDP/ICE) passe actuellement en texte clair par le relais.", es: "Cifrado AES-256-GCM via Web Crypto API del navegador. El relay solo ve texto cifrado opaco. Voz y video usan DTLS-SRTP estandar de WebRTC. El intercambio de claves usa un esquema lattice propio inspirado en Kyber-768; NO es una implementacion FIPS 203 certificada NIST, la migracion esta en la hoja de ruta. La senalizacion de llamadas (SDP/ICE) pasa actualmente en texto plano por el relay.", ru: "AES-256-GCM shifrovanie soobshchenij cherez Web Crypto API brauzera. Relay vidit tolko neprozrachnyj shifrtekst. Golos i video ispolzuyut standartnyj DTLS-SRTP iz WebRTC. Obmen klyuchami ispolzuet sobstvennuyu lattice-skhemu vdokhnovlennuyu Kyber-768; eto NE NIST-sertifitsirovannaya FIPS 203 realizatsiya, migratsiya v plane razvitiya. Signalizatsiya zvonkov (SDP/ICE) seychas prokhodit cherez relay v otkrytom vide.", de: "AES-256-GCM Nachrichtenverschlusselung via Web Crypto API des Browsers. Der Relay sieht nur undurchsichtigen Geheimtext. Sprache und Video verwenden WebRTC-Standard DTLS-SRTP. Schlusselaustausch verwendet ein eigenes Gitter-Schema inspiriert von Kyber-768; dies ist KEINE NIST-zertifizierte FIPS 203 Implementierung, eine Migration steht auf der Roadmap. Anruf-Signalisierung (SDP/ICE) lauft derzeit im Klartext uber den Relay.", sl: "AES-256-GCM sifriranje sporocil prek Web Crypto API. Relay vidi le neprosojen sifrobesedilo. Glas in video uporabljata WebRTC standard DTLS-SRTP. Izmenjava kljucev uporablja lastno lattice shemo navdihnjeno z Kyber-768; to NI NIST certificirana FIPS 203 implementacija, migracija je na karti razvoja. Signalizacija klicev (SDP/ICE) trenutno gre v cistopisu skozi relay.", lg: "AES-256-GCM enkuuma y'obubaka. Relay erabira ssente esirikidde, si by'omunda. Voice ne video bikozesa WebRTC standard DTLS-SRTP. Okwawukana kw'obusumuluzo kukozesa lattice yaffe etondebbwa ku Kyber-768; SI NIST FIPS 203, okukyusa kuli ku roadmap. Signaling y'okukubirwa (SDP/ICE) kati eyita mu plaintext kuva ku relay.", sw: "Usimbaji wa ujumbe AES-256-GCM kupitia Web Crypto API. Relay inaona maandishi yaliyosimbwa tu. Sauti na video zinatumia DTLS-SRTP ya WebRTC. Kubadilishana funguo kunatumia mfumo wetu wa lattice ulioongozwa na Kyber-768; SI utekelezaji wa NIST FIPS 203, uhamiaji uko kwenye ramani. Ishara za simu (SDP/ICE) sasa zinapita relay kwa maandishi wazi." },
+  "info.securityDesc": { en: "AES-256-GCM message encryption via the browser's Web Crypto API. The relay sees only opaque ciphertext, not message content. Voice and video media use WebRTC's standard DTLS-SRTP. Key exchange uses a FIPS 203 ML-KEM-768 (NIST post-quantum) via @noble/post-quantum library. Calls signaling (SDP/ICE) currently passes the relay in plaintext.", nl: "AES-256-GCM berichten-versleuteling via de Web Crypto API van de browser. De relay ziet alleen ondoorzichtige ciphertext, niet de inhoud. Voice en video gebruiken de WebRTC-standaard DTLS-SRTP. Sleuteluitwisseling gebruikt een FIPS 203 ML-KEM-768 (NIST post-quantum) via @noble/post-quantum library. Voice/video signaling (SDP/ICE) gaat nu in plaintext langs de relay.", fr: "Chiffrement AES-256-GCM via Web Crypto API. Le relais ne voit que du texte chiffre opaque. Voix et video utilisent le DTLS-SRTP standard de WebRTC. L'echange de cles utilise un schema lattice maison inspire par Kyber-768; ce n'est PAS une implementation FIPS 203 certifiee NIST, une migration est sur la feuille de route. La signalisation des appels (SDP/ICE) passe actuellement en texte clair par le relais.", es: "Cifrado AES-256-GCM via Web Crypto API del navegador. El relay solo ve texto cifrado opaco. Voz y video usan DTLS-SRTP estandar de WebRTC. El intercambio de claves usa un esquema lattice propio inspirado en Kyber-768; NO es una implementacion FIPS 203 certificada NIST, la migracion esta en la hoja de ruta. La senalizacion de llamadas (SDP/ICE) pasa actualmente en texto plano por el relay.", ru: "AES-256-GCM shifrovanie soobshchenij cherez Web Crypto API brauzera. Relay vidit tolko neprozrachnyj shifrtekst. Golos i video ispolzuyut standartnyj DTLS-SRTP iz WebRTC. Obmen klyuchami ispolzuet sobstvennuyu lattice-skhemu vdokhnovlennuyu Kyber-768; eto NE NIST-sertifitsirovannaya FIPS 203 realizatsiya, migratsiya v plane razvitiya. Signalizatsiya zvonkov (SDP/ICE) seychas prokhodit cherez relay v otkrytom vide.", de: "AES-256-GCM Nachrichtenverschlusselung via Web Crypto API des Browsers. Der Relay sieht nur undurchsichtigen Geheimtext. Sprache und Video verwenden WebRTC-Standard DTLS-SRTP. Schlusselaustausch verwendet ein eigenes Gitter-Schema inspiriert von Kyber-768; dies ist KEINE NIST-zertifizierte FIPS 203 Implementierung, eine Migration steht auf der Roadmap. Anruf-Signalisierung (SDP/ICE) lauft derzeit im Klartext uber den Relay.", sl: "AES-256-GCM sifriranje sporocil prek Web Crypto API. Relay vidi le neprosojen sifrobesedilo. Glas in video uporabljata WebRTC standard DTLS-SRTP. Izmenjava kljucev uporablja lastno lattice shemo navdihnjeno z Kyber-768; to NI NIST certificirana FIPS 203 implementacija, migracija je na karti razvoja. Signalizacija klicev (SDP/ICE) trenutno gre v cistopisu skozi relay.", lg: "AES-256-GCM enkuuma y'obubaka. Relay erabira ssente esirikidde, si by'omunda. Voice ne video bikozesa WebRTC standard DTLS-SRTP. Okwawukana kw'obusumuluzo kukozesa lattice yaffe etondebbwa ku Kyber-768; SI NIST FIPS 203, okukyusa kuli ku roadmap. Signaling y'okukubirwa (SDP/ICE) kati eyita mu plaintext kuva ku relay.", sw: "Usimbaji wa ujumbe AES-256-GCM kupitia Web Crypto API. Relay inaona maandishi yaliyosimbwa tu. Sauti na video zinatumia DTLS-SRTP ya WebRTC. Kubadilishana funguo kunatumia mfumo wetu wa lattice ulioongozwa na Kyber-768; SI utekelezaji wa NIST FIPS 203, uhamiaji uko kwenye ramani. Ishara za simu (SDP/ICE) sasa zinapita relay kwa maandishi wazi." },
   "mod.chat": { en: "Chat", nl: "Chat", fr: "Discussion", es: "Chat", ru: "Chat", de: "Chat", sl: "Klepet", lg: "Okwogerako", sw: "Mazungumzo" },
   "mod.chatDesc": { en: "End-to-end encrypted messaging", nl: "End-to-end versleuteld berichtenverkeer", fr: "Messagerie chiffree de bout en bout", es: "Mensajeria cifrada de extremo a extremo", ru: "Skvoznoe shifrovanie soobshchenij", de: "Ende-zu-Ende-verschlusselte Nachrichten", sl: "Sifrirana sporocila od konca do konca", lg: "Obubaka obukuumiddwa ddala", sw: "Ujumbe uliofichwa mwanzo hadi mwisho" },
   "mod.call": { en: "Call", nl: "Bellen", fr: "Appel", es: "Llamada", ru: "Zvonok", de: "Anruf", sl: "Klic", lg: "Okuyita", sw: "Piga simu" },
@@ -776,10 +776,30 @@ export default function SpeaqApp() {
     const savedPhoto = localStorage.getItem("speaq_profile_photo");
     if (savedPhoto) setProfilePhoto(savedPhoto);
 
-    // Load or generate Kyber keypair + signing keypair
+    // Load or generate Kyber keypair + signing keypair.
+    // D1 audit fix (2026-04-25): if stored keys are legacy (homemade ring-LWE format),
+    // regenerate with FIPS 203 ML-KEM-768. Existing ratchet states are unaffected because
+    // they store sharedSecret directly, not the Kyber keys.
     const savedKyber = localStorage.getItem("speaq_kyber_keys");
     if (savedKyber) {
-      kyberKeys.current = JSON.parse(savedKyber);
+      try {
+        const parsed = JSON.parse(savedKyber) as KyberKeyPair;
+        if (isLegacyKyberKey(parsed.publicKey)) {
+          console.warn("[SPEAQ] Detected legacy Kyber keys, regenerating with FIPS 203 ML-KEM-768");
+          generateKyberKeyPair().then((kp) => {
+            kyberKeys.current = kp;
+            localStorage.setItem("speaq_kyber_keys", JSON.stringify(kp));
+          });
+        } else {
+          kyberKeys.current = parsed;
+        }
+      } catch {
+        // Corrupted - regenerate
+        generateKyberKeyPair().then((kp) => {
+          kyberKeys.current = kp;
+          localStorage.setItem("speaq_kyber_keys", JSON.stringify(kp));
+        });
+      }
     } else if (saved) {
       generateKyberKeyPair().then((kp) => {
         kyberKeys.current = kp;
@@ -986,8 +1006,31 @@ export default function SpeaqApp() {
         }
 
         if (!plaintext) return;
-        let parsed: { text?: string; from?: string; senderId?: string; timestamp?: number; photo?: string; audioB64?: string; qc?: boolean; amount?: number; fromName?: string };
+        let parsed: { type?: string; text?: string; from?: string; senderId?: string; timestamp?: number; photo?: string; audioB64?: string; qc?: boolean; amount?: number; fromName?: string; groupId?: string };
         try { parsed = JSON.parse(plaintext); } catch { parsed = { text: plaintext }; }
+
+        // Group message: route to groupMessages[groupId], not 1-on-1 messages.
+        // Sender broadcasts encrypted to each member individually, so the relay sees them as
+        // 1-on-1 sends but the inner blob carries type:"group_message" + groupId.
+        // Audit fix E2 (2026-04-25).
+        if (parsed.type === "group_message" && parsed.groupId && parsed.text) {
+          const senderId = parsed.senderId || fromId;
+          const gmsg: GroupMsg = {
+            id: Date.now().toString(36) + Math.random().toString(36).substring(2, 6),
+            groupId: parsed.groupId,
+            senderId,
+            senderName: parsed.from || senderId.substring(0, 8),
+            text: parsed.text,
+            timestamp: parsed.timestamp || Date.now(),
+            fromMe: senderId === identity.speaqId,
+          };
+          setGroupMessages((prev) => ({
+            ...prev,
+            [parsed.groupId!]: [...(prev[parsed.groupId!] || []), gmsg],
+          }));
+          playIncoming();
+          return;
+        }
 
         // Handle QC payment
         if (parsed.qc && parsed.amount && parsed.amount > 0) {
@@ -1100,17 +1143,27 @@ export default function SpeaqApp() {
       if (msg.type === "CALL_END") {
         endCall();
       }
-      // KEY_EXCHANGE: someone wants to establish quantum-secure channel
+      // KEY_EXCHANGE: someone wants to establish quantum-secure channel.
+      // Audit hardening E1 (2026-04-25): signature is now MANDATORY (fail-closed). If a
+      // contact's signing key changes after first registration, the new exchange is REJECTED
+      // and the user is alerted - this prevents silent key-replacement (MITM via re-exchange).
       if (msg.type === "KEY_EXCHANGE" && msg.from && msg.blob && identity) {
         try {
-          // Verify signature if present (prevents MITM)
-          if (msg.sig && msg.signPub) {
-            const valid = await verifySignature(msg.blob, msg.sig, msg.signPub);
-            if (!valid) { console.warn("[SPEAQ] KEY_EXCHANGE signature INVALID from", msg.from); return; }
-            // Store their signing public key for future verification
-            saveContactSigningKey(msg.from, msg.signPub);
-            console.log("[SPEAQ] KEY_EXCHANGE signature verified from", msg.from);
+          if (!msg.sig || !msg.signPub) {
+            console.warn("[SPEAQ] KEY_EXCHANGE REJECTED from", msg.from, "- missing signature (fail-closed)");
+            return;
           }
+          const valid = await verifySignature(msg.blob, msg.sig, msg.signPub);
+          if (!valid) { console.warn("[SPEAQ] KEY_EXCHANGE signature INVALID from", msg.from); return; }
+          const knownKey = loadContactSigningKey(msg.from);
+          if (knownKey && knownKey !== msg.signPub) {
+            console.warn("[SPEAQ] KEY_EXCHANGE signing key CHANGED for", msg.from, "- REJECTING (potential MITM). Use 'verify safety number' UI to accept.");
+            // TODO: surface as a dismiss-or-accept UI dialog. For now: reject.
+            return;
+          }
+          // First contact OR same key: accept and store.
+          saveContactSigningKey(msg.from, msg.signPub);
+          console.log("[SPEAQ] KEY_EXCHANGE signature verified from", msg.from);
           // Encapsulate to create shared secret
           const theirPublicKey = msg.blob;
           const { ciphertext, sharedSecret } = await kyberEncapsulate(theirPublicKey);
@@ -1130,16 +1183,23 @@ export default function SpeaqApp() {
         }
       }
 
-      // KEY_EXCHANGE_RESPONSE: they responded with signed Kyber ciphertext
+      // KEY_EXCHANGE_RESPONSE: they responded with signed Kyber ciphertext.
+      // E1 hardening: signature mandatory + key-change check.
       if (msg.type === "KEY_EXCHANGE_RESPONSE" && msg.from && msg.blob && identity) {
         try {
-          // Verify signature if present
-          if (msg.sig && msg.signPub) {
-            const valid = await verifySignature(msg.blob, msg.sig, msg.signPub);
-            if (!valid) { console.warn("[SPEAQ] KEY_EXCHANGE_RESPONSE signature INVALID from", msg.from); return; }
-            saveContactSigningKey(msg.from, msg.signPub);
-            console.log("[SPEAQ] KEY_EXCHANGE_RESPONSE signature verified from", msg.from);
+          if (!msg.sig || !msg.signPub) {
+            console.warn("[SPEAQ] KEY_EXCHANGE_RESPONSE REJECTED from", msg.from, "- missing signature (fail-closed)");
+            return;
           }
+          const valid = await verifySignature(msg.blob, msg.sig, msg.signPub);
+          if (!valid) { console.warn("[SPEAQ] KEY_EXCHANGE_RESPONSE signature INVALID from", msg.from); return; }
+          const knownKey2 = loadContactSigningKey(msg.from);
+          if (knownKey2 && knownKey2 !== msg.signPub) {
+            console.warn("[SPEAQ] KEY_EXCHANGE_RESPONSE signing key CHANGED for", msg.from, "- REJECTING");
+            return;
+          }
+          saveContactSigningKey(msg.from, msg.signPub);
+          console.log("[SPEAQ] KEY_EXCHANGE_RESPONSE signature verified from", msg.from);
           const privateKey = pendingKeyExchanges.current[msg.from];
           if (privateKey) {
             const sharedSecret = await kyberDecapsulate(msg.blob, privateKey);
@@ -3256,6 +3316,58 @@ export default function SpeaqApp() {
                   alert("Backup saved. Keep this file safe and remember your backup PIN.");
                 } catch { alert("Backup failed"); }
               }} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.backupWallet", lang) }</span><span className="text-sm text-quantum-teal">Export</span></button>
+              {/* E6 audit fix (2026-04-25): full identity backup. Encrypts speaqId, kyber priv,
+                  signing priv, contacts, messages, and onChainWallet under PIN-derived AES-GCM. */}
+              <button onClick={async () => {
+                if (!identity) { alert("No identity"); return; }
+                const pin = prompt("Backup PIN (>= 6 chars). Required to restore on a new device:");
+                if (!pin || pin.length < 6) { alert("PIN must be at least 6 characters"); return; }
+                try {
+                  const allData = { v: 1, kind: "speaq-identity-backup", createdAt: Date.now(), identity, kyberKeys: kyberKeys.current, signingKeys: signingKeys.current, contacts, messages, groups, onChainWallet };
+                  const salt = crypto.getRandomValues(new Uint8Array(16));
+                  const key = await deriveBackupKeyFromSalt(pin, salt);
+                  const ct = await encryptWithKey(key, JSON.stringify(allData));
+                  const wrapped = JSON.stringify({ v: 1, kind: "speaq-identity-backup", salt: Array.from(salt).map(b => b.toString(16).padStart(2, "0")).join(""), data: ct, speaqIdHint: identity.speaqId.slice(0, 8), createdAt: Date.now() });
+                  const blob = new Blob([wrapped], { type: "application/json" });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url; a.download = `speaq-identity-backup-${new Date().toISOString().slice(0,10)}.json`;
+                  a.click(); URL.revokeObjectURL(url);
+                  alert("Identity backup saved. KEEP FILE AND PIN SAFE - this is the only way to recover if you lose your phone.");
+                } catch (e) { alert("Identity backup failed: " + (e instanceof Error ? e.message : String(e))); }
+              }} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">Backup Identity</span><span className="text-sm text-quantum-teal">Export</span></button>
+              <button onClick={() => {
+                const idIn = document.createElement("input");
+                idIn.type = "file"; idIn.accept = ".json";
+                idIn.onchange = async (ev) => {
+                  const file = (ev.target as HTMLInputElement).files?.[0];
+                  if (!file) return;
+                  const text = await file.text();
+                  const pin = prompt("Enter the identity backup PIN:");
+                  if (!pin) return;
+                  try {
+                    const wrap = JSON.parse(text);
+                    if (wrap.kind !== "speaq-identity-backup" || wrap.v !== 1) throw new Error("Not a valid SPEAQ identity backup");
+                    const saltHex = wrap.salt as string;
+                    const salt = Uint8Array.from(saltHex.match(/.{2}/g)!.map(b => parseInt(b, 16)));
+                    const key = await deriveBackupKeyFromSalt(pin, salt);
+                    const plain = await decryptWithKey(key, wrap.data as string);
+                    const data = JSON.parse(plain);
+                    if (!data.identity?.speaqId) throw new Error("Backup payload missing identity");
+                    if (!confirm(`Restore identity ${data.identity.speaqId.slice(0,8)}... ? This OVERWRITES current identity, contacts, messages.`)) return;
+                    saveJSON("speaq_identity", data.identity);
+                    if (data.kyberKeys) localStorage.setItem("speaq_kyber_keys", JSON.stringify(data.kyberKeys));
+                    if (data.signingKeys) saveSigningKeys(data.signingKeys);
+                    if (data.contacts) saveJSON("speaq_contacts", data.contacts);
+                    if (data.messages) saveJSON("speaq_messages", data.messages);
+                    if (data.groups) saveJSON("speaq_groups", data.groups);
+                    if (data.onChainWallet) localStorage.setItem("speaq_onchain_wallet", JSON.stringify(data.onChainWallet));
+                    alert("Identity restored. Reloading...");
+                    window.location.reload();
+                  } catch (err) { alert("Restore failed: " + (err instanceof Error ? err.message : String(err))); }
+                };
+                idIn.click();
+              }} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">Restore Identity</span><span className="text-sm text-resistance-red">Import</span></button>
               <button onClick={() => {
                 const input = document.createElement("input");
                 input.type = "file"; input.accept = ".json";
@@ -3748,6 +3860,58 @@ The Netherlands`}</div>
                   alert("Backup saved. Keep this file safe and remember your backup PIN.");
                 } catch { alert("Backup failed"); }
               }} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.backupWallet", lang) }</span><span className="text-sm text-quantum-teal">Export</span></button>
+              {/* E6 audit fix (2026-04-25): full identity backup. Encrypts speaqId, kyber priv,
+                  signing priv, contacts, messages, and onChainWallet under PIN-derived AES-GCM. */}
+              <button onClick={async () => {
+                if (!identity) { alert("No identity"); return; }
+                const pin = prompt("Backup PIN (>= 6 chars). Required to restore on a new device:");
+                if (!pin || pin.length < 6) { alert("PIN must be at least 6 characters"); return; }
+                try {
+                  const allData = { v: 1, kind: "speaq-identity-backup", createdAt: Date.now(), identity, kyberKeys: kyberKeys.current, signingKeys: signingKeys.current, contacts, messages, groups, onChainWallet };
+                  const salt = crypto.getRandomValues(new Uint8Array(16));
+                  const key = await deriveBackupKeyFromSalt(pin, salt);
+                  const ct = await encryptWithKey(key, JSON.stringify(allData));
+                  const wrapped = JSON.stringify({ v: 1, kind: "speaq-identity-backup", salt: Array.from(salt).map(b => b.toString(16).padStart(2, "0")).join(""), data: ct, speaqIdHint: identity.speaqId.slice(0, 8), createdAt: Date.now() });
+                  const blob = new Blob([wrapped], { type: "application/json" });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url; a.download = `speaq-identity-backup-${new Date().toISOString().slice(0,10)}.json`;
+                  a.click(); URL.revokeObjectURL(url);
+                  alert("Identity backup saved. KEEP FILE AND PIN SAFE - this is the only way to recover if you lose your phone.");
+                } catch (e) { alert("Identity backup failed: " + (e instanceof Error ? e.message : String(e))); }
+              }} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">Backup Identity</span><span className="text-sm text-quantum-teal">Export</span></button>
+              <button onClick={() => {
+                const idIn = document.createElement("input");
+                idIn.type = "file"; idIn.accept = ".json";
+                idIn.onchange = async (ev) => {
+                  const file = (ev.target as HTMLInputElement).files?.[0];
+                  if (!file) return;
+                  const text = await file.text();
+                  const pin = prompt("Enter the identity backup PIN:");
+                  if (!pin) return;
+                  try {
+                    const wrap = JSON.parse(text);
+                    if (wrap.kind !== "speaq-identity-backup" || wrap.v !== 1) throw new Error("Not a valid SPEAQ identity backup");
+                    const saltHex = wrap.salt as string;
+                    const salt = Uint8Array.from(saltHex.match(/.{2}/g)!.map(b => parseInt(b, 16)));
+                    const key = await deriveBackupKeyFromSalt(pin, salt);
+                    const plain = await decryptWithKey(key, wrap.data as string);
+                    const data = JSON.parse(plain);
+                    if (!data.identity?.speaqId) throw new Error("Backup payload missing identity");
+                    if (!confirm(`Restore identity ${data.identity.speaqId.slice(0,8)}... ? This OVERWRITES current identity, contacts, messages.`)) return;
+                    saveJSON("speaq_identity", data.identity);
+                    if (data.kyberKeys) localStorage.setItem("speaq_kyber_keys", JSON.stringify(data.kyberKeys));
+                    if (data.signingKeys) saveSigningKeys(data.signingKeys);
+                    if (data.contacts) saveJSON("speaq_contacts", data.contacts);
+                    if (data.messages) saveJSON("speaq_messages", data.messages);
+                    if (data.groups) saveJSON("speaq_groups", data.groups);
+                    if (data.onChainWallet) localStorage.setItem("speaq_onchain_wallet", JSON.stringify(data.onChainWallet));
+                    alert("Identity restored. Reloading...");
+                    window.location.reload();
+                  } catch (err) { alert("Restore failed: " + (err instanceof Error ? err.message : String(err))); }
+                };
+                idIn.click();
+              }} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">Restore Identity</span><span className="text-sm text-resistance-red">Import</span></button>
               <button onClick={() => {
                 const input = document.createElement("input");
                 input.type = "file"; input.accept = ".json";
