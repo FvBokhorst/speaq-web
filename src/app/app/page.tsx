@@ -2880,39 +2880,31 @@ export default function SpeaqApp() {
   // RENDER: Private Group
   // =========================================================================
   if (screen === "ghostGroup") {
+    // GhostGroups was a placeholder UI: messages were only written to local component state
+    // and never broadcast over the relay. Two phones in the same "group" would see only their
+    // own messages. The real implementation (relay-side multicast with opaque blobs) is on the
+    // roadmap. For now we render a clear "coming soon" notice instead of the broken interactive
+    // surface so users do not get the false impression they are communicating with anyone.
     return (
       <div className="h-dvh bg-bg-deep flex flex-col">
         <ScreenHeader title={t("adv.ghost", lang)} onBack={() => setScreen("advanced")} lang={lang} />
-        <div className="px-4 py-3 bg-bg-surface border-b border-[rgba(100,116,139,0.1)]">
-          <div className="flex items-center gap-2"><IconGhost className="w-4 h-4 text-voice-gold" /><span className="text-xs font-mono text-voice-gold">Your alias: {ghostAlias || "Not set"}</span></div>
-          {!ghostAlias && (
-            <div className="flex gap-2 mt-2">
-              <input type="text" value={ghostAlias} onChange={(e) => setGhostAlias(e.target.value)} placeholder={t("ghost.enterAlias", lang)}
-                className="flex-1 px-3 py-2 rounded-lg bg-bg-card border border-[rgba(100,116,139,0.15)] text-text-primary placeholder:text-text-muted font-mono text-sm min-h-[44px]" />
-              <button onClick={() => setGhostAlias(`Ghost-${Math.floor(Math.random() * 9999)}`)} className="px-3 py-2 rounded-lg bg-voice-gold/20 text-voice-gold text-xs font-mono min-h-[44px]">{t("ghost.random", lang)}</button>
-            </div>
-          )}
+        <div className="flex-1 flex flex-col items-center justify-center px-8 text-center">
+          <IconGhost className="w-16 h-16 text-voice-gold/40 mb-6" />
+          <h2 className="text-xl font-heading font-bold text-text-primary mb-3">Coming soon</h2>
+          <p className="text-sm text-text-muted leading-relaxed max-w-sm mb-6">
+            Anonymous group messaging is on the roadmap. The current build does not broadcast group messages over the network, so this feature is disabled to prevent confusion.
+          </p>
+          <p className="text-xs font-mono text-text-muted/60 max-w-sm">
+            Planned: relay-multicast with opaque ciphertext per recipient, alias-only sender field. Tracking: punchlist item C6.
+          </p>
         </div>
-        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
-          {ghostMessages.map((msg, i) => (
-            <div key={i} className={`flex ${msg.alias === ghostAlias ? "justify-end" : "justify-start"}`}>
-              <div className={`max-w-[80%] px-4 py-2.5 rounded-2xl ${msg.alias === ghostAlias ? "bg-voice-gold/20 rounded-br-md" : "bg-bg-card rounded-bl-md"}`}>
-                <p className="text-[10px] font-mono text-voice-gold/70 mb-1">{msg.alias}</p>
-                <p className="text-sm font-body break-words text-text-primary">{msg.text}</p>
-                <p className="text-[10px] mt-1 text-text-muted">{formatTime(msg.timestamp)}</p>
-              </div>
-            </div>
-          ))}
-          <div ref={messagesEndRef} />
-        </div>
-        <div className="shrink-0 px-4 py-3 bg-bg-surface border-t border-[rgba(100,116,139,0.15)]">
-          <div className="flex items-center gap-2">
-            <input type="text" value={ghostInput} onChange={(e) => setGhostInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendGhostMsg()}
-              placeholder={t("ghost.anonMsg", lang)}
-              className="flex-1 px-4 py-2.5 rounded-full bg-bg-card border border-[rgba(100,116,139,0.15)] text-text-primary placeholder:text-text-muted font-body text-sm min-h-[44px]" />
-            <button onClick={sendGhostMsg} disabled={!ghostInput.trim()}
-              className="p-2.5 rounded-full bg-voice-gold text-bg-deep disabled:opacity-40 min-h-[44px] min-w-[44px] flex items-center justify-center"><IconSend /></button>
-          </div>
+        {/* Hidden scaffold - keeps the references alive for the rest of the file but never renders.
+            We intentionally do not call sendGhostMsg, do not render the input, do not show messages. */}
+        <div style={{ display: "none" }}>
+          <input type="text" value={ghostAlias} onChange={(e) => setGhostAlias(e.target.value)} aria-hidden />
+          {ghostMessages.length > 0 && <span>{ghostMessages.length}</span>}
+          <input type="text" value={ghostInput} onChange={(e) => setGhostInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && sendGhostMsg()} aria-hidden />
+          <button onClick={sendGhostMsg} aria-hidden><IconSend /></button>
         </div>
       </div>
     );
