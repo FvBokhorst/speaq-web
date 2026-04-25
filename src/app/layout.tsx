@@ -25,7 +25,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "SPEAQ - Communication & Freedom Platform",
   description:
-    "Chat, call, send money, and earn rewards. Protected by verified encryption (NIST-certified). Your data, your control.",
+    "Chat, call, send Q-Credits, earn by contributing. AES-256-GCM message encryption (NIST). Lattice-based key exchange (custom, pre-NIST migration on roadmap). Pre-Chain mode until mainnet launch.",
   manifest: "/manifest.json",
   icons: {
     icon: "/favicon.ico",

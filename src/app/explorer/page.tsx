@@ -178,14 +178,16 @@ export default function ExplorerPage() {
               <p className="text-[10px] font-[family-name:var(--font-jetbrains)] text-quantum-teal uppercase tracking-wider">Cryptographic Stack</p>
               <div className="space-y-2">
                 {[
-                  { name: "ML-DSA-65 (FIPS 204)", desc: "Quantum-resistant digital signatures for wallet transactions" },
-                  { name: "SPHINCS+ (FIPS 205)", desc: "Hash-based backup signatures for blockchain blocks" },
-                  { name: "Kyber-768 (FIPS 203)", desc: "Quantum-resistant key encapsulation for message encryption" },
-                  { name: "AES-256-GCM", desc: "Military-grade symmetric encryption for every message" },
-                  { name: "Double Ratchet Protocol", desc: "Forward secrecy - unique key per message" },
-                  { name: "PBKDF2 (600K iterations)", desc: "PIN protection against brute-force attacks" },
-                  { name: "SHA-256", desc: "Cryptographic hashing for addresses, witness records, block links" },
-                  { name: "Sealed Sender", desc: "Relay cannot identify message sender" },
+                  { name: "AES-256-GCM (NIST)", desc: "Symmetric encryption for text messages and payment payloads. Active and verified standard." },
+                  { name: "Double Ratchet Protocol", desc: "Forward secrecy - fresh derived key per message. Active." },
+                  { name: "Custom lattice key exchange (NOT FIPS 203)", desc: "Kyber-768-inspired homemade scheme. NOT NIST-validated. Migration to verified FIPS 203 library on roadmap." },
+                  { name: "ECDSA P-256 (NIST, pre-quantum)", desc: "Signed key exchange between contacts. Active. Quantum-vulnerable - replaced by post-quantum signatures on roadmap." },
+                  { name: "SHA-256 (NIST)", desc: "Cryptographic hashing for addresses, witness records, block links. Active." },
+                  { name: "HMAC-SHA256 (NIST)", desc: "Server-side mining receipt tags. Note: relay-internal only, not user-signed double-proof." },
+                  { name: "WebRTC DTLS-SRTP", desc: "Voice and video media encryption (standard). Note: signaling SDP/ICE itself is plaintext via relay." },
+                  { name: "[ROADMAP] FIPS 203 Kyber-768", desc: "Replacement for the custom lattice scheme. Not yet implemented." },
+                  { name: "[ROADMAP] FIPS 204 ML-DSA-65", desc: "Wallet transaction signatures. Not yet implemented." },
+                  { name: "[ROADMAP] FIPS 205 SPHINCS+", desc: "Hash-based backup signatures. Not yet implemented." },
                 ].map((item) => (
                   <div key={item.name} className="bg-bg-card rounded-lg px-4 py-3 border border-[rgba(100,116,139,0.08)]">
                     <p className="text-sm font-[family-name:var(--font-jetbrains)] text-quantum-teal">{item.name}</p>
@@ -194,9 +196,9 @@ export default function ExplorerPage() {
                 ))}
               </div>
 
-              <p className="text-[10px] font-[family-name:var(--font-jetbrains)] text-voice-gold uppercase tracking-wider mt-6">Formal Verification</p>
+              <p className="text-[10px] font-[family-name:var(--font-jetbrains)] text-voice-gold uppercase tracking-wider mt-6">Audit Status (2026-04-25)</p>
               <div className="bg-bg-card rounded-xl p-4 border border-voice-gold/20">
-                <p className="text-xs text-text-muted">24 security properties proven TRUE across 7 ProVerif protocol models. 113 Rust unit tests. 3 NIST certifications (FIPS 203, 204, 205).</p>
+                <p className="text-xs text-text-muted">ProVerif protocol models exist in the source tree but have not been independently verified against the running implementation. NIST certification claims (FIPS 203/204/205) describe planned state, not current implementation. An external security audit by a specialized firm has NOT been performed; this is on the open roadmap.</p>
               </div>
 
               <p className="text-[10px] font-[family-name:var(--font-jetbrains)] text-voice-gold uppercase tracking-wider mt-6">Network Infrastructure</p>

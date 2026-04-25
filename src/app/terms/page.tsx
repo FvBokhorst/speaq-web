@@ -58,11 +58,15 @@ export default function TermsPage() {
               End-to-End Encryption
             </h2>
             <p>
-              All messages, calls, and files sent through SPEAQ are end-to-end
-              encrypted using quantum-resistant cryptography (Kyber-768, AES-256,
-              Double Ratchet). SPEAQ cannot read, listen to, or access your
-              communications. This is a technical guarantee, not a policy
-              promise.
+              Text messages are end-to-end encrypted on your device with
+              AES-256-GCM (NIST standard) and forwarded by SPEAQ as opaque
+              ciphertext. Voice and video media use WebRTC DTLS-SRTP standard
+              encryption. Key exchange uses a custom lattice-based scheme
+              inspired by Kyber-768 (this is NOT the NIST-standardized FIPS
+              203 library; migration to a verified post-quantum implementation
+              is on the roadmap). Voice and video signaling (SDP/ICE) currently
+              passes the relay in plaintext. SPEAQ does not retain plaintext
+              copies of message content.
             </p>
           </section>
 
@@ -211,16 +215,18 @@ export default function TermsPage() {
               Cryptographic Security
             </h2>
             <p className="mb-4">
-              SPEAQ employs post-quantum cryptography certified by NIST:
+              Cryptographic primitives currently active (as of 2026-04-25 audit):
             </p>
             <ul className="list-none space-y-3">
               {[
-                "Kyber-768 (FIPS 203) - quantum-resistant key encapsulation",
-                "Dilithium-3 (FIPS 204) - quantum-resistant digital signatures",
-                "SPHINCS+ (FIPS 205) - hash-based backup signatures",
-                "AES-256-GCM - symmetric encryption for messages",
-                "CLSAG ring signatures - sender anonymity (ring size 11)",
-                "Pedersen commitments + Bulletproofs - confidential transactions",
+                "AES-256-GCM (NIST) - symmetric encryption for text messages, file content, and Q-Credits payment payloads",
+                "Double Ratchet - forward secrecy, fresh derived key per message",
+                "Custom lattice-based key exchange inspired by Kyber-768 - NOT the NIST-standardized FIPS 203 library; migration on roadmap",
+                "ECDSA P-256 (NIST, pre-quantum) - signed key exchange between contacts",
+                "SHA-256 (NIST) - hashing of identity records and witness records",
+                "HMAC-SHA256 (NIST) - server-side mining receipt tags (relay-internal authentication, not double-signed)",
+                "WebRTC DTLS-SRTP - voice and video media encryption (signaling itself is plaintext)",
+                "[ROADMAP, not yet implemented] FIPS 203 Kyber-768, FIPS 204 ML-DSA-65 wallet signatures, FIPS 205 SPHINCS+, CLSAG ring signatures, Pedersen commitments + Bulletproofs",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-quantum-teal mt-2.5 shrink-0" />

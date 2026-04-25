@@ -89,11 +89,14 @@ export default function PrivacyPage() {
               Encryption
             </h2>
             <p>
-              All communications are protected by end-to-end encryption using
-              AES-256 with the Double Ratchet protocol for forward secrecy. Key
-              exchange uses Kyber-768, a post-quantum lattice-based KEM. Even if
-              quantum computers become available, your past and future messages
-              remain secure.
+              Text messages are end-to-end encrypted with AES-256-GCM (NIST
+              standard) and a Double Ratchet protocol providing forward secrecy.
+              Key exchange uses a custom lattice-based scheme inspired by
+              Kyber-768; this is NOT the NIST-standardized FIPS 203
+              implementation. Migration to a verified post-quantum library is
+              on the roadmap. Voice and video media use WebRTC's standard
+              DTLS-SRTP encryption; signaling (SDP/ICE) currently passes the
+              relay in plaintext.
             </p>
           </section>
 

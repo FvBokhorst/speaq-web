@@ -34,7 +34,7 @@ export default function Home() {
     {
       layer: "5",
       nameKey: "security.l5.name",
-      tech: "Kyber-768",
+      tech: "Lattice KX (custom)",
       descKey: "security.l5.desc",
       color: "text-voice-warm",
     },

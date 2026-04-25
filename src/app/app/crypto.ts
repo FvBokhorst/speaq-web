@@ -311,6 +311,40 @@ export async function hashPinPBKDF2(pin: string, speaqId: string): Promise<strin
   return toHex(new Uint8Array(derived));
 }
 
+// Vault-specific: derive an AES-GCM key from PIN + speaqId (separate salt namespace from auth-PIN hashing).
+// Used to actually encrypt vault content at rest (page.tsx vaultItems persistence).
+export async function deriveVaultKey(pin: string, speaqId: string): Promise<CryptoKey> {
+  const encoder = new TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey(
+    "raw", encoder.encode(pin), "PBKDF2", false, ["deriveKey"]
+  );
+  return crypto.subtle.deriveKey(
+    { name: "PBKDF2", salt: encoder.encode("speaq-vault-salt:" + speaqId), iterations: 600000, hash: "SHA-256" },
+    keyMaterial,
+    { name: "AES-GCM", length: 256 },
+    false,
+    ["encrypt", "decrypt"]
+  );
+}
+
+// Encrypt arbitrary JSON-serializable content with a vault key. Returns base64 of (iv || ciphertext).
+export async function encryptWithKey(key: CryptoKey, plaintext: string): Promise<string> {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, new TextEncoder().encode(plaintext));
+  const combined = new Uint8Array(iv.length + ct.byteLength);
+  combined.set(iv);
+  combined.set(new Uint8Array(ct), iv.length);
+  return uint8ToBase64(combined);
+}
+
+export async function decryptWithKey(key: CryptoKey, b64: string): Promise<string> {
+  const raw = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+  const iv = raw.slice(0, 12);
+  const ct = raw.slice(12);
+  const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, ct);
+  return new TextDecoder().decode(plain);
+}
+
 // ============================================================
 // SECTION 6: Ratchet-based Encrypt/Decrypt
 // ============================================================

@@ -388,6 +388,12 @@
 
 <div class="container">
 
+<!-- AUDIT BANNER 2026-04-25 -->
+<div style="background: rgba(226, 75, 74, 0.12); border: 1px solid var(--resistance-red); border-radius: 8px; padding: 20px; margin: 20px 0 40px 0;">
+  <p style="font-weight: bold; color: var(--resistance-red); margin-bottom: 8px;">Audit notice (2026-04-25)</p>
+  <p style="font-size: 14px;">This whitepaper describes <strong>roadmap design</strong> for the SPEAQ platform. It is not a description of the currently shipped implementation. Several cryptographic primitives referenced below (NIST FIPS 203 Kyber-768, FIPS 204 ML-DSA-65, FIPS 205 SPHINCS+, double-signed contribution receipts, sovereign wallet on-chain transactions) are <strong>planned but not yet implemented</strong>. The shipped app uses AES-256-GCM (NIST) for messages, a custom lattice scheme inspired by Kyber-768 for key exchange (not FIPS 203), ECDSA P-256 (pre-quantum) for signed key exchange, and a server-side HMAC tag for mining receipts (not double-signed). Pre-Chain mode is active until mainnet launches; balances are loyalty records. A full audit-bevindingen list is maintained internally. External security audit by a specialized firm has not been performed.</p>
+</div>
+
 <!-- COVER -->
 <div class="logo-section">
   <img src="/speaq-logo.png" alt="SPEAQ" width="120" height="120" style="border-radius: 50%;" />

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import {
   generateId, deriveKey, encrypt, decrypt, hashPinPBKDF2,
+  deriveVaultKey, encryptWithKey, decryptWithKey,
   generateKyberKeyPair, kyberEncapsulate, kyberDecapsulate,
   initRatchet, ratchetEncrypt, ratchetDecrypt,
   saveRatchetState, loadRatchetState,
@@ -361,8 +362,8 @@ const appStrings: Record<string, Record<string, string>> = {
   "info.earningP1": { en: "SPEAQ uses Proof of Contribution earning. You earn Q-Credits by helping the network - not by wasting energy like Bitcoin.", nl: "SPEAQ gebruikt Proof of Contribution earning. Je verdient Q-Credits door het netwerk te helpen - niet door energie te verspillen zoals Bitcoin.", fr: "SPEAQ utilise le gains par Preuve de Contribution. Vous gagnez des Q-Credits en aidant le reseau.", es: "SPEAQ utiliza ganancias por Prueba de Contribucion. Ganas Q-Credits ayudando a la red.", ru: "SPEAQ ispolzuet zarabotok Proof of Contribution. Vy zarabatyvaete Q-Credits pomogaya seti.", de: "SPEAQ nutzt Proof of Contribution. Sie verdienen Q-Credits indem Sie dem Netzwerk helfen.", sl: "SPEAQ uporablja zasluzek s Proof of Contribution. Zasluzite Q-Credits s pomocjo omrezju.", lg: "SPEAQ ekozesa Proof of Contribution. Ofuna Q-Credits ng'oyamba network.", sw: "SPEAQ inatumia kupata wa Uthibitisho wa Mchango. Unapata Q-Credits kwa kusaidia mtandao." },
   "info.earningTypes": { en: "7 Earning Types: Relay (forward messages), Validation (verify proofs), Storage (store encrypted data), Mesh (Bluetooth node), Bridge (cash agent), Translation (translate app), Onboarding (invite users).", nl: "7 Earning Types: Relay (berichten doorsturen), Validatie (bewijzen verifieren), Opslag (versleutelde data bewaren), Mesh (Bluetooth node), Bridge (cash agent), Vertaling (app vertalen), Onboarding (gebruikers uitnodigen).", fr: "7 Types de Gains: Relais, Validation, Stockage, Mesh, Pont, Traduction, Integration.", es: "7 Tipos de Ganancias: Retransmision, Validacion, Almacenamiento, Mesh, Puente, Traduccion, Incorporacion.", ru: "7 tipov zarabotoka: Retranslyatsiya, Validatsiya, Khranenie, Mesh, Most, Perevod, Registratsiya.", de: "7 Earning-Typen: Relay, Validierung, Speicherung, Mesh, Bridge, Ubersetzung, Onboarding.", sl: "7 tipov rudarjenja: Prenos, Preverjanje, Shranjevanje, Mesh, Most, Prevajanje, Vkljucevanje.", lg: "Ebika 7 by'okufuna: Relay, Okukakasa, Okutereka, Mesh, Bridge, Okuvvuunula, Okuyingiza.", sw: "Aina 7 za kupata: Relay, Uthibitisho, Hifadhi, Mesh, Daraja, Tafsiri, Usajili." },
   "info.earningRates": { en: "Daily earnings: ~0.02-0.05 QC/day (~5-8% annual yield, comparable to staking platforms). Rewards halve every 2,100,000 QC earned.", nl: "Dagelijkse verdiensten: ~0.02-0.05 QC/dag (~5-8% jaarlijks rendement, vergelijkbaar met staking platforms). Beloningen halveren elke 2.100.000 QC verdiend.", fr: "Gains quotidiens: ~0.02-0.05 QC/jour (~5-8% rendement annuel). Les recompenses diminuent de moitie tous les 2.100.000 QC gagnes.", es: "Ganancias diarias: ~0.02-0.05 QC/dia (~5-8% rendimiento anual). Las recompensas se reducen a la mitad cada 2.100.000 QC ganados.", ru: "Dnevnoj dokhod: ~0.02-0.05 QC/den (~5-8% godovoj dokhod). Nagrady umenshayutsya vdvoe kazhdye 2.100.000 QC.", de: "Tagliche Einnahmen: ~0.02-0.05 QC/Tag (~5-8% jahrliche Rendite). Belohnungen halbieren sich alle 2.100.000 QC.", sl: "Dnevni zasluzek: ~0.02-0.05 QC/dan (~5-8% letni donos). Nagrade se razpolovijo vsakih 2.100.000 QC.", lg: "Empeera ez'olunaku: ~0.02-0.05 QC/olunaku (~5-8% omwaka). Empeera zeegabanyizibwa buli 2,100,000 QC.", sw: "Mapato ya kila siku: ~0.02-0.05 QC/siku (~5-8% kwa mwaka). Tuzo hupungua nusu kila QC 2,100,000." },
-  "info.earningProof": { en: "Proof System (C+): Every earning reward is double-signed. You sign with your private key (proves identity). The relay server co-signs as witness (proves the work happened). Both signatures are stored in your earning ledger. When the blockchain launches, only double-signed entries are accepted. This makes fraud impossible.", nl: "Bewijs Systeem (C+): Elke verdien beloning wordt dubbel gesigned. Jij signeert met je private key (bewijst identiteit). De relay server tekent mee als getuige (bewijst dat het werk is gedaan). Beide handtekeningen worden opgeslagen in je earning ledger. Bij blockchain launch worden alleen dubbel-gesignde entries geaccepteerd. Fraude is onmogelijk.", fr: "Systeme de Preuve (C+): Chaque recompense est doublement signee. Vous signez avec votre cle privee. Le serveur relais co-signe comme temoin. Les deux signatures sont stockees. Lors du lancement de la blockchain, seules les entrees doublement signees sont acceptees.", es: "Sistema de Prueba (C+): Cada recompensa se firma dos veces. Tu firmas con tu clave privada. El servidor relay co-firma como testigo. Ambas firmas se almacenan. Al lanzar la blockchain, solo se aceptan entradas con doble firma.", ru: "Sistema dokazatelstv (C+): Kazhdaya nagrada podpisyvaetsya dvazhdy. Vy podpisyvaete svoim privatnym klyuchom. Server-retranslyator sopodspisyvaet kak svidetel. Obe podpisi sokhranyayutsya. Pri zapuske blokchejna prinimayutsya tolko zapisi s dvojnoj podpisyu.", de: "Beweis-System (C+): Jede Verdienst-Belohnung wird doppelt signiert. Sie signieren mit Ihrem privaten Schlussel. Der Relay-Server signiert als Zeuge mit. Beide Signaturen werden gespeichert. Beim Blockchain-Start werden nur doppelt signierte Eintrage akzeptiert.", sl: "Dokazni sistem (C+): Vsaka nagrada je dvojno podpisana. Vi podpisete s svojim zasebnim kljucem. Streznik za prenos sopodpise kot prica. Oba podpisa sta shranjena. Ob zagonu verige blokov so sprejeti samo dvojno podpisani vnosi.", lg: "Enkola y'Obujulizi (C+): Buli mpeera esainibwa emirundi ebiri. Osainiira ne key yo ey'ekyama. Relay server esainiira ng'omujulizi. Obusaini bubiri buterekeddwa. Blockchain bw'etandika, entries ez'obusaini bubiri zokka ze zikkirizibwa.", sw: "Mfumo wa Uthibitisho (C+): Kila tuzo inasainiwa mara mbili. Unasaini na ufunguo wako wa siri. Seva ya relay inasaini kama shahidi. Saini zote mbili zinahifadhiwa. Blockchain inapoanzishwa, maingizo yenye saini mbili tu yanakubaliwa." },
-  "info.securityDesc": { en: "AES-256-GCM encryption via Web Crypto API. Kyber-768 quantum-resistant key exchange. Double Ratchet forward secrecy. Signed key exchange (ECDSA P-256) prevents man-in-the-middle attacks. Zero-knowledge architecture - no one can read your messages, not even SPEAQ.", nl: "AES-256-GCM versleuteling via Web Crypto API. Kyber-768 quantum-resistente key exchange. Double Ratchet forward secrecy. Gesigneerde key exchange (ECDSA P-256) voorkomt man-in-the-middle aanvallen. Zero-knowledge architectuur - niemand kan je berichten lezen, zelfs SPEAQ niet.", fr: "Chiffrement AES-256-GCM. Echange de cles Kyber-768 resistant au quantique. Confidentialite persistante Double Ratchet. Echange de cles signe (ECDSA P-256). Architecture zero-knowledge.", es: "Cifrado AES-256-GCM. Intercambio de claves Kyber-768 resistente al cuantico. Secreto perfecto Double Ratchet. Intercambio de claves firmado (ECDSA P-256). Arquitectura zero-knowledge.", ru: "Shifrovanie AES-256-GCM. Kvantovo-ustojchivyj obmen klyuchami Kyber-768. Pryamaya sekretnost Double Ratchet. Podpisannyj obmen klyuchami (ECDSA P-256). Arkhitektura nulevogo znaniya.", de: "AES-256-GCM Verschlusselung. Kyber-768 quantenresistenter Schlusselaustausch. Double Ratchet Vorwartssicherheit. Signierter Schlusselaustausch (ECDSA P-256). Zero-Knowledge Architektur.", sl: "AES-256-GCM sifriranje. Kyber-768 kvantno odporna izmenjava kljucev. Double Ratchet posredna tajnost. Podpisana izmenjava kljucev (ECDSA P-256). Zero-knowledge arhitektura.", lg: "AES-256-GCM enkuuma. Kyber-768 okukyusa kw'obusumuluzo. Double Ratchet ekyama eky'omu maaso. Okusainiira obusumuluzo (ECDSA P-256). Zero-knowledge architecture.", sw: "Usimbaji AES-256-GCM. Kubadilishana funguo Kyber-768 zinazostahimili quantum. Usiri wa mbele wa Double Ratchet. Kubadilishana funguo iliyosainiwa (ECDSA P-256). Usanifu wa zero-knowledge." },
+  "info.earningProof": { en: "Pre-Chain ledger (current state): Earning rewards are recorded by the relay server with an HMAC tag. This is a server-side log, not a cryptographic proof. A double-signed proof system (you sign + relay co-signs) is on the roadmap toward mainnet. Until mainnet launches, treat earning balances as pre-chain loyalty records, not chain-secured tokens.", nl: "Pre-Chain ledger (huidige staat): verdien-beloningen worden door de relay-server geregistreerd met een HMAC-tag. Dat is een server-side log, geen cryptografisch bewijs. Een dubbel-getekend bewijs-systeem (jij tekent + relay tekent mee) staat op de roadmap richting mainnet. Tot mainnet-launch zijn earning saldi pre-chain loyaliteits-records, geen chain-beveiligde tokens.", fr: "Registre Pre-Chain (etat actuel): les recompenses sont enregistrees par le serveur relais avec une etiquette HMAC. C'est un journal cote serveur, pas une preuve cryptographique. Un systeme de double signature est sur la feuille de route vers le mainnet. Jusqu'au lancement, les soldes sont des enregistrements de fidelite, pas des tokens securises par la chaine.", es: "Registro Pre-Chain (estado actual): las recompensas son registradas por el servidor relay con una etiqueta HMAC. Es un registro del servidor, no una prueba criptografica. Un sistema de doble firma esta en la hoja de ruta hacia mainnet. Hasta el lanzamiento, los saldos son registros de fidelidad pre-chain, no tokens asegurados por la cadena.", ru: "Pre-Chain reestr (tekushchee sostoyanie): nagrady reglistriruyutsya serverom relay s HMAC-metkoj. Eto serverniy zhurnal, ne kriptograficheskoe dokazatelstvo. Sistema dvojnoj podpisi v plane razvitiya k mainnet. Do zapuska balansy yavlyayutsya pre-chain zapisyami loyalnosti, ne tokenami zashchishchennymi tsepyu.", de: "Pre-Chain Ledger (aktueller Zustand): Belohnungen werden vom Relay-Server mit einem HMAC-Tag erfasst. Dies ist ein Server-Log, kein kryptographischer Beweis. Ein Doppelsignatur-System steht auf der Roadmap zum Mainnet. Bis zum Start sind Salden Pre-Chain Treuepunkte, keine Chain-gesicherten Token.", sl: "Pre-Chain knjiga (trenutno stanje): nagrade belezi streznik za prenos s HMAC-oznako. To je dnevnik na strani streznika, ne kriptografski dokaz. Sistem dvojnega podpisa je na karti razvoja proti glavnemu omrezju. Do zagona so stanja pre-chain zvestobni zapisi, ne z verigo zavarovani zetoni.", lg: "Pre-Chain ledger (embeera ya kati): empeera ziwandikibwa relay server n'akabonero ka HMAC. Kuno kuwandiika kwa server, si bukakafu bwa cryptographic. Sisitemu y'obusaini obw'amalundi abiri eri ku roadmap. Mainnet bw'etandika, embeera nzigirira pre-chain loyalty records.", sw: "Daftari la Pre-Chain (hali ya sasa): zawadi zinaorodheshwa na seva ya relay kwa lebo ya HMAC. Hili ni rekodi ya seva, sio uthibitisho wa cryptographic. Mfumo wa saini mbili uko kwenye ramani ya barabara kuelekea mainnet. Hadi uzinduzi, salio ni rekodi za uaminifu za pre-chain, sio token zilizolindwa na mlolongo." },
+  "info.securityDesc": { en: "AES-256-GCM message encryption via the browser's Web Crypto API. The relay sees only opaque ciphertext, not message content. Voice and video media use WebRTC's standard DTLS-SRTP. Key exchange uses a custom lattice-based scheme inspired by Kyber-768; this is NOT the NIST-standardized FIPS 203 implementation, and a migration to a verified post-quantum library is on the roadmap. Calls signaling (SDP/ICE) currently passes the relay in plaintext.", nl: "AES-256-GCM berichten-versleuteling via de Web Crypto API van de browser. De relay ziet alleen ondoorzichtige ciphertext, niet de inhoud. Voice en video gebruiken de WebRTC-standaard DTLS-SRTP. Sleuteluitwisseling gebruikt een eigen lattice-schema geinspireerd op Kyber-768; dit is GEEN NIST-gestandaardiseerde FIPS 203 implementatie, en migratie naar een geverifieerde post-quantum library staat op de roadmap. Voice/video signaling (SDP/ICE) gaat nu in plaintext langs de relay.", fr: "Chiffrement AES-256-GCM via Web Crypto API. Le relais ne voit que du texte chiffre opaque. Voix et video utilisent le DTLS-SRTP standard de WebRTC. L'echange de cles utilise un schema lattice maison inspire par Kyber-768; ce n'est PAS une implementation FIPS 203 certifiee NIST, une migration est sur la feuille de route. La signalisation des appels (SDP/ICE) passe actuellement en texte clair par le relais.", es: "Cifrado AES-256-GCM via Web Crypto API del navegador. El relay solo ve texto cifrado opaco. Voz y video usan DTLS-SRTP estandar de WebRTC. El intercambio de claves usa un esquema lattice propio inspirado en Kyber-768; NO es una implementacion FIPS 203 certificada NIST, la migracion esta en la hoja de ruta. La senalizacion de llamadas (SDP/ICE) pasa actualmente en texto plano por el relay.", ru: "AES-256-GCM shifrovanie soobshchenij cherez Web Crypto API brauzera. Relay vidit tolko neprozrachnyj shifrtekst. Golos i video ispolzuyut standartnyj DTLS-SRTP iz WebRTC. Obmen klyuchami ispolzuet sobstvennuyu lattice-skhemu vdokhnovlennuyu Kyber-768; eto NE NIST-sertifitsirovannaya FIPS 203 realizatsiya, migratsiya v plane razvitiya. Signalizatsiya zvonkov (SDP/ICE) seychas prokhodit cherez relay v otkrytom vide.", de: "AES-256-GCM Nachrichtenverschlusselung via Web Crypto API des Browsers. Der Relay sieht nur undurchsichtigen Geheimtext. Sprache und Video verwenden WebRTC-Standard DTLS-SRTP. Schlusselaustausch verwendet ein eigenes Gitter-Schema inspiriert von Kyber-768; dies ist KEINE NIST-zertifizierte FIPS 203 Implementierung, eine Migration steht auf der Roadmap. Anruf-Signalisierung (SDP/ICE) lauft derzeit im Klartext uber den Relay.", sl: "AES-256-GCM sifriranje sporocil prek Web Crypto API. Relay vidi le neprosojen sifrobesedilo. Glas in video uporabljata WebRTC standard DTLS-SRTP. Izmenjava kljucev uporablja lastno lattice shemo navdihnjeno z Kyber-768; to NI NIST certificirana FIPS 203 implementacija, migracija je na karti razvoja. Signalizacija klicev (SDP/ICE) trenutno gre v cistopisu skozi relay.", lg: "AES-256-GCM enkuuma y'obubaka. Relay erabira ssente esirikidde, si by'omunda. Voice ne video bikozesa WebRTC standard DTLS-SRTP. Okwawukana kw'obusumuluzo kukozesa lattice yaffe etondebbwa ku Kyber-768; SI NIST FIPS 203, okukyusa kuli ku roadmap. Signaling y'okukubirwa (SDP/ICE) kati eyita mu plaintext kuva ku relay.", sw: "Usimbaji wa ujumbe AES-256-GCM kupitia Web Crypto API. Relay inaona maandishi yaliyosimbwa tu. Sauti na video zinatumia DTLS-SRTP ya WebRTC. Kubadilishana funguo kunatumia mfumo wetu wa lattice ulioongozwa na Kyber-768; SI utekelezaji wa NIST FIPS 203, uhamiaji uko kwenye ramani. Ishara za simu (SDP/ICE) sasa zinapita relay kwa maandishi wazi." },
   "mod.chat": { en: "Chat", nl: "Chat", fr: "Discussion", es: "Chat", ru: "Chat", de: "Chat", sl: "Klepet", lg: "Okwogerako", sw: "Mazungumzo" },
   "mod.chatDesc": { en: "End-to-end encrypted messaging", nl: "End-to-end versleuteld berichtenverkeer", fr: "Messagerie chiffree de bout en bout", es: "Mensajeria cifrada de extremo a extremo", ru: "Skvoznoe shifrovanie soobshchenij", de: "Ende-zu-Ende-verschlusselte Nachrichten", sl: "Sifrirana sporocila od konca do konca", lg: "Obubaka obukuumiddwa ddala", sw: "Ujumbe uliofichwa mwanzo hadi mwisho" },
   "mod.call": { en: "Call", nl: "Bellen", fr: "Appel", es: "Llamada", ru: "Zvonok", de: "Anruf", sl: "Klic", lg: "Okuyita", sw: "Piga simu" },
@@ -617,6 +618,9 @@ export default function SpeaqApp() {
   const [vaultHiddenHash, setVaultHiddenHash] = useState<string | null>(null); // stored hidden PIN hash
   const [vaultPinError, setVaultPinError] = useState(false);
   const vaultPhotoRef = useRef<HTMLInputElement>(null);
+  // Vault encryption key (derived from PIN at unlock; never persisted; lost on lock/relogin requiring re-derive).
+  // While null, vaultItems writes are blocked from persistence (in-memory only).
+  const vaultEncKey = useRef<CryptoKey | null>(null);
 
   // PIN state
   const [pinInput, setPinInput] = useState("");
@@ -728,7 +732,9 @@ export default function SpeaqApp() {
     setMessages(loadJSON<Record<string, Message[]>>("speaq_messages", {}));
     setGroups(loadJSON<Group[]>("speaq_groups", []));
     setGroupMessages(loadJSON<Record<string, GroupMsg[]>>("speaq_group_messages", {}));
-    setVaultItems(loadJSON<VaultItem[]>("speaq_vault", []));
+    // vaultItems are NOT loaded at app-start anymore. They are encrypted at rest with a PIN-derived
+    // AES-GCM key. Items are loaded into memory only after the user unlocks the vault and the key
+    // has been derived. Until then vaultItems stays empty.
     setVaultPinHash(localStorage.getItem("speaq_vault_pin"));
     setVaultHiddenHash(localStorage.getItem("speaq_vault_hidden"));
     setWitnessRecords(loadJSON<WitnessRecord[]>("speaq_witness", []));
@@ -870,7 +876,21 @@ export default function SpeaqApp() {
   }, [messages]);
   useEffect(() => { if (groups.length > 0) saveJSON("speaq_groups", groups); }, [groups]);
   useEffect(() => { if (Object.keys(groupMessages).length > 0) saveJSON("speaq_group_messages", groupMessages); }, [groupMessages]);
-  useEffect(() => { saveJSON("speaq_vault", vaultItems); }, [vaultItems]);
+  // Vault persistence: only write if a vault key has been derived (i.e. user has unlocked).
+  // Items are AES-GCM encrypted at rest under a PBKDF2(PIN, vault-salt) derived key; the plain JSON
+  // is never written to localStorage anymore. If vault is locked (no key in memory), the in-memory
+  // change is kept but not flushed - on next unlock we re-derive and re-encrypt the current state.
+  useEffect(() => {
+    if (!vaultEncKey.current) return;
+    (async () => {
+      try {
+        const ct = await encryptWithKey(vaultEncKey.current!, JSON.stringify(vaultItems));
+        localStorage.setItem("speaq_vault_enc", ct);
+      } catch (e) {
+        console.error("Vault save failed:", e);
+      }
+    })();
+  }, [vaultItems]);
   useEffect(() => { saveJSON("speaq_witness", witnessRecords); }, [witnessRecords]);
   useEffect(() => { saveJSON("speaq_ghost", ghostMessages); }, [ghostMessages]);
   useEffect(() => { if (projects.length > 0) saveJSON("speaq_projects", projects); }, [projects]);
@@ -1769,11 +1789,11 @@ export default function SpeaqApp() {
   // =========================================================================
   if (screen === "onboarding") {
     const slides = [
-      { icon: "Q", title: "Private & Secure", sub: "Every message, call, and payment is protected by verified encryption standards (NIST). Your conversations stay private." },
-      { icon: "C", title: "Chat & Call Freely", sub: "Text, voice, and video calls with end-to-end encryption. No phone number required. No data stored on servers." },
-      { icon: "$", title: "Send Money Instantly", sub: "Send and receive Q-Credits to anyone, anywhere. No bank account needed. No fees between users." },
-      { icon: "G", title: "Private Groups & Records", sub: "Create private groups for your community. Record important moments with verified timestamps." },
-      { icon: "M", title: "Earn by Contributing", sub: "Earn credits by helping the network grow. Relay messages, invite friends, contribute translations." },
+      { icon: "Q", title: "Private Messaging", sub: "Text messages are encrypted on your device with AES-256-GCM (NIST standard). The relay forwards opaque ciphertext only. Voice and video media use WebRTC DTLS-SRTP." },
+      { icon: "C", title: "Chat & Call", sub: "Text, voice, and video calls. No phone number required. Note: voice and video signaling currently passes the relay in plaintext; media itself stays encrypted." },
+      { icon: "$", title: "Send Q-Credits", sub: "Send and receive Q-Credits to anyone. Pre-Chain Mode: balances are loyalty records, not chain-secured tokens, until mainnet launches." },
+      { icon: "G", title: "Storage & Records", sub: "Personal encrypted storage for notes and photos. Local SHA-256 evidence records (not yet anchored to an external timestamping authority)." },
+      { icon: "M", title: "Earn by Contributing", sub: "Earn Q-Credits by helping the network: relay messages, validate, store. Earnings are recorded as pre-chain loyalty records by the relay." },
     ];
     const slide = slides[onboardingSlide];
     return (
@@ -2637,7 +2657,10 @@ export default function SpeaqApp() {
       return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
     };
 
-    // Vault PIN submit handler (shared by setup and unlock)
+    // Vault PIN submit handler (shared by setup and unlock).
+    // On a successful unlock or first-PIN setup, we ALSO derive an AES-GCM key from (pin, speaqId)
+    // and use that to load (decrypt) or initialize the vault items at rest. The plain JSON variant
+    // is no longer used; existing legacy "speaq_vault" plain data is migrated on first unlock.
     const handleVaultPinSubmit = async (pin: string) => {
       if (pin.length !== 4) return;
       const step = !vaultPinHash ? (vaultSetupStep === "none" ? "setPin" : vaultSetupStep) : "unlock";
@@ -2648,6 +2671,10 @@ export default function SpeaqApp() {
           const h = await hashPin(pin);
           localStorage.setItem("speaq_vault_pin", h);
           setVaultPinHash(h);
+          // Derive vault encryption key from this PIN for at-rest encryption.
+          if (identity) {
+            try { vaultEncKey.current = await deriveVaultKey(pin, identity.speaqId); } catch (e) { console.error("Vault key derive failed:", e); }
+          }
           setVaultPinInput(""); setVaultTempPin(""); setVaultSetupStep("setHidden");
         } else { setVaultPinError(true); setVaultPinInput(""); setVaultSetupStep("setPin"); setVaultTempPin(""); }
       }
@@ -2662,9 +2689,42 @@ export default function SpeaqApp() {
       }
       else if (step === "unlock") {
         const h = await hashPin(pin);
-        if (vaultHiddenHash && h === vaultHiddenHash) { setVaultUnlocked(true); setVaultHiddenUnlocked(true); setVaultPinInput(""); setVaultPinError(false); }
-        else if (h === vaultPinHash) { setVaultUnlocked(true); setVaultHiddenUnlocked(false); setVaultPinInput(""); setVaultPinError(false); }
-        else { setVaultPinError(true); setVaultPinInput(""); }
+        const matched = (vaultHiddenHash && h === vaultHiddenHash) || h === vaultPinHash;
+        if (matched && identity) {
+          try {
+            // Derive AES-GCM key from this PIN for vault decrypt and future writes.
+            vaultEncKey.current = await deriveVaultKey(pin, identity.speaqId);
+            // Try load+decrypt the encrypted vault first.
+            const enc = localStorage.getItem("speaq_vault_enc");
+            if (enc) {
+              try {
+                const plain = await decryptWithKey(vaultEncKey.current, enc);
+                setVaultItems(JSON.parse(plain) as VaultItem[]);
+              } catch {
+                // Wrong PIN or corrupt ciphertext - keep in-memory empty, do not overwrite stored ct.
+                vaultEncKey.current = null;
+                setVaultPinError(true); setVaultPinInput("");
+                return;
+              }
+            } else {
+              // No encrypted blob yet. Migrate legacy plain vault if it exists.
+              const legacy = localStorage.getItem("speaq_vault");
+              if (legacy) {
+                try {
+                  const items = JSON.parse(legacy) as VaultItem[];
+                  setVaultItems(items);
+                  // Encrypt and persist immediately, then remove the legacy plain copy.
+                  const ct = await encryptWithKey(vaultEncKey.current, JSON.stringify(items));
+                  localStorage.setItem("speaq_vault_enc", ct);
+                  localStorage.removeItem("speaq_vault");
+                } catch (e) { console.error("Vault legacy migration failed:", e); }
+              }
+            }
+          } catch (e) { console.error("Vault unlock failed:", e); }
+          if (vaultHiddenHash && h === vaultHiddenHash) { setVaultUnlocked(true); setVaultHiddenUnlocked(true); }
+          else { setVaultUnlocked(true); setVaultHiddenUnlocked(false); }
+          setVaultPinInput(""); setVaultPinError(false);
+        } else { setVaultPinError(true); setVaultPinInput(""); }
       }
     };
 
@@ -2738,13 +2798,21 @@ export default function SpeaqApp() {
               const h = await hashPin(appPin);
               const storedAppPin = localStorage.getItem("speaq_pin");
               if (h !== storedAppPin) { alert("Wrong app PIN"); return; }
+              // Reset vault PIN. Encrypted vault content is unrecoverable without the old PIN, so
+              // we wipe the encrypted blob too. The user is starting a fresh vault.
               localStorage.removeItem("speaq_vault_pin");
               localStorage.removeItem("speaq_vault_hidden");
+              localStorage.removeItem("speaq_vault_enc");
+              localStorage.removeItem("speaq_vault"); // legacy plain (if still present)
+              vaultEncKey.current = null;
+              setVaultItems([]);
+              setVaultUnlocked(false);
+              setVaultHiddenUnlocked(false);
               setVaultPinHash(null);
               setVaultHiddenHash(null);
               setVaultPinInput("");
               setVaultSetupStep("none");
-              alert("Vault PIN reset. Set up a new PIN.");
+              alert("Vault PIN reset. Encrypted vault content has been wiped (cannot be recovered without old PIN). Set up a new PIN to start fresh.");
             }} className="mt-6 text-[11px] text-text-muted hover:text-resistance-red transition-colors">
               {t("vault.resetPin", lang)}
             </button>
