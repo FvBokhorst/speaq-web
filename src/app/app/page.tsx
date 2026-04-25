@@ -66,6 +66,13 @@ interface Group {
   members: string[];
   createdAt: number;
   photo?: string;
+  // E2-deeper: epoch counter for member-list sync. Increments every time the local user
+  // adds/removes a member or renames the group. The epoch travels with group_state messages
+  // so receivers know whose state is newest.
+  epoch?: number;
+  // Track who created the group so members can prefer their authority on conflicts
+  // (lightweight pre-chain consensus - not Byzantine resistant, but works in practice).
+  ownerId?: string;
 }
 
 interface GroupMsg {
@@ -1006,8 +1013,34 @@ export default function SpeaqApp() {
         }
 
         if (!plaintext) return;
-        let parsed: { type?: string; text?: string; from?: string; senderId?: string; timestamp?: number; photo?: string; audioB64?: string; qc?: boolean; amount?: number; fromName?: string; groupId?: string };
+        let parsed: { type?: string; text?: string; from?: string; senderId?: string; timestamp?: number; photo?: string; audioB64?: string; qc?: boolean; amount?: number; fromName?: string; groupId?: string; name?: string; members?: unknown[]; ownerId?: string; epoch?: number };
         try { parsed = JSON.parse(plaintext); } catch { parsed = { text: plaintext }; }
+
+        // E2-deeper: group_state sync. Sender authoritatively broadcasts member-list +
+        // name + epoch. Recipient merges based on epoch (highest wins). Allows the group
+        // to converge across devices without a server-side roster.
+        if (parsed.type === "group_state" && parsed.groupId && Array.isArray(parsed.members)) {
+          const groupId = parsed.groupId;
+          const incomingEpoch = Number(parsed.epoch) || 1;
+          const incomingMembers = (parsed.members as unknown[]).filter((m): m is string => typeof m === "string");
+          const incomingName = typeof parsed.name === "string" ? parsed.name : null;
+          const incomingOwnerId = typeof parsed.ownerId === "string" ? parsed.ownerId : null;
+          setGroups((prev) => {
+            const existing = prev.find((g) => g.id === groupId);
+            if (existing && (existing.epoch ?? 0) >= incomingEpoch) return prev; // ignore older
+            const newGroup: Group = {
+              id: groupId,
+              name: incomingName || existing?.name || groupId.slice(0, 8),
+              members: incomingMembers,
+              ownerId: incomingOwnerId || existing?.ownerId,
+              createdAt: existing?.createdAt || Date.now(),
+              photo: existing?.photo,
+              epoch: incomingEpoch,
+            };
+            return existing ? prev.map((g) => g.id === groupId ? newGroup : g) : [...prev, newGroup];
+          });
+          return;
+        }
 
         // Group message: route to groupMessages[groupId], not 1-on-1 messages.
         // Sender broadcasts encrypted to each member individually, so the relay sees them as
@@ -1726,8 +1759,17 @@ export default function SpeaqApp() {
   // Group handlers
   const createGroup = () => {
     if (!newGroupName.trim() || !identity) return;
-    const group: Group = { id: generateId(), name: newGroupName.trim(), members: [identity.speaqId, ...selectedMembers], createdAt: Date.now() };
+    const group: Group = {
+      id: generateId(),
+      name: newGroupName.trim(),
+      members: [identity.speaqId, ...selectedMembers],
+      createdAt: Date.now(),
+      epoch: 1,
+      ownerId: identity.speaqId,
+    };
     setGroups((prev) => [...prev, group]);
+    // E2-deeper: broadcast initial group state so members converge to the same view.
+    broadcastGroupState(group).catch((e) => console.error("[SPEAQ] initial group_state broadcast failed:", e));
     setNewGroupName("");
     setSelectedMembers([]);
     setScreen("main");
@@ -1746,6 +1788,37 @@ export default function SpeaqApp() {
       wsRef.current.send(JSON.stringify({ type: "SEND", to: memberId, blob }));
     }
     setInputText("");
+  };
+
+  // E2-deeper: broadcast the current group state (members, name, epoch) to every member.
+  // Run after creating a group, adding/removing a member, or renaming. Recipients merge based
+  // on epoch (highest wins) so members converge to the same membership view without needing
+  // a server-side roster. Not Byzantine-resistant - relies on sender being honest - but works
+  // for friend-group sized chats (the only use case in pre-chain mode).
+  const broadcastGroupState = async (group: Group) => {
+    if (!identity || !wsRef.current) return;
+    const epoch = (group.epoch ?? 0) + 1;
+    const updated: Group = { ...group, epoch, ownerId: group.ownerId || identity.speaqId };
+    setGroups((prev) => prev.map((g) => g.id === group.id ? updated : g));
+    const payload = JSON.stringify({
+      type: "group_state",
+      groupId: updated.id,
+      name: updated.name,
+      members: updated.members,
+      ownerId: updated.ownerId,
+      epoch,
+      from: identity.displayName,
+      senderId: identity.speaqId,
+      timestamp: Date.now(),
+    });
+    for (const memberId of updated.members) {
+      if (memberId === identity.speaqId) continue;
+      try {
+        const key = await deriveKey(identity.speaqId, memberId);
+        const blob = await encrypt(key, payload);
+        wsRef.current.send(JSON.stringify({ type: "SEND", to: memberId, blob }));
+      } catch (e) { console.error("[SPEAQ] group_state send failed for", memberId, e); }
+    }
   };
 
   // Call handlers
@@ -2168,6 +2241,22 @@ export default function SpeaqApp() {
           <button onClick={() => startCall(activeContact)} className="w-8 h-8 rounded-full bg-bg-elevated flex items-center justify-center"><span className="text-xs font-heading font-bold text-text-muted">P</span></button>
           {/* Video call */}
           <button onClick={() => startCall(activeContact, true)} className="w-8 h-8 rounded-full bg-bg-elevated flex items-center justify-center"><span className="text-xs font-heading font-bold text-text-muted">V</span></button>
+          {/* Safety-number verification (E1 hardening UI) */}
+          <button onClick={async () => {
+            if (!signingKeys.current || !activeContact) return;
+            const myPub = signingKeys.current.publicKey;
+            const theirPub = loadContactSigningKey(activeContact.speaqId);
+            const fp = async (pubB64: string | null): Promise<string> => {
+              if (!pubB64) return "(no key on file)";
+              const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(pubB64));
+              const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+              // 16 groups of 4 hex chars = 64 chars total, easy to compare audibly.
+              return hex.match(/.{1,4}/g)!.slice(0, 16).join(" ");
+            };
+            const mine = await fp(myPub);
+            const theirs = await fp(theirPub);
+            alert("Safety numbers - read these aloud with your contact via a separate channel. Both halves must match exactly.\n\nYou:\n" + mine + "\n\nThem:\n" + theirs + "\n\nIf they don't match, your channel is compromised. Reject the contact and re-add them.");
+          }} className="w-8 h-8 rounded-full bg-bg-elevated flex items-center justify-center" title="Verify safety number"><span className="text-xs font-heading font-bold text-text-muted">#</span></button>
           <div className={`w-2 h-2 rounded-full ${connected ? "bg-quantum-teal" : "bg-resistance-red"}`} />
         </header>
 
@@ -3316,24 +3405,27 @@ export default function SpeaqApp() {
                   alert("Backup saved. Keep this file safe and remember your backup PIN.");
                 } catch { alert("Backup failed"); }
               }} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.backupWallet", lang) }</span><span className="text-sm text-quantum-teal">Export</span></button>
-              {/* E6 audit fix (2026-04-25): full identity backup. Encrypts speaqId, kyber priv,
-                  signing priv, contacts, messages, and onChainWallet under PIN-derived AES-GCM. */}
+              {/* E6/E6-deeper audit fix (2026-04-25) - identity backup v2.
+                  v=2 payload records explicit kdfIterations + algorithm so harder KDFs can be
+                  chosen per-device. v=1 payloads remain importable - falls back to 600000. */}
               <button onClick={async () => {
                 if (!identity) { alert("No identity"); return; }
                 const pin = prompt("Backup PIN (>= 6 chars). Required to restore on a new device:");
                 if (!pin || pin.length < 6) { alert("PIN must be at least 6 characters"); return; }
+                const iterStr = prompt("PBKDF2 iteration count (default 600000 - higher = stronger but slower; mobile may use 200000):", "600000");
+                const iterations = Math.max(100000, Math.min(5000000, parseInt(iterStr || "600000", 10) || 600000));
                 try {
-                  const allData = { v: 1, kind: "speaq-identity-backup", createdAt: Date.now(), identity, kyberKeys: kyberKeys.current, signingKeys: signingKeys.current, contacts, messages, groups, onChainWallet };
+                  const allData = { v: 2, kind: "speaq-identity-backup", createdAt: Date.now(), identity, kyberKeys: kyberKeys.current, signingKeys: signingKeys.current, contacts, messages, groups, onChainWallet };
                   const salt = crypto.getRandomValues(new Uint8Array(16));
-                  const key = await deriveBackupKeyFromSalt(pin, salt);
+                  const key = await deriveBackupKeyFromSalt(pin, salt, iterations);
                   const ct = await encryptWithKey(key, JSON.stringify(allData));
-                  const wrapped = JSON.stringify({ v: 1, kind: "speaq-identity-backup", salt: Array.from(salt).map(b => b.toString(16).padStart(2, "0")).join(""), data: ct, speaqIdHint: identity.speaqId.slice(0, 8), createdAt: Date.now() });
+                  const wrapped = JSON.stringify({ v: 2, kind: "speaq-identity-backup", kdf: "PBKDF2-SHA256", kdfIterations: iterations, salt: Array.from(salt).map(b => b.toString(16).padStart(2, "0")).join(""), data: ct, speaqIdHint: identity.speaqId.slice(0, 8), createdAt: Date.now() });
                   const blob = new Blob([wrapped], { type: "application/json" });
                   const url = URL.createObjectURL(blob);
                   const a = document.createElement("a");
                   a.href = url; a.download = `speaq-identity-backup-${new Date().toISOString().slice(0,10)}.json`;
                   a.click(); URL.revokeObjectURL(url);
-                  alert("Identity backup saved. KEEP FILE AND PIN SAFE - this is the only way to recover if you lose your phone.");
+                  alert(`Identity backup saved (${iterations} PBKDF2 iterations). KEEP FILE AND PIN SAFE - this is the only way to recover if you lose your phone.`);
                 } catch (e) { alert("Identity backup failed: " + (e instanceof Error ? e.message : String(e))); }
               }} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">Backup Identity</span><span className="text-sm text-quantum-teal">Export</span></button>
               <button onClick={() => {
@@ -3347,10 +3439,13 @@ export default function SpeaqApp() {
                   if (!pin) return;
                   try {
                     const wrap = JSON.parse(text);
-                    if (wrap.kind !== "speaq-identity-backup" || wrap.v !== 1) throw new Error("Not a valid SPEAQ identity backup");
+                    if (wrap.kind !== "speaq-identity-backup") throw new Error("Not a valid SPEAQ identity backup");
+                    const v = Number(wrap.v) || 1;
+                    if (v !== 1 && v !== 2) throw new Error(`Unsupported backup version: ${v}`);
                     const saltHex = wrap.salt as string;
                     const salt = Uint8Array.from(saltHex.match(/.{2}/g)!.map(b => parseInt(b, 16)));
-                    const key = await deriveBackupKeyFromSalt(pin, salt);
+                    const iterations = v === 2 ? Math.max(100000, Number(wrap.kdfIterations) || 600000) : 600000;
+                    const key = await deriveBackupKeyFromSalt(pin, salt, iterations);
                     const plain = await decryptWithKey(key, wrap.data as string);
                     const data = JSON.parse(plain);
                     if (!data.identity?.speaqId) throw new Error("Backup payload missing identity");
@@ -3860,24 +3955,27 @@ The Netherlands`}</div>
                   alert("Backup saved. Keep this file safe and remember your backup PIN.");
                 } catch { alert("Backup failed"); }
               }} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{ t("settings.backupWallet", lang) }</span><span className="text-sm text-quantum-teal">Export</span></button>
-              {/* E6 audit fix (2026-04-25): full identity backup. Encrypts speaqId, kyber priv,
-                  signing priv, contacts, messages, and onChainWallet under PIN-derived AES-GCM. */}
+              {/* E6/E6-deeper audit fix (2026-04-25) - identity backup v2.
+                  v=2 payload records explicit kdfIterations + algorithm so harder KDFs can be
+                  chosen per-device. v=1 payloads remain importable - falls back to 600000. */}
               <button onClick={async () => {
                 if (!identity) { alert("No identity"); return; }
                 const pin = prompt("Backup PIN (>= 6 chars). Required to restore on a new device:");
                 if (!pin || pin.length < 6) { alert("PIN must be at least 6 characters"); return; }
+                const iterStr = prompt("PBKDF2 iteration count (default 600000 - higher = stronger but slower; mobile may use 200000):", "600000");
+                const iterations = Math.max(100000, Math.min(5000000, parseInt(iterStr || "600000", 10) || 600000));
                 try {
-                  const allData = { v: 1, kind: "speaq-identity-backup", createdAt: Date.now(), identity, kyberKeys: kyberKeys.current, signingKeys: signingKeys.current, contacts, messages, groups, onChainWallet };
+                  const allData = { v: 2, kind: "speaq-identity-backup", createdAt: Date.now(), identity, kyberKeys: kyberKeys.current, signingKeys: signingKeys.current, contacts, messages, groups, onChainWallet };
                   const salt = crypto.getRandomValues(new Uint8Array(16));
-                  const key = await deriveBackupKeyFromSalt(pin, salt);
+                  const key = await deriveBackupKeyFromSalt(pin, salt, iterations);
                   const ct = await encryptWithKey(key, JSON.stringify(allData));
-                  const wrapped = JSON.stringify({ v: 1, kind: "speaq-identity-backup", salt: Array.from(salt).map(b => b.toString(16).padStart(2, "0")).join(""), data: ct, speaqIdHint: identity.speaqId.slice(0, 8), createdAt: Date.now() });
+                  const wrapped = JSON.stringify({ v: 2, kind: "speaq-identity-backup", kdf: "PBKDF2-SHA256", kdfIterations: iterations, salt: Array.from(salt).map(b => b.toString(16).padStart(2, "0")).join(""), data: ct, speaqIdHint: identity.speaqId.slice(0, 8), createdAt: Date.now() });
                   const blob = new Blob([wrapped], { type: "application/json" });
                   const url = URL.createObjectURL(blob);
                   const a = document.createElement("a");
                   a.href = url; a.download = `speaq-identity-backup-${new Date().toISOString().slice(0,10)}.json`;
                   a.click(); URL.revokeObjectURL(url);
-                  alert("Identity backup saved. KEEP FILE AND PIN SAFE - this is the only way to recover if you lose your phone.");
+                  alert(`Identity backup saved (${iterations} PBKDF2 iterations). KEEP FILE AND PIN SAFE - this is the only way to recover if you lose your phone.`);
                 } catch (e) { alert("Identity backup failed: " + (e instanceof Error ? e.message : String(e))); }
               }} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">Backup Identity</span><span className="text-sm text-quantum-teal">Export</span></button>
               <button onClick={() => {
@@ -3891,10 +3989,13 @@ The Netherlands`}</div>
                   if (!pin) return;
                   try {
                     const wrap = JSON.parse(text);
-                    if (wrap.kind !== "speaq-identity-backup" || wrap.v !== 1) throw new Error("Not a valid SPEAQ identity backup");
+                    if (wrap.kind !== "speaq-identity-backup") throw new Error("Not a valid SPEAQ identity backup");
+                    const v = Number(wrap.v) || 1;
+                    if (v !== 1 && v !== 2) throw new Error(`Unsupported backup version: ${v}`);
                     const saltHex = wrap.salt as string;
                     const salt = Uint8Array.from(saltHex.match(/.{2}/g)!.map(b => parseInt(b, 16)));
-                    const key = await deriveBackupKeyFromSalt(pin, salt);
+                    const iterations = v === 2 ? Math.max(100000, Number(wrap.kdfIterations) || 600000) : 600000;
+                    const key = await deriveBackupKeyFromSalt(pin, salt, iterations);
                     const plain = await decryptWithKey(key, wrap.data as string);
                     const data = JSON.parse(plain);
                     if (!data.identity?.speaqId) throw new Error("Backup payload missing identity");

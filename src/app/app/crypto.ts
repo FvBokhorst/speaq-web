@@ -340,15 +340,17 @@ export async function hashPinPBKDF2(pin: string, speaqId: string): Promise<strin
 }
 
 // Identity-backup-specific: derive an AES-GCM key from PIN + a per-backup random salt.
-// Used by exportIdentityBackup / importIdentityBackup so backups are portable across devices
-// (different speaqId-based salts would prevent restoring on a fresh device).
-export async function deriveBackupKeyFromSalt(pin: string, salt: Uint8Array): Promise<CryptoKey> {
+// Used by exportIdentityBackup / importIdentityBackup so backups are portable across devices.
+// E6-deeper (2026-04-25): KDF iterations are now an explicit parameter so that the wrap
+// payload can record which iteration count was used - this allows future hardening on
+// powerful devices without breaking older backup files.
+export async function deriveBackupKeyFromSalt(pin: string, salt: Uint8Array, iterations: number = 600000): Promise<CryptoKey> {
   const encoder = new TextEncoder();
   const keyMaterial = await crypto.subtle.importKey(
     "raw", encoder.encode(`SPEAQ-IDENTITY-BACKUP:${pin}`), "PBKDF2", false, ["deriveKey"]
   );
   return crypto.subtle.deriveKey(
-    { name: "PBKDF2", salt: salt as BufferSource, iterations: 600000, hash: "SHA-256" },
+    { name: "PBKDF2", salt: salt as BufferSource, iterations, hash: "SHA-256" },
     keyMaterial,
     { name: "AES-GCM", length: 256 },
     false,
