@@ -11,6 +11,7 @@ import {
   generateSigningKeyPair, signData, verifySignature,
   saveSigningKeys, loadSigningKeys, saveContactSigningKey, loadContactSigningKey,
   type SigningKeyPair,
+  deriveCallKeyForSend, decryptCallBlob,
 } from "./crypto";
 import { languages, Lang } from "@/lib/i18n";
 import QRCode from "qrcode";
@@ -1127,16 +1128,16 @@ export default function SpeaqApp() {
         playIncoming();
       }
       // Handle call signaling. SDP + ICE candidates may arrive encrypted (msg.blob) or as
-      // legacy plaintext (msg.sdp / msg.candidate). New senders always encrypt with deriveKey
-      // shared between the two peers. Backwards-compat: a plaintext path remains until all
-      // peers are upgraded; a console.warn flags the legacy path so we can spot stragglers.
+      // legacy plaintext (msg.sdp / msg.candidate). C2.2 (2026-04-25): receiver uses
+      // decryptCallBlob which tries ratchet-derived key first (zero-knowledge against
+      // relay), then falls back to legacy ID-derived key for older peers. Backwards-compat
+      // plaintext path remains for unupgraded clients.
       if (msg.type === "CALL_OFFER" && msg.from && identity) {
         let sdp = msg.sdp as string | undefined;
         let video = !!msg.video;
         if (msg.blob) {
           try {
-            const key = await deriveKey(identity.speaqId, msg.from);
-            const plain = JSON.parse(await decrypt(key, msg.blob)) as { sdp: string; video?: boolean };
+            const plain = JSON.parse(await decryptCallBlob(identity.speaqId, msg.from, msg.blob)) as { sdp: string; video?: boolean };
             sdp = plain.sdp;
             video = !!plain.video;
           } catch (e) { console.error("[SPEAQ] CALL_OFFER decrypt failed:", e); return; }
@@ -1153,8 +1154,7 @@ export default function SpeaqApp() {
         let sdp = msg.sdp as string | undefined;
         if (msg.blob) {
           try {
-            const key = await deriveKey(identity.speaqId, msg.from);
-            sdp = (JSON.parse(await decrypt(key, msg.blob)) as { sdp: string }).sdp;
+            sdp = (JSON.parse(await decryptCallBlob(identity.speaqId, msg.from, msg.blob)) as { sdp: string }).sdp;
           } catch (e) { console.error("[SPEAQ] CALL_ANSWER decrypt failed:", e); return; }
         } else if (sdp) {
           console.warn("[SPEAQ] CALL_ANSWER received in legacy plaintext mode");
@@ -1165,8 +1165,7 @@ export default function SpeaqApp() {
         let candidate = msg.candidate;
         if (msg.blob) {
           try {
-            const key = await deriveKey(identity.speaqId, msg.from);
-            candidate = (JSON.parse(await decrypt(key, msg.blob)) as { candidate: RTCIceCandidateInit }).candidate;
+            candidate = (JSON.parse(await decryptCallBlob(identity.speaqId, msg.from, msg.blob)) as { candidate: RTCIceCandidateInit }).candidate;
           } catch (e) { console.error("[SPEAQ] ICE_CANDIDATE decrypt failed:", e); return; }
         } else if (candidate) {
           console.warn("[SPEAQ] ICE_CANDIDATE received in legacy plaintext mode");
@@ -1840,9 +1839,14 @@ export default function SpeaqApp() {
       const pc = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.thespeaq.com:3478" }, { urls: "stun:136.109.120.222:3478" }] });
       peerConnection.current = pc;
       localStream.current.getTracks().forEach((track) => pc.addTrack(track, localStream.current!));
-      // Pre-derive a shared session key so all signaling for this call uses the same key.
-      // Same key as chat (deriveKey(self, peer)) so no separate exchange is needed.
-      const sigKey = await deriveKey(identity.speaqId, contact.speaqId);
+      // C2.2 (2026-04-25): pre-derive a shared session key from the ratchet rootKey
+      // (Kyber-derived shared secret, NOT visible to the relay). Falls back to ID-derived
+      // key if no ratchet exists yet. Same key reused for all signaling messages of this
+      // call so the receiver can derive once.
+      const { key: sigKey, mode: sigMode } = await deriveCallKeyForSend(identity.speaqId, contact.speaqId);
+      if (sigMode === "id") {
+        console.warn("[SPEAQ] startCall: no ratchet for", contact.speaqId, "- falling back to ID-derived signaling key (relay can decrypt)");
+      }
       pc.onicecandidate = async (e) => {
         if (e.candidate && wsRef.current) {
           try {
@@ -1884,7 +1888,10 @@ export default function SpeaqApp() {
       const pc = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.thespeaq.com:3478" }, { urls: "stun:136.109.120.222:3478" }] });
       peerConnection.current = pc;
       localStream.current.getTracks().forEach((track) => pc.addTrack(track, localStream.current!));
-      const sigKey = await deriveKey(identity.speaqId, from);
+      const { key: sigKey, mode: sigMode } = await deriveCallKeyForSend(identity.speaqId, from);
+      if (sigMode === "id") {
+        console.warn("[SPEAQ] handleCallAnswer: no ratchet for", from, "- falling back to ID-derived signaling key (relay can decrypt)");
+      }
       pc.onicecandidate = async (e) => {
         if (e.candidate && wsRef.current) {
           try {

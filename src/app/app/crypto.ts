@@ -296,6 +296,58 @@ export async function decryptWithFallback(myId: string, contactId: string, ciphe
   throw new Error("Decryption failed with both PBKDF2 and legacy keys");
 }
 
+/**
+ * C2.2 audit fix (2026-04-25): Call signaling key derived from the ratchet
+ * rootKey instead of the two SPEAQ IDs. The relay knows both IDs (it routes
+ * by them) so an ID-derived key is computable by the relay - meaning the
+ * relay COULD decrypt SDP/ICE blobs and theoretically MITM the DTLS
+ * fingerprint exchange. The ratchet rootKey is derived from the Kyber-768
+ * shared secret (FIPS 203) which the relay does NOT know. This makes call
+ * signaling truly zero-knowledge against the relay operator.
+ *
+ * Backwards-compat: if no ratchet exists yet (e.g. very first contact, no
+ * messages exchanged) we fall back to the ID-derived key. In practice every
+ * contact has a ratchet after the automatic KEY_EXCHANGE on contact-add, so
+ * the ID path is rare.
+ *
+ * The receiver tries the ratchet-derived key first, then the ID-derived one,
+ * to remain compatible with peers still on the legacy code path.
+ */
+async function ratchetDerivedCallKey(rootKey: string): Promise<CryptoKey> {
+  const encoder = new TextEncoder();
+  const hashBuffer = await crypto.subtle.digest("SHA-256", encoder.encode(rootKey + ":speaq-call-v1"));
+  return crypto.subtle.importKey("raw", hashBuffer, "AES-GCM", false, ["encrypt", "decrypt"]);
+}
+
+async function idDerivedCallKey(myId: string, peerId: string): Promise<CryptoKey> {
+  const sorted = [myId, peerId].sort().join(":");
+  const encoder = new TextEncoder();
+  const hashBuffer = await crypto.subtle.digest("SHA-256", encoder.encode(sorted));
+  return crypto.subtle.importKey("raw", hashBuffer, "AES-GCM", false, ["encrypt", "decrypt"]);
+}
+
+export async function deriveCallKeyForSend(myId: string, peerId: string): Promise<{ key: CryptoKey; mode: "ratchet" | "id" }> {
+  const ratchet = loadRatchetState(peerId);
+  if (ratchet?.rootKey) {
+    return { key: await ratchetDerivedCallKey(ratchet.rootKey), mode: "ratchet" };
+  }
+  return { key: await idDerivedCallKey(myId, peerId), mode: "id" };
+}
+
+export async function decryptCallBlob(myId: string, peerId: string, blobB64: string): Promise<string> {
+  const ratchet = loadRatchetState(peerId);
+  if (ratchet?.rootKey) {
+    try {
+      const key = await ratchetDerivedCallKey(ratchet.rootKey);
+      return await decrypt(key, blobB64);
+    } catch {
+      // Fall through to ID-key (legacy peer or pre-C2.2 sender)
+    }
+  }
+  const idKey = await idDerivedCallKey(myId, peerId);
+  return await decrypt(idKey, blobB64);
+}
+
 function uint8ToBase64(arr: Uint8Array): string {
   let binary = "";
   for (let i = 0; i < arr.length; i += 8192) {
