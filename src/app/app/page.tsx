@@ -753,10 +753,22 @@ export default function SpeaqApp() {
     setDeadmanConfig(loadJSON<DeadManConfig>("speaq_deadman", { enabled: false, timeoutMinutes: 60, message: "", recipients: [], lastCheckin: Date.now() }));
     setGhostMessages(loadJSON<{ alias: string; text: string; timestamp: number }[]>("speaq_ghost", []));
 
-    setWalletState(loadWallet());
+    const loadedWallet = loadWallet();
+    const stats = loadStats();
+    // Wallet self-heal: prior versions of the WS QC-receive handler used a stale closure
+    // for `wallet`, so any mining accumulated since the handler was last memoized got
+    // overwritten by saveWallet(stale_wallet + amount). Mining stats stayed correct (separate
+    // localStorage key, separate update path), so totalMined < totalEarned signals lost mining.
+    if (loadedWallet.totalMined < stats.totalEarned) {
+      const delta = stats.totalEarned - loadedWallet.totalMined;
+      loadedWallet.balance = Math.round((loadedWallet.balance + delta) * 1e8) / 1e8;
+      loadedWallet.totalMined = stats.totalEarned;
+      saveWallet(loadedWallet);
+      console.log(`[SPEAQ] Wallet self-heal: +${delta.toFixed(4)} QC restored from mining drift`);
+    }
+    setWalletState(loadedWallet);
     setTxs(loadTransactions());
     setProjects(loadJSON<WalletProject[]>("speaq_projects", []));
-    const stats = loadStats();
     setMiningStats(stats);
     setMiningRewards(loadRewards());
     if (localStorage.getItem("speaq_mining_active") === "true") setMiningActive(true);
@@ -1077,9 +1089,32 @@ export default function SpeaqApp() {
               return updated;
             });
           }
-          const result = receiveQC(wallet, txs, parsed.amount, senderId);
-          setWalletState(result.wallet);
-          setTxs(result.txs);
+          // Functional updates avoid stale closure: handleWsMessage deps are [identity, contacts]
+          // so wallet/txs in this scope can be many ticks behind. Reading via setState callback
+          // ensures we mutate the live state, not the snapshot from when the handler was memoized.
+          const qcAmount = parsed.amount;
+          setWalletState((cur) => {
+            const updated: WalletState = {
+              ...cur,
+              balance: Math.round((cur.balance + qcAmount) * 1e8) / 1e8,
+              totalReceived: Math.round((cur.totalReceived + qcAmount) * 1e8) / 1e8,
+            };
+            saveWallet(updated);
+            return updated;
+          });
+          setTxs((cur) => {
+            const tx: Transaction = {
+              id: Date.now().toString(36) + Math.random().toString(36).substring(2, 6),
+              type: "receive",
+              amount: qcAmount,
+              counterparty: senderId,
+              description: `Received from ${senderId.substring(0, 8)}...`,
+              timestamp: Date.now(),
+            };
+            const updated = [tx, ...cur].slice(0, 500);
+            saveTransactions(updated);
+            return updated;
+          });
           // Show as chat message too
           const qcMsg: Message = { id: Date.now().toString(36) + Math.random().toString(36).substring(2, 6), text: `Received ${parsed.amount} QC from ${parsed.fromName || senderId.substring(0, 8)}`, fromMe: false, timestamp: Date.now() };
           setMessages((prev) => ({ ...prev, [senderId]: [...(prev[senderId] || []), qcMsg] }));
