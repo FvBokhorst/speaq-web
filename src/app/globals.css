@@ -27,12 +27,17 @@
 
 html {
   scroll-behavior: smooth;
+  /* Prevent iOS rubber-band overscroll above/below the page on full-viewport
+     screens like onboarding, PIN, welcome. Does not block scroll within a
+     scroll-container (chat list, settings) - that uses local overflow. */
+  overscroll-behavior-y: none;
 }
 
 body {
   background: var(--color-bg-deep);
   color: var(--color-text-primary);
   font-family: var(--font-body);
+  overscroll-behavior-y: none;
 }
 
 /* Q Glow Animation - gold pulse every 3 seconds */
