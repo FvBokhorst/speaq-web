@@ -285,7 +285,7 @@ const security: Record<Lang, FaqItem[]> = {
   en: [
     {
       question: "How secure is SPEAQ?",
-      answer: "SPEAQ encrypts text messages on your device with AES-256-GCM (NIST standard). The relay server forwards opaque ciphertext only and cannot read content. Voice and video media use WebRTC's standard DTLS-SRTP. Key exchange uses a custom lattice-based scheme inspired by Kyber-768 (NOT the FIPS 203 standardized version - migration to a verified post-quantum library is on the roadmap). Voice and video signaling currently passes the relay in plaintext.",
+      answer: "SPEAQ encrypts text messages on your device with AES-256-GCM (NIST standard). The relay server forwards opaque ciphertext only and cannot read content. Voice and video media use WebRTC's standard DTLS-SRTP. Key exchange uses ML-KEM-768 (FIPS 203, NIST post-quantum). Voice and video signaling (SDP/ICE) is encrypted with a session key derived from ML-KEM-768 - the relay cannot read it.",
     },
     {
       question: "What encryption does SPEAQ use?",
@@ -317,13 +317,13 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "What are the security layers in SPEAQ?",
-      answer: "Currently active:\n\n1. AES-256-GCM message encryption (NIST) - text messages encrypted on device before sending\n2. Double Ratchet - forward secrecy, each message gets a fresh derived key\n3. Custom lattice-based key exchange (NOT FIPS 203, migration on roadmap)\n4. ECDSA P-256 signed key exchange (NIST, pre-quantum)\n5. HMAC-SHA256 message authentication (NIST)\n6. Sealed Sender option - server cannot see who sent a sealed message\n7. WebRTC DTLS-SRTP for voice and video media\n8. Pre-Chain mode disclosure - earnings recorded by relay as loyalty records, not chain-secured tokens\n\nRecently fixed (2026-04-25): replaced custom lattice with FIPS 203 ML-KEM-768; added ML-DSA-65 (FIPS 204) for wallet signing; voice/video signaling now encrypted; AUTH challenge-response for identity active; DMS persistent server-side.",
+      answer: "Currently active:\n\n1. AES-256-GCM message encryption (NIST) - text messages encrypted on device before sending\n2. Double Ratchet - forward secrecy, each message gets a fresh derived key\n3. ML-KEM-768 (FIPS 203) - NIST post-quantum key exchange\n4. ML-DSA-65 (FIPS 204) hybrid with ECDSA P-256 - signed key exchange and AUTH challenge-response\n5. SPHINCS+ (FIPS 205, SLH-DSA) - chain block dual-signing alongside ML-DSA-65\n6. HMAC-SHA256 message authentication (NIST)\n7. Sealed Sender option - server cannot see who sent a sealed message\n8. WebRTC DTLS-SRTP for voice and video media; signaling (SDP/ICE) encrypted via ML-KEM-768 derived session key\n9. Pre-Chain mode disclosure - earnings recorded by relay as loyalty records, not chain-secured tokens",
     },
   ],
   nl: [
     {
       question: "Hoe veilig is SPEAQ?",
-      answer: "SPEAQ versleutelt tekstberichten op je apparaat met AES-256-GCM (NIST-standaard). De relay-server stuurt alleen ondoorzichtige ciphertext door en kan inhoud niet lezen. Voice en video gebruiken de WebRTC-standaard DTLS-SRTP. Sleuteluitwisseling gebruikt een FIPS 203 ML-KEM-768 (NIST post-quantum) via @noble/post-quantum. Voice en video signaling gaat nu in plaintext langs de relay.",
+      answer: "SPEAQ versleutelt tekstberichten op je apparaat met AES-256-GCM (NIST-standaard). De relay-server stuurt alleen ondoorzichtige ciphertext door en kan inhoud niet lezen. Voice en video gebruiken de WebRTC-standaard DTLS-SRTP. Sleuteluitwisseling gebruikt een FIPS 203 ML-KEM-768 (NIST post-quantum) via @noble/post-quantum. Voice en video signaling (SDP/ICE) is versleuteld met een sessiesleutel afgeleid van ML-KEM-768 - de relay kan het niet lezen.",
     },
     {
       question: "Welke encryptie gebruikt SPEAQ?",
@@ -331,7 +331,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Wat is kwantumbestendige encryptie en waarom is het belangrijk?",
-      answer: "Kwantumcomputers zullen uiteindelijk encryptie op basis van RSA en elliptische krommen kunnen breken. SPEAQ's berichten-versleuteling (AES-256-GCM) is symmetrisch en wordt niet door Shor's algoritme geraakt. SPEAQ's sleuteluitwisseling gebruikt een eigen lattice-schema geinspireerd op Kyber-768 - lattice-problemen worden in principe quantum-resistent geacht, maar deze specifieke implementatie is NIET door NIST gevalideerd. Migratie naar een geverifieerde FIPS 203-implementatie (`@noble/post-quantum` of equivalent) staat op de roadmap.",
+      answer: "Kwantumcomputers zullen uiteindelijk encryptie op basis van RSA en elliptische krommen kunnen breken. SPEAQ's berichten-versleuteling (AES-256-GCM) is symmetrisch en wordt niet door Shor's algoritme geraakt. SPEAQ's sleuteluitwisseling gebruikt sinds 25 april 2026 ML-KEM-768 (FIPS 203, NIST post-quantum) via @noble/post-quantum. Wallet-transacties en chain-blocks worden ondertekend met ML-DSA-65 (FIPS 204) en SPHINCS+ (FIPS 205) - allemaal NIST-gestandaardiseerd.",
     },
     {
       question: "Kan iemand mijn berichten lezen - zelfs SPEAQ zelf?",
@@ -361,7 +361,7 @@ const security: Record<Lang, FaqItem[]> = {
   fr: [
     {
       question: "A quel point SPEAQ est-il securise ?",
-      answer: "SPEAQ utilise 9 couches de securite, notamment le chiffrement AES-256, le protocole Double Ratchet pour la confidentialite persistante, l'echange de cles lattice (custom, PAS FIPS 203), le relais a expediteur scelle et la generation de nombres aleatoires quantiques. Chaque message, appel, fichier et paiement est chiffre avant de quitter votre appareil. Le serveur relais ne voit que des blobs chiffres - il ne peut pas lire le contenu, identifier les parties communicantes ou detercontributor ce qui est envoye.",
+      answer: "SPEAQ utilise 9 couches de securite, notamment le chiffrement AES-256, le protocole Double Ratchet pour la confidentialite persistante, l'echange de cles ML-KEM-768 (FIPS 203, post-quantique NIST), le relais a expediteur scelle et la generation de nombres aleatoires quantiques. Chaque message, appel, fichier et paiement est chiffre avant de quitter votre appareil. Le serveur relais ne voit que des blobs chiffres - il ne peut pas lire le contenu, identifier les parties communicantes ou detercontributor ce qui est envoye.",
     },
     {
       question: "Quel chiffrement SPEAQ utilise-t-il ?",
@@ -369,7 +369,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Qu'est-ce que le chiffrement resistant aux quantiques et pourquoi est-ce important ?",
-      answer: "Les ordinateurs quantiques seront eventuellement capables de casser le chiffrement utilise par la plupart des applications aujourd'hui (RSA, ECC). Cela signifie que les messages chiffres aujourd'hui pourraient etre stockes et dechiffres a l'avenir - une strategie connue sous le nom de 'recolter maintenant, dechiffrer plus tard'. SPEAQ utilise des lattice (custom, NON valide NIST). Migration vers FIPS 203/204/205 sur la feuille de route concus pour resister aux attaques des ordinateurs classiques et quantiques. Vos messages sont en securite aujourd'hui et a l'avenir.",
+      answer: "Les ordinateurs quantiques seront eventuellement capables de casser le chiffrement utilise par la plupart des applications aujourd'hui (RSA, ECC). Cela signifie que les messages chiffres aujourd'hui pourraient etre stockes et dechiffres a l'avenir - une strategie connue sous le nom de 'recolter maintenant, dechiffrer plus tard'. SPEAQ utilise depuis le 25 avril 2026 ML-KEM-768 (FIPS 203), ML-DSA-65 (FIPS 204) et SPHINCS+ (FIPS 205) - tous standardises NIST et concus pour resister aux attaques des ordinateurs classiques et quantiques. Vos messages sont en securite aujourd'hui et a l'avenir.",
     },
     {
       question: "Quelqu'un peut-il lire mes messages - meme SPEAQ lui-meme ?",
@@ -399,7 +399,7 @@ const security: Record<Lang, FaqItem[]> = {
   es: [
     {
       question: "Que tan seguro es SPEAQ?",
-      answer: "SPEAQ utiliza 9 capas de seguridad, incluyendo cifrado AES-256, el protocolo Double Ratchet para secreto perfecto hacia adelante, intercambio de claves lattice (propio, NO FIPS 203), retransmision con remitente sellado y generacion de numeros aleatorios cuanticos. Cada mensaje, llamada, archivo y pago se cifra antes de salir de tu dispositivo. El servidor de retransmision solo ve blobs cifrados - no puede leer contenido, identificar partes comunicantes ni determinar que se esta enviando.",
+      answer: "SPEAQ utiliza 9 capas de seguridad, incluyendo cifrado AES-256, el protocolo Double Ratchet para secreto perfecto hacia adelante, intercambio de claves ML-KEM-768 (FIPS 203, post-cuantico NIST), retransmision con remitente sellado y generacion de numeros aleatorios cuanticos. Cada mensaje, llamada, archivo y pago se cifra antes de salir de tu dispositivo. El servidor de retransmision solo ve blobs cifrados - no puede leer contenido, identificar partes comunicantes ni determinar que se esta enviando.",
     },
     {
       question: "Que cifrado utiliza SPEAQ?",
@@ -407,7 +407,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Que es el cifrado resistente a computadoras cuanticas y por que importa?",
-      answer: "Las computadoras cuanticas eventualmente podran romper el cifrado usado por la mayoria de las aplicaciones hoy (RSA, ECC). Esto significa que los mensajes cifrados hoy podrian almacenarse y descifrarse en el futuro - una estrategia conocida como 'cosechar ahora, descifrar despues'. SPEAQ usa lattice (propio, NO validado por NIST). Migracion a FIPS 203/204/205 en la hoja de ruta disenados para resistir ataques de computadoras tanto clasicas como cuanticas. Tus mensajes estan seguros hoy y en el futuro.",
+      answer: "Las computadoras cuanticas eventualmente podran romper el cifrado usado por la mayoria de las aplicaciones hoy (RSA, ECC). Esto significa que los mensajes cifrados hoy podrian almacenarse y descifrarse en el futuro - una estrategia conocida como 'cosechar ahora, descifrar despues'. SPEAQ usa desde el 25 de abril de 2026 ML-KEM-768 (FIPS 203), ML-DSA-65 (FIPS 204) y SPHINCS+ (FIPS 205) - todos estandarizados por NIST y disenados para resistir ataques de computadoras tanto clasicas como cuanticas. Tus mensajes estan seguros hoy y en el futuro.",
     },
     {
       question: "Puede alguien leer mis mensajes - incluso SPEAQ mismo?",
@@ -437,7 +437,7 @@ const security: Record<Lang, FaqItem[]> = {
   ru: [
     {
       question: "Naskolko bezopasen SPEAQ?",
-      answer: "SPEAQ ispolzuet 9 urovney bezopasnosti, vklyuchaya shifrovanie AES-256, protokol Double Ratchet dlya pryamoy sekretnosi, lattice-obmen klyuchami (sobstvennyj, NE FIPS 203), retranslyatsiyu s zapechatannym otpravitelem i generatsiyu kvantovykh sluchaynykh chisel. Kazhdoe soobshchenie, zvonok, fayl i platezh shifruyutsya do togo, kak pokinut vashe ustroystvo. Server-retranslyator vidit tolko zashifrovannye bloby - on ne mozhet chitat soderzhimoe, identifitsirovat obshchayushchiesya storony ili opredelit, chto otpravlyaetsya.",
+      answer: "SPEAQ ispolzuet 9 urovney bezopasnosti, vklyuchaya shifrovanie AES-256, protokol Double Ratchet dlya pryamoy sekretnosi, obmen klyuchami ML-KEM-768 (FIPS 203, postkvantovyj NIST), retranslyatsiyu s zapechatannym otpravitelem i generatsiyu kvantovykh sluchaynykh chisel. Kazhdoe soobshchenie, zvonok, fayl i platezh shifruyutsya do togo, kak pokinut vashe ustroystvo. Server-retranslyator vidit tolko zashifrovannye bloby - on ne mozhet chitat soderzhimoe, identifitsirovat obshchayushchiesya storony ili opredelit, chto otpravlyaetsya.",
     },
     {
       question: "Kakoe shifrovanie ispolzuet SPEAQ?",
@@ -445,7 +445,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Chto takoe kvantovoustomchivoe shifrovanie i pochemu eto vazhno?",
-      answer: "Kvantovye kompyutery v konechnom itoge smogut vzlomat shifrovanie, ispolzuemoe bolshinstvom prilozheniy segodnya (RSA, ECC). Eto oznachaet, chto soobshcheniya, zashifrovannye segodnya, mogut byt sokhraneny i rasshifrovany v budushchem - strategiya, izvestnaya kak 'sobirat seychas, rasshifrovat pozhe'. SPEAQ ispolzuet lattice (sobstvennaya, ne validirovano NIST). Migratsiya na FIPS 203/204/205 v plane razvitiya, kotorye prednaznacheny dlya soprotivleniya atakam kak klassicheskikh, tak i kvantovykh kompyuterov. Vashi soobshcheniya v bezopasnosti segodnya i v budushchem.",
+      answer: "Kvantovye kompyutery v konechnom itoge smogut vzlomat shifrovanie, ispolzuemoe bolshinstvom prilozheniy segodnya (RSA, ECC). Eto oznachaet, chto soobshcheniya, zashifrovannye segodnya, mogut byt sokhraneny i rasshifrovany v budushchem - strategiya, izvestnaya kak 'sobirat seychas, rasshifrovat pozhe'. SPEAQ ispolzuet s 25 aprelya 2026 ML-KEM-768 (FIPS 203), ML-DSA-65 (FIPS 204) i SPHINCS+ (FIPS 205) - vse standartizirovany NIST i razrabotany dlya soprotivleniya atakam kak klassicheskikh, tak i kvantovykh kompyuterov. Vashi soobshcheniya v bezopasnosti segodnya i v budushchem.",
     },
     {
       question: "Mozhet li kto-to chitat moi soobshcheniya - dazhe sam SPEAQ?",
@@ -483,7 +483,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Was ist quantenresistente Verschlusselung und warum ist sie wichtig?",
-      answer: "Quantencomputer werden irgendwann in der Lage sein, die Verschlusselung zu brechen, die die meisten Apps heute verwenden (RSA, ECC). Das bedeutet, dass heute verschlusselte Nachrichten gespeichert und in Zukunft entschlusselt werden konnten - eine Strategie, die als 'jetzt ernten, spater entschlusseln' bekannt ist. SPEAQ verwendet Gitter (eigen, NICHT NIST-validiert). Migration zu FIPS 203/204/205 auf der Roadmap, die entwickelt wurden, um Angriffen von sowohl klassischen als auch Quantencomputern zu widerstehen. Ihre Nachrichten sind heute und in Zukunft sicher.",
+      answer: "Quantencomputer werden irgendwann in der Lage sein, die Verschlusselung zu brechen, die die meisten Apps heute verwenden (RSA, ECC). Das bedeutet, dass heute verschlusselte Nachrichten gespeichert und in Zukunft entschlusselt werden konnten - eine Strategie, die als 'jetzt ernten, spater entschlusseln' bekannt ist. SPEAQ verwendet seit dem 25. April 2026 ML-KEM-768 (FIPS 203), ML-DSA-65 (FIPS 204) und SPHINCS+ (FIPS 205) - alle NIST-standardisiert und entwickelt, um Angriffen von sowohl klassischen als auch Quantencomputern zu widerstehen. Ihre Nachrichten sind heute und in Zukunft sicher.",
     },
     {
       question: "Kann jemand meine Nachrichten lesen - sogar SPEAQ selbst?",
@@ -513,7 +513,7 @@ const security: Record<Lang, FaqItem[]> = {
   sl: [
     {
       question: "Kako varen je SPEAQ?",
-      answer: "SPEAQ uporablja 9 varnostnih plasti, vkljuchno s sifriranjem AES-256, protokolom Double Ratchet za vnaprejsnjo skrivnost, lattice izmenjavo kljuchev (lastno, NE FIPS 203), zapechatenem posiljateljem in kvantno generacijo nakljuchnih stevilk. Vsako sporocilo, klic, datoteka in placilo je sifrirano, preden zapusti vaso napravo. Posredovalni streznik vidi samo sifrirane blob-e - ne more brati vsebine, identificirati komunicirajochih strank ali dolociti, kaj se possilja.",
+      answer: "SPEAQ uporablja 9 varnostnih plasti, vkljuchno s sifriranjem AES-256, protokolom Double Ratchet za vnaprejsnjo skrivnost, izmenjavo kljuchev ML-KEM-768 (FIPS 203, NIST postkvantni), zapechatenem posiljateljem in kvantno generacijo nakljuchnih stevilk. Vsako sporocilo, klic, datoteka in placilo je sifrirano, preden zapusti vaso napravo. Posredovalni streznik vidi samo sifrirane blob-e - ne more brati vsebine, identificirati komunicirajochih strank ali dolociti, kaj se possilja.",
     },
     {
       question: "Katero sifriranje uporablja SPEAQ?",
@@ -521,7 +521,7 @@ const security: Record<Lang, FaqItem[]> = {
     },
     {
       question: "Kaj je kvantno odporno sifriranje in zakaj je pomembno?",
-      answer: "Kvantni racunalniki bodo sochasoma lahko zlomili sifriranje, ki ga vecina aplikacij danes uporablja (RSA, ECC). To pomeni, da bi se sporocila, sifrirana danes, lahko shranila in desifrirala v prihodnosti - strategija, znana kot 'pozhni zdaj, desifriraj pozneje'. SPEAQ uporablja lattice (lastno, NI NIST-validirano). Migracija na FIPS 203/204/205 na roadmap, zasnovane za odpornost proti napadom tako klasicnih kot kvantnih racunalnikov. Vasa sporocila so varna danes in v prihodnosti.",
+      answer: "Kvantni racunalniki bodo sochasoma lahko zlomili sifriranje, ki ga vecina aplikacij danes uporablja (RSA, ECC). To pomeni, da bi se sporocila, sifrirana danes, lahko shranila in desifrirala v prihodnosti - strategija, znana kot 'pozhni zdaj, desifriraj pozneje'. SPEAQ uporablja od 25. aprila 2026 ML-KEM-768 (FIPS 203), ML-DSA-65 (FIPS 204) in SPHINCS+ (FIPS 205) - vse NIST-standardizirano in zasnovano za odpornost proti napadom tako klasicnih kot kvantnih racunalnikov. Vasa sporocila so varna danes in v prihodnosti.",
     },
     {
       question: "Ali lahko kdorkoli bere moja sporocila - celo SPEAQ sam?",

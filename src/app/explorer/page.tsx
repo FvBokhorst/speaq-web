@@ -181,13 +181,13 @@ export default function ExplorerPage() {
                   { name: "AES-256-GCM (NIST)", desc: "Symmetric encryption for text messages and payment payloads. Active and verified standard." },
                   { name: "Double Ratchet Protocol", desc: "Forward secrecy - fresh derived key per message. Active." },
                   { name: "FIPS 203 ML-KEM-768 (CRYSTALS-Kyber)", desc: "FIPS 203 ML-KEM-768 implementation via @noble/post-quantum, NIST-standardized post-quantum key exchange. Replaced custom ring-LWE scheme on 2026-04-25." },
-                  { name: "ECDSA P-256 (NIST, pre-quantum)", desc: "Signed key exchange between contacts. Active. Quantum-vulnerable - replaced by post-quantum signatures on roadmap." },
+                  { name: "ECDSA P-256 (NIST, pre-quantum)", desc: "Signed key exchange between contacts. Active in hybrid combination with ML-DSA-65 (FIPS 204) since 2026-04-25 audit fix - the post-quantum signature provides forward security." },
                   { name: "SHA-256 (NIST)", desc: "Cryptographic hashing for addresses, witness records, block links. Active." },
                   { name: "HMAC-SHA256 (NIST)", desc: "Server-side mining receipt tags. Note: relay-internal only, not user-signed double-proof." },
-                  { name: "WebRTC DTLS-SRTP", desc: "Voice and video media encryption (standard). Note: signaling SDP/ICE itself is plaintext via relay." },
-                  { name: "FIPS 203 Kyber-768 (ACTIVE since 2026-04-25)", desc: "Replacement for the custom lattice scheme. Not yet implemented." },
-                  { name: "FIPS 204 ML-DSA-65 (implemented for wallet/transaction signing)", desc: "Wallet transaction signatures. Not yet implemented." },
-                  { name: "[ROADMAP] FIPS 205 SPHINCS+", desc: "Hash-based backup signatures. Not yet implemented." },
+                  { name: "WebRTC DTLS-SRTP", desc: "Voice and video media encryption (standard). Signaling (SDP/ICE) is encrypted with an AES-256-GCM session key derived from ML-KEM-768 since 2026-04-25 - the relay cannot read it." },
+                  { name: "ML-KEM-768 (FIPS 203, ACTIVE since 2026-04-25)", desc: "NIST-standardized post-quantum key encapsulation mechanism via @noble/post-quantum. Replaced the custom lattice scheme. Active in both PWA and native." },
+                  { name: "ML-DSA-65 (FIPS 204, ACTIVE since 2026-04-25)", desc: "NIST-standardized post-quantum digital signatures. Active for wallet transactions, AUTH challenge-response (hybrid with ECDSA P-256), and chain block signing (dual-signed with SPHINCS+)." },
+                  { name: "SPHINCS+ / SLH-DSA (FIPS 205, ACTIVE since 2026-04-25)", desc: "NIST-standardized hash-based post-quantum signatures. Active for chain block dual-signing alongside ML-DSA-65 - independent cryptographic assumption gives a backup if lattice schemes are broken." },
                 ].map((item) => (
                   <div key={item.name} className="bg-bg-card rounded-lg px-4 py-3 border border-[rgba(100,116,139,0.08)]">
                     <p className="text-sm font-[family-name:var(--font-jetbrains)] text-quantum-teal">{item.name}</p>
