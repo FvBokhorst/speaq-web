@@ -1073,7 +1073,35 @@ export default function SpeaqApp() {
         return;
       }
       if ((msg.type === "RECEIVE_SEALED" || msg.type === "RECEIVE") && msg.blob && identity) {
-        const fromId = msg.from;
+        // RECEIVE_SEALED: relay strips `from` field by design (sender hidden in encrypted blob).
+        // We try ratchet decrypt against every stored ratchet; whichever decrypts cleanly
+        // identifies the sender via the senderId field inside the decrypted payload.
+        let fromId = msg.from as string | undefined;
+        let prediscoveredPlaintext = "";
+        if (!fromId && msg.type === "RECEIVE_SEALED") {
+          try {
+            const ratchetMsg = JSON.parse(msg.blob);
+            const mn = ratchetMsg.messageNumber ?? ratchetMsg.mn;
+            const ct = ratchetMsg.ciphertext ?? ratchetMsg.ct;
+            if (mn !== undefined && ct) {
+              const keys = Object.keys(localStorage).filter((k) => k.startsWith("speaq_ratchet_"));
+              for (const key of keys) {
+                const candidateId = key.slice("speaq_ratchet_".length);
+                const candidateState = loadRatchetState(candidateId);
+                if (!candidateState) continue;
+                try {
+                  const result = await ratchetDecrypt(candidateState, ct, mn);
+                  prediscoveredPlaintext = result.plaintext;
+                  saveRatchetState(candidateId, result.state);
+                  fromId = candidateId;
+                  console.log("[SPEAQ] Sealed message decrypted from", candidateId);
+                  break;
+                } catch { /* not this ratchet, try next */ }
+              }
+            }
+          } catch { /* malformed sealed blob */ }
+          if (!fromId) { console.warn("[SPEAQ] Sealed message: no ratchet decrypts it"); return; }
+        }
         if (!fromId) { console.warn("[SPEAQ] No from field in message"); return; }
         // Apple Guideline 1.2: drop messages from blocked SPEAQ IDs silently.
         // The sender already received an ACK from the relay (server-side block
@@ -1094,28 +1122,35 @@ export default function SpeaqApp() {
           } catch { /* ignore */ }
         }
         console.log("[SPEAQ] Received message from", fromId, "blob size:", msg.blob.length);
-        let plaintext = "";
+        let plaintext = prediscoveredPlaintext;
 
-        // Try legacy AES-256-GCM with SHA-256 key derivation (most reliable)
-        try {
-          const key = await deriveKey(identity.speaqId, fromId);
-          plaintext = await decrypt(key, msg.blob);
-          console.log("[SPEAQ] Decrypted OK, plaintext size:", plaintext.length);
-        } catch (e: unknown) {
-          // Try ratchet decrypt as fallback
-          const ratchetState = loadRatchetState(fromId);
-          if (ratchetState) {
-            try {
-              const ratchetMsg = JSON.parse(msg.blob);
-              if (ratchetMsg.mn !== undefined && ratchetMsg.ct) {
-                const result = await ratchetDecrypt(ratchetState, ratchetMsg.ct, ratchetMsg.mn);
-                plaintext = result.plaintext;
-                saveRatchetState(fromId, result.state);
-                console.log("[SPEAQ] Ratchet decrypted OK");
-              }
-            } catch {}
+        // Skip legacy + ratchet attempts if sealed-discovery already produced plaintext above.
+        if (!plaintext) {
+          // Try legacy AES-256-GCM with SHA-256 key derivation (most reliable)
+          try {
+            const key = await deriveKey(identity.speaqId, fromId);
+            plaintext = await decrypt(key, msg.blob);
+            console.log("[SPEAQ] Decrypted OK, plaintext size:", plaintext.length);
+          } catch (e: unknown) {
+            // Try ratchet decrypt as fallback. Accept both PWA-legacy field names
+            // ({mn, ct}) and native/full names ({messageNumber, ciphertext}) so PWA can
+            // ingest messages from native iOS clients.
+            const ratchetState = loadRatchetState(fromId);
+            if (ratchetState) {
+              try {
+                const ratchetMsg = JSON.parse(msg.blob);
+                const mn = ratchetMsg.messageNumber ?? ratchetMsg.mn;
+                const ct = ratchetMsg.ciphertext ?? ratchetMsg.ct;
+                if (mn !== undefined && ct) {
+                  const result = await ratchetDecrypt(ratchetState, ct, mn);
+                  plaintext = result.plaintext;
+                  saveRatchetState(fromId, result.state);
+                  console.log("[SPEAQ] Ratchet decrypted OK");
+                }
+              } catch {}
+            }
+            if (!plaintext) { console.warn("[SPEAQ] All decryption failed from", fromId, (e as Error)?.message); return; }
           }
-          if (!plaintext) { console.warn("[SPEAQ] All decryption failed from", fromId, (e as Error)?.message); return; }
         }
 
         if (!plaintext) return;
@@ -1806,12 +1841,15 @@ export default function SpeaqApp() {
 
     // Check if we have a ratchet (quantum-secure channel) with this contact
     const ratchetState = loadRatchetState(activeContact.speaqId);
+    let useSealed = false;
     if (ratchetState) {
       // Ratchet encrypt: unique key per message, forward secrecy
       const result = await ratchetEncrypt(ratchetState, plainPayload);
       saveRatchetState(activeContact.speaqId, result.state);
-      // Send as JSON with message number so receiver can ratchet-decrypt
-      blob = JSON.stringify({ mn: result.messageNumber, ct: result.ciphertext });
+      // Native uses {messageNumber, ciphertext}; we standardize on full names so
+      // both clients can decode each other's blobs without an alias layer.
+      blob = JSON.stringify({ messageNumber: result.messageNumber, ciphertext: result.ciphertext });
+      useSealed = true;
     } else {
       // No ratchet yet. initiate Kyber key exchange AND send with legacy encryption
       // The key exchange runs in background; future messages will use ratchet
@@ -1829,7 +1867,22 @@ export default function SpeaqApp() {
       blob = await encrypt(key, plainPayload);
     }
 
-    wsRef.current.send(JSON.stringify({ type: "SEND", to: activeContact.speaqId, blob }));
+    // For ratchet messages, include protocol marker so native peers route them through
+    // their ratchet decrypt branch (ChatScreen.tsx checks msg.protocol === "ratchet-v1").
+    // We keep frame-type SEND (not SEND_SEALED) because native does not yet handle
+    // RECEIVE_SEALED -- using sealed-sender from PWA would silently drop on native.
+    // Relay must forward `protocol` field on SEND -> RECEIVE; that change ships with
+    // this fix in packages/speaq-relay/src/server.ts.
+    if (useSealed) {
+      wsRef.current.send(JSON.stringify({
+        type: "SEND",
+        to: activeContact.speaqId,
+        blob,
+        protocol: "ratchet-v1",
+      }));
+    } else {
+      wsRef.current.send(JSON.stringify({ type: "SEND", to: activeContact.speaqId, blob }));
+    }
     const newMsg: Message = { id: Date.now().toString(36) + Math.random().toString(36).substring(2, 6), text: inputText.trim(), fromMe: true, timestamp: Date.now() };
     setMessages((prev) => ({ ...prev, [activeContact.speaqId]: [...(prev[activeContact.speaqId] || []), newMsg] }));
     setInputText("");
