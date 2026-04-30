@@ -1345,13 +1345,15 @@ export default function SpeaqApp() {
       // Audit hardening E1 (2026-04-25): signature is now MANDATORY (fail-closed). If a
       // contact's signing key changes after first registration, the new exchange is REJECTED
       // and the user is alerted - this prevents silent key-replacement (MITM via re-exchange).
-      if (msg.type === "KEY_EXCHANGE" && msg.from && msg.blob && identity) {
+      // Accept both field-name conventions: PWA `blob`, native iOS `kyberPublicKey`.
+      const kxIncomingPubKey = (msg.blob as string) || (msg.kyberPublicKey as string);
+      if (msg.type === "KEY_EXCHANGE" && msg.from && kxIncomingPubKey && identity) {
         try {
           if (!msg.sig || !msg.signPub) {
             console.warn("[SPEAQ] KEY_EXCHANGE REJECTED from", msg.from, "- missing signature (fail-closed)");
             return;
           }
-          const valid = await verifySignature(msg.blob, msg.sig, msg.signPub);
+          const valid = await verifySignature(kxIncomingPubKey, msg.sig, msg.signPub);
           if (!valid) { console.warn("[SPEAQ] KEY_EXCHANGE signature INVALID from", msg.from); return; }
           const knownKey = loadContactSigningKey(msg.from);
           if (knownKey && knownKey !== msg.signPub) {
@@ -1363,14 +1365,24 @@ export default function SpeaqApp() {
           saveContactSigningKey(msg.from, msg.signPub);
           console.log("[SPEAQ] KEY_EXCHANGE signature verified from", msg.from);
           // Encapsulate to create shared secret
-          const theirPublicKey = msg.blob;
+          const theirPublicKey = kxIncomingPubKey;
           const { ciphertext, sharedSecret } = await kyberEncapsulate(theirPublicKey);
           // Sign our response
           const sig = signingKeys.current ? await signData(ciphertext, signingKeys.current.privateKey) : "";
           const signPub = signingKeys.current?.publicKey || "";
           // Send back signed ciphertext
           if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-            wsRef.current.send(JSON.stringify({ type: "KEY_EXCHANGE_RESPONSE", to: msg.from, blob: ciphertext, sig, signPub }));
+            // Send both field names so native iOS clients (which read `kyberCiphertext`)
+            // and PWA clients (which read `blob`) both decode the response.
+            wsRef.current.send(JSON.stringify({
+              type: "KEY_EXCHANGE_RESPONSE",
+              to: msg.from,
+              blob: ciphertext,
+              kyberCiphertext: ciphertext,
+              from: identity.speaqId,
+              sig,
+              signPub,
+            }));
           }
           // Init Double Ratchet as responder (not initiator)
           const ratchet = await initRatchet(sharedSecret, false);
@@ -1383,13 +1395,16 @@ export default function SpeaqApp() {
 
       // KEY_EXCHANGE_RESPONSE: they responded with signed Kyber ciphertext.
       // E1 hardening: signature mandatory + key-change check.
-      if (msg.type === "KEY_EXCHANGE_RESPONSE" && msg.from && msg.blob && identity) {
+      // Accept both PWA-native field-name conventions: PWA uses `blob`, native iOS
+      // uses `kyberCiphertext`. Same for the existence-check below.
+      const kxrCiphertext = (msg.blob as string) || (msg.kyberCiphertext as string);
+      if (msg.type === "KEY_EXCHANGE_RESPONSE" && msg.from && kxrCiphertext && identity) {
         try {
           if (!msg.sig || !msg.signPub) {
             console.warn("[SPEAQ] KEY_EXCHANGE_RESPONSE REJECTED from", msg.from, "- missing signature (fail-closed)");
             return;
           }
-          const valid = await verifySignature(msg.blob, msg.sig, msg.signPub);
+          const valid = await verifySignature(kxrCiphertext, msg.sig, msg.signPub);
           if (!valid) { console.warn("[SPEAQ] KEY_EXCHANGE_RESPONSE signature INVALID from", msg.from); return; }
           const knownKey2 = loadContactSigningKey(msg.from);
           if (knownKey2 && knownKey2 !== msg.signPub) {
@@ -1398,13 +1413,31 @@ export default function SpeaqApp() {
           }
           saveContactSigningKey(msg.from, msg.signPub);
           console.log("[SPEAQ] KEY_EXCHANGE_RESPONSE signature verified from", msg.from);
-          const privateKey = pendingKeyExchanges.current[msg.from];
-          if (privateKey) {
-            const sharedSecret = await kyberDecapsulate(msg.blob, privateKey);
-            const ratchet = await initRatchet(sharedSecret, true);
-            saveRatchetState(msg.from, ratchet);
+          // Path A: we initiated with an ephemeral keypair (PWA-to-PWA flow).
+          const ephemeralPrivateKey = pendingKeyExchanges.current[msg.from];
+          let sharedSecret: string | null = null;
+          let isInitiator = true;
+          if (ephemeralPrivateKey) {
+            sharedSecret = await kyberDecapsulate(kxrCiphertext, ephemeralPrivateKey);
             delete pendingKeyExchanges.current[msg.from];
-            console.log("[SPEAQ] SIGNED quantum key exchange response received from", msg.from);
+            console.log("[SPEAQ] KEY_EXCHANGE_RESPONSE decrypted with ephemeral key (initiator path) from", msg.from);
+          } else if (kyberKeys.current?.privateKey) {
+            // Path B: peer used our STORED Kyber pubkey (registered at /api/v1/register)
+            // to encapsulate unilaterally -- e.g., native iOS getOrCreateRatchet path.
+            // Decapsulate with our stored long-lived Kyber privkey.
+            try {
+              sharedSecret = await kyberDecapsulate(kxrCiphertext, kyberKeys.current.privateKey);
+              // myId < contactId determines initiator role to match native crypto.ts:705
+              isInitiator = identity.speaqId < msg.from;
+              console.log("[SPEAQ] KEY_EXCHANGE_RESPONSE decrypted with stored Kyber key (responder path) from", msg.from);
+            } catch (decapErr) {
+              console.warn("[SPEAQ] KEY_EXCHANGE_RESPONSE: stored-key decapsulation failed", decapErr);
+            }
+          }
+          if (sharedSecret) {
+            const ratchet = await initRatchet(sharedSecret, isInitiator);
+            saveRatchetState(msg.from, ratchet);
+            console.log("[SPEAQ] SIGNED quantum key exchange complete with", msg.from);
           }
         } catch (e) {
           console.error("[SPEAQ] Key exchange response failed:", e);
@@ -1859,7 +1892,17 @@ export default function SpeaqApp() {
         pendingKeyExchanges.current[activeContact.speaqId] = kp.privateKey;
         const sig = signingKeys.current ? await signData(kp.publicKey, signingKeys.current.privateKey) : "";
         const signPub = signingKeys.current?.publicKey || "";
-        wsRef.current.send(JSON.stringify({ type: "KEY_EXCHANGE", to: activeContact.speaqId, blob: kp.publicKey, sig, signPub }));
+        // Native iOS handleKeyExchange checks for `kyberPublicKey` field (speaq.ts:177).
+        // PWA peers traditionally use `blob`. Send both so either client accepts it.
+        wsRef.current.send(JSON.stringify({
+          type: "KEY_EXCHANGE",
+          to: activeContact.speaqId,
+          blob: kp.publicKey,
+          kyberPublicKey: kp.publicKey,
+          from: identity.speaqId,
+          sig,
+          signPub,
+        }));
         console.log("[SPEAQ] Initiated SIGNED Kyber key exchange with", activeContact.speaqId);
       }
       // Send with legacy AES-256-GCM (still encrypted, just not quantum-resistant yet)
