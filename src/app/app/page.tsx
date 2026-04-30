@@ -2349,7 +2349,22 @@ export default function SpeaqApp() {
             <button
               onClick={() => {
                 localStorage.setItem("speaq_eula_v1_accepted_at", new Date().toISOString());
-                setScreen("welcome");
+                // Mirror the boot-useEffect routing so existing users with a saved
+                // identity continue to their PIN unlock (or PIN setup) instead of
+                // being forced through "welcome" (create new account). Otherwise a
+                // returning user has to close + reopen the app to get past this gate.
+                if (identity) {
+                  const hasPin = !!localStorage.getItem("speaq_pin");
+                  if (hasPin) {
+                    setScreen("lock");
+                    setPinLocked(true);
+                  } else {
+                    setScreen("setPin");
+                    setPinLocked(true);
+                  }
+                } else {
+                  setScreen("welcome");
+                }
               }}
               disabled={!eulaCheckbox}
               className={`w-full px-12 py-3 rounded-xl font-body font-semibold text-base min-h-[44px] transition-all ${eulaCheckbox ? "bg-voice-gold text-bg-deep" : "bg-bg-elevated text-text-muted cursor-not-allowed"}`}
