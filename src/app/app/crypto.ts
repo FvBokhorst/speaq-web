@@ -454,12 +454,27 @@ export async function decryptWithKey(key: CryptoKey, b64: string): Promise<strin
 // BOTH formats on decrypt for backwards compatibility with older PWA peers. The `bytesToB64`
 // and `b64ToBytes` helpers are defined earlier in this file (around line 172).
 
+// Native iOS derives the AES-256 key from the ratchet messageKey by taking sha256 of
+// the UTF-8 bytes of the hex-string messageKey (see crypto.ts _deriveAesKey on native).
+// PWA historically imported the hex-decoded messageKey bytes directly as the AES key
+// instead. Cross-platform decrypt requires using the same derivation, so we now compute
+// the AES key the native way.
+async function deriveAesKeyFromMessageKey(messageKey: string): Promise<CryptoKey> {
+  const utf8 = new TextEncoder().encode(messageKey);
+  const hash = await crypto.subtle.digest("SHA-256", utf8);
+  return crypto.subtle.importKey("raw", hash, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
+}
+
+// Backwards-compat: legacy PWA peers used the hex-decoded messageKey directly. We try
+// the native derivation first and fall back to this if it fails on receive.
+async function deriveAesKeyLegacyPwa(messageKey: string): Promise<CryptoKey> {
+  const raw = Uint8Array.from(messageKey.match(/.{2}/g)!.map(b => parseInt(b, 16)));
+  return crypto.subtle.importKey("raw", raw, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+}
+
 export async function ratchetEncrypt(state: RatchetState, plaintext: string): Promise<{ state: RatchetState; ciphertext: string; messageNumber: number }> {
   const { nextChainKey, messageKey } = await advanceChain(state.chainKeySend);
-  const key = await crypto.subtle.importKey(
-    "raw", Uint8Array.from(messageKey.match(/.{2}/g)!.map(b => parseInt(b, 16))),
-    { name: "AES-GCM", length: 256 }, false, ["encrypt"]
-  );
+  const key = await deriveAesKeyFromMessageKey(messageKey);
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const ct = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, new TextEncoder().encode(plaintext));
   // Output v2 envelope so native iOS aesGcmDecrypt can parse it (native gates on
@@ -477,10 +492,6 @@ export async function ratchetDecrypt(state: RatchetState, ciphertextB64: string,
     chainKey = nextChainKey;
   }
   const { nextChainKey, messageKey } = await advanceChain(chainKey);
-  const key = await crypto.subtle.importKey(
-    "raw", Uint8Array.from(messageKey.match(/.{2}/g)!.map(b => parseInt(b, 16))),
-    { name: "AES-GCM", length: 256 }, false, ["decrypt"]
-  );
   // Try native v2 envelope first: base64(JSON {v, iv, ct}).
   let iv: Uint8Array | null = null;
   let cipher: Uint8Array | null = null;
@@ -498,7 +509,16 @@ export async function ratchetDecrypt(state: RatchetState, ciphertextB64: string,
     iv = raw.slice(0, 12);
     cipher = raw.slice(12);
   }
-  const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: iv as BufferSource }, key, cipher as BufferSource);
+  // Try native key derivation first; fall back to legacy PWA derivation so old PWA
+  // peers (still on direct hex-decoded keys) keep decrypting after this rollout.
+  let pt: ArrayBuffer | null = null;
+  try {
+    const key = await deriveAesKeyFromMessageKey(messageKey);
+    pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: iv as BufferSource }, key, cipher as BufferSource);
+  } catch {
+    const legacyKey = await deriveAesKeyLegacyPwa(messageKey);
+    pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: iv as BufferSource }, legacyKey, cipher as BufferSource);
+  }
   const newState = { ...state, chainKeyRecv: nextChainKey, recvCount: messageNumber + 1 };
   return { state: newState, plaintext: new TextDecoder().decode(pt) };
 }
