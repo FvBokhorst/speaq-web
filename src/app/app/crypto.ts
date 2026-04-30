@@ -498,7 +498,7 @@ export async function ratchetDecrypt(state: RatchetState, ciphertextB64: string,
     iv = raw.slice(0, 12);
     cipher = raw.slice(12);
   }
-  const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, cipher);
+  const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: iv as BufferSource }, key, cipher as BufferSource);
   const newState = { ...state, chainKeyRecv: nextChainKey, recvCount: messageNumber + 1 };
   return { state: newState, plaintext: new TextDecoder().decode(pt) };
 }
