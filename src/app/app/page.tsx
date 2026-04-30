@@ -122,7 +122,7 @@ interface DeadManConfig {
 }
 
 type Screen =
-  | "onboarding" | "lock" | "setPin" | "welcome" | "main" | "chat" | "addContact"
+  | "onboarding" | "eula" | "lock" | "setPin" | "welcome" | "main" | "chat" | "addContact"
   | "walletDetail" | "sendQC" | "transactions"
   | "miningDetail"
   | "call"
@@ -268,6 +268,20 @@ const appStrings: Record<string, Record<string, string>> = {
   "onb.skip": { en: "Skip", nl: "Overslaan", fr: "Passer", es: "Omitir", ru: "Propustit", de: "Uberspringen", sl: "Preskoci", lg: "Buuka", sw: "Ruka" },
   "onb.next": { en: "Next", nl: "Volgende", fr: "Suivant", es: "Siguiente", ru: "Dalee", de: "Weiter", sl: "Naprej", lg: "Ekiddako", sw: "Ifuatayo" },
   "onb.getStarted": { en: "Get Started", nl: "Aan de slag", fr: "Commencer", es: "Comenzar", ru: "Nachat", de: "Los geht's", sl: "Zacni", lg: "Tandika", sw: "Anza" },
+
+  // EULA - Apple Guideline 1.2 acceptance gate
+  "eula.title": { en: "Terms of Use and Conduct", nl: "Voorwaarden en Gedragsregels", fr: "Conditions d'utilisation et de conduite", es: "Terminos de uso y conducta", ru: "Usloviya ispolzovaniya i povedeniya", de: "Nutzungs- und Verhaltensbedingungen", sl: "Pogoji uporabe in vedenja", lg: "Endagaano y'okukozesa n'enneeyisa", sw: "Masharti ya Matumizi na Mwenendo" },
+  "eula.intro": { en: "Before you start using SPEAQ, please review and agree to our community standards. SPEAQ is a free communication platform and we depend on every user to keep it safe.", nl: "Lees voor je SPEAQ gebruikt onze gedragsregels en stem ermee in. SPEAQ is een vrij communicatieplatform en we rekenen op iedere gebruiker om het veilig te houden.", fr: "Avant d'utiliser SPEAQ, veuillez lire et accepter nos regles de conduite. SPEAQ est une plateforme de communication libre et nous comptons sur chaque utilisateur pour la garder sure.", es: "Antes de usar SPEAQ, lee y acepta nuestras reglas de conducta. SPEAQ es una plataforma de comunicacion libre y dependemos de cada usuario para mantenerla segura.", ru: "Pered ispolzovaniem SPEAQ pozhaluysta oznakomtes i soglasites s nashimi pravilami povedeniya. SPEAQ - svobodnaya kommunikatsionnaya platforma, i my zavisim ot kazhdogo polzovatelya, chtoby sohranit ee bezopasnoy.", de: "Bevor Sie SPEAQ nutzen, lesen Sie bitte unsere Verhaltensregeln und stimmen Sie ihnen zu. SPEAQ ist eine freie Kommunikationsplattform und wir sind auf jeden Nutzer angewiesen, um sie sicher zu halten.", sl: "Pred uporabo SPEAQ prosim preberite in se strinjajte z nasimi pravili vedenja. SPEAQ je svobodna komunikacijska platforma in odvisni smo od vsakega uporabnika, da jo ohranja varno.", lg: "Nga tonatandise SPEAQ, soma era okkirize amateeka g'amakwaata. SPEAQ ye platifoomu y'okuwuliziganya ey'eddembe era twesigamye ku buli mukozesa okugikuuma nga nungamu.", sw: "Kabla ya kutumia SPEAQ, tafadhali soma na ukubali kanuni zetu za jamii. SPEAQ ni jukwaa huru la mawasiliano na tunategemea kila mtumiaji kuilinda iwe salama." },
+  "eula.zeroToleranceTitle": { en: "Zero tolerance for objectionable content and abusive behavior.", nl: "Nul tolerantie voor aanstootgevende inhoud en misbruik.", fr: "Zero tolerance pour le contenu offensant et les comportements abusifs.", es: "Cero tolerancia para contenido objetable y comportamiento abusivo.", ru: "Nulevaya terpimost k oskorbitelnomu kontentu i nasilstvennomu povedeniyu.", de: "Null Toleranz fur anstossige Inhalte und missbrauchliches Verhalten.", sl: "Nicelna toleranca do spornih vsebin in zlorabljajocega vedenja.", lg: "Tetukkiriza biwendo bya kunenya wadde okukola obubi.", sw: "Hakuna uvumilivu kwa maudhui yasiyofaa na tabia za unyanyasaji." },
+  "eula.bullet1": { en: "I will not send violent, sexual, hateful, threatening, or illegal content, including any form of child sexual abuse material (CSAM).", nl: "Ik verstuur geen gewelddadige, seksuele, haatdragende, bedreigende of illegale inhoud, inclusief enige vorm van kindermisbruikmateriaal.", fr: "Je n'enverrai pas de contenu violent, sexuel, haineux, menacant ou illegal, y compris toute forme de materiel pedopornographique.", es: "No enviare contenido violento, sexual, de odio, amenazante o ilegal, incluido cualquier material de abuso sexual infantil.", ru: "Ya ne budu otpravlyat nasilstvennyy, seksualnyy, nenavistnyy, ugrozhayushchiy ili nezakonnyy kontent, vklyuchaya lyubuyu formu materialov o seksualnom nasilii nad detmi.", de: "Ich werde keine gewalttatigen, sexuellen, hasserfullten, drohenden oder illegalen Inhalte senden, einschliesslich jeglicher Form von Material des sexuellen Missbrauchs von Kindern.", sl: "Ne bom posiljal nasilnih, spolnih, sovraznih, grozecih ali nezakonitih vsebin, vkljucno s katero koli obliko gradiva o spolni zlorabi otrok.", lg: "Sijja kuwerezako biwendo bya butemu, by'ekitundu kya kabaka, bya bukyayi, bya kutiisatiisa wadde ebitamu mateeka, omuli mu butuufu obwabwo bw'okukozesa abaana.", sw: "Sitatuma maudhui ya vurugu, ngono, chuki, vitisho, au haramu, ikiwemo aina yoyote ya nyenzo za unyanyasaji wa kingono kwa watoto." },
+  "eula.bullet2": { en: "I will not harass, bully, threaten, impersonate, or intimidate other users.", nl: "Ik val andere gebruikers niet lastig, pest of bedreig ze niet, en doe me niet voor als iemand anders.", fr: "Je ne harcelerai, n'intimiderai, ne menacerai, n'usurperai pas l'identite d'autres utilisateurs.", es: "No acosare, intimidare, amenazare ni suplantare la identidad de otros usuarios.", ru: "Ya ne budu presledovat, zapugivat, ugrozhat ili vydavat sebya za drugih polzovateley.", de: "Ich werde andere Nutzer nicht belastigen, schikanieren, bedrohen oder mich als sie ausgeben.", sl: "Ne bom nadlegoval, ustrahoval, grozil ali se izdajal za druge uporabnike.", lg: "Sijja kunyiiza, kutiisatiisa, oba okwefumira ng'omulala.", sw: "Sitamsumbua, kumtisha, au kujifanya kuwa mtumiaji mwingine." },
+  "eula.bullet3": { en: "I will report objectionable content I receive and block users who violate this policy.", nl: "Ik meld aanstootgevende inhoud die ik ontvang en blokkeer gebruikers die de regels overtreden.", fr: "Je signalerai le contenu offensant que je recois et je bloquerai les utilisateurs qui enfreignent cette politique.", es: "Reportare contenido objetable que reciba y bloqueare a los usuarios que infrinjan esta politica.", ru: "Ya budu soobshchat ob oskorbitelnom kontente, kotoryy ya poluchayu, i blokirovat polzovateley, narushayushchih etu politiku.", de: "Ich werde anstossige Inhalte, die ich erhalte, melden und Nutzer blockieren, die gegen diese Regel verstossen.", sl: "Sporne vsebine, ki jih prejmem, bom prijavil in blokiral uporabnike, ki krsijo to politiko.", lg: "Nzija kulanga ebintu ebibi bye nfuna era nziya kuziyiza abakozesa abamenya enkambi zino.", sw: "Nitaripoti maudhui yasiyofaa ninayopokea na kuwazuia watumiaji wanaokiuka sera hii." },
+  "eula.bullet4": { en: "SPEAQ moderators review reports within 24 hours. Confirmed violations result in suspension of the offending SPEAQ ID from the network.", nl: "SPEAQ-moderators beoordelen meldingen binnen 24 uur. Bevestigde overtredingen leiden tot schorsing van de SPEAQ ID van het netwerk.", fr: "Les moderateurs SPEAQ examinent les signalements dans les 24 heures. Les violations confirmees entrainent la suspension de l'identifiant SPEAQ du reseau.", es: "Los moderadores de SPEAQ revisan los reportes en 24 horas. Las violaciones confirmadas resultan en la suspension del SPEAQ ID infractor de la red.", ru: "Moderatory SPEAQ rassmatrivayut zhaloby v techenie 24 chasov. Podtverzhdennyye narusheniya vlekut otklyuchenie narushayushchego SPEAQ ID ot seti.", de: "SPEAQ-Moderatoren prufen Meldungen innerhalb von 24 Stunden. Bestatigte Verstosse fuhren zur Sperrung der betreffenden SPEAQ-ID vom Netzwerk.", sl: "Moderatorji SPEAQ pregledujejo prijave v 24 urah. Potrjene krsitve povzrocijo prekinitev krsiteljevega SPEAQ ID iz omrezja.", lg: "Bagonza ba SPEAQ basoma ebigambo mu ssaawa 24. Okumenya amateeka okukakasibwa kuvaako okuziyizibwa kw'erinnya lya SPEAQ ku mukutu.", sw: "Wasimamizi wa SPEAQ wanakagua ripoti ndani ya saa 24. Ukiukaji uliothibitishwa unasababisha kusimamishwa kwa SPEAQ ID iliyokosea kutoka kwenye mtandao." },
+  "eula.bullet5": { en: "I am at least 13 years old (17 in some jurisdictions) and accept that violations may be reported to law enforcement where required by law.", nl: "Ik ben minimaal 13 jaar oud (17 in sommige landen) en accepteer dat overtredingen waar de wet dat vereist gemeld kunnen worden aan justitie.", fr: "J'ai au moins 13 ans (17 dans certaines juridictions) et j'accepte que les violations puissent etre signalees aux autorites lorsque la loi l'exige.", es: "Tengo al menos 13 anos (17 en algunas jurisdicciones) y acepto que las violaciones puedan ser reportadas a las autoridades cuando lo exija la ley.", ru: "Mne ne menee 13 let (17 v nekotoryh yurisdiktsiyah), i ya prinimayu, chto narusheniya mogut byt soobshcheny pravoohranitelnym organam tam, gde etogo trebuet zakon.", de: "Ich bin mindestens 13 Jahre alt (17 in einigen Landern) und akzeptiere, dass Verstosse den Strafverfolgungsbehorden gemeldet werden konnen, wo dies gesetzlich erforderlich ist.", sl: "Star sem najmanj 13 let (17 v nekaterih jurisdikcijah) in sprejemam, da se krsitve lahko prijavijo organom pregona, kjer to zahteva zakon.", lg: "Nina obukadde obutali wansi wa 13 (17 mu nsi ezimu) era nzikiriza nti okumenya amateeka kuyinza okulangirirwa eri eby'amateeka ng'amateeka galagira." , sw: "Nina umri wa angalau miaka 13 (17 katika mamlaka fulani) na ninakubali kwamba ukiukaji unaweza kuripotiwa kwa vyombo vya sheria pale sheria inapohitaji." },
+  "eula.linkLead": { en: "Read the full Objectionable Content Policy and Terms of Service at", nl: "Lees het volledige beleid en de algemene voorwaarden op", fr: "Lisez la politique complete et les conditions sur", es: "Lee la politica completa y los terminos en", ru: "Polnaya politika i usloviya dostupny na", de: "Vollstandige Richtlinien und Nutzungsbedingungen finden Sie unter", sl: "Celotno politiko in pogoje preberite na", lg: "Soma enkambi yonna n'endagaano ku", sw: "Soma sera kamili na masharti katika" },
+  "eula.linkText": { en: "thespeaq.com/terms", nl: "thespeaq.com/terms", fr: "thespeaq.com/terms", es: "thespeaq.com/terms", ru: "thespeaq.com/terms", de: "thespeaq.com/terms", sl: "thespeaq.com/terms", lg: "thespeaq.com/terms", sw: "thespeaq.com/terms" },
+  "eula.checkbox": { en: "I have read and agree to the Terms of Service, including the Objectionable Content Policy and zero tolerance for abuse.", nl: "Ik heb de algemene voorwaarden gelezen en ga akkoord, inclusief het beleid voor aanstootgevende inhoud en de nul-tolerantie voor misbruik.", fr: "J'ai lu et j'accepte les conditions d'utilisation, y compris la politique sur les contenus offensants et la tolerance zero envers les abus.", es: "He leido y acepto los terminos del servicio, incluyendo la politica de contenido objetable y la cero tolerancia hacia el abuso.", ru: "Ya prochital i prinimayu usloviya ispolzovaniya, vklyuchaya politiku o oskorbitelnom kontente i nulevuyu terpimost k zloupotrebleniyam.", de: "Ich habe die Nutzungsbedingungen gelesen und akzeptiere sie, einschliesslich der Richtlinie zu anstossigen Inhalten und der Null-Toleranz-Politik gegenuber Missbrauch.", sl: "Prebral sem in se strinjam s pogoji uporabe, vkljucno s politiko spornih vsebin in nicelno toleranco do zlorabe.", lg: "Nasoma era nzikiriza endagaano y'okukozesa, omuli enkambi y'ebiwendo ebibi n'okutakkiriza kw'okwogerera.", sw: "Nimesoma na ninakubali masharti ya huduma, ikiwa ni pamoja na sera ya maudhui yasiyofaa na hakuna uvumilivu kwa unyanyasaji." },
+  "eula.continue": { en: "Continue", nl: "Doorgaan", fr: "Continuer", es: "Continuar", ru: "Prodolzhit", de: "Weiter", sl: "Nadaljuj", lg: "Genda mu maaso", sw: "Endelea" },
   "onb.slide1.title": { en: "Private Messaging", nl: "Prive berichten", fr: "Messagerie privee", es: "Mensajes privados", ru: "Chastnye soobshcheniya", de: "Private Nachrichten", sl: "Zasebna sporocila", lg: "Obubaka obw'ekyama", sw: "Ujumbe wa faragha" },
   "onb.slide1.sub": { en: "Every message is locked on your phone before it leaves. Nobody on the way can read it - not even SPEAQ. We forward sealed envelopes, not letters.", nl: "Elk bericht wordt op je telefoon vergrendeld voordat het vertrekt. Niemand onderweg kan het lezen - zelfs SPEAQ niet. Wij sturen verzegelde enveloppen door, geen brieven.", fr: "Chaque message est verrouille sur votre telephone avant de partir. Personne en chemin ne peut le lire - meme pas SPEAQ. Nous transmettons des enveloppes scellees, pas des lettres.", es: "Cada mensaje queda cerrado en tu telefono antes de salir. Nadie en el camino puede leerlo - ni siquiera SPEAQ. Reenviamos sobres sellados, no cartas.", ru: "Kazhdoe soobshchenie zashifrovano na vashem telefone do otpravki. Nikto v puti ne mozhet ego prochitat - dazhe SPEAQ. My peresylaem zapechatannye konverty, a ne pisma.", de: "Jede Nachricht wird auf Ihrem Telefon verschlusselt bevor sie abgeschickt wird. Niemand unterwegs kann sie lesen - auch SPEAQ nicht. Wir leiten versiegelte Umschlage weiter, keine Briefe.", sl: "Vsako sporocilo je zaklenjeno na vasem telefonu, preden poslje. Nihce na poti ga ne more prebrati - niti SPEAQ. Mi posiljamo zapecatene ovojnice, ne pisem.", lg: "Buli bubaka bukugalwa ku ssimu yo nga tebunnaba kuva. Tewali muntu ku kkubo ayinza kububala - nasse SPEAQ. Tutwala obubaka obugalwa, si ebbaluwa.", sw: "Kila ujumbe umefungwa kwenye simu yako kabla ya kutoka. Hakuna mtu njiani anaweza kuusoma - hata SPEAQ. Tunatuma bahasha zilizofungwa, si barua." },
   "onb.slide2.title": { en: "Chat & Call", nl: "Chat & Bellen", fr: "Chat & Appel", es: "Chat y Llamadas", ru: "Chat i zvonki", de: "Chat & Anruf", sl: "Klepet & klic", lg: "Chat ne kukuba simu", sw: "Mazungumzo na simu" },
@@ -693,6 +707,9 @@ export default function SpeaqApp() {
   // Onboarding
   const [onboardingSlide, setOnboardingSlide] = useState(0);
 
+  // EULA acceptance gate (Apple Guideline 1.2)
+  const [eulaCheckbox, setEulaCheckbox] = useState(false);
+
   // Disappearing messages per contact
   const [disappearTimers, setDisappearTimers] = useState<Record<string, number>>({});
 
@@ -732,6 +749,7 @@ export default function SpeaqApp() {
     const saved = loadJSON<Identity | null>("speaq_identity", null);
     const hasPin = !!localStorage.getItem("speaq_pin");
     const onboardingDone = !!localStorage.getItem("speaq_onboarding_done");
+    const eulaAccepted = !!localStorage.getItem("speaq_eula_v1_accepted_at");
     if (saved) {
       setIdentity(saved);
       // Generate QR codes: gold (thumbnail) + black-on-white (scannable)
@@ -740,7 +758,10 @@ export default function SpeaqApp() {
         .then((url: string) => setQrDataUrl(url)).catch(() => {});
       QRCode.toDataURL(connectUrl, { width: 400, margin: 2, color: { dark: "#000000", light: "#FFFFFF" } })
         .then((url: string) => setQrScanUrl(url)).catch(() => {});
-      if (hasPin) {
+      if (!eulaAccepted) {
+        // Existing identity but no EULA acceptance recorded (upgrade case): force the gate.
+        setScreen("eula");
+      } else if (hasPin) {
         setScreen("lock");
         setPinLocked(true);
       } else {
@@ -749,6 +770,8 @@ export default function SpeaqApp() {
       }
     } else if (!onboardingDone) {
       setScreen("onboarding");
+    } else if (!eulaAccepted) {
+      setScreen("eula");
     }
     setContacts(loadJSON<Contact[]>("speaq_contacts", []));
     setMessages(loadJSON<Record<string, Message[]>>("speaq_messages", {}));
@@ -2114,10 +2137,75 @@ export default function SpeaqApp() {
         </div>
         <button onClick={() => {
           if (onboardingSlide < slides.length - 1) { setOnboardingSlide(onboardingSlide + 1); }
-          else { localStorage.setItem("speaq_onboarding_done", "1"); setScreen("welcome"); }
+          else { localStorage.setItem("speaq_onboarding_done", "1"); setScreen("eula"); }
         }} className="mt-8 px-12 py-3 rounded-xl bg-voice-gold text-bg-deep font-body font-semibold text-base min-h-[44px]">
           {onboardingSlide === slides.length - 1 ? t("onb.getStarted", lang) : t("onb.next", lang)}
         </button>
+      </div>
+    );
+  }
+
+  // =========================================================================
+  // RENDER: EULA acceptance gate (Apple Guideline 1.2 - User-Generated Content)
+  // Required by App Store Review. Shown once after onboarding, before any
+  // account creation. Acceptance is recorded with a timestamp in localStorage.
+  // =========================================================================
+  if (screen === "eula") {
+    return (
+      <div className="h-dvh bg-bg-deep flex flex-col">
+        <div className="flex-1 overflow-y-auto px-6 pt-12 pb-4">
+          <div className="max-w-md mx-auto">
+            <div className="flex items-center mb-6">
+              <span className="text-2xl font-heading font-bold text-text-primary tracking-tight">SPEA</span>
+              <div className="w-7 h-7 rounded-full border border-voice-gold flex items-center justify-center ml-0.5 relative">
+                <span className="text-xl font-heading font-bold text-voice-gold -mt-0.5">Q</span>
+                <div className="absolute bottom-0.5 right-1.5 w-1 h-1 rounded-full bg-quantum-teal" />
+              </div>
+            </div>
+            <h2 className="text-2xl font-heading font-bold text-text-primary mb-3">{t("eula.title", lang)}</h2>
+            <p className="text-sm text-text-secondary leading-relaxed mb-5">{t("eula.intro", lang)}</p>
+            <div className="bg-bg-card rounded-xl p-5 mb-5 border border-bg-elevated">
+              <p className="text-sm font-semibold text-voice-gold mb-3">{t("eula.zeroToleranceTitle", lang)}</p>
+              <ul className="space-y-2.5 text-xs text-text-secondary leading-relaxed">
+                <li className="flex gap-2"><span className="text-voice-gold shrink-0">·</span><span>{t("eula.bullet1", lang)}</span></li>
+                <li className="flex gap-2"><span className="text-voice-gold shrink-0">·</span><span>{t("eula.bullet2", lang)}</span></li>
+                <li className="flex gap-2"><span className="text-voice-gold shrink-0">·</span><span>{t("eula.bullet3", lang)}</span></li>
+                <li className="flex gap-2"><span className="text-voice-gold shrink-0">·</span><span>{t("eula.bullet4", lang)}</span></li>
+                <li className="flex gap-2"><span className="text-voice-gold shrink-0">·</span><span>{t("eula.bullet5", lang)}</span></li>
+              </ul>
+            </div>
+            <p className="text-xs text-text-muted leading-relaxed mb-3">
+              {t("eula.linkLead", lang)}{" "}
+              <a href="/terms#objectionable-content" target="_blank" rel="noopener noreferrer" className="text-voice-gold underline">
+                {t("eula.linkText", lang)}
+              </a>
+              .
+            </p>
+            <label className="flex items-start gap-3 cursor-pointer mb-4">
+              <input
+                type="checkbox"
+                checked={eulaCheckbox}
+                onChange={(e) => setEulaCheckbox(e.target.checked)}
+                className="w-5 h-5 mt-0.5 accent-voice-gold shrink-0"
+              />
+              <span className="text-sm text-text-primary leading-relaxed">{t("eula.checkbox", lang)}</span>
+            </label>
+          </div>
+        </div>
+        <div className="px-6 pb-8 pt-2 bg-bg-deep border-t border-bg-elevated">
+          <div className="max-w-md mx-auto">
+            <button
+              onClick={() => {
+                localStorage.setItem("speaq_eula_v1_accepted_at", new Date().toISOString());
+                setScreen("welcome");
+              }}
+              disabled={!eulaCheckbox}
+              className={`w-full px-12 py-3 rounded-xl font-body font-semibold text-base min-h-[44px] transition-all ${eulaCheckbox ? "bg-voice-gold text-bg-deep" : "bg-bg-elevated text-text-muted cursor-not-allowed"}`}
+            >
+              {t("eula.continue", lang)}
+            </button>
+          </div>
+        </div>
       </div>
     );
   }

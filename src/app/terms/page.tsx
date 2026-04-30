@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Terms of Service - SPEAQ",
-  description: "SPEAQ Terms of Service. Know your rights on the quantum-resistant communication platform.",
+  description: "SPEAQ Terms of Service including the Objectionable Content Policy and zero-tolerance for abuse on the quantum-resistant communication platform.",
 };
 
 export default function TermsPage() {
@@ -23,7 +23,7 @@ export default function TermsPage() {
           Terms of Service
         </h1>
         <p className="text-text-muted text-sm font-[family-name:var(--font-jetbrains)] mb-16">
-          Last updated: April 7, 2026
+          Last updated: April 30, 2026
         </p>
 
         <div className="space-y-10 text-text-secondary text-[16px] leading-relaxed">
@@ -67,6 +67,71 @@ export default function TermsPage() {
               @noble/post-quantum library). FIPS 204 ML-DSA-65 implementation
               is present for wallet/transaction signing. SPEAQ does not retain
               plaintext copies of message content.
+            </p>
+          </section>
+
+          <section id="objectionable-content">
+            <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-medium text-text-primary mb-4">
+              Objectionable Content Policy and Zero Tolerance for Abuse
+            </h2>
+            <p className="mb-4">
+              <strong>SPEAQ has a zero-tolerance policy for objectionable content
+              and abusive behavior.</strong> By using SPEAQ, you agree that you
+              will not use the platform to send, share, post, transmit, or
+              otherwise distribute any of the following:
+            </p>
+            <ul className="list-none space-y-3 mb-4">
+              {[
+                "Content that promotes, glorifies, or incites violence against any individual or group",
+                "Sexually explicit material involving minors, or any form of child sexual abuse material (CSAM)",
+                "Content that constitutes harassment, bullying, hate speech, threats, or intimidation",
+                "Content that promotes or facilitates illegal activity, including drug dealing, weapons trafficking, terrorism, or human trafficking",
+                "Content that infringes on intellectual property rights, privacy rights, or trade secrets of others",
+                "Spam, scams, fraud, phishing attempts, or impersonation",
+                "Malware, viruses, or other malicious code",
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#E24B4A] mt-2.5 shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <p className="mb-4">
+              <strong>How enforcement works on a zero-knowledge platform.</strong>
+              {" "}Because messages are end-to-end encrypted, SPEAQ servers never
+              see the content of communications between users. Enforcement
+              therefore relies on user-driven reporting and identity-level
+              moderation:
+            </p>
+            <ul className="list-none space-y-3 mb-4">
+              {[
+                "You can report any received message that violates this policy by long-pressing the message and choosing Report. The report shares the offending message with SPEAQ moderators with your consent (only you, the recipient, can decrypt the message).",
+                "You can block any SPEAQ ID at any time. Blocked users can no longer send you messages, and your block automatically files an abuse report.",
+                "SPEAQ moderators review every report within 24 hours. Confirmed violations result in the offending SPEAQ ID being suspended from the SPEAQ network relay (network-level eject). Suspended SPEAQ IDs cannot connect to the relay or send messages.",
+                "Repeat offenders, or single severe violations (CSAM, terrorism, immediate threats), result in permanent network suspension and, where required by law, reporting to law enforcement.",
+                "SPEAQ also applies client-side filtering for known offensive language patterns. Flagged messages are blurred on the recipient's screen with a Reveal option.",
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-voice-gold mt-2.5 shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <p className="mb-4">
+              <strong>Reporting abuse to SPEAQ directly.</strong> If you observe
+              behavior that requires our immediate attention (CSAM, threats of
+              imminent harm, or terrorism), email{" "}
+              <a href="mailto:abuse@thespeaq.com" className="text-voice-gold hover:underline">
+                abuse@thespeaq.com
+              </a>{" "}
+              with the SPEAQ ID of the offending user and a description of the
+              violation. We respond to such reports within 24 hours.
+            </p>
+            <p>
+              <strong>Your acceptance.</strong> By using the SPEAQ app or website,
+              you acknowledge that you have read this policy and agree to comply
+              with it. Violations may result in immediate and permanent removal
+              from the SPEAQ network without prior notice.
             </p>
           </section>
 
