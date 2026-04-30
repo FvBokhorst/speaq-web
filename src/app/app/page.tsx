@@ -35,6 +35,7 @@ import {
 import NotificationPrompt from "./NotificationPrompt";
 import { playIncoming, loadMutedState } from "./in-app-sound";
 import { requestPermissionAndSubscribe, loadPushState, isPushSupported } from "./push-register";
+import { containsObjectionableContent, type SafetyLang } from "@/lib/safety/keyword-filter";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -59,6 +60,9 @@ interface Message {
   text: string;
   fromMe: boolean;
   timestamp: number;
+  // Apple Guideline 1.2 - flagged by client-side keyword filter on receive.
+  // Renders blurred until user reveals.
+  flagged?: boolean;
 }
 
 interface Group {
@@ -308,6 +312,8 @@ const appStrings: Record<string, Record<string, string>> = {
   "safety.blockedUsersTitle": { en: "Blocked users", nl: "Geblokkeerde gebruikers", fr: "Utilisateurs bloques", es: "Usuarios bloqueados", ru: "Zablokirovannyye polzovateli", de: "Blockierte Benutzer", sl: "Blokirani uporabniki", lg: "Abakozesa abaziyiziddwa", sw: "Watumiaji waliozuiwa" },
   "safety.blockedUsersEmpty": { en: "You have not blocked anyone yet.", nl: "Je hebt nog niemand geblokkeerd.", fr: "Vous n'avez encore bloque personne.", es: "Aun no has bloqueado a nadie.", ru: "Vy ne zablokirovali nikogo.", de: "Sie haben noch niemanden blockiert.", sl: "Se niste blokirali nikogar.", lg: "Tonnaaziyiza muntu yenna.", sw: "Bado haujamzuia mtu yeyote." },
   "safety.unblock": { en: "Unblock", nl: "Deblokkeren", fr: "Debloquer", es: "Desbloquear", ru: "Razblokirovat", de: "Entsperren", sl: "Odblokiraj", lg: "Yala", sw: "Ondoa zuio" },
+  "safety.flaggedNotice": { en: "This message may contain offensive language.", nl: "Dit bericht kan beledigend taalgebruik bevatten.", fr: "Ce message peut contenir un langage offensant.", es: "Este mensaje puede contener lenguaje ofensivo.", ru: "Eto soobshchenie mozhet soderzhat oskorbitelnyy yazyk.", de: "Diese Nachricht kann beleidigende Sprache enthalten.", sl: "To sporocilo lahko vsebuje zaljiv jezik.", lg: "Obubaka buno buyinza okuba bukyaayi.", sw: "Ujumbe huu unaweza kuwa na lugha chafu." },
+  "safety.reveal": { en: "Reveal anyway", nl: "Toch tonen", fr: "Afficher quand meme", es: "Mostrar de todos modos", ru: "Vse ravno pokazat", de: "Trotzdem anzeigen", sl: "Vseeno prikazi", lg: "Lambika", sw: "Onyesha hata hivyo" },
   "onb.slide1.title": { en: "Private Messaging", nl: "Prive berichten", fr: "Messagerie privee", es: "Mensajes privados", ru: "Chastnye soobshcheniya", de: "Private Nachrichten", sl: "Zasebna sporocila", lg: "Obubaka obw'ekyama", sw: "Ujumbe wa faragha" },
   "onb.slide1.sub": { en: "Every message is locked on your phone before it leaves. Nobody on the way can read it - not even SPEAQ. We forward sealed envelopes, not letters.", nl: "Elk bericht wordt op je telefoon vergrendeld voordat het vertrekt. Niemand onderweg kan het lezen - zelfs SPEAQ niet. Wij sturen verzegelde enveloppen door, geen brieven.", fr: "Chaque message est verrouille sur votre telephone avant de partir. Personne en chemin ne peut le lire - meme pas SPEAQ. Nous transmettons des enveloppes scellees, pas des lettres.", es: "Cada mensaje queda cerrado en tu telefono antes de salir. Nadie en el camino puede leerlo - ni siquiera SPEAQ. Reenviamos sobres sellados, no cartas.", ru: "Kazhdoe soobshchenie zashifrovano na vashem telefone do otpravki. Nikto v puti ne mozhet ego prochitat - dazhe SPEAQ. My peresylaem zapechatannye konverty, a ne pisma.", de: "Jede Nachricht wird auf Ihrem Telefon verschlusselt bevor sie abgeschickt wird. Niemand unterwegs kann sie lesen - auch SPEAQ nicht. Wir leiten versiegelte Umschlage weiter, keine Briefe.", sl: "Vsako sporocilo je zaklenjeno na vasem telefonu, preden poslje. Nihce na poti ga ne more prebrati - niti SPEAQ. Mi posiljamo zapecatene ovojnice, ne pisem.", lg: "Buli bubaka bukugalwa ku ssimu yo nga tebunnaba kuva. Tewali muntu ku kkubo ayinza kububala - nasse SPEAQ. Tutwala obubaka obugalwa, si ebbaluwa.", sw: "Kila ujumbe umefungwa kwenye simu yako kabla ya kutoka. Hakuna mtu njiani anaweza kuusoma - hata SPEAQ. Tunatuma bahasha zilizofungwa, si barua." },
   "onb.slide2.title": { en: "Chat & Call", nl: "Chat & Bellen", fr: "Chat & Appel", es: "Chat y Llamadas", ru: "Chat i zvonki", de: "Chat & Anruf", sl: "Klepet & klic", lg: "Chat ne kukuba simu", sw: "Mazungumzo na simu" },
@@ -738,6 +744,8 @@ export default function SpeaqApp() {
 
   // Safety - Report + Block action menu (Apple Guideline 1.2)
   const [actionsForMsg, setActionsForMsg] = useState<{ id: string; from: string; text: string } | null>(null);
+  // Track which flagged messages the user has revealed (per chat-session memory).
+  const [revealedFlagged, setRevealedFlagged] = useState<Record<string, boolean>>({});
   const [reportDialog, setReportDialog] = useState<{ from: string; messageId: string; messageText: string } | null>(null);
   const [reportReason, setReportReason] = useState<"spam" | "harassment" | "threat" | "csam" | "illegal" | "impersonation" | "other">("harassment");
   const [reportComment, setReportComment] = useState("");
@@ -1239,7 +1247,10 @@ export default function SpeaqApp() {
           } catch (e) { console.error("[SPEAQ] Voice decode error:", e); }
         }
         const senderId = parsed.senderId || fromId;
-        const newMsg: Message = { id: msgId, text, fromMe: false, timestamp: parsed.timestamp || Date.now() };
+        // Apple Guideline 1.2 - client-side keyword filter on the decrypted
+        // text. Flag (do not drop) so the user can choose Reveal + Report.
+        const flagged = containsObjectionableContent(text, lang as SafetyLang);
+        const newMsg: Message = { id: msgId, text, fromMe: false, timestamp: parsed.timestamp || Date.now(), flagged };
         setMessages((prev) => ({ ...prev, [senderId]: [...(prev[senderId] || []), newMsg] }));
         setContacts((prev) => {
           if (prev.some((c) => c.speaqId === senderId) || deletedContacts.current.has(senderId)) return prev;
@@ -2561,6 +2572,7 @@ export default function SpeaqApp() {
             const isFile = msg.text.startsWith("[file:") && msg.text.endsWith("[/file]");
             const isVoice = msg.text.startsWith("[voice:") && (msg.text.endsWith("]") || msg.text.endsWith("[/voice]"));
             const isPay = msg.text.startsWith("[Payment:");
+            const isFlaggedHidden = !!msg.flagged && !revealedFlagged[msg.id];
             let content: React.ReactNode;
             if (isImg) {
               let src = msg.text.slice(5, -6);
@@ -2597,10 +2609,23 @@ export default function SpeaqApp() {
             } else {
               content = <p className="text-sm font-body break-words">{msg.text}</p>;
             }
+            if (isFlaggedHidden) {
+              content = (
+                <div className="py-1">
+                  <p className="text-xs text-text-muted leading-relaxed mb-2">{t("safety.flaggedNotice", lang)}</p>
+                  <button
+                    onClick={() => setRevealedFlagged((prev) => ({ ...prev, [msg.id]: true }))}
+                    className="text-xs font-body font-semibold text-voice-gold underline"
+                  >
+                    {t("safety.reveal", lang)}
+                  </button>
+                </div>
+              );
+            }
             return (
               <div key={msg.id} className={`flex ${msg.fromMe ? "justify-end" : "justify-start"}`}>
                 <div
-                  className={`max-w-[80%] px-4 py-2.5 rounded-2xl relative group ${msg.fromMe ? "bg-voice-gold/20 text-text-primary rounded-br-md" : "bg-bg-card text-text-primary rounded-bl-md"}`}
+                  className={`max-w-[80%] px-4 py-2.5 rounded-2xl relative group ${msg.fromMe ? "bg-voice-gold/20 text-text-primary rounded-br-md" : isFlaggedHidden ? "bg-bg-elevated text-text-primary rounded-bl-md border border-[#E24B4A]/30" : "bg-bg-card text-text-primary rounded-bl-md"}`}
                   onContextMenu={!msg.fromMe ? (e) => {
                     e.preventDefault();
                     setActionsForMsg({ id: msg.id, from: activeContact.speaqId, text: msg.text });
