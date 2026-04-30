@@ -1903,18 +1903,9 @@ export default function SpeaqApp() {
     const ratchetState = loadRatchetState(activeContact.speaqId);
     let useSealed = false;
     if (ratchetState) {
-      // Native iOS 1.0.4 has a loadRatchetState bug -- each receive re-derives a fresh
-      // deterministic-seed ratchet at recvCount=0. To stay decryptable on the native
-      // side we send each message from a freshly derived seed-state at sendCount=0
-      // (so messageNumber is always 0, matching native's reset recvCount). Forward
-      // secrecy with native peers is reduced until native ships a fix.
-      const seedString = [identity.speaqId, activeContact.speaqId].sort().join(":") + ":speaq-quantum-v1";
-      const seedEnc = new TextEncoder();
-      const seedHash = await crypto.subtle.digest("SHA-256", seedEnc.encode(seedString));
-      const sharedSecret = Array.from(new Uint8Array(seedHash)).map((b) => b.toString(16).padStart(2, "0")).join("");
-      const freshState = await initRatchet(sharedSecret, identity.speaqId < activeContact.speaqId);
-      const result = await ratchetEncrypt(freshState, plainPayload);
-      // Do NOT save the advanced state; we want the next send to also start at #0.
+      // Ratchet encrypt: unique key per message, forward secrecy preserved.
+      const result = await ratchetEncrypt(ratchetState, plainPayload);
+      saveRatchetState(activeContact.speaqId, result.state);
       blob = JSON.stringify({ messageNumber: result.messageNumber, ciphertext: result.ciphertext });
       useSealed = true;
     } else {
