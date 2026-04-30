@@ -1088,8 +1088,9 @@ export default function SpeaqApp() {
             const ct = ratchetMsg.ciphertext ?? ratchetMsg.ct;
             if (mn !== undefined && ct) {
               const keys = Object.keys(localStorage).filter((k) => k.startsWith("speaq_ratchet_"));
-              for (const key of keys) {
-                const candidateId = key.slice("speaq_ratchet_".length);
+              const candidates = keys.map((k) => k.slice("speaq_ratchet_".length));
+              // Pass 1: try stored ratchet states (advanced by prior decrypts).
+              for (const candidateId of candidates) {
                 const candidateState = loadRatchetState(candidateId);
                 if (!candidateState) continue;
                 try {
@@ -1097,9 +1098,32 @@ export default function SpeaqApp() {
                   prediscoveredPlaintext = result.plaintext;
                   saveRatchetState(candidateId, result.state);
                   fromId = candidateId;
-                  console.log("[SPEAQ] Sealed message decrypted from", candidateId);
+                  console.log("[SPEAQ] Sealed message decrypted from", candidateId, "(stored state)");
                   break;
                 } catch { /* not this ratchet, try next */ }
+              }
+              // Pass 2: native iOS 1.0.4 has a loadRatchetState bug where each send re-creates
+              // a fresh deterministic-seed ratchet at sendCount=0. Stored advanced PWA state
+              // can't decrypt those messages because chainKeyRecv has advanced past 0. Retry
+              // each candidate with a freshly derived seed-state, accepting messages at #0.
+              if (!fromId && identity) {
+                for (const candidateId of candidates) {
+                  try {
+                    const seedString = [identity.speaqId, candidateId].sort().join(":") + ":speaq-quantum-v1";
+                    const enc = new TextEncoder();
+                    const hash = await crypto.subtle.digest("SHA-256", enc.encode(seedString));
+                    const sharedSecret = Array.from(new Uint8Array(hash)).map((b) => b.toString(16).padStart(2, "0")).join("");
+                    const freshState = await initRatchet(sharedSecret, identity.speaqId < candidateId);
+                    const result = await ratchetDecrypt(freshState, ct, mn);
+                    prediscoveredPlaintext = result.plaintext;
+                    // Save the freshly-advanced state so subsequent stored-state attempts
+                    // also work for messages that DO advance correctly.
+                    saveRatchetState(candidateId, result.state);
+                    fromId = candidateId;
+                    console.log("[SPEAQ] Sealed message decrypted from", candidateId, "(fresh seed retry)");
+                    break;
+                  } catch { /* try next */ }
+                }
               }
             }
           } catch { /* malformed sealed blob */ }
