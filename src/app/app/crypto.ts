@@ -451,14 +451,8 @@ export async function decryptWithKey(key: CryptoKey, b64: string): Promise<strin
 // Native iOS uses an "AEAD v2 envelope": base64(JSON.stringify({v:2, iv: <b64>, ct: <b64>})).
 // PWA historically used: base64(iv || ct+tag) raw concatenation. Native cannot decrypt the
 // PWA format and vice versa. We unify on the native v2 envelope going forward, and accept
-// BOTH formats on decrypt for backwards compatibility with older PWA peers.
-
-function bytesToB64(bytes: Uint8Array): string {
-  let s = ""; for (let i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]); return btoa(s);
-}
-function b64ToBytes(b64: string): Uint8Array {
-  return Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
-}
+// BOTH formats on decrypt for backwards compatibility with older PWA peers. The `bytesToB64`
+// and `b64ToBytes` helpers are defined earlier in this file (around line 172).
 
 export async function ratchetEncrypt(state: RatchetState, plaintext: string): Promise<{ state: RatchetState; ciphertext: string; messageNumber: number }> {
   const { nextChainKey, messageKey } = await advanceChain(state.chainKeySend);
