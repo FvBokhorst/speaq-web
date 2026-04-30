@@ -282,6 +282,32 @@ const appStrings: Record<string, Record<string, string>> = {
   "eula.linkText": { en: "thespeaq.com/terms", nl: "thespeaq.com/terms", fr: "thespeaq.com/terms", es: "thespeaq.com/terms", ru: "thespeaq.com/terms", de: "thespeaq.com/terms", sl: "thespeaq.com/terms", lg: "thespeaq.com/terms", sw: "thespeaq.com/terms" },
   "eula.checkbox": { en: "I have read and agree to the Terms of Service, including the Objectionable Content Policy and zero tolerance for abuse.", nl: "Ik heb de algemene voorwaarden gelezen en ga akkoord, inclusief het beleid voor aanstootgevende inhoud en de nul-tolerantie voor misbruik.", fr: "J'ai lu et j'accepte les conditions d'utilisation, y compris la politique sur les contenus offensants et la tolerance zero envers les abus.", es: "He leido y acepto los terminos del servicio, incluyendo la politica de contenido objetable y la cero tolerancia hacia el abuso.", ru: "Ya prochital i prinimayu usloviya ispolzovaniya, vklyuchaya politiku o oskorbitelnom kontente i nulevuyu terpimost k zloupotrebleniyam.", de: "Ich habe die Nutzungsbedingungen gelesen und akzeptiere sie, einschliesslich der Richtlinie zu anstossigen Inhalten und der Null-Toleranz-Politik gegenuber Missbrauch.", sl: "Prebral sem in se strinjam s pogoji uporabe, vkljucno s politiko spornih vsebin in nicelno toleranco do zlorabe.", lg: "Nasoma era nzikiriza endagaano y'okukozesa, omuli enkambi y'ebiwendo ebibi n'okutakkiriza kw'okwogerera.", sw: "Nimesoma na ninakubali masharti ya huduma, ikiwa ni pamoja na sera ya maudhui yasiyofaa na hakuna uvumilivu kwa unyanyasaji." },
   "eula.continue": { en: "Continue", nl: "Doorgaan", fr: "Continuer", es: "Continuar", ru: "Prodolzhit", de: "Weiter", sl: "Nadaljuj", lg: "Genda mu maaso", sw: "Endelea" },
+
+  // Safety - Apple Guideline 1.2 (Report + Block)
+  "safety.messageActions": { en: "Message actions", nl: "Berichtacties", fr: "Actions sur le message", es: "Acciones del mensaje", ru: "Deystviya s soobshcheniem", de: "Nachrichtenaktionen", sl: "Dejanja sporocila", lg: "Ebintu by'okukola ku bubaka", sw: "Vitendo vya ujumbe" },
+  "safety.reportMessage": { en: "Report message", nl: "Bericht melden", fr: "Signaler le message", es: "Reportar mensaje", ru: "Pozhalovatsya na soobshchenie", de: "Nachricht melden", sl: "Prijavi sporocilo", lg: "Loopa obubaka", sw: "Ripoti ujumbe" },
+  "safety.blockUser": { en: "Block user", nl: "Gebruiker blokkeren", fr: "Bloquer l'utilisateur", es: "Bloquear usuario", ru: "Zablokirovat polzovatelya", de: "Benutzer blockieren", sl: "Blokiraj uporabnika", lg: "Ziyiza omukozesa", sw: "Zuia mtumiaji" },
+  "safety.cancel": { en: "Cancel", nl: "Annuleren", fr: "Annuler", es: "Cancelar", ru: "Otmena", de: "Abbrechen", sl: "Preklici", lg: "Sazaamu", sw: "Ghairi" },
+  "safety.reportTitle": { en: "Report this message", nl: "Dit bericht melden", fr: "Signaler ce message", es: "Reportar este mensaje", ru: "Pozhalovatsya na eto soobshchenie", de: "Diese Nachricht melden", sl: "Prijavi to sporocilo", lg: "Loopa obubaka buno", sw: "Ripoti ujumbe huu" },
+  "safety.reportSubtitle": { en: "Your report is sent to SPEAQ moderators. We review every report within 24 hours and may suspend the offending SPEAQ ID from the network.", nl: "Je melding gaat naar de SPEAQ-moderators. We beoordelen elke melding binnen 24 uur en kunnen de overtredende SPEAQ ID van het netwerk verwijderen.", fr: "Votre signalement est envoye aux moderateurs SPEAQ. Nous examinons chaque signalement dans les 24 heures et pouvons suspendre l'identifiant SPEAQ fautif du reseau.", es: "Tu reporte se envia a los moderadores de SPEAQ. Revisamos cada reporte en 24 horas y podemos suspender el SPEAQ ID infractor de la red.", ru: "Vasha zhaloba otpravlena moderatoram SPEAQ. My rassmatrivayem kazhduyu zhalobu v techenie 24 chasov i mozhem otklyuchit narushayushchiy SPEAQ ID ot seti.", de: "Ihre Meldung wird an SPEAQ-Moderatoren gesendet. Wir prufen jede Meldung innerhalb von 24 Stunden und konnen die betreffende SPEAQ-ID vom Netzwerk sperren.", sl: "Vasa prijava je poslana moderatorjem SPEAQ. Vsako prijavo pregledamo v 24 urah in lahko prekinemo krsiteljev SPEAQ ID iz omrezja.", lg: "Okulanga kwo kuweerezeddwa eri abagonza ba SPEAQ. Tukola buli kulanga mu ssaawa 24 era tuyinza okuziyiza erinnya lya SPEAQ erimenya ku mukutu.", sw: "Ripoti yako inatumwa kwa wasimamizi wa SPEAQ. Tunakagua kila ripoti ndani ya saa 24 na tunaweza kusimamisha SPEAQ ID iliyokosea kutoka kwenye mtandao." },
+  "safety.reportReason": { en: "Reason", nl: "Reden", fr: "Raison", es: "Motivo", ru: "Prichina", de: "Grund", sl: "Razlog", lg: "Ensonga", sw: "Sababu" },
+  "safety.reportComment": { en: "Additional details (optional)", nl: "Aanvullende details (optioneel)", fr: "Details supplementaires (optionnel)", es: "Detalles adicionales (opcional)", ru: "Dopolnitelnaya informatsiya (neobyazatelno)", de: "Zusatzliche Details (optional)", sl: "Dodatne podrobnosti (neobvezno)", lg: "Ebirala (tekirina kwetaagisa)", sw: "Maelezo zaidi (sio lazima)" },
+  "safety.reportCommentPlaceholder": { en: "What happened? (optional)", nl: "Wat is er gebeurd? (optioneel)", fr: "Que s'est-il passe ? (optionnel)", es: "Que paso? (opcional)", ru: "Chto sluchilos? (neobyazatelno)", de: "Was ist passiert? (optional)", sl: "Kaj se je zgodilo? (neobvezno)", lg: "Kiki ekibaddewo? (tekirina kwetaagisa)", sw: "Nini kilitokea? (sio lazima)" },
+  "safety.reportSubmit": { en: "Submit report", nl: "Melding versturen", fr: "Envoyer le signalement", es: "Enviar reporte", ru: "Otpravit zhalobu", de: "Meldung senden", sl: "Posli prijavo", lg: "Sindika okulanga", sw: "Tuma ripoti" },
+  "safety.reportSending": { en: "Sending...", nl: "Versturen...", fr: "Envoi...", es: "Enviando...", ru: "Otpravka...", de: "Senden...", sl: "Posiljanje...", lg: "Esindika...", sw: "Inatuma..." },
+  "safety.reportThanks": { en: "Report submitted. Thank you for keeping SPEAQ safe.", nl: "Melding verstuurd. Bedankt dat je SPEAQ veilig houdt.", fr: "Signalement envoye. Merci de garder SPEAQ sur.", es: "Reporte enviado. Gracias por mantener SPEAQ seguro.", ru: "Zhaloba otpravlena. Spasibo za sohranenie bezopasnosti SPEAQ.", de: "Meldung gesendet. Danke, dass Sie SPEAQ sicher halten.", sl: "Prijava poslana. Hvala, da SPEAQ ohranjate varen.", lg: "Okulanga kuweerezeddwa. Webale okukuuma SPEAQ ng'enungamu.", sw: "Ripoti imetumwa. Asante kwa kuilinda SPEAQ iwe salama." },
+  "safety.reportFailed": { en: "Could not send report. Please check your connection and try again.", nl: "Melding kon niet worden verstuurd. Controleer je verbinding en probeer opnieuw.", fr: "Impossible d'envoyer le signalement. Verifiez votre connexion et reessayez.", es: "No se pudo enviar el reporte. Verifica tu conexion e intenta de nuevo.", ru: "Ne udalos otpravit zhalobu. Proverte podklyuchenie i poprobuyte snova.", de: "Meldung konnte nicht gesendet werden. Bitte uberprufen Sie Ihre Verbindung und versuchen Sie es erneut.", sl: "Prijave ni bilo mogoce poslati. Preverite povezavo in poskusite znova.", lg: "Okulanga tekuyinzise kuweerezebwa. Kebera enkulungo y'omukutu n'oddamu okugezaako.", sw: "Haikuweza kutuma ripoti. Tafadhali angalia muunganisho wako na ujaribu tena." },
+  "safety.blockToast": { en: "User blocked. We have notified SPEAQ moderators.", nl: "Gebruiker geblokkeerd. We hebben de SPEAQ-moderators op de hoogte gebracht.", fr: "Utilisateur bloque. Nous avons notifie les moderateurs SPEAQ.", es: "Usuario bloqueado. Hemos notificado a los moderadores de SPEAQ.", ru: "Polzovatel zablokirovan. My uvedomili moderatorov SPEAQ.", de: "Benutzer blockiert. Wir haben die SPEAQ-Moderatoren benachrichtigt.", sl: "Uporabnik blokiran. Obvestili smo moderatorje SPEAQ.", lg: "Omukozesa aziyiziddwa. Tubuulidde abagonza ba SPEAQ.", sw: "Mtumiaji amezuiwa. Tumewataarifu wasimamizi wa SPEAQ." },
+  "safety.reason.spam": { en: "Spam", nl: "Spam", fr: "Spam", es: "Spam", ru: "Spam", de: "Spam", sl: "Spam", lg: "Spam", sw: "Spam" },
+  "safety.reason.harassment": { en: "Harassment or bullying", nl: "Lastigvallen of pesten", fr: "Harcelement", es: "Acoso", ru: "Domogatelstvo", de: "Belastigung", sl: "Nadlegovanje", lg: "Okunyiiza", sw: "Unyanyasaji" },
+  "safety.reason.threat": { en: "Threats or violence", nl: "Bedreiging of geweld", fr: "Menaces ou violence", es: "Amenazas o violencia", ru: "Ugrozy ili nasilie", de: "Bedrohung oder Gewalt", sl: "Groznje ali nasilje", lg: "Ebitiisa oba obukambwe", sw: "Vitisho au vurugu" },
+  "safety.reason.csam": { en: "Child sexual abuse material", nl: "Kindermisbruikmateriaal", fr: "Materiel pedopornographique", es: "Material de abuso sexual infantil", ru: "Material o nasilii nad detmi", de: "Material des sexuellen Kindesmissbrauchs", sl: "Gradivo o spolni zlorabi otrok", lg: "Ebitundu by'okukozesa abaana", sw: "Nyenzo za unyanyasaji wa kingono kwa watoto" },
+  "safety.reason.illegal": { en: "Illegal content or activity", nl: "Illegale inhoud of activiteit", fr: "Contenu ou activite illegal", es: "Contenido o actividad ilegal", ru: "Nezakonnyy kontent ili deyatelnost", de: "Illegale Inhalte oder Aktivitaten", sl: "Nezakonita vsebina ali dejavnost", lg: "Ebitamu mateeka", sw: "Maudhui au shughuli haramu" },
+  "safety.reason.impersonation": { en: "Impersonation", nl: "Identiteitsfraude", fr: "Usurpation d'identite", es: "Suplantacion de identidad", ru: "Vydavanie sebya za drugogo", de: "Identitatsdiebstahl", sl: "Predstavljanje za drugega", lg: "Okwefumira", sw: "Kujifanya mtu mwingine" },
+  "safety.reason.other": { en: "Other", nl: "Anders", fr: "Autre", es: "Otro", ru: "Drugoye", de: "Andere", sl: "Drugo", lg: "Ekirala", sw: "Nyingine" },
+  "safety.blockedUsersTitle": { en: "Blocked users", nl: "Geblokkeerde gebruikers", fr: "Utilisateurs bloques", es: "Usuarios bloqueados", ru: "Zablokirovannyye polzovateli", de: "Blockierte Benutzer", sl: "Blokirani uporabniki", lg: "Abakozesa abaziyiziddwa", sw: "Watumiaji waliozuiwa" },
+  "safety.blockedUsersEmpty": { en: "You have not blocked anyone yet.", nl: "Je hebt nog niemand geblokkeerd.", fr: "Vous n'avez encore bloque personne.", es: "Aun no has bloqueado a nadie.", ru: "Vy ne zablokirovali nikogo.", de: "Sie haben noch niemanden blockiert.", sl: "Se niste blokirali nikogar.", lg: "Tonnaaziyiza muntu yenna.", sw: "Bado haujamzuia mtu yeyote." },
+  "safety.unblock": { en: "Unblock", nl: "Deblokkeren", fr: "Debloquer", es: "Desbloquear", ru: "Razblokirovat", de: "Entsperren", sl: "Odblokiraj", lg: "Yala", sw: "Ondoa zuio" },
   "onb.slide1.title": { en: "Private Messaging", nl: "Prive berichten", fr: "Messagerie privee", es: "Mensajes privados", ru: "Chastnye soobshcheniya", de: "Private Nachrichten", sl: "Zasebna sporocila", lg: "Obubaka obw'ekyama", sw: "Ujumbe wa faragha" },
   "onb.slide1.sub": { en: "Every message is locked on your phone before it leaves. Nobody on the way can read it - not even SPEAQ. We forward sealed envelopes, not letters.", nl: "Elk bericht wordt op je telefoon vergrendeld voordat het vertrekt. Niemand onderweg kan het lezen - zelfs SPEAQ niet. Wij sturen verzegelde enveloppen door, geen brieven.", fr: "Chaque message est verrouille sur votre telephone avant de partir. Personne en chemin ne peut le lire - meme pas SPEAQ. Nous transmettons des enveloppes scellees, pas des lettres.", es: "Cada mensaje queda cerrado en tu telefono antes de salir. Nadie en el camino puede leerlo - ni siquiera SPEAQ. Reenviamos sobres sellados, no cartas.", ru: "Kazhdoe soobshchenie zashifrovano na vashem telefone do otpravki. Nikto v puti ne mozhet ego prochitat - dazhe SPEAQ. My peresylaem zapechatannye konverty, a ne pisma.", de: "Jede Nachricht wird auf Ihrem Telefon verschlusselt bevor sie abgeschickt wird. Niemand unterwegs kann sie lesen - auch SPEAQ nicht. Wir leiten versiegelte Umschlage weiter, keine Briefe.", sl: "Vsako sporocilo je zaklenjeno na vasem telefonu, preden poslje. Nihce na poti ga ne more prebrati - niti SPEAQ. Mi posiljamo zapecatene ovojnice, ne pisem.", lg: "Buli bubaka bukugalwa ku ssimu yo nga tebunnaba kuva. Tewali muntu ku kkubo ayinza kububala - nasse SPEAQ. Tutwala obubaka obugalwa, si ebbaluwa.", sw: "Kila ujumbe umefungwa kwenye simu yako kabla ya kutoka. Hakuna mtu njiani anaweza kuusoma - hata SPEAQ. Tunatuma bahasha zilizofungwa, si barua." },
   "onb.slide2.title": { en: "Chat & Call", nl: "Chat & Bellen", fr: "Chat & Appel", es: "Chat y Llamadas", ru: "Chat i zvonki", de: "Chat & Anruf", sl: "Klepet & klic", lg: "Chat ne kukuba simu", sw: "Mazungumzo na simu" },
@@ -710,6 +736,14 @@ export default function SpeaqApp() {
   // EULA acceptance gate (Apple Guideline 1.2)
   const [eulaCheckbox, setEulaCheckbox] = useState(false);
 
+  // Safety - Report + Block action menu (Apple Guideline 1.2)
+  const [actionsForMsg, setActionsForMsg] = useState<{ id: string; from: string; text: string } | null>(null);
+  const [reportDialog, setReportDialog] = useState<{ from: string; messageId: string; messageText: string } | null>(null);
+  const [reportReason, setReportReason] = useState<"spam" | "harassment" | "threat" | "csam" | "illegal" | "impersonation" | "other">("harassment");
+  const [reportComment, setReportComment] = useState("");
+  const [reportSubmitting, setReportSubmitting] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+
   // Disappearing messages per contact
   const [disappearTimers, setDisappearTimers] = useState<Record<string, number>>({});
 
@@ -1033,6 +1067,24 @@ export default function SpeaqApp() {
       if ((msg.type === "RECEIVE_SEALED" || msg.type === "RECEIVE") && msg.blob && identity) {
         const fromId = msg.from;
         if (!fromId) { console.warn("[SPEAQ] No from field in message"); return; }
+        // Apple Guideline 1.2: drop messages from blocked SPEAQ IDs silently.
+        // The sender already received an ACK from the relay (server-side block
+        // also drops at SEND-time once we have called WS BLOCK). This client-side
+        // filter is the safety net for cases where the local block has not yet
+        // propagated to the relay (e.g., relay restart before the BLOCK message
+        // was processed).
+        const currentBlockedRaw = typeof localStorage !== "undefined"
+          ? localStorage.getItem("speaq_blocked")
+          : null;
+        if (currentBlockedRaw) {
+          try {
+            const list = JSON.parse(currentBlockedRaw);
+            if (Array.isArray(list) && list.includes(fromId)) {
+              console.log("[SPEAQ] Dropping message from blocked SPEAQ ID", fromId);
+              return;
+            }
+          } catch { /* ignore */ }
+        }
         console.log("[SPEAQ] Received message from", fromId, "blob size:", msg.blob.length);
         let plaintext = "";
 
@@ -1548,18 +1600,107 @@ export default function SpeaqApp() {
     wsRef.current.send(JSON.stringify({ type: "TYPING", to: activeContact.speaqId }));
   };
 
-  // Block/unblock user
-  const blockUser = (speaqId: string) => {
-    if (!confirm(`Block this user?`)) return;
+  // Apple Guideline 1.2 - Abuse report + Block helpers
+  // Report or block submits to the relay /api/v1/abuse-report endpoint with
+  // the recipient's decrypted view of the message (consent-based share, does
+  // NOT break zero-knowledge). Block additionally sends a WS BLOCK so the
+  // relay drops future deliveries, and stores the SPEAQ ID locally so the
+  // PWA receive-handler also drops messages from that sender.
+  const RELAY_HTTPS_BASE = RELAY_URL.replace("wss://", "https://");
+
+  async function postAbuseReport(payload: {
+    reportedSpeaqId: string;
+    reason: "spam" | "harassment" | "threat" | "csam" | "illegal" | "impersonation" | "other";
+    source: "app-report" | "app-block";
+    comment?: string;
+    messageContent?: string;
+    messageId?: string;
+  }): Promise<boolean> {
+    if (!identity) return false;
+    try {
+      const res = await fetch(`${RELAY_HTTPS_BASE}/api/v1/abuse-report`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          reporterSpeaqId: identity.speaqId,
+          reportedSpeaqId: payload.reportedSpeaqId,
+          reason: payload.reason,
+          source: payload.source,
+          comment: payload.comment,
+          messageContent: payload.messageContent,
+          messageId: payload.messageId,
+          appVersion: "pwa-1.0",
+          language: lang,
+        }),
+      });
+      return res.ok;
+    } catch (e) {
+      console.error("[abuse] report POST failed", e);
+      return false;
+    }
+  }
+
+  function showToast(text: string) {
+    setToast(text);
+    setTimeout(() => setToast(null), 3000);
+  }
+
+  // Submit the active report dialog
+  async function submitReport() {
+    if (!reportDialog || reportSubmitting) return;
+    setReportSubmitting(true);
+    const ok = await postAbuseReport({
+      reportedSpeaqId: reportDialog.from,
+      reason: reportReason,
+      source: "app-report",
+      comment: reportComment.trim() || undefined,
+      messageContent: reportDialog.messageText,
+      messageId: reportDialog.messageId,
+    });
+    setReportSubmitting(false);
+    setReportDialog(null);
+    setReportComment("");
+    setReportReason("harassment");
+    showToast(ok ? t("safety.reportThanks", lang) : t("safety.reportFailed", lang));
+  }
+
+  // Block/unblock user. Block also auto-files an abuse report (per Apple
+  // requirements) and signals the relay so future SENDs from that sender
+  // are dropped server-side as well.
+  const blockUser = async (speaqId: string, opts?: { autoReport?: boolean; messageContent?: string; messageId?: string }) => {
+    if (blockedUsers.includes(speaqId)) return;
     const updated = [...blockedUsers, speaqId];
     setBlockedUsers(updated);
     saveJSON("speaq_blocked", updated);
+    // Tell the relay so SEND from that sender is dropped server-side too.
+    try {
+      if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+        wsRef.current.send(JSON.stringify({ type: "BLOCK", targetSpeaqId: speaqId }));
+      }
+    } catch (e) { console.warn("[block] WS BLOCK send failed", e); }
+    // Auto-file an abuse report so the SPEAQ moderators can review the
+    // pattern and take network-level action when needed (24-hour SLA).
+    if (opts?.autoReport !== false) {
+      await postAbuseReport({
+        reportedSpeaqId: speaqId,
+        reason: "harassment",
+        source: "app-block",
+        messageContent: opts?.messageContent,
+        messageId: opts?.messageId,
+      });
+    }
+    showToast(t("safety.blockToast", lang));
   };
 
   const unblockUser = (speaqId: string) => {
     const updated = blockedUsers.filter((id) => id !== speaqId);
     setBlockedUsers(updated);
     saveJSON("speaq_blocked", updated);
+    try {
+      if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+        wsRef.current.send(JSON.stringify({ type: "UNBLOCK", targetSpeaqId: speaqId }));
+      }
+    } catch (e) { console.warn("[block] WS UNBLOCK send failed", e); }
   };
 
   // Link wallet
@@ -2458,7 +2599,22 @@ export default function SpeaqApp() {
             }
             return (
               <div key={msg.id} className={`flex ${msg.fromMe ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[80%] px-4 py-2.5 rounded-2xl ${msg.fromMe ? "bg-voice-gold/20 text-text-primary rounded-br-md" : "bg-bg-card text-text-primary rounded-bl-md"}`}>
+                <div
+                  className={`max-w-[80%] px-4 py-2.5 rounded-2xl relative group ${msg.fromMe ? "bg-voice-gold/20 text-text-primary rounded-br-md" : "bg-bg-card text-text-primary rounded-bl-md"}`}
+                  onContextMenu={!msg.fromMe ? (e) => {
+                    e.preventDefault();
+                    setActionsForMsg({ id: msg.id, from: activeContact.speaqId, text: msg.text });
+                  } : undefined}
+                >
+                  {!msg.fromMe && (
+                    <button
+                      onClick={() => setActionsForMsg({ id: msg.id, from: activeContact.speaqId, text: msg.text })}
+                      aria-label={t("safety.messageActions", lang)}
+                      className="absolute top-1 right-1 w-7 h-7 flex items-center justify-center rounded-full text-text-muted opacity-60 hover:opacity-100 hover:bg-bg-elevated active:bg-bg-elevated transition"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="6" r="1.5" /><circle cx="12" cy="12" r="1.5" /><circle cx="12" cy="18" r="1.5" /></svg>
+                    </button>
+                  )}
                   {content}
                   <p className={`text-[10px] mt-1 ${msg.fromMe ? "text-voice-gold/60" : "text-text-muted"}`}>{formatTime(msg.timestamp)}</p>
                 </div>
@@ -2557,6 +2713,96 @@ export default function SpeaqApp() {
             </div>
           )}
         </div>
+
+        {/* Apple Guideline 1.2 - Message-action sheet (Report / Block) */}
+        {actionsForMsg && (
+          <div className="fixed inset-0 z-50 bg-black/60 flex items-end" onClick={() => setActionsForMsg(null)}>
+            <div className="w-full bg-bg-card rounded-t-2xl pb-6 pt-2" onClick={(e) => e.stopPropagation()}>
+              <div className="w-10 h-1 rounded-full bg-bg-elevated mx-auto mb-3" />
+              <button
+                onClick={() => {
+                  setReportDialog({ from: actionsForMsg.from, messageId: actionsForMsg.id, messageText: actionsForMsg.text });
+                  setActionsForMsg(null);
+                }}
+                className="w-full px-6 py-4 text-left text-sm font-body text-text-primary hover:bg-bg-elevated transition-colors min-h-[44px] flex items-center gap-3"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M3 21V5a2 2 0 0 1 2-2h12l4 4v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><line x1="12" y1="9" x2="12" y2="14" /><circle cx="12" cy="17" r="0.5" fill="currentColor" /></svg>
+                {t("safety.reportMessage", lang)}
+              </button>
+              <button
+                onClick={() => {
+                  const target = actionsForMsg;
+                  setActionsForMsg(null);
+                  blockUser(target.from, { autoReport: true, messageContent: target.text, messageId: target.id });
+                }}
+                className="w-full px-6 py-4 text-left text-sm font-body text-[#E24B4A] hover:bg-bg-elevated transition-colors min-h-[44px] flex items-center gap-3"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="12" cy="12" r="10" /><line x1="4.93" y1="4.93" x2="19.07" y2="19.07" /></svg>
+                {t("safety.blockUser", lang)}
+              </button>
+              <button
+                onClick={() => setActionsForMsg(null)}
+                className="w-full px-6 py-4 text-center text-sm font-body text-text-muted hover:bg-bg-elevated transition-colors min-h-[44px]"
+              >
+                {t("safety.cancel", lang)}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Apple Guideline 1.2 - Report dialog */}
+        {reportDialog && (
+          <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center px-4" onClick={() => !reportSubmitting && setReportDialog(null)}>
+            <div className="w-full max-w-md bg-bg-card rounded-2xl p-6 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+              <h3 className="text-lg font-heading font-bold text-text-primary mb-2">{t("safety.reportTitle", lang)}</h3>
+              <p className="text-xs text-text-muted leading-relaxed mb-4">{t("safety.reportSubtitle", lang)}</p>
+              <p className="text-xs font-body font-semibold text-text-primary mb-2">{t("safety.reportReason", lang)}</p>
+              <div className="space-y-2 mb-4">
+                {(["spam", "harassment", "threat", "csam", "illegal", "impersonation", "other"] as const).map((r) => (
+                  <button
+                    key={r}
+                    onClick={() => setReportReason(r)}
+                    className={`w-full px-4 py-2.5 rounded-xl text-left text-sm font-body min-h-[44px] flex items-center gap-3 transition-colors ${reportReason === r ? "bg-voice-gold/20 text-text-primary border border-voice-gold/50" : "bg-bg-elevated text-text-secondary border border-transparent"}`}
+                  >
+                    <div className={`w-4 h-4 rounded-full border-2 ${reportReason === r ? "border-voice-gold bg-voice-gold" : "border-text-muted"}`} />
+                    {t(`safety.reason.${r}`, lang)}
+                  </button>
+                ))}
+              </div>
+              <p className="text-xs font-body font-semibold text-text-primary mb-2">{t("safety.reportComment", lang)}</p>
+              <textarea
+                value={reportComment}
+                onChange={(e) => setReportComment(e.target.value.slice(0, 500))}
+                placeholder={t("safety.reportCommentPlaceholder", lang)}
+                rows={3}
+                className="w-full px-3 py-2 rounded-xl bg-bg-elevated text-text-primary text-sm font-body resize-none focus:outline-none focus:border-voice-gold/50 border border-transparent mb-4"
+              />
+              <div className="flex gap-2">
+                <button
+                  onClick={() => !reportSubmitting && setReportDialog(null)}
+                  disabled={reportSubmitting}
+                  className="flex-1 px-4 py-3 rounded-xl bg-bg-elevated text-text-primary text-sm font-body font-semibold min-h-[44px]"
+                >
+                  {t("safety.cancel", lang)}
+                </button>
+                <button
+                  onClick={submitReport}
+                  disabled={reportSubmitting}
+                  className={`flex-1 px-4 py-3 rounded-xl bg-voice-gold text-bg-deep text-sm font-body font-semibold min-h-[44px] ${reportSubmitting ? "opacity-60" : ""}`}
+                >
+                  {reportSubmitting ? t("safety.reportSending", lang) : t("safety.reportSubmit", lang)}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Toast for safety actions */}
+        {toast && (
+          <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 bg-bg-deep border border-voice-gold/40 rounded-xl px-4 py-2.5 text-sm text-text-primary font-body shadow-lg max-w-[90%]">
+            {toast}
+          </div>
+        )}
       </div>
     );
   }
@@ -4233,6 +4479,21 @@ The Netherlands`}</div>
               <button onClick={() => setScreen("privacy")} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{t("settings.privacyPolicy", lang)}</span><span className="text-sm text-voice-gold">{t("settings.view", lang)}</span></button>
               <a href="/terms" target="_blank" rel="noopener noreferrer" className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-text-primary">{t("settings.termsOfService", lang)}</span><span className="text-sm text-voice-gold">{t("settings.view", lang)}</span></a>
               <button onClick={deleteAllData} className="flex justify-between px-4 py-3 w-full text-left min-h-[44px]"><span className="text-sm text-resistance-red">{ t("settings.deleteAll", lang) }</span><span className="text-sm text-resistance-red">{t("settings.delete", lang)}</span></button>
+            </div>
+
+            {/* Safety - Apple Guideline 1.2 (Blocked Users) */}
+            <p className="text-[10px] font-mono text-text-muted uppercase tracking-wider px-2 mt-4">{ t("safety.blockedUsersTitle", lang) }</p>
+            <div className="bg-bg-card rounded-xl border border-[rgba(100,116,139,0.15)] divide-y divide-[rgba(100,116,139,0.1)]">
+              {blockedUsers.length === 0 ? (
+                <div className="px-4 py-3 text-xs text-text-muted">{t("safety.blockedUsersEmpty", lang)}</div>
+              ) : (
+                blockedUsers.map((sid) => (
+                  <div key={sid} className="flex justify-between items-center px-4 py-3 min-h-[44px]">
+                    <span className="text-xs font-mono text-text-primary truncate max-w-[60%]">{sid}</span>
+                    <button onClick={() => unblockUser(sid)} className="text-xs text-voice-gold font-body min-h-[32px] px-2">{t("safety.unblock", lang)}</button>
+                  </div>
+                ))
+              )}
             </div>
 
             {/* About */}
