@@ -448,6 +448,18 @@ export async function decryptWithKey(key: CryptoKey, b64: string): Promise<strin
 // SECTION 6: Ratchet-based Encrypt/Decrypt
 // ============================================================
 
+// Native iOS uses an "AEAD v2 envelope": base64(JSON.stringify({v:2, iv: <b64>, ct: <b64>})).
+// PWA historically used: base64(iv || ct+tag) raw concatenation. Native cannot decrypt the
+// PWA format and vice versa. We unify on the native v2 envelope going forward, and accept
+// BOTH formats on decrypt for backwards compatibility with older PWA peers.
+
+function bytesToB64(bytes: Uint8Array): string {
+  let s = ""; for (let i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]); return btoa(s);
+}
+function b64ToBytes(b64: string): Uint8Array {
+  return Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+}
+
 export async function ratchetEncrypt(state: RatchetState, plaintext: string): Promise<{ state: RatchetState; ciphertext: string; messageNumber: number }> {
   const { nextChainKey, messageKey } = await advanceChain(state.chainKeySend);
   const key = await crypto.subtle.importKey(
@@ -456,10 +468,12 @@ export async function ratchetEncrypt(state: RatchetState, plaintext: string): Pr
   );
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const ct = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, new TextEncoder().encode(plaintext));
-  const combined = new Uint8Array(iv.length + ct.byteLength);
-  combined.set(iv); combined.set(new Uint8Array(ct), iv.length);
+  // Output v2 envelope so native iOS aesGcmDecrypt can parse it (native gates on
+  // wrapped.v === 2 with iv/ct fields).
+  const envelope = JSON.stringify({ v: 2, iv: bytesToB64(iv), ct: bytesToB64(new Uint8Array(ct)) });
+  const ciphertext = bytesToB64(new TextEncoder().encode(envelope));
   const newState = { ...state, chainKeySend: nextChainKey, sendCount: state.sendCount + 1 };
-  return { state: newState, ciphertext: uint8ToBase64(combined), messageNumber: state.sendCount };
+  return { state: newState, ciphertext, messageNumber: state.sendCount };
 }
 
 export async function ratchetDecrypt(state: RatchetState, ciphertextB64: string, messageNumber: number): Promise<{ state: RatchetState; plaintext: string }> {
@@ -473,8 +487,24 @@ export async function ratchetDecrypt(state: RatchetState, ciphertextB64: string,
     "raw", Uint8Array.from(messageKey.match(/.{2}/g)!.map(b => parseInt(b, 16))),
     { name: "AES-GCM", length: 256 }, false, ["decrypt"]
   );
-  const raw = Uint8Array.from(atob(ciphertextB64), (c) => c.charCodeAt(0));
-  const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: raw.slice(0, 12) }, key, raw.slice(12));
+  // Try native v2 envelope first: base64(JSON {v, iv, ct}).
+  let iv: Uint8Array | null = null;
+  let cipher: Uint8Array | null = null;
+  try {
+    const decoded = new TextDecoder().decode(b64ToBytes(ciphertextB64));
+    const wrapped = JSON.parse(decoded) as { v?: number; iv?: string; ct?: string };
+    if (wrapped && wrapped.v === 2 && wrapped.iv && wrapped.ct) {
+      iv = b64ToBytes(wrapped.iv);
+      cipher = b64ToBytes(wrapped.ct);
+    }
+  } catch { /* not v2 envelope, fall through */ }
+  if (!iv || !cipher) {
+    // Legacy PWA format: base64(iv || ct+tag) raw concatenation.
+    const raw = b64ToBytes(ciphertextB64);
+    iv = raw.slice(0, 12);
+    cipher = raw.slice(12);
+  }
+  const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, cipher);
   const newState = { ...state, chainKeyRecv: nextChainKey, recvCount: messageNumber + 1 };
   return { state: newState, plaintext: new TextDecoder().decode(pt) };
 }
