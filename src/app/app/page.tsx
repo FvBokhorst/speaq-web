@@ -1074,11 +1074,14 @@ export default function SpeaqApp() {
       }
       if ((msg.type === "RECEIVE_SEALED" || msg.type === "RECEIVE") && msg.blob && identity) {
         // RECEIVE_SEALED: relay strips `from` field by design (sender hidden in encrypted blob).
-        // We try ratchet decrypt against every stored ratchet; whichever decrypts cleanly
-        // identifies the sender via the senderId field inside the decrypted payload.
+        // The relay's offline-queue path also forwards sealed messages as RECEIVE with the
+        // literal `from: "sealed"` placeholder (server.ts:1361 + 935). Treat both as "no
+        // real sender id" and trigger sender-discovery via per-ratchet trial decrypt.
         let fromId = msg.from as string | undefined;
+        if (fromId === "sealed") fromId = undefined;
         let prediscoveredPlaintext = "";
-        if (!fromId && msg.type === "RECEIVE_SEALED") {
+        const needsDiscovery = !fromId && (msg.type === "RECEIVE_SEALED" || msg.type === "RECEIVE");
+        if (needsDiscovery) {
           try {
             const ratchetMsg = JSON.parse(msg.blob);
             const mn = ratchetMsg.messageNumber ?? ratchetMsg.mn;
