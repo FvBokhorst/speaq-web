@@ -503,14 +503,28 @@
 </table>
 
 <h3>3.2.1 Voice and Video Calling</h3>
-<p>Calls layer two independent encryption mechanisms so a break in either still leaves the other intact:</p>
+<p>Calls layer multiple independent encryption mechanisms so a break in any single layer still leaves the others intact. Three media-routing paths are available, chosen automatically based on what the network and platform allow:</p>
 <table>
   <tr><th>Layer</th><th>What it protects</th><th>Mechanism</th></tr>
   <tr><td>Media stream</td><td>Audio and video bytes between the two devices</td><td>DTLS-SRTP (WebRTC standard, browser-enforced, AES-GCM)</td></tr>
-  <tr><td>Signaling (PWA)</td><td>SDP, ICE candidates (IPs), DTLS fingerprints</td><td>AES-256-GCM with key = SHA-256(ratchet rootKey || "speaq-call-v1"). The ratchet rootKey is derived from the Kyber-768 shared secret, which the relay does not know - signaling is therefore zero-knowledge against the relay.</td></tr>
-  <tr><td>STUN / TURN</td><td>NAT traversal and relayed media when peer-to-peer fails</td><td>Self-hosted coturn (<code>stun:stun.thespeaq.com:3478</code>). No Google or third-party STUN. Relayed media is opaque DTLS-SRTP to coturn.</td></tr>
+  <tr><td>Signaling (PWA)</td><td>SDP, ICE candidates (IPs), DTLS fingerprints, SFU room ID</td><td>AES-256-GCM with key = SHA-256(ratchet rootKey || "speaq-call-v1"). The ratchet rootKey is derived from the Kyber-768 shared secret, which the relay does not know - signaling is therefore zero-knowledge against the relay.</td></tr>
+  <tr><td>Direct peer-to-peer</td><td>Used when devices can connect that way (typically same network)</td><td>DTLS-SRTP between the two endpoints; nothing transits any SPEAQ server.</td></tr>
+  <tr><td>STUN / TURN / TURNS</td><td>NAT traversal and relayed media when peer-to-peer fails</td><td>Self-hosted coturn at <code>turn.thespeaq.com</code> (UDP/TCP 3478, TURN-over-TLS on 443 with Let's Encrypt). No Google or third-party STUN. Relayed media is opaque DTLS-SRTP to coturn.</td></tr>
+  <tr><td>Mediasoup-SFU</td><td>Required path for cross-network 2-iPhone Safari PWA calls (iOS WebKit blocks p2p relay-allocate-pairing between two iOS devices on different networks)</td><td>Self-hosted mediasoup at <code>sfu.thespeaq.com</code> (TLS, Let's Encrypt). The SFU forwards encrypted DTLS-SRTP packets between participants without ever decrypting them; it sees only encrypted bytes, never call content. Per-call room IDs are random and exchanged inside the encrypted CALL_OFFER blob.</td></tr>
 </table>
-<p style="font-size: 14px; opacity: 0.8;">Native iOS/Android apps currently transmit signaling over TLS to the relay; bringing native to PWA-parity (encrypted signaling blob) is on the immediate roadmap. Media-layer DTLS-SRTP is identical on all platforms.</p>
+<p style="font-size: 14px; opacity: 0.8;">Native iOS/Android apps currently transmit signaling over TLS to the relay; bringing native to PWA-parity (encrypted signaling blob and SFU support) is on the immediate roadmap. Media-layer DTLS-SRTP is identical on all platforms.</p>
+
+<h3>3.2.2 Push Notifications</h3>
+<p>When the SPEAQ PWA is closed or in the background and a message or call arrives, the user receives a push notification. The notification system is designed to leak nothing on the lock screen:</p>
+<table>
+  <tr><th>Property</th><th>Mechanism</th></tr>
+  <tr><td>Payload contents (relay -> push service -> device)</td><td>Generic data-only payload: <code>{"t":"msg","ts":...}</code> or <code>{"t":"call","ts":...}</code>. No sender identity, no recipient identity, no message content, no caller name. The payload reveals only that <em>some</em> activity happened for this push subscription.</td></tr>
+  <tr><td>Lock-screen display</td><td>Service Worker shows a localised generic line: "New message" or "Incoming call" in the user's chosen language (9 locales supported). No sender name, no preview, no metadata.</td></tr>
+  <tr><td>Identity and content reveal</td><td>Only after the user taps the notification, opens SPEAQ, and enters their PIN. The PWA then fetches the encrypted CALL_OFFER from a short-lived (30-second) pending-call queue or replays missed messages from the offline queue, decrypts locally, and shows who is contacting them.</td></tr>
+  <tr><td>Transport</td><td>Standard W3C Web Push protocol with VAPID-signed silent payloads. The relay holds the VAPID private key in a Cloud secret; the public half is the only key the device needs. Push gateways (Apple, Google, Mozilla) deliver the payload without seeing its plaintext (it is encrypted with the user's subscription keys end-to-end against the gateway).</td></tr>
+  <tr><td>Cross-device propagation</td><td>The OS notification mirroring system (e.g. iOS -> Apple Watch) carries the same generic line to paired devices. SPEAQ never customises caller name on the lock screen even when other messengers do.</td></tr>
+</table>
+<p style="font-size: 14px; opacity: 0.8;">This design intentionally trades a small UX convenience (caller name on lock screen) for a hard privacy guarantee (a stolen or shoulder-surfed phone reveals nothing about your contacts).</p>
 
 <div class="callout">
   <p>These are not experimental algorithms. They are NIST-certified standards, developed through a decade of international review and selected specifically for their resistance to quantum computing attacks.</p>

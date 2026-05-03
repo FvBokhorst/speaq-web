@@ -1,4 +1,4 @@
-const CACHE_NAME = "speaq-pwa-v111";
+const CACHE_NAME = "speaq-pwa-v113";
 const STATIC_ASSETS = ["/manifest.json", "/icon-192.png", "/icon-512.png"];
 
 self.addEventListener("install", (event) => {
@@ -40,22 +40,55 @@ self.addEventListener("fetch", (event) => {
 });
 
 // --- Push notifications -----------------------------------------------------
-// The relay sends silent data-only payloads ("{t":"msg","ts":...}). We never
-// receive message content; the notification is intentionally generic so the
-// lock screen reveals nothing about who is talking to whom.
+// The relay sends silent data-only payloads, never message or caller content;
+// the notification is intentionally generic so the lock screen reveals nothing
+// about who is talking to whom. Two payload types:
+//   {t:"msg", ts:...}  -> generic "new message" notification
+//   {t:"call", ts:...} -> generic "incoming call" notification
+//
+// i18n: notification body is localised based on navigator.language (browser
+// locale of the device that registered the SW). 9 languages supported, same
+// set as the in-app translations. Falls back to English if locale unknown.
+
+const NOTIF_I18N = {
+  msg: {
+    en: "New message", nl: "Nieuw bericht", fr: "Nouveau message",
+    es: "Nuevo mensaje", de: "Neue Nachricht", ru: "Новое сообщение",
+    sl: "Novo sporocilo", lg: "Obubaka obupya", sw: "Ujumbe mpya",
+  },
+  call: {
+    en: "Incoming call", nl: "Inkomende oproep", fr: "Appel entrant",
+    es: "Llamada entrante", de: "Eingehender Anruf", ru: "Входящий вызов",
+    sl: "Dohodni klic", lg: "Essimu eyingiza", sw: "Simu inayoingia",
+  },
+};
+
+function pickLocale() {
+  const raw = (self.navigator && self.navigator.language) || "en";
+  const code = raw.toLowerCase().slice(0, 2);
+  return (code in NOTIF_I18N.msg) ? code : "en";
+}
 
 self.addEventListener("push", (event) => {
+  let payload = { t: "msg" };
+  try {
+    if (event.data) payload = event.data.json();
+  } catch (e) { void e; }
+
+  const isCall = payload && payload.t === "call";
+  const locale = pickLocale();
   const title = "SPEAQ";
-  const body = "New message";
+  const body = isCall ? NOTIF_I18N.call[locale] : NOTIF_I18N.msg[locale];
+  const tag = isCall ? "speaq-call" : "speaq-msg";
 
   const options = {
     body,
     icon: "/icon-192.png",
     badge: "/icon-192.png",
-    tag: "speaq-msg",
+    tag,
     renotify: true,
-    requireInteraction: false,
-    data: { url: "/app", ts: Date.now() },
+    requireInteraction: isCall,
+    data: { url: "/app", ts: Date.now(), kind: isCall ? "call" : "msg" },
   };
 
   event.waitUntil(self.registration.showNotification(title, options));

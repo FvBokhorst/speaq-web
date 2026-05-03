@@ -100,6 +100,14 @@ const platform: Record<Lang, FaqItem[]> = {
       question: "Is SPEAQ free?",
       answer: "Yes. SPEAQ is free to download and use. All core features - messaging, voice and video calls, file sharing, Private Storage, Private Groups, Witness Mode, and Safety Check-in - are free. You can also earn Q-Credits through Proof of Contribution earning at no cost.",
     },
+    {
+      question: "How do voice and video calls work?",
+      answer: "Voice and video calls are end-to-end encrypted. SPEAQ uses a media-routing server (mediasoup-SFU) that forwards encrypted audio and video packets between devices without ever decrypting them - the server sees only encrypted bytes, never the content of your call. Direct peer-to-peer is used when devices can connect that way (same network), but the SFU is required for cross-network iOS Safari PWA calls due to a platform restriction in iOS WebKit. Call setup signaling (offer/answer/ICE) stays end-to-end encrypted via the SPEAQ relay - the relay never sees who is calling whom or any call data. Inside the call you can mute your microphone or your speaker independently with the on-screen buttons.",
+    },
+    {
+      question: "How do push notifications work?",
+      answer: "When SPEAQ is closed or in the background and you receive a message or a call, you get a push notification. The notification text is intentionally generic - 'New message' or 'Incoming call' - and shows NO sender name, NO message content, and NO caller identity. The lock screen reveals nothing about your conversations. To open a message or answer a call, tap the notification and then enter your PIN to unlock SPEAQ. Only AFTER unlocking does SPEAQ show who is contacting you and what was sent. Other messaging apps (WhatsApp, Signal, Telegram) typically show caller name on the lock screen - SPEAQ deliberately does not. Notifications use the standard Web Push protocol with VAPID-signed silent payloads and reach paired devices like Apple Watch via the operating system's notification mirroring.",
+    },
   ],
   nl: [
     {
@@ -121,6 +129,14 @@ const platform: Record<Lang, FaqItem[]> = {
     {
       question: "Is SPEAQ gratis?",
       answer: "Ja. SPEAQ is gratis te downloaden en te gebruiken. Alle kernfuncties - berichten, spraak- en videogesprekken, bestandsdeling, Private Storage, Private Groups, Witness Mode en Safety Check-in - zijn gratis. Je kunt ook Q-Credits verdienen via Proof of Contribution earning zonder kosten.",
+    },
+    {
+      question: "Hoe werken spraak- en videogesprekken?",
+      answer: "Spraak- en videogesprekken zijn end-to-end versleuteld. SPEAQ gebruikt een media-doorstuurserver (mediasoup-SFU) die versleutelde audio- en videopakketten tussen apparaten doorstuurt zonder ze ooit te ontsleutelen - de server ziet alleen versleutelde bytes, nooit de inhoud van je gesprek. Directe peer-to-peer wordt gebruikt als apparaten zo kunnen verbinden (zelfde netwerk), maar de SFU is nodig voor cross-network iPhone-naar-iPhone Safari PWA-gesprekken vanwege een platformbeperking in iOS WebKit. Gespreksopzet-signalering (offer/answer/ICE) blijft end-to-end versleuteld via de SPEAQ relay - de relay ziet nooit wie wie belt of enige gespreksdata. Tijdens het gesprek kun je je microfoon of luidspreker onafhankelijk dempen met de schermknoppen.",
+    },
+    {
+      question: "Hoe werken push-meldingen?",
+      answer: "Wanneer SPEAQ gesloten is of op de achtergrond draait en je ontvangt een bericht of een oproep, krijg je een push-melding. De meldingstekst is bewust generiek - 'Nieuw bericht' of 'Inkomende oproep' - en toont GEEN afzendernaam, GEEN berichtinhoud en GEEN bellersnaam. Het lockscreen onthult niets over je gesprekken. Om een bericht te openen of een oproep te beantwoorden, tik op de melding en voer je PIN in om SPEAQ te ontgrendelen. Pas NA ontgrendeling toont SPEAQ wie er contact zoekt en wat er is verstuurd. Andere berichten-apps (WhatsApp, Signal, Telegram) tonen meestal de bellersnaam op het lockscreen - SPEAQ doet dat bewust niet. Meldingen gebruiken het standaard Web Push protocol met VAPID-gesigneerde silent payloads en bereiken gekoppelde apparaten zoals Apple Watch via de notificatie-mirroring van het besturingssysteem.",
     },
   ],
   fr: [
@@ -144,6 +160,14 @@ const platform: Record<Lang, FaqItem[]> = {
       question: "SPEAQ est-il gratuit ?",
       answer: "Oui. SPEAQ est gratuit a telecharger et a utiliser. Toutes les fonctionnalites principales - messagerie, appels vocaux et video, partage de fichiers, Private Storage, Private Groups, mode Temoin et Safety Check-in - sont gratuites. Vous pouvez egalement gagner des Q-Credits grace au gains Proof of Contribution sans aucun cout.",
     },
+    {
+      question: "Comment fonctionnent les appels vocaux et video?",
+      answer: "Les appels vocaux et video sont chiffres de bout en bout. SPEAQ utilise un serveur de routage media (mediasoup-SFU) qui transmet les paquets audio et video chiffres entre les appareils sans jamais les dechiffrer - le serveur ne voit que des octets chiffres, jamais le contenu de votre appel. Le pair-a-pair direct est utilise quand les appareils peuvent se connecter ainsi (meme reseau), mais le SFU est necessaire pour les appels iPhone-a-iPhone Safari PWA sur des reseaux differents en raison d'une restriction de plateforme dans iOS WebKit. La signalisation de configuration d'appel reste chiffree de bout en bout via le relais SPEAQ. Pendant l'appel vous pouvez couper votre micro ou votre haut-parleur independamment.",
+    },
+    {
+      question: "Comment fonctionnent les notifications push?",
+      answer: "Quand SPEAQ est ferme ou en arriere-plan et que vous recevez un message ou un appel, vous obtenez une notification push generique - 'Nouveau message' ou 'Appel entrant' - qui n'affiche AUCUN nom d'expediteur, AUCUN contenu de message, AUCUNE identite d'appelant. L'ecran de verrouillage ne revele rien. Pour ouvrir un message ou repondre a un appel, appuyez sur la notification puis entrez votre PIN pour deverrouiller SPEAQ. Ce n'est qu'APRES le deverrouillage que SPEAQ affiche qui vous contacte. D'autres applications de messagerie affichent generalement le nom de l'appelant sur l'ecran de verrouillage - SPEAQ ne le fait deliberement pas. Les notifications utilisent le protocole Web Push standard et atteignent Apple Watch via la mise en miroir des notifications iOS.",
+    },
   ],
   es: [
     {
@@ -165,6 +189,10 @@ const platform: Record<Lang, FaqItem[]> = {
     {
       question: "Es SPEAQ gratuito?",
       answer: "Si. SPEAQ es gratuito para descargar y usar. Todas las funciones principales - mensajeria, llamadas de voz y video, uso compartido de archivos, Private Storage, Private Groups, modo Testigo y Safety Check-in - son gratuitas. Tambien puedes ganar Q-Credits a traves de la ganancias Proof of Contribution sin costo alguno.",
+    },
+    {
+      question: "Como funcionan las llamadas y notificaciones push?",
+      answer: "Llamadas: las llamadas de voz y video estan cifradas de extremo a extremo. SPEAQ usa un servidor de enrutamiento de medios (mediasoup-SFU) que reenvia paquetes cifrados entre dispositivos sin descifrarlos - el servidor solo ve bytes cifrados. El SFU es necesario para llamadas iPhone-a-iPhone Safari PWA entre redes diferentes debido a una restriccion de plataforma en iOS WebKit. La senalizacion de llamada permanece cifrada de extremo a extremo via el relay. Durante la llamada puedes silenciar tu microfono o el altavoz independientemente.\n\nNotificaciones: cuando SPEAQ esta cerrado y recibes un mensaje o llamada, obtienes una notificacion push generica - 'Nuevo mensaje' o 'Llamada entrante' - sin nombre del remitente, sin contenido, sin identidad del llamante. La pantalla de bloqueo no revela nada. Toca la notificacion y luego ingresa tu PIN para desbloquear SPEAQ. Solo DESPUES del desbloqueo, SPEAQ muestra quien te contacta. Otras apps muestran el nombre del llamante - SPEAQ deliberadamente no. Las notificaciones usan el protocolo Web Push estandar y llegan a Apple Watch via espejo de notificaciones de iOS.",
     },
   ],
   ru: [
@@ -188,6 +216,10 @@ const platform: Record<Lang, FaqItem[]> = {
       question: "SPEAQ besplaten?",
       answer: "Da. SPEAQ besplaten dlya skachivaniya i ispolzovaniya. Vse osnovnye funktsii - soobshcheniya, golosovye i videozvonki, obmen faylami, Private Storage, Private Groups, rezhim Svidetelya i Safety Check-in - besplatny. Vy takzhe mozhete zarabatyvat Q-Credits cherez mayning Proof of Contribution bez kakikh-libo zatrat.",
     },
+    {
+      question: "Kak rabotayut zvonki i push-uvedomleniya?",
+      answer: "Zvonki: golosovye i video zvonki shifruyutsya skvoznym shifrovaniem. SPEAQ ispolzuet server marshrutizatsii media (mediasoup-SFU), kotoryy peredaet zashifrovannye pakety mezhdu ustroystvami, ne rasshifrovyvaya ikh - server vidit tolko zashifrovannye bayty. SFU neobkhodim dlya zvonkov iPhone-k-iPhone Safari PWA mezhdu raznymi setyami iz-za ogranicheniya platformy v iOS WebKit. Signalizatsiya zvonka ostaetsya shifrovannoy skvoznym shifrovaniem cherez relay. Vo vremya zvonka vy mozhete otklyuchit mikrofon ili dinamik nezavisimo.\n\nUvedomleniya: kogda SPEAQ zakryt i vy poluchaete soobshchenie ili zvonok, vy poluchaete obshcheye push-uvedomlenie - 'Novoe soobshchenie' ili 'Vkhodyashchiy vyzov' - bez imeni otpravitelya, bez soderzhimogo, bez lichnosti zvonyashchego. Ekran blokirovki nichego ne raskryvaet. Kosnites uvedomleniya, zatem vvedite svoy PIN, chtoby razblokirovat SPEAQ. Tolko POSLE razblokirovki SPEAQ pokazyvaet, kto vas kontaktiruet. Drugie messendzhery pokazyvayut imya zvonyashchego - SPEAQ namerenno net. Uvedomleniya ispolzuyut standartnyy protokol Web Push i dostigayut Apple Watch cherez zerkalirovanie uvedomleniy iOS.",
+    },
   ],
   de: [
     {
@@ -209,6 +241,10 @@ const platform: Record<Lang, FaqItem[]> = {
     {
       question: "Ist SPEAQ kostenlos?",
       answer: "Ja. SPEAQ kann kostenlos heruntergeladen und genutzt werden. Alle Kernfunktionen - Nachrichten, Sprach- und Videoanrufe, Dateifreigabe, Private Storage, Private Groups, Zeugenmodus und Safety Check-in - sind kostenlos. Sie konnen auch Q-Credits durch Proof of Contribution ohne Kosten verdienen.",
+    },
+    {
+      question: "Wie funktionieren Anrufe und Push-Benachrichtigungen?",
+      answer: "Anrufe: Sprach- und Videoanrufe sind Ende-zu-Ende verschluesselt. SPEAQ verwendet einen Medien-Routing-Server (mediasoup-SFU), der verschluesselte Pakete zwischen Geraeten weiterleitet, ohne sie zu entschluesseln - der Server sieht nur verschluesselte Bytes. Der SFU ist erforderlich fuer iPhone-zu-iPhone Safari PWA-Anrufe zwischen verschiedenen Netzwerken aufgrund einer Plattformbeschraenkung in iOS WebKit. Die Anrufsignalisierung bleibt Ende-zu-Ende verschluesselt ueber den Relay. Waehrend des Anrufs koennen Sie Ihr Mikrofon oder den Lautsprecher unabhaengig stummschalten.\n\nBenachrichtigungen: Wenn SPEAQ geschlossen ist und Sie eine Nachricht oder einen Anruf erhalten, bekommen Sie eine generische Push-Benachrichtigung - 'Neue Nachricht' oder 'Eingehender Anruf' - ohne Absendernamen, ohne Inhalt, ohne Anruferidentitaet. Der Sperrbildschirm enthuellt nichts. Tippen Sie auf die Benachrichtigung und geben Sie dann Ihre PIN ein, um SPEAQ zu entsperren. Erst NACH dem Entsperren zeigt SPEAQ, wer Sie kontaktiert. Andere Messenger zeigen den Anrufernamen - SPEAQ absichtlich nicht. Benachrichtigungen verwenden das Standard-Web-Push-Protokoll und erreichen Apple Watch ueber iOS-Benachrichtigungsspiegelung.",
     },
   ],
   sl: [
@@ -232,6 +268,10 @@ const platform: Record<Lang, FaqItem[]> = {
       question: "Ali je SPEAQ brezplacen?",
       answer: "Da. SPEAQ je brezplacen za prenos in uporabo. Vse osnovne funkcije - sporocanje, glasovni in video klici, deljenje datotek, Private Storage, Private Groups, nacin Price in Safety Check-in - so brezplacne. Prav tako lahko zasluzite Q-Credits z zasluzekm Proof of Contribution brez stroskov.",
     },
+    {
+      question: "Kako delujejo klici in push obvestila?",
+      answer: "Klici: glasovni in video klici so end-to-end sifrirani. SPEAQ uporablja strezhnik za usmerjanje medijev (mediasoup-SFU), ki posreduje sifrirane pakete med napravami, ne da bi jih desifriral - strezhnik vidi samo sifrirane bajte. SFU je potreben za klice iPhone-do-iPhone Safari PWA med razlicnimi omrezji zaradi omejitve platforme v iOS WebKit. Signalizacija klica ostane end-to-end sifrirana prek relaya. Med klicem lahko utisajte mikrofon ali zvocnik neodvisno.\n\nObvestila: ko je SPEAQ zaprt in prejmete sporocilo ali klic, dobite splosno push obvestilo - 'Novo sporocilo' ali 'Dohodni klic' - brez imena posiljatelja, brez vsebine, brez identitete klicatelja. Zaklenjen zaslon nicesar ne razkriva. Tapnite obvestilo in nato vnesite svoj PIN, da odklenete SPEAQ. Sele PO odklepu SPEAQ pokaze, kdo vas kontaktira. Druge aplikacije pokazejo ime klicatelja - SPEAQ namenoma ne. Obvestila uporabljajo standardni protokol Web Push in dosezejo Apple Watch prek zrcaljenja obvestil iOS.",
+    },
   ],
   lg: [
     {
@@ -254,6 +294,10 @@ const platform: Record<Lang, FaqItem[]> = {
       question: "SPEAQ ya bwereere?",
       answer: "Yee. SPEAQ ya bwereere okugulawo n'okukozesa. Ebikola byonna ebikulu - obubaka, okukuba amaloboozi n'ebifaananyi, okugabana fayiro, Private Storage, Private Groups, Witness Mode, ne Safety Check-in - bya bwereere. Osobola n'okufuna Q-Credits okuyita mu kusimba Proof of Contribution awatali ssente.",
     },
+    {
+      question: "Okuyita n'obubaka bwa push bikola bitya?",
+      answer: "Okuyita: okuyita kw'eddoboozi ne video kuli mu nkulungo y'okuteebereza okuva ku ggwanga eddala. SPEAQ ekozesa server y'okusiba media (mediasoup-SFU) ekisindika obupakete obutebereddwa wakati wa simu nga taibitebula - server elaba bayites obutebereddwa kyokka. SFU yetaagisa olw'okuyita kwa iPhone-ku-iPhone Safari PWA ku puroguramu enjawulo olw'okugatta okwa platifoomu mu iOS WebKit. Okutebereza kw'okuyita kuteberewa end-to-end nga kuyita ku relay. Mu kuyita osobola okusirisa makirofoni yo oba spika obutalimba.\n\nObubaka: SPEAQ bw'eba egaddwa ate ofuna obubaka oba okuyita, ofuna obubaka obwa push obwa bulijjo - 'Obubaka obupya' oba 'Essimu eyingiza' - obutaba na linnya lya muweerezzi, contents, oba akubidde. Olukalala lw'okusiba talwoleka kintu kyonna. Kwata ku bubaka, oluvanyuma yingiza PIN yo okuggula SPEAQ. Olwaki OLUVANYUMA okuggula, SPEAQ alaga ani akontaktinga. Apps endala zilaga linnya ly'akubira - SPEAQ tabikola. Obubaka bukozesa protocol y'omu mateeka eya Web Push era butuuka ku Apple Watch nga buyita ku okuvuga obubaka kw'iOS.",
+    },
   ],
   sw: [
     {
@@ -275,6 +319,10 @@ const platform: Record<Lang, FaqItem[]> = {
     {
       question: "Je, SPEAQ ni bure?",
       answer: "Ndiyo. SPEAQ ni bure kupakua na kutumia. Vipengele vyote vya msingi - ujumbe, simu za sauti na video, kushiriki faili, Private Storage, Private Groups, Hali ya Shahidi, na Safety Check-in - ni bure. Unaweza pia kupata Q-Credits kupitia kupata wa Proof of Contribution bila gharama yoyote.",
+    },
+    {
+      question: "Simu na arifa za push zinafanyaje kazi?",
+      answer: "Simu: simu za sauti na video zinasimbwa kutoka mwisho hadi mwisho. SPEAQ inatumia seva ya kupitisha vyombo vya habari (mediasoup-SFU) ambayo inapitisha pakiti zilizosimbwa kati ya vifaa bila kuzifumbua - seva inaona tu baiti zilizosimbwa. SFU inahitajika kwa simu za iPhone-kwa-iPhone Safari PWA katika mitandao tofauti kutokana na kizuizi cha jukwaa katika iOS WebKit. Ishara za usanidi wa simu zinabaki zimesimbwa kutoka mwisho hadi mwisho kupitia relay. Wakati wa simu unaweza kunyamazisha kipaza sauti chako au spika kwa kujitegemea.\n\nArifa: SPEAQ inapofungwa na unapokea ujumbe au simu, unapata arifa ya push ya jumla - 'Ujumbe mpya' au 'Simu inayoingia' - bila jina la mtumaji, bila maudhui, bila utambulisho wa mpiga simu. Skrini ya kufunga haifunui chochote. Gusa arifa, kisha ingiza PIN yako kufungua SPEAQ. Ni BAADA tu ya kufungua, SPEAQ inaonesha ni nani anayekutumia. Programu nyingine zinaonesha jina la mpiga simu - SPEAQ haifanyi hivyo kwa makusudi. Arifa zinatumia itifaki ya kawaida ya Web Push na zinafikia Apple Watch kupitia kioo cha arifa cha iOS.",
     },
   ],
 };

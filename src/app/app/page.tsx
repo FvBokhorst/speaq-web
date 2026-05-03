@@ -36,6 +36,8 @@ import NotificationPrompt from "./NotificationPrompt";
 import { playIncoming, loadMutedState } from "./in-app-sound";
 import { requestPermissionAndSubscribe, loadPushState, isPushSupported } from "./push-register";
 import { containsObjectionableContent, type SafetyLang } from "@/lib/safety/keyword-filter";
+import { getIceServers } from "./turn";
+import { connectSfu, type SfuSession } from "./sfu";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -555,6 +557,18 @@ function IconArrowDown({ className = "w-5 h-5" }: { className?: string }) {
 function IconCheck({ className = "w-5 h-5" }: { className?: string }) {
   return (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>);
 }
+function IconMic({ className = "w-5 h-5" }: { className?: string }) {
+  return (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /><line x1="12" y1="19" x2="12" y2="23" /><line x1="8" y1="23" x2="16" y2="23" /></svg>);
+}
+function IconMicOff({ className = "w-5 h-5" }: { className?: string }) {
+  return (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="1" y1="1" x2="23" y2="23" /><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6" /><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23" /><line x1="12" y1="19" x2="12" y2="23" /><line x1="8" y1="23" x2="16" y2="23" /></svg>);
+}
+function IconSpeaker({ className = "w-5 h-5" }: { className?: string }) {
+  return (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" /><path d="M19.07 4.93a10 10 0 0 1 0 14.14" /></svg>);
+}
+function IconSpeakerOff({ className = "w-5 h-5" }: { className?: string }) {
+  return (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" /></svg>);
+}
 function IconPhoneOff({ className = "w-5 h-5" }: { className?: string }) {
   return (<svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10.68 13.31a16 16 0 003.41 2.6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.42 19.42 0 01-3.33-2.67m-2.67-3.34a19.79 19.79 0 01-3.07-8.63A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91" /><line x1="1" y1="1" x2="23" y2="23" /></svg>);
 }
@@ -662,9 +676,16 @@ export default function SpeaqApp() {
   const [callContact, setCallContact] = useState<Contact | null>(null);
   const [callActive, setCallActive] = useState(false);
   const [callDuration, setCallDuration] = useState(0);
+  const [micMuted, setMicMuted] = useState(false);
+  const [speakerMuted, setSpeakerMuted] = useState(false);
   const callTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const peerConnection = useRef<RTCPeerConnection | null>(null);
+  const sfuSession = useRef<SfuSession | null>(null);
+  const sfuRemoteStream = useRef<MediaStream | null>(null);
+  const sfuGainNode = useRef<GainNode | null>(null);
   const localStream = useRef<MediaStream | null>(null);
+  const statsTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
 
   // Advanced state
   const [witnessRecords, setWitnessRecords] = useState<WitnessRecord[]>([]);
@@ -768,7 +789,7 @@ export default function SpeaqApp() {
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteAudioRef = useRef<HTMLAudioElement>(null);
   const [isVideoCall, setIsVideoCall] = useState(false);
-  const [incomingCall, setIncomingCall] = useState<{ from: string; name: string; sdp: string } | null>(null);
+  const [incomingCall, setIncomingCall] = useState<{ from: string; name: string; sdp?: string; sfu?: { roomId: string; video: boolean } } | null>(null);
 
   // Blocked users
   const [blockedUsers, setBlockedUsers] = useState<string[]>([]);
@@ -1328,33 +1349,57 @@ export default function SpeaqApp() {
       if (msg.type === "CALL_OFFER" && msg.from && identity) {
         let sdp = msg.sdp as string | undefined;
         let video = !!msg.video;
+        let sfuRoomId: string | undefined;
         if (msg.blob) {
           try {
-            const plain = JSON.parse(await decryptCallBlob(identity.speaqId, msg.from, msg.blob)) as { sdp: string; video?: boolean };
+            const plain = JSON.parse(await decryptCallBlob(identity.speaqId, msg.from, msg.blob)) as { sdp?: string; video?: boolean; sfu?: boolean; roomId?: string };
             sdp = plain.sdp;
             video = !!plain.video;
+            if (plain.sfu === true && typeof plain.roomId === "string") sfuRoomId = plain.roomId;
           } catch (e) { console.error("[SPEAQ] CALL_OFFER decrypt failed:", e); return; }
         } else if (sdp) {
           console.warn("[SPEAQ] CALL_OFFER received in legacy plaintext mode from", msg.from);
         }
-        if (!sdp) { console.error("[SPEAQ] CALL_OFFER without usable SDP, ignoring"); return; }
         const contact = contacts.find(c => c.speaqId === msg.from) || { speaqId: msg.from, name: msg.from.substring(0, 8), addedAt: Date.now() };
-        setIsVideoCall(video);
-        setIncomingCall({ from: msg.from, name: (contact as Contact).name, sdp });
-        setCallContact(contact as Contact);
+        if (sfuRoomId) {
+          setIsVideoCall(video);
+          setIncomingCall({ from: msg.from, name: (contact as Contact).name, sfu: { roomId: sfuRoomId, video } });
+          setCallContact(contact as Contact);
+          console.log("[SPEAQ] CALL_OFFER (sfu) from", msg.from, "room", sfuRoomId);
+        } else {
+          if (!sdp) { console.error("[SPEAQ] CALL_OFFER without usable SDP, ignoring"); return; }
+          setIsVideoCall(video);
+          setIncomingCall({ from: msg.from, name: (contact as Contact).name, sdp });
+          setCallContact(contact as Contact);
+        }
       }
-      if (msg.type === "CALL_ANSWER" && peerConnection.current && identity && msg.from) {
+      if (msg.type === "CALL_ANSWER" && identity && msg.from) {
         let sdp = msg.sdp as string | undefined;
+        let sfuAccepted = false;
         if (msg.blob) {
           try {
-            sdp = (JSON.parse(await decryptCallBlob(identity.speaqId, msg.from, msg.blob)) as { sdp: string }).sdp;
+            const plain = JSON.parse(await decryptCallBlob(identity.speaqId, msg.from, msg.blob)) as { sdp?: string; sfu?: boolean; accepted?: boolean };
+            sdp = plain.sdp;
+            sfuAccepted = plain.sfu === true && plain.accepted === true;
           } catch (e) { console.error("[SPEAQ] CALL_ANSWER decrypt failed:", e); return; }
         } else if (sdp) {
           console.warn("[SPEAQ] CALL_ANSWER received in legacy plaintext mode");
         }
-        if (sdp) await peerConnection.current.setRemoteDescription(new RTCSessionDescription({ type: "answer", sdp }));
+        if (sfuAccepted && sfuSession.current) {
+          // Caller's SFU session is already producing; receiver will appear as newProducer.
+          console.log("[SPEAQ] CALL_ANSWER (sfu) accepted from", msg.from);
+          setCallActive(true);
+          setCallDuration(0);
+          if (callTimer.current) clearInterval(callTimer.current);
+          callTimer.current = setInterval(() => setCallDuration((d) => d + 1), 1000);
+        } else if (sdp && peerConnection.current) {
+          await peerConnection.current.setRemoteDescription(new RTCSessionDescription({ type: "answer", sdp }));
+        }
       }
-      if (msg.type === "ICE_CANDIDATE" && peerConnection.current && identity && msg.from) {
+      if (msg.type === "ICE_CANDIDATE" && identity && msg.from) {
+        // SFU mode handles its own ICE via mediasoup-client transports - skip relay candidates.
+        if (sfuSession.current) return;
+        if (!peerConnection.current) return;
         let candidate = msg.candidate;
         if (msg.blob) {
           try {
@@ -2170,14 +2215,34 @@ export default function SpeaqApp() {
     setCallActive(true);
     setCallDuration(0);
     callTimer.current = setInterval(() => setCallDuration((d) => d + 1), 1000);
+    startCallStatsReporter(`${Date.now()}`);
     try {
+      // iOS audio-unlock: play a silent MP3 sync within user-gesture window
+      // so the <audio> element stays "warm" even when the real stream arrives
+      // ~500ms later via TURN. This is the proven iOS WebRTC pattern.
+      if (remoteAudioRef.current) {
+        remoteAudioRef.current.src = "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQxAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAEAAABIADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwP////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAASD5wH+ZoQAAAAAAAAAAAAAAAAAAAAA=";
+        remoteAudioRef.current.play().catch(() => {});
+      }
+      if (video && remoteVideoRef.current) {
+        remoteVideoRef.current.play().catch(() => {});
+      }
+      // Also unlock AudioContext for WebAudio fallback path in pc.ontrack.
+      try {
+        if (!audioContextRef.current) {
+          const Ctx = (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext || AudioContext;
+          audioContextRef.current = new Ctx();
+        }
+        audioContextRef.current.resume().catch(() => {});
+      } catch (err) { void err; }
       localStream.current = await navigator.mediaDevices.getUserMedia({ audio: true, video });
       // Show local video preview
       if (video && localVideoRef.current) {
         localVideoRef.current.srcObject = localStream.current;
         localVideoRef.current.play().catch(() => {});
       }
-      const pc = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.thespeaq.com:3478" }, { urls: "stun:136.109.120.222:3478" }] });
+      const iceServers = await getIceServers(identity.speaqId);
+      const pc = new RTCPeerConnection({ iceServers });
       peerConnection.current = pc;
       localStream.current.getTracks().forEach((track) => pc.addTrack(track, localStream.current!));
       // C2.2 (2026-04-25): pre-derive a shared session key from the ratchet rootKey
@@ -2197,15 +2262,30 @@ export default function SpeaqApp() {
         }
       };
       pc.ontrack = (e) => {
-        // Use DOM audio element (Safari blocks new Audio().play() outside user gesture)
+        const stream = e.streams[0];
+        // Force-enable any tracks delivered with enabled=false.
+        stream.getAudioTracks().forEach((t) => { t.enabled = true; });
+        stream.getVideoTracks().forEach((t) => { t.enabled = true; });
+        // <audio> + <video> binding (same as production).
         if (remoteAudioRef.current) {
-          remoteAudioRef.current.srcObject = e.streams[0];
+          remoteAudioRef.current.srcObject = stream;
           remoteAudioRef.current.play().catch(() => {});
         }
         if (video && remoteVideoRef.current) {
-          remoteVideoRef.current.srcObject = e.streams[0];
+          remoteVideoRef.current.srcObject = stream;
           remoteVideoRef.current.play().catch(() => {});
         }
+        // iOS Safari/Brave fallback: route audio through AudioContext directly.
+        // The audio-element-srcObject path is sometimes silenced by iOS in
+        // non-incognito mode even with autoPlay. WebAudio bypasses that policy.
+        try {
+          const ctx = audioContextRef.current;
+          const audioTracks = stream.getAudioTracks();
+          if (ctx && audioTracks.length > 0) {
+            const src = ctx.createMediaStreamSource(new MediaStream([audioTracks[0]]));
+            src.connect(ctx.destination);
+          }
+        } catch (err) { void err; }
       };
       const offer = await pc.createOffer();
       await pc.setLocalDescription(offer);
@@ -2221,12 +2301,28 @@ export default function SpeaqApp() {
   const handleCallAnswer = async (sdp: string, from: string, wantVideo = false) => {
     try {
       if (!identity) return;
+      // iOS audio-unlock: silent MP3 src + AudioContext resume. Same as startCall.
+      if (remoteAudioRef.current) {
+        remoteAudioRef.current.src = "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQxAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAEAAABIADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwP////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAASD5wH+ZoQAAAAAAAAAAAAAAAAAAAAA=";
+        remoteAudioRef.current.play().catch(() => {});
+      }
+      if (wantVideo && remoteVideoRef.current) {
+        remoteVideoRef.current.play().catch(() => {});
+      }
+      try {
+        if (!audioContextRef.current) {
+          const Ctx = (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext || AudioContext;
+          audioContextRef.current = new Ctx();
+        }
+        audioContextRef.current.resume().catch(() => {});
+      } catch (err) { void err; }
       localStream.current = await navigator.mediaDevices.getUserMedia({ audio: true, video: wantVideo });
       if (wantVideo && localVideoRef.current) {
         localVideoRef.current.srcObject = localStream.current;
         localVideoRef.current.play().catch(() => {});
       }
-      const pc = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.thespeaq.com:3478" }, { urls: "stun:136.109.120.222:3478" }] });
+      const iceServers = await getIceServers(identity.speaqId);
+      const pc = new RTCPeerConnection({ iceServers });
       peerConnection.current = pc;
       localStream.current.getTracks().forEach((track) => pc.addTrack(track, localStream.current!));
       const { key: sigKey, mode: sigMode } = await deriveCallKeyForSend(identity.speaqId, from);
@@ -2242,13 +2338,15 @@ export default function SpeaqApp() {
         }
       };
       pc.ontrack = (e) => {
-        if (remoteAudioRef.current) {
-          remoteAudioRef.current.srcObject = e.streams[0];
-          remoteAudioRef.current.play().catch(() => {});
-        }
+        // Bind to ONE element only to avoid TURN-relay dual-binding mute.
+        // Video calls: <video> plays both video and audio.
+        // Audio-only calls: hidden <audio> handles playback.
         if (wantVideo && remoteVideoRef.current) {
           remoteVideoRef.current.srcObject = e.streams[0];
           remoteVideoRef.current.play().catch(() => {});
+        } else if (remoteAudioRef.current) {
+          remoteAudioRef.current.srcObject = e.streams[0];
+          remoteAudioRef.current.play().catch(() => {});
         }
       };
       await pc.setRemoteDescription(new RTCSessionDescription({ type: "offer", sdp }));
@@ -2261,6 +2359,7 @@ export default function SpeaqApp() {
       setCallActive(true);
       setCallDuration(0);
       callTimer.current = setInterval(() => setCallDuration((d) => d + 1), 1000);
+    startCallStatsReporter(`${Date.now()}`);
     } catch (err) {
       console.error("Answer failed:", err);
       endCall();
@@ -2269,13 +2368,219 @@ export default function SpeaqApp() {
 
   const endCall = () => {
     if (callTimer.current) { clearInterval(callTimer.current); callTimer.current = null; }
+    if (statsTimer.current) { clearInterval(statsTimer.current); statsTimer.current = null; }
     if (peerConnection.current) { peerConnection.current.close(); peerConnection.current = null; }
+    if (sfuSession.current) { try { sfuSession.current.close(); } catch { /* ignore */ } sfuSession.current = null; }
+    sfuRemoteStream.current = null;
+    if (sfuGainNode.current) { try { sfuGainNode.current.disconnect(); } catch { /* ignore */ } sfuGainNode.current = null; }
     if (localStream.current) { localStream.current.getTracks().forEach((t2) => t2.stop()); localStream.current = null; }
     if (callContact && wsRef.current) wsRef.current.send(JSON.stringify({ type: "CALL_END", to: callContact.speaqId }));
     setCallActive(false);
     setCallDuration(0);
     setCallContact(null);
+    setMicMuted(false);
+    setSpeakerMuted(false);
     setScreen("main");
+  };
+
+  const toggleMic = () => {
+    setMicMuted((prev) => {
+      const next = !prev;
+      if (localStream.current) {
+        localStream.current.getAudioTracks().forEach((t) => { t.enabled = !next; });
+      }
+      return next;
+    });
+  };
+
+  const toggleSpeaker = () => {
+    setSpeakerMuted((prev) => {
+      const next = !prev;
+      if (remoteAudioRef.current) remoteAudioRef.current.muted = next;
+      if (remoteVideoRef.current) remoteVideoRef.current.muted = next;
+      // The WebAudio fallback path (createMediaStreamSource -> destination) has
+      // no .muted property of its own, so a GainNode in the middle gives us a
+      // single mute control for both <audio>-element and WebAudio-direct paths.
+      if (sfuGainNode.current) sfuGainNode.current.gain.value = next ? 0 : 1;
+      return next;
+    });
+  };
+
+  // ---------------------------------------------------------------------------
+  // SFU call flow (mediasoup) - bypasses peer-to-peer + TURN entirely.
+  // Used because iOS Safari WebKit blocks 2-iPhones cross-network p2p relay
+  // pairing. Mediasoup-server forwards encrypted DTLS-SRTP packets without
+  // decrypting (privacy intact). Insertable streams encryption layer to be
+  // added in a follow-up commit.
+  // ---------------------------------------------------------------------------
+  const attachRemoteSfuTrack = (track: MediaStreamTrack, kind: "audio" | "video", wantVideo: boolean) => {
+    if (!sfuRemoteStream.current) sfuRemoteStream.current = new MediaStream();
+    sfuRemoteStream.current.addTrack(track);
+    track.enabled = true;
+    const stream = sfuRemoteStream.current;
+    if (kind === "video" && wantVideo && remoteVideoRef.current) {
+      remoteVideoRef.current.srcObject = stream;
+      remoteVideoRef.current.play().catch(() => {});
+    } else if (kind === "audio") {
+      if (wantVideo && remoteVideoRef.current) {
+        remoteVideoRef.current.srcObject = stream;
+        remoteVideoRef.current.play().catch(() => {});
+      } else if (remoteAudioRef.current) {
+        remoteAudioRef.current.srcObject = stream;
+        remoteAudioRef.current.play().catch(() => {});
+      }
+      try {
+        const ctx = audioContextRef.current;
+        if (ctx) {
+          const src = ctx.createMediaStreamSource(new MediaStream([track]));
+          if (!sfuGainNode.current) {
+            sfuGainNode.current = ctx.createGain();
+            sfuGainNode.current.gain.value = speakerMuted ? 0 : 1;
+            sfuGainNode.current.connect(ctx.destination);
+          }
+          src.connect(sfuGainNode.current);
+        }
+      } catch { /* ignore */ }
+    }
+  };
+
+  const startCallSfu = async (contact: Contact, video = false) => {
+    if (!identity || !wsRef.current) return;
+    setCallContact(contact);
+    setIsVideoCall(video);
+    setScreen("call");
+    setCallActive(true);
+    setCallDuration(0);
+    if (callTimer.current) clearInterval(callTimer.current);
+    callTimer.current = setInterval(() => setCallDuration((d) => d + 1), 1000);
+    try {
+      // iOS audio-unlock (same as p2p path).
+      if (remoteAudioRef.current) {
+        remoteAudioRef.current.src = "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQxAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAEAAABIADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwP////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAASD5wH+ZoQAAAAAAAAAAAAAAAAAAAAA=";
+        remoteAudioRef.current.play().catch(() => {});
+      }
+      try {
+        if (!audioContextRef.current) {
+          const Ctx = (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext || AudioContext;
+          audioContextRef.current = new Ctx();
+        }
+        audioContextRef.current.resume().catch(() => {});
+      } catch { /* ignore */ }
+
+      localStream.current = await navigator.mediaDevices.getUserMedia({ audio: true, video });
+      if (video && localVideoRef.current) {
+        localVideoRef.current.srcObject = localStream.current;
+        localVideoRef.current.play().catch(() => {});
+      }
+
+      const roomId = (typeof crypto !== "undefined" && "randomUUID" in crypto) ? crypto.randomUUID() : (Date.now().toString(36) + Math.random().toString(36).slice(2));
+      const session = await connectSfu(roomId);
+      sfuSession.current = session;
+      session.onRemoteTrack((peerId, track, kind) => {
+        console.log("[SPEAQ] sfu remote track from", peerId, kind);
+        attachRemoteSfuTrack(track, kind, video);
+      });
+      session.onPeerLeft((peerId) => {
+        console.log("[SPEAQ] sfu peer left", peerId);
+      });
+
+      for (const track of localStream.current.getTracks()) {
+        await session.publish(track, track.kind === "video" ? "video" : "audio");
+      }
+
+      const { key: sigKey, mode: sigMode } = await deriveCallKeyForSend(identity.speaqId, contact.speaqId);
+      if (sigMode === "id") {
+        console.warn("[SPEAQ] startCallSfu: no ratchet for", contact.speaqId, "- falling back to ID-derived signaling key (relay can decrypt the SFU room-id)");
+      }
+      const offerBlob = await encrypt(sigKey, JSON.stringify({ sfu: true, roomId, video }));
+      wsRef.current.send(JSON.stringify({ type: "CALL_OFFER", to: contact.speaqId, blob: offerBlob }));
+      console.log("[SPEAQ] startCallSfu: CALL_OFFER sent, room", roomId);
+    } catch (err) {
+      console.error("startCallSfu failed:", err);
+      alert("Could not start call: " + (err as Error).message);
+      endCall();
+    }
+  };
+
+  const handleCallAnswerSfu = async (roomId: string, from: string, wantVideo: boolean) => {
+    if (!identity || !wsRef.current) return;
+    try {
+      if (remoteAudioRef.current) {
+        remoteAudioRef.current.src = "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQxAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAEAAABIADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwP////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAASD5wH+ZoQAAAAAAAAAAAAAAAAAAAAA=";
+        remoteAudioRef.current.play().catch(() => {});
+      }
+      try {
+        if (!audioContextRef.current) {
+          const Ctx = (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext || AudioContext;
+          audioContextRef.current = new Ctx();
+        }
+        audioContextRef.current.resume().catch(() => {});
+      } catch { /* ignore */ }
+
+      localStream.current = await navigator.mediaDevices.getUserMedia({ audio: true, video: wantVideo });
+      if (wantVideo && localVideoRef.current) {
+        localVideoRef.current.srcObject = localStream.current;
+        localVideoRef.current.play().catch(() => {});
+      }
+
+      const session = await connectSfu(roomId);
+      sfuSession.current = session;
+      session.onRemoteTrack((peerId, track, kind) => {
+        console.log("[SPEAQ] sfu remote track from", peerId, kind);
+        attachRemoteSfuTrack(track, kind, wantVideo);
+      });
+      session.onPeerLeft((peerId) => {
+        console.log("[SPEAQ] sfu peer left", peerId);
+      });
+
+      for (const track of localStream.current.getTracks()) {
+        await session.publish(track, track.kind === "video" ? "video" : "audio");
+      }
+
+      const { key: sigKey } = await deriveCallKeyForSend(identity.speaqId, from);
+      const ansBlob = await encrypt(sigKey, JSON.stringify({ sfu: true, accepted: true }));
+      wsRef.current.send(JSON.stringify({ type: "CALL_ANSWER", to: from, blob: ansBlob }));
+
+      setCallActive(true);
+      setCallDuration(0);
+      if (callTimer.current) clearInterval(callTimer.current);
+      callTimer.current = setInterval(() => setCallDuration((d) => d + 1), 1000);
+      console.log("[SPEAQ] handleCallAnswerSfu: room", roomId, "answered");
+    } catch (err) {
+      console.error("handleCallAnswerSfu failed:", err);
+      endCall();
+    }
+  };
+
+  // Debug-instrumentation: post inbound-rtp stats to relay every 2s.
+  const startCallStatsReporter = (callId: string) => {
+    if (statsTimer.current) { clearInterval(statsTimer.current); }
+    if (!identity) return;
+    const speaqId = identity.speaqId;
+    const relayHttp = RELAY_URL.replace("wss://", "https://");
+    statsTimer.current = setInterval(async () => {
+      const pc = peerConnection.current;
+      if (!pc) return;
+      try {
+        const reports = await pc.getStats();
+        const inbound: Array<Record<string, unknown>> = [];
+        const candidatePairs: Array<Record<string, unknown>> = [];
+        const typeCounts: Record<string, number> = {};
+        reports.forEach((r) => {
+          const rep = r as Record<string, unknown>;
+          const t = String(rep.type || "unknown");
+          typeCounts[t] = (typeCounts[t] || 0) + 1;
+          if (t === "inbound-rtp") {
+            inbound.push({ kind: rep.kind, bytesReceived: rep.bytesReceived, packetsReceived: rep.packetsReceived, audioLevel: rep.audioLevel, framesDecoded: rep.framesDecoded });
+          }
+          if (t === "candidate-pair" && rep.nominated) {
+            candidatePairs.push({ state: rep.state, localType: rep.localCandidateType, remoteType: rep.remoteCandidateType });
+          }
+        });
+        const out = { connState: pc.connectionState, iceState: pc.iceConnectionState, typeCounts, inbound, candidatePairs };
+        fetch(`${relayHttp}/api/v1/turn-stats`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ speaqId, callId, stats: out }) }).catch(() => {});
+      } catch (err) { void err; }
+    }, 2000);
   };
 
   // Witness handler - creates tamper-proof evidence with real SHA-256
@@ -2671,9 +2976,9 @@ export default function SpeaqApp() {
             {isTyping ? <p className="text-[10px] text-[#22C55E]">{t("chat.typing", lang)}</p> : <div className="flex items-center gap-1.5"><IconShield className="w-3 h-3 text-quantum-teal" /><span className="text-[10px] font-mono text-quantum-teal uppercase tracking-wider">{t("chat.secured", lang)}{disappearLabel ? ` - ${disappearLabel}` : ""}</span></div>}
           </div>
           {/* Voice call */}
-          <button onClick={() => startCall(activeContact)} className="w-8 h-8 rounded-full bg-bg-elevated flex items-center justify-center"><span className="text-xs font-heading font-bold text-text-muted">P</span></button>
+          <button onClick={() => startCallSfu(activeContact)} className="w-8 h-8 rounded-full bg-bg-elevated flex items-center justify-center"><span className="text-xs font-heading font-bold text-text-muted">P</span></button>
           {/* Video call */}
-          <button onClick={() => startCall(activeContact, true)} className="w-8 h-8 rounded-full bg-bg-elevated flex items-center justify-center"><span className="text-xs font-heading font-bold text-text-muted">V</span></button>
+          <button onClick={() => startCallSfu(activeContact, true)} className="w-8 h-8 rounded-full bg-bg-elevated flex items-center justify-center"><span className="text-xs font-heading font-bold text-text-muted">V</span></button>
           {/* Safety-number verification (E1 hardening UI) */}
           <button onClick={async () => {
             if (!signingKeys.current || !activeContact) return;
@@ -2984,7 +3289,11 @@ export default function SpeaqApp() {
         <div className="flex gap-6">
           <button onClick={() => {
             setScreen("call");
-            handleCallAnswer(incomingCall.sdp, incomingCall.from, isVideoCall);
+            if (incomingCall.sfu) {
+              handleCallAnswerSfu(incomingCall.sfu.roomId, incomingCall.from, incomingCall.sfu.video);
+            } else if (incomingCall.sdp) {
+              handleCallAnswer(incomingCall.sdp, incomingCall.from, isVideoCall);
+            }
             setIncomingCall(null);
           }} className="w-16 h-16 rounded-full bg-[#22C55E] flex items-center justify-center text-white"><IconPhone className="w-7 h-7" /></button>
           <button onClick={() => {
@@ -3019,7 +3328,15 @@ export default function SpeaqApp() {
           <h2 className="text-xl font-heading font-semibold text-text-primary mb-2">{callContact?.name || "Unknown"}</h2>
           <p className="text-sm text-text-secondary mb-1">{callActive ? formatCallDuration(callDuration) : t("call.calling", lang)}</p>
           <div className="flex items-center gap-1.5 mb-12"><IconShield className="w-3 h-3 text-quantum-teal" /><span className="text-[10px] font-mono text-quantum-teal uppercase tracking-wider">{t("chat.secured", lang)}</span></div>
-          <button onClick={endCall} className="w-16 h-16 rounded-full bg-resistance-red flex items-center justify-center text-white"><IconPhoneOff className="w-7 h-7" /></button>
+          <div className="flex items-center gap-4">
+            <button onClick={toggleMic} aria-label={micMuted ? "Unmute microphone" : "Mute microphone"} className={`w-14 h-14 rounded-full flex items-center justify-center ${micMuted ? "bg-bg-elevated text-resistance-red" : "bg-bg-card text-text-primary"}`}>
+              {micMuted ? <IconMicOff className="w-6 h-6" /> : <IconMic className="w-6 h-6" />}
+            </button>
+            <button onClick={endCall} className="w-16 h-16 rounded-full bg-resistance-red flex items-center justify-center text-white"><IconPhoneOff className="w-7 h-7" /></button>
+            <button onClick={toggleSpeaker} aria-label={speakerMuted ? "Speaker on" : "Speaker off"} className={`w-14 h-14 rounded-full flex items-center justify-center ${speakerMuted ? "bg-bg-elevated text-resistance-red" : "bg-bg-card text-text-primary"}`}>
+              {speakerMuted ? <IconSpeakerOff className="w-6 h-6" /> : <IconSpeaker className="w-6 h-6" />}
+            </button>
+          </div>
           <p className="mt-3 text-xs text-text-muted">{t("call.end", lang)}</p>
         </div>
       </div>
