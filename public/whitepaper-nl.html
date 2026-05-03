@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPEAQ Whitepaper v2.1</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #08090D;
+    --bg-surface: #0E1017;
+    --bg-card: #141620;
+    --bg-elevated: #1A1D2B;
+    --voice-gold: #D4A853;
+    --voice-warm: #E8C47A;
+    --voice-light: #F5DFA6;
+    --quantum-teal: #2DD4BF;
+    --quantum-dark: #0F766E;
+    --text-primary: #F1F5F9;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+    --freedom-white: #FAFBFC;
+    --resistance-red: #E24B4A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 60px 40px;
+  }
+
+  /* Logo */
+  .logo-section {
+    text-align: center;
+    padding: 80px 0 40px;
+  }
+
+  .logo-section svg {
+    margin-bottom: 24px;
+  }
+
+  .logo-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--voice-gold);
+    letter-spacing: 12px;
+    margin-bottom: 8px;
+  }
+
+  .logo-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+
+  .motto {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--voice-warm);
+    margin-bottom: 8px;
+  }
+
+  .version-info {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--voice-gold), transparent);
+    margin: 48px 0;
+    opacity: 0.3;
+  }
+
+  .divider-teal {
+    background: linear-gradient(90deg, transparent, var(--quantum-teal), transparent);
+  }
+
+  /* Headings */
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--voice-gold);
+    margin-bottom: 24px;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-top: 48px;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--quantum-teal);
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+
+  /* Text */
+  p {
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+  }
+
+  strong {
+    color: var(--text-primary);
+    font-weight: 700;
+  }
+
+  em {
+    color: var(--voice-warm);
+    font-style: italic;
+  }
+
+  /* Section number */
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--quantum-teal);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 14px;
+  }
+
+  th {
+    background: var(--bg-elevated);
+    color: var(--voice-gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid rgba(212, 168, 83, 0.2);
+  }
+
+  td {
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(100, 116, 139, 0.1);
+    color: var(--text-secondary);
+  }
+
+  tr:hover td {
+    background: rgba(45, 212, 191, 0.03);
+  }
+
+  /* Callout boxes */
+  .callout {
+    background: var(--bg-card);
+    border-left: 3px solid var(--quantum-teal);
+    padding: 20px 24px;
+    margin: 24px 0;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .callout-gold {
+    border-left-color: var(--voice-gold);
+  }
+
+  .callout p {
+    margin-bottom: 0;
+    color: var(--text-primary);
+  }
+
+  /* Lists */
+  ul {
+    margin: 16px 0;
+    padding-left: 24px;
+  }
+
+  li {
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+
+  li strong {
+    color: var(--quantum-teal);
+  }
+
+  /* Code / mono */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    background: var(--bg-elevated);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--quantum-teal);
+  }
+
+  /* Abstract box */
+  .abstract {
+    background: var(--bg-surface);
+    border: 1px solid rgba(212, 168, 83, 0.15);
+    border-radius: 12px;
+    padding: 32px;
+    margin: 32px 0;
+  }
+
+  .abstract p {
+    color: var(--text-primary);
+    font-size: 17px;
+    line-height: 1.8;
+  }
+
+  /* Comparison checkmark */
+  .yes { color: var(--quantum-teal); font-weight: 700; }
+  .no { color: var(--text-muted); }
+  .speaq-col { color: var(--voice-gold); font-weight: 700; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 60px 0 40px;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  .footer .motto-footer {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--voice-gold);
+    margin-top: 16px;
+  }
+
+  /* Theme toggle */
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .theme-toggle a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .theme-toggle a:hover {
+    color: var(--voice-gold);
+  }
+
+  .theme-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(100, 116, 139, 0.2);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .theme-btn:hover {
+    border-color: var(--voice-gold);
+    color: var(--voice-gold);
+  }
+
+  /* Light mode */
+  html.light {
+    --bg-deep: #FAFBFC;
+    --bg-surface: #F1F5F9;
+    --bg-card: #E2E8F0;
+    --bg-elevated: #E8ECF1;
+    --voice-gold: #8B6914;
+    --voice-warm: #A07D2E;
+    --voice-light: #6B5310;
+    --quantum-teal: #0F766E;
+    --quantum-dark: #134E4A;
+    --text-primary: #1A1A2E;
+    --text-secondary: #475569;
+    --text-muted: #64748B;
+    --freedom-white: #FFFFFF;
+    --resistance-red: #DC2626;
+  }
+
+  html.light .theme-btn {
+    background: #E2E8F0;
+    border-color: rgba(100, 116, 139, 0.3);
+  }
+
+  html.light .abstract {
+    border-color: rgba(139, 105, 20, 0.2);
+  }
+
+  html.light .divider {
+    opacity: 0.5;
+  }
+
+  /* SVG fills for light mode */
+  html.light svg text { fill: #8B6914; }
+  html.light svg circle[fill="#2DD4BF"] { fill: #0F766E; }
+
+  /* Print */
+  @media print {
+    body { background: white; color: #1a1a1a; }
+    .container { padding: 20px; }
+    .theme-toggle { display: none; }
+    h1, .logo-title { color: #8B6914; }
+    h3, .section-num { color: #0F766E; }
+    .callout { border-left-color: #0F766E; background: #f5f5f5; }
+    table th { background: #f0f0f0; color: #8B6914; }
+    td, p, li { color: #333; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Theme toggle + back link -->
+<div class="theme-toggle">
+  <a href="/">Terug naar SPEAQ</a>
+  <button class="theme-btn" id="themeBtn" title="Schakel donkere/lichte modus">
+    <svg id="sunIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+    </svg>
+    <svg id="moonIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  </button>
+</div>
+
+<script>
+(function() {
+  var btn = document.getElementById('themeBtn');
+  var sun = document.getElementById('sunIcon');
+  var moon = document.getElementById('moonIcon');
+  function setTheme(light) {
+    if (light) {
+      document.documentElement.classList.add('light');
+      sun.style.display = 'none';
+      moon.style.display = 'block';
+    } else {
+      document.documentElement.classList.remove('light');
+      sun.style.display = 'block';
+      moon.style.display = 'none';
+    }
+    localStorage.setItem('speaq-wp-theme', light ? 'light' : 'dark');
+  }
+  btn.addEventListener('click', function() {
+    setTheme(!document.documentElement.classList.contains('light'));
+  });
+  if (localStorage.getItem('speaq-wp-theme') === 'light') setTheme(true);
+})();
+</script>
+
+<div class="container">
+
+<!-- COVER -->
+<div class="logo-section">
+  <img src="/speaq-logo.png" alt="SPEAQ" width="120" height="120" style="border-radius: 50%;" />
+  <div class="logo-title">SPEAQ</div>
+  <div class="logo-subtitle">Een Kwantum-Resistent Communicatie- en Waardenetwerk</div>
+  <div class="motto">"Door het volk, voor het volk."</div>
+  <div class="version-info">Versie 3.1 - Mei 2026</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ABSTRACT -->
+<div class="abstract">
+  <p>SPEAQ is een communicatie- en waardetransfernetwerk gebouwd op post-kwantumcryptografie, ontworpen voor een wereld waarin privacy geen privilege is, maar een recht. Het combineert end-to-end versleutelde berichten, spraak- en videogesprekken, en een native digitale valuta (Q-Credits) in één platform dat geen registratie, geen telefoonnummer en geen bankrekening vereist.</p>
+  <br>
+  <p>SPEAQ introduceert Proof of Contribution (DPoC), een consensusmechanisme waarbij deelnemers hun positie verdienen door het netwerk te helpen, niet door puzzels op te lossen of kapitaal in te zetten. Het resultaat is een systeem waarin waarde voortvloeit uit participatie, niet uit rijkdom.</p>
+  <br>
+  <p>Dit document beschrijft de architectuur, de economie en de principes achter SPEAQ.</p>
+</div>
+
+<div class="divider divider-teal"></div>
+
+<!-- SECTION 1 -->
+<div class="section-num">Sectie 01</div>
+<h1>Waarom SPEAQ Bestaat</h1>
+
+<h3>1.1 De Vraag</h3>
+<p>SPEAQ is ontstaan uit een simpele vraag: <strong>waarom zou iemand de macht moeten hebben om te beslissen of twee mensen met elkaar kunnen praten?</strong></p>
+<p>Geen overheid. Geen bedrijf. Geen algoritme. Niemand.</p>
+<p>Als je iemand van wie je houdt in een ander land, in een andere tijdzone, onder een ander regime hebt, zou je altijd met hen moeten kunnen spreken. Zonder toestemming. Zonder gegevens te delen. Zonder de mogelijkheid dat iemand, ergens, een schakelaar omzet en jullie beiden het zwijgen oplegt.</p>
+<p>Dit is geen theoretische zorg. Het gebeurt vandaag. Hele landen worden losgekoppeld van het wereldwijde internet. Berichtenplatforms worden geblokkeerd. Gesprekken worden gemonitord. Mensen verliezen contact met hun families, hun partners, hun gemeenschappen, niet vanwege technologie, maar vanwege macht.</p>
+<p>SPEAQ bestaat omdat we weigeren dat te accepteren.</p>
+
+<h3>1.2 Het Grotere Probleem</h3>
+<p>Er zijn 5,4 miljard mensen verbonden met het internet. De meesten van hen gebruiken communicatieplatforms gebouwd door bedrijven waarvan het bedrijfsmodel afhankelijk is van het verzamelen van gegevens, het tonen van advertenties of het voldoen aan overheidsverzoeken om toegang te krijgen tot privégesprekken.</p>
+<p>Tegelijkertijd hebben 1,4 miljard volwassenen wereldwijd geen bankrekening. Zij kunnen geen geld verzenden of ontvangen zonder tussenpersonen die kosten in rekening brengen, limieten opleggen of de dienst volledig weigeren.</p>
+<p>Dit zijn geen afzonderlijke problemen. Het is hetzelfde probleem: <strong>mensen zijn afhankelijk van systemen die zij niet controleren.</strong></p>
+
+<div class="callout callout-gold">
+  <p>Wanneer een platform besluit je account te sluiten, verdwijnen je berichten. Wanneer een bank besluit dat je te risicovol bent, wordt je geld bevroren. Wanneer een overheid besluit dat je communicatie ongemakkelijk is, wordt je app geblokkeerd.</p>
+</div>
+
+<h3>1.3 Wat Wij Geloven</h3>
+<p>Wij geloven dat de mogelijkheid om vrij te spreken en vrij te handelen fundamentele menselijke capaciteiten zijn. Geen functies. Geen diensten. Capaciteiten.</p>
+<p>Een capaciteit kan niet worden verleend door een bedrijf of een overheid. Het kan alleen worden ingebouwd in de architectuur van het systeem zelf. Als een systeem KAN worden uitgeschakeld, ZAL het uiteindelijk worden uitgeschakeld, door beleid, door druk of door economie.</p>
+<p>SPEAQ is zo ontworpen dat geen enkele entiteit, inclusief de makers, je berichten kan lezen, je geld kan bevriezen of je van het netwerk kan uitsluiten.</p>
+<p><strong>Dit is geen beleid. Het is wiskunde.</strong></p>
+
+<h3>1.4 Voor Wie SPEAQ Is</h3>
+<p>SPEAQ is voor iedereen. Maar sommige mensen hebben het meer nodig dan anderen:</p>
+<ul>
+  <li><strong>De 1,4 miljard mensen zonder bankrekening</strong>, die een manier nodig hebben om waarde te verzenden en te ontvangen zonder bankrekening</li>
+  <li><strong>Mensen in restrictieve omgevingen</strong>, die communicatie nodig hebben die niet kan worden gemonitord of geblokkeerd</li>
+  <li><strong>Gemeenschappen die lokale economieën opbouwen</strong>, die een valuta nodig hebben die participatie beloont, niet speculatie</li>
+  <li><strong>Iedereen die privacy waardeert</strong>, die communicatie wil die standaard privé is, niet op belofte</li>
+</ul>
+
+<div class="divider"></div>
+
+<!-- SECTION 2 -->
+<div class="section-num">Sectie 02</div>
+<h1>Principes</h1>
+
+<h3>2.1 Geen Registratie</h3>
+<p>SPEAQ vraagt niet om je naam, e-mailadres, telefoonnummer of enige identificatie. Je identiteit is een cryptografisch sleutelpaar dat op je apparaat wordt gegenereerd. Je bent alleen bekend onder je SPEAQ ID, een reeks tekens die niet is gekoppeld aan iets in de fysieke wereld.</p>
+<p>Waarom dit belangrijk is: registratie creëert een database. Een database kan worden gehackt, opgevraagd of verkocht. Geen registratie betekent geen database. Geen database betekent niets om te hacken.</p>
+
+<h3>2.2 Privacy Eerst</h3>
+<p>De SPEAQ relay server werkt volgens een privacy-eerst principe. Het ziet alleen versleutelde gegevens die tussen adressen bewegen. Het kan niet:</p>
+<ul>
+  <li>Berichten lezen</li>
+  <li>Afzenders of ontvangers identificeren</li>
+  <li>Toegang krijgen tot portemonneesaldi</li>
+  <li>Communicatiepatronen loggen</li>
+</ul>
+<p>De server is een hulpprogramma, zoals een weg. Het vervoert verkeer. Het leest de brieven niet.</p>
+
+<h3>2.3 Soevereiniteit</h3>
+<p>Je sleutels, je berichten, je geld, alles opgeslagen op je apparaat. SPEAQ kan er geen toegang toe krijgen, ze bevriezen of wegnemen. Als je je sleutels verliest, zijn ze weg. Dit is de prijs van soevereiniteit, en het is de moeite waard om te betalen.</p>
+
+<h3>2.4 Bijdrage Boven Kapitaal</h3>
+<p>In de meeste systemen hebben de mensen met het meeste geld de meeste macht. SPEAQ keert dit om: de mensen die het meest bijdragen aan het netwerk, verdienen het meest. Je waarde komt van wat je doet, niet van wat je hebt.</p>
+
+<div class="divider divider-teal"></div>
+
+<!-- SECTION 3 -->
+<div class="section-num">Sectie 03</div>
+<h1>Architectuur</h1>
+
+<h3>3.1 Systeemoverzicht</h3>
+<p>SPEAQ draait op Google Cloud Platform met vier kerncomponenten:</p>
+
+<table>
+  <tr><th>Component</th><th>Technologie</th><th>Platform</th><th>Doel</th></tr>
+  <tr><td>speaq-web (PWA)</td><td>Next.js 16.2.2</td><td>Cloud Run (europe-west1)</td><td>Webapplicatie, installeerbaar op elk apparaat</td></tr>
+  <tr><td>speaq-app (Native)</td><td>React Native 0.84</td><td>iOS / Android</td><td>Native mobiele app met mesh-netwerken</td></tr>
+  <tr><td>speaq-relay</td><td>Node.js WebSocket</td><td>Cloud Run (europe-west1)</td><td>Zero-knowledge berichtenrelais</td></tr>
+  <tr><td>speaq-chain</td><td>Rust + RocksDB</td><td>Google Compute Engine</td><td>Blockchain-node, persistente opslag</td></tr>
+</table>
+
+<h3>3.2 Communicatielaag</h3>
+<p>Alle communicatie in SPEAQ is end-to-end versleuteld met post-kwantumcryptografie:</p>
+
+<table>
+  <tr><th>Component</th><th>Technologie</th><th>Standaard</th><th>Doel</th></tr>
+  <tr><td>Sleuteluitwisseling</td><td>Kyber-768 (ML-KEM)</td><td>NIST FIPS 203</td><td>Vaststellen van gedeelde geheimen, kwantum-resistent</td></tr>
+  <tr><td>Digitale handtekening</td><td>ML-DSA-65 (Dilithium)</td><td>NIST FIPS 204</td><td>Hybride (ECDSA P-256 + ML-DSA-65) authenticatie op relay-uitdagingen en sleuteluitwisseling</td></tr>
+  <tr><td>Berichtversleuteling</td><td>AES-256-GCM</td><td>NIST SP 800-38D</td><td>Geauthenticeerde versleuteling per bericht (Web Crypto API + @noble/ciphers op native)</td></tr>
+  <tr><td>Forward secrecy</td><td>Double Ratchet</td><td>Signal Protocol</td><td>Elk bericht gebruikt een eigen sleutel afgeleid van een roterende keten</td></tr>
+  <tr><td>PIN-beveiliging</td><td>PBKDF2-SHA256</td><td>600,000 iteraties</td><td>Brute-force resistente PIN-hashing voor de lokale kluis</td></tr>
+  <tr><td>Afzenderprivacy</td><td>Sealed Sender</td><td>Aangepast</td><td>Afzenderidentiteit versleuteld binnen de berichtblob; relais ziet alleen "to:"</td></tr>
+  <tr><td>Blokondertekening (chain)</td><td>SPHINCS+ (SLH-DSA)</td><td>NIST FIPS 205</td><td>Elk blok op de SPEAQ Chain is dubbel ondertekend met ML-DSA-65 + SPHINCS+ (hash-gebaseerd). Als lattice crypto ooit wordt gebroken, blijven blokken verifieerbaar via de hash-only handtekening.</td></tr>
+</table>
+
+<h3>3.2.1 Spraak- en Videogesprekken</h3>
+<p>Gesprekken leggen meerdere onafhankelijke versleutelingsmechanismen over elkaar heen, zodat een doorbraak in één enkele laag de andere intact laat:</p>
+<table>
+  <tr><th>Laag</th><th>Wat het beschermt</th><th>Mechanisme</th></tr>
+  <tr><td>Mediastroom</td><td>Audio- en videobytes tussen de twee apparaten</td><td>DTLS-SRTP (WebRTC standaard, browser-afgedwongen, AES-GCM)</td></tr>
+  <tr><td>Signalisatie</td><td>SDP, ICE candidates (IP's), DTLS fingerprints, SFU room ID</td><td>AES-256-GCM met sleutel = SHA-256(ratchet rootKey || "speaq-call-v1"). De ratchet rootKey is afgeleid van het Kyber-768 gedeelde geheim, dat het relais niet kent, signalisatie is daarom zero-knowledge ten opzichte van het relais.</td></tr>
+</table>
+
+<p>Er zijn drie media-routeringspaden, automatisch gekozen per gesprek op basis van wat het platform en netwerk toestaan:</p>
+<table>
+  <tr><th>Pad</th><th>Wanneer gebruikt</th><th>Privacy</th></tr>
+  <tr><td>Mediasoup-SFU<br><em>(standaard voor de PWA)</em></td><td>Elk gesprek tussen twee SPEAQ PWA's. iOS WebKit blokkeert betrouwbare peer-to-peer media tussen twee iPhone Safari PWA's op verschillende netwerken (host- of relay-allocate-koppeling mislukt), dus een server-gemedieerd pad is de enige consistent werkende route. De SFU is daarom de standaard voor alle PWA-gesprekken, niet alleen iOS.</td><td>Zelf-gehoste mediasoup op <code>sfu.thespeaq.com</code> (TLS, Let's Encrypt). De SFU stuurt versleutelde DTLS-SRTP pakketten door tussen deelnemers zonder ze ooit te ontsleutelen, het ziet alleen IP-adressen en versleutelde bytes, nooit gespreksinhoud of wie met wie praat (de willekeurige per-gesprek room ID wordt uitgewisseld binnen de versleutelde CALL_OFFER blob).</td></tr>
+  <tr><td>Direct peer-to-peer</td><td>Beschikbaar als fallback wanneer SFU onbereikbaar is. Native iOS/Android apps gebruiken dit nog steeds als primair pad totdat ze SFU-pariteit bereiken (op de directe roadmap).</td><td>DTLS-SRTP tussen de twee eindpunten; niets passeert een SPEAQ-server.</td></tr>
+  <tr><td>STUN / TURN / TURNS<br><em>(legacy pad, native + backwards-compat)</em></td><td>Gebruikt door native iOS/Android apps voor NAT traversal en doorgestuurde media. Ook gebruikt als fallback wanneer een oudere PWA-peer (zonder SFU-ondersteuning) een huidige PWA-peer belt.</td><td>Zelf-gehoste coturn op <code>turn.thespeaq.com</code> (UDP/TCP 3478, TURN-over-TLS op 443 met Let's Encrypt). Geen Google of externe STUN. Doorgestuurde media is opaque DTLS-SRTP naar coturn.</td></tr>
+</table>
+<p style="font-size: 14px; opacity: 0.8;">Zowel <code>sfu.thespeaq.com</code> als <code>turn.thespeaq.com</code> worden beheerd door Plexaris op Google Cloud. Geen van beide bewaart DTLS-sleutels voor enig gesprek; beide zien alleen versleutelde bytes. Native iOS/Android apps verzenden momenteel signalisatie via TLS naar het relais (nog geen versleutelde-blob laag); het bereiken van PWA-pariteit voor zowel signalisatie-versleuteling als SFU-gebruik voor native staat op de directe roadmap. Media-laag DTLS-SRTP is identiek op alle platforms.</p>
+
+<h3>3.2.2 Pushmeldingen</h3>
+<p>Wanneer de SPEAQ PWA gesloten is of op de achtergrond draait en er een bericht of oproep binnenkomt, ontvangt de gebruiker een pushmelding. Het meldingssysteem is ontworpen om niets te lekken op het vergrendelscherm:</p>
+<table>
+  <tr><th>Eigenschap</th><th>Mechanisme</th></tr>
+  <tr><td>Payload-inhoud (relais -> pushdienst -> apparaat)</td><td>Generieke data-only payload: <code>{"t":"msg","ts":...}</code> of <code>{"t":"call","ts":...}</code>. Geen afzenderidentiteit, geen ontvangeridentiteit, geen berichtinhoud, geen naam van de beller. De payload onthult alleen dat <em>enige</em> activiteit heeft plaatsgevonden voor dit push-abonnement.</td></tr>
+  <tr><td>Weergave vergrendelscherm</td><td>Service Worker toont een gelokaliseerde generieke regel: "Nieuw bericht" of "Inkomende oproep" in de gekozen taal van de gebruiker (9 ondersteunde talen). Geen afzender naam, geen preview, geen metadata.</td></tr>
+  <tr><td>Identiteit en inhoud onthullen</td><td>Alleen nadat de gebruiker op de melding tikt, SPEAQ opent en zijn PIN invoert. De PWA haalt dan de versleutelde CALL_OFFER op uit een kortstondige (30 seconden) wachtrij voor inkomende oproepen of speelt gemiste berichten af uit de offline wachtrij, ontsleutelt lokaal en toont wie contact met hen opneemt.</td></tr>
+  <tr><td>Transport</td><td>Standaard W3C Web Push protocol met VAPID-ondertekende stille payloads. Het relais bewaart de VAPID private key in een Cloud secret; de publieke helft is de enige sleutel die het apparaat nodig heeft. Push-gateways (Apple, Google, Mozilla) leveren de payload af zonder de platte tekst te zien (deze is end-to-end versleuteld met de abonnementssleutels van de gebruiker tegen de gateway).</td></tr>
+  <tr><td>Cross-device propagatie</td><td>Het OS-meldingsspiegelsysteem (bijv. iOS -> Apple Watch) draagt dezelfde generieke regel over naar gekoppelde apparaten. SPEAQ past de naam van de beller op het vergrendelscherm nooit aan, zelfs niet wanneer andere messengers dat wel doen.</td></tr>
+</table>
+<p style="font-size: 14px; opacity: 0.8;">Dit ontwerp ruilt opzettelijk een klein UX-gemak (naam van de beller op het vergrendelscherm) in voor een harde privacygarantie (een gestolen of afgekeken telefoon onthult niets over je contacten).</p>
+
+<div class="callout">
+  <p>Dit zijn geen experimentele algoritmen. Het zijn NIST-gecertificeerde standaarden, ontwikkeld door een decennium van internationale beoordeling en specifiek geselecteerd vanwege hun weerstand tegen kwantumcomputer-aanvallen.</p>
+</div>
+
+<h3>3.3 Cross-Platform Cryptografische Compatibiliteit</h3>
+<p>SPEAQ gebruikt dezelfde cryptografische algoritmen op alle platforms, bewezen compatibel:</p>
+
+<table>
+  <tr><th>Platform</th><th>Bibliotheek</th><th>Sleutelgroottes (bytes)</th></tr>
+  <tr><td>PWA + Native (JavaScript)</td><td>@noble/post-quantum (ML-DSA-65)</td><td>PK=1952, SK=4032, Sig=3309</td></tr>
+  <tr><td>Blockchain Node (Rust)</td><td>fips204 crate (ML-DSA-65)</td><td>PK=1952, SK=4032, Sig=3309</td></tr>
+</table>
+<p>Cross-compatibiliteit tussen JavaScript- en Rust-implementaties is cryptografisch geverifieerd: sleutels die op het ene platform zijn gegenereerd, kunnen op het andere worden gevalideerd.</p>
+
+<h3>3.4 Soevereine Portemonnee</h3>
+<p>Elke SPEAQ-gebruiker heeft een soevereine portemonnee met ML-DSA-65 (FIPS 204) sleutels die lokaal op hun apparaat zijn gegenereerd. Sleutels verlaten het apparaat nooit. Het on-chain adres is afgeleid als:</p>
+<p><code>SQ1 + SHA-256(publicKey)</code></p>
+<p>Transacties worden op het apparaat ondertekend en rechtstreeks naar de blockchain-node verzonden. Geen tussenpersoon bewaart je sleutels of kan namens jou transacties autoriseren.</p>
+
+<h3>3.5 Waardelaag (Q-Credits)</h3>
+
+<table>
+  <tr><th>Eigenschap</th><th>Waarde</th></tr>
+  <tr><td>Maximale voorraad</td><td>21.000.000 QC</td></tr>
+  <tr><td>Kleinste eenheid</td><td>1 Spark (1 QC = 100.000.000 Sparks)</td></tr>
+  <tr><td>Blokinterval</td><td>30 seconden</td></tr>
+  <tr><td>Initiële blokbeloning</td><td>0.5 QC</td></tr>
+  <tr><td>Halveringsinterval</td><td>Elke 2.100.000 verdiende QC</td></tr>
+  <tr><td>Goudreferentie</td><td>1 QC = 0.01 gram goud (protocolbodem, ondersteund door een publieke live oracle, zie Sectie 10.1)</td></tr>
+  <tr><td>Consensus</td><td>Proof of Contribution (DPoC)</td></tr>
+  <tr><td>Blockchain-opslag</td><td>RocksDB (persistent op schijf)</td></tr>
+</table>
+
+<p>De voorraad is gelimiteerd. Niemand kan meer Q-Credits creëren dan het protocol toestaat. Dit wordt afgedwongen door code, niet door beleid.</p>
+
+<h3>3.6 Netwerklaag</h3>
+<p>SPEAQ-nodes communiceren met behulp van libp2p, dezelfde peer-to-peer netwerkstack die wordt gebruikt door Polkadot, Filecoin en IPFS:</p>
+<ul>
+  <li><strong>GossipSub</strong> - Efficiënte uitzending van blokken en transacties naar alle peers</li>
+  <li><strong>Kademlia DHT</strong> - Gedecentraliseerde peer-ontdekking, geen centrale server nodig</li>
+  <li><strong>Noise Protocol</strong> - Alle node-naar-node verbindingen zijn versleuteld</li>
+  <li><strong>BLE Mesh</strong> - Voor omgevingen zonder internet, berichten doorsturen via Bluetooth</li>
+</ul>
+
+<h3>3.7 On-Chain Transacties</h3>
+<p>De complete transactiestroom:</p>
+<ol>
+  <li>Afzender creëert transactie JSON (van, naar, bedrag, tijdstempel)</li>
+  <li>Afzender ondertekent met ML-DSA-65 (FIPS 204) soevereine sleutels</li>
+  <li>Transactie ingediend via POST <code>/api/transaction</code> naar speaq-chain</li>
+  <li>Node verifieert ML-DSA-65 handtekening tegen publieke sleutel</li>
+  <li>Node verifieert afzenderadres = <code>SHA-256(publicKey)</code> met SQ1 prefix</li>
+  <li>Transactie komt in de mempool</li>
+  <li>Volgende blokproducent (elke 30 seconden) leegt mempool in blok</li>
+  <li>Blok ondertekend met ML-DSA-65 (primair) + SPHINCS+ (backup)</li>
+  <li>Blok opgeslagen in RocksDB, uitgezonden naar peers via GossipSub</li>
+</ol>
+
+<div class="divider"></div>
+
+<!-- SECTION 4 -->
+<div class="section-num">Sectie 04</div>
+<h1>Proof of Contribution (DPoC)</h1>
+
+<h3>4.1 Het Probleem met Bestaande Consensus</h3>
+<p><strong>Proof of Work</strong> (Bitcoin) beveiligt het netwerk door middel van computationele puzzels. Dit werkt, maar tegen enorme milieukosten. Het Bitcoin-netwerk verbruikt meer elektriciteit dan veel landen. De beveiliging komt voort uit verspilling.</p>
+<p><strong>Proof of Stake</strong> (Ethereum) vervangt berekening door kapitaal. Validators zetten geld in om het recht te verdienen om blokken te produceren. Dit is efficiënter, maar het concentreert de macht bij degenen die al rijkdom bezitten. De rijken worden rijker.</p>
+<p>Beide systemen beantwoorden de vraag "wie moet het volgende blok produceren?" met een proxy: ofwel "wie de meeste hardware heeft" of "wie het meeste geld heeft."</p>
+
+<h3>4.2 Een Ander Antwoord</h3>
+<p>SPEAQ stelt een eenvoudigere vraag: <strong>wie heeft het netwerk het meest geholpen?</strong></p>
+
+<table>
+  <tr><th>Bijdrage</th><th>Wat je doet</th><th>Waarom het belangrijk is</th></tr>
+  <tr><td>Berichtenrelais</td><td>Versleutelde berichten doorsturen tussen gebruikers</td><td>Houdt het netwerk verbonden</td></tr>
+  <tr><td>Bewijsvalidatie</td><td>Blokken geproduceerd door andere validators verifiëren</td><td>Zorgt voor netwerkintegriteit</td></tr>
+  <tr><td>Gegevensopslag</td><td>Blockchain-gegevens opslaan voor andere nodes</td><td>Behoudt de gedeelde geschiedenis</td></tr>
+  <tr><td>Mesh-netwerken</td><td>Verbindingen overbruggen voor gebruikers zonder internet</td><td>Vergroot de toegang tot onderbediende gebieden</td></tr>
+  <tr><td>Vertaling</td><td>De app vertalen naar nieuwe talen</td><td>Maakt SPEAQ toegankelijk voor meer mensen</td></tr>
+  <tr><td>Gebruikersonboarding</td><td>Nieuwe gebruikers helpen lid te worden van het netwerk</td><td>Laat de gemeenschap groeien</td></tr>
+</table>
+
+<div class="callout">
+  <p><strong>Belangrijk:</strong> Alle verificatie van bijdragen en beloningsberekening vindt server-side plaats. De app 'mint' niet op je apparaat. Het verdient beloningen door deel te nemen aan het netwerk, en de server valideert en wijst die beloningen toe. De batterij en prestaties van je telefoon worden niet beïnvloed.</p>
+</div>
+
+<h3>4.3 Geografische Diversiteit</h3>
+<p>Om concentratie in welvarende regio's te voorkomen, past SPEAQ een geografische diversiteitsbonus toe:</p>
+<ul>
+  <li>Nodes in Afrika ontvangen een scorevermenigvuldiger van 150%</li>
+  <li>Zuid-Amerika: 140%</li>
+  <li>Oceanië: 130%</li>
+  <li>Azië: 110%</li>
+  <li>Europa en Noord-Amerika: 100% (basislijn)</li>
+</ul>
+<p>Niet meer dan 5 van de 21 validators mogen uit dezelfde geografische regio komen.</p>
+
+<h3>4.4 Hoe Blokproductie Werkt</h3>
+<p>Elke 30 seconden selecteert het protocol deterministisch één validator om het volgende blok te produceren. De selectie wordt gewogen op basis van de bijdragescore.</p>
+<p>De selectie is deterministisch: elke node kan onafhankelijk berekenen wie elk blok moet produceren, uitsluitend met behulp van de blokhoogte en de hash van het vorige blok. Er is geen communicatie nodig om overeenstemming te bereiken over wiens beurt het is.</p>
+<p>Wanneer een validator een blok produceert, is het blok:</p>
+<ol>
+  <li>Ondertekend met ML-DSA-65 (primaire kwantum-resistente handtekening)</li>
+  <li>Tegenondertekend met SPHINCS+ (backup hash-gebaseerde handtekening)</li>
+  <li>Uitgezonden naar alle peers via GossipSub</li>
+  <li>Gevalideerd door ontvangende nodes (handtekening, merkle root, chain link, hoogte)</li>
+  <li>Opgeslagen in de lokale RocksDB database van elke node</li>
+</ol>
+
+<h3>4.5 Finaliteit</h3>
+<p>Een blok bereikt finaliteit wanneer 2/3 van de actieve validators (14 van de 21) het bevestigen. Eenmaal definitief, kan een blok niet worden teruggedraaid.</p>
+
+<div class="divider divider-teal"></div>
+
+<!-- SECTION 5 -->
+<div class="section-num">Sectie 05</div>
+<h1>Token Economie</h1>
+
+<h3>5.1 Aanbodschema</h3>
+
+<table>
+  <tr><th>Fase</th><th>Totaal QC Gemined</th><th>Blokbeloning</th><th>Geschatte Duur</th></tr>
+  <tr><td>1</td><td>0 - 2.100.000</td><td>0.50 QC</td><td>~4 jaar</td></tr>
+  <tr><td>2</td><td>2.100.000 - 4.200.000</td><td>0.25 QC</td><td>~8 jaar</td></tr>
+  <tr><td>3</td><td>4.200.000 - 6.300.000</td><td>0.125 QC</td><td>~16 jaar</td></tr>
+  <tr><td>...</td><td>...</td><td>Halveert elke fase</td><td>Verdubbelt elke fase</td></tr>
+</table>
+
+<h3>5.2 Initiële Toewijzing</h3>
+
+<table>
+  <tr><th>Toewijzing</th><th>Percentage</th><th>Doel</th></tr>
+  <tr><td>Verdienbeloningen</td><td>85%</td><td>Verdiend door netwerkbijdragers over tijd</td></tr>
+  <tr><td>Freedom Fund</td><td>5%</td><td>Door de gemeenschap beheerd fonds voor projecten die toegang uitbreiden</td></tr>
+  <tr><td>Oprichters</td><td>5%</td><td>4-jarige vesting, afgestemd op de langetermijngezondheid van het netwerk</td></tr>
+  <tr><td>Ontwikkeling</td><td>3%</td><td>Voortdurend platformonderhoud en beveiliging</td></tr>
+  <tr><td>Vroege bijdragers</td><td>2%</td><td>Erkenning van degenen die hebben geholpen de basis te leggen</td></tr>
+</table>
+
+<h3>5.3 Het Freedom Fund</h3>
+<p>5% van alle Q-Credits wordt toegewezen aan het Freedom Fund, een door de gemeenschap beheerde schatkist die projecten financiert die aansluiten bij de missie van SPEAQ:</p>
+<ul>
+  <li>Mesh-netwerkhardware voor gemeenschappen zonder internet</li>
+  <li>Vertaling van de app naar onderbediende talen</li>
+  <li>Digitale geletterdheidsprogramma's</li>
+  <li>Lokale gemeenschapsnetwerken</li>
+</ul>
+
+<h3>5.4 Pre-Chain Status en Migratiebeleid</h3>
+
+<p><strong>De openbare SPEAQ blockchain is nog niet gelanceerd.</strong> Het toewijzingsschema, de blokintervallen en de tokenmechanismen beschreven in Secties 5.1 tot en met 5.3 treden in werking bij de mainnet-lancering (geschat 2026 Q3-Q4).</p>
+
+<p>Totdat mainnet wordt gelanceerd, worden gebruikers-Q-Credits lokaal op elk apparaat bijgehouden als een pre-chain loyaliteitsrecord. Elke bijdragebeloning is <strong>dubbel ondertekend</strong>: door de privésleutel van de gebruiker (Dilithium / ML-DSA-65) en door de relay server als getuige. Beide handtekeningen zijn vereist om een vermelding in aanmerking te laten komen voor migratie bij de mainnet-lancering.</p>
+
+<p>Implicaties van de pre-chain status:</p>
+<ul>
+  <li>QC heeft geen marktwaarde totdat mainnet wordt gelanceerd</li>
+  <li>QC is niet genoteerd op een beurs</li>
+  <li>QC kan niet worden omgezet naar of van fiatvaluta</li>
+  <li>QC bestaat alleen als een loyaliteitstracker tussen SPEAQ-deelnemers</li>
+  <li>Transacties worden nog niet geverifieerd door een consensusnetwerk; ze worden lokaal op elk apparaat vastgelegd met getuigenhandtekeningen</li>
+</ul>
+
+<p><strong>Migratiebeleid (Optie C - Hybride Snapshot):</strong></p>
+
+<table>
+  <tr><th>Stap</th><th>Mechanisme</th></tr>
+  <tr><td>1. Snapshot</td><td>Bij mainnet blokhoogte 0 wordt een deterministische snapshot gemaakt van alle pre-chain saldi uit de dubbel ondertekende grootboekstatus</td></tr>
+  <tr><td>2. Claimvenster</td><td>Elke SPEAQ ID heeft een venster van 30 dagen om een ondertekende migratieclaimtransactie in te dienen</td></tr>
+  <tr><td>3. Limiet per account</td><td><strong>500 QC per SPEAQ ID.</strong> Grootboeksaldo hierboven migreert niet</td></tr>
+  <tr><td>4. Financieringsbron</td><td>Toewijzing vroege bijdragers (2% van 21.000.000 QC = 420.000 QC totale pool, berekend voor maximaal ~840 vroege bijdragers op de limiet)</td></tr>
+  <tr><td>5. Verificatie</td><td>Claims worden cryptografisch on-chain geverifieerd tegen het dubbel ondertekende bijdragegrootboek. Vermeldingen zonder een van beide handtekeningen worden afgewezen</td></tr>
+  <tr><td>6. Verbeurdverklaring</td><td>Pre-chain saldi boven de limiet, of zonder geldige ondertekende bijdragen, worden niet overgedragen naar mainnet</td></tr>
+</table>
+
+<p><strong>Waarom een limiet van 500 QC?</strong> De pool voor vroege bijdragers is 420.000 QC. Een limiet van 500 QC stelt maximaal 840 vroege adopters in staat om volledig te migreren en respecteert echte loyaliteit, terwijl de impact van lokale opslagmanipulatie wordt beperkt. De limiet is rekenkundig afgeleid van tokenomics, niet willekeurig.</p>
+
+<p><strong>Transparantie:</strong> De definitieve migratieregels zullen ten minste 30 dagen vóór de mainnet-lancering worden gepubliceerd in het Migratiebeleidsdocument (SPEAQ_Migration_Policy_v1). De timing van de lancering is afhankelijk van testnet-validatie, governance-gereedheid en goedkeuring van de gemeenschap. Totdat mainnet wordt gelanceerd, zien alle gebruikers de Pre-Chain Mode-verklaring in de app (native InfoScreen, PWA Earn screen banner en /terms pagina).</p>
+
+<div class="divider"></div>
+
+<!-- SECTION 6 -->
+<div class="section-num">Sectie 06</div>
+<h1>Infrastructuur</h1>
+
+<h3>6.1 Productie Architectuur</h3>
+<p>Alle SPEAQ-diensten draaien op Google Cloud Platform:</p>
+
+<table>
+  <tr><th>Dienst</th><th>Platform</th><th>Regio</th><th>Opslag</th></tr>
+  <tr><td>PWA (thespeaq.com)</td><td>Cloud Run</td><td>europe-west1 (België)</td><td>Stateless</td></tr>
+  <tr><td>Relay Server</td><td>Cloud Run</td><td>europe-west1 (België)</td><td>Statistieken gesynchroniseerd met VM (persistent)</td></tr>
+  <tr><td>Blockchain Node</td><td>Compute Engine e2-micro</td><td>us-west1 (Oregon)</td><td>RocksDB op schijf (persistent)</td></tr>
+  <tr><td>Stats Server</td><td>Compute Engine e2-micro</td><td>us-west1 (Oregon)</td><td>JSON op schijf (persistent)</td></tr>
+</table>
+
+<h3>6.2 Veerkracht</h3>
+<ul>
+  <li><strong>Blockchain-node:</strong> Systemd-dienst met automatische herstart na reboot of crash</li>
+  <li><strong>Statistiekenpersistentie:</strong> Relais synchroniseert gebruikersgegevens elke 2 minuten naar VM + onmiddellijk bij nieuwe gebruikersregistratie</li>
+  <li><strong>Geheugenvoetafdruk:</strong> Blockchain-node gebruikt slechts 6.5 MB RAM. Draait op 1 GB RAM + 2 GB swap met 516 MB beschikbaar</li>
+  <li><strong>Chain-gegevens:</strong> Overleeft reboots, opgeslagen in RocksDB op persistente schijf</li>
+  <li><strong>Geen enkelvoudig storingspunt:</strong> PWA, relais en blockchain zijn onafhankelijke diensten</li>
+</ul>
+
+<h3>6.3 Beveiligingsheaders</h3>
+<p>De PWA handhaaft strikte beveiligingsheaders:</p>
+<ul>
+  <li>HSTS (HTTP Strict Transport Security)</li>
+  <li>Content Security Policy (CSP)</li>
+  <li>X-Frame-Options: DENY</li>
+  <li>X-Content-Type-Options: nosniff</li>
+  <li>Referrer-Policy: strict-origin-when-cross-origin</li>
+</ul>
+
+<div class="divider divider-teal"></div>
+
+<!-- SECTION 7 -->
+<div class="section-num">Sectie 07</div>
+<h1>Privacy Laag</h1>
+
+<h3>7.1 Wat Wij Over Jou Weten</h3>
+
+<div class="callout callout-gold">
+  <p><strong>Niets.</strong></p>
+</div>
+
+<table>
+  <tr><th>Gegevenstype</th><th>Opgeslagen?</th><th>Toegankelijk?</th></tr>
+  <tr><td>E-mailadres</td><td>Nee</td><td>N.v.t.</td></tr>
+  <tr><td>Telefoonnummer</td><td>Nee</td><td>N.v.t.</td></tr>
+  <tr><td>Echte naam</td><td>Nee</td><td>N.v.t.</td></tr>
+  <tr><td>Berichtinhoud</td><td>Nee</td><td>N.v.t.</td></tr>
+  <tr><td>Oproepgegevens</td><td>Nee</td><td>N.v.t.</td></tr>
+  <tr><td>Portemonneesaldi</td><td>Alleen op apparaat</td><td>Alleen door apparaateigenaar</td></tr>
+  <tr><td>Browsegeschiedenis</td><td>Alleen op apparaat</td><td>Alleen door apparaateigenaar</td></tr>
+  <tr><td>Contactlijst</td><td>Alleen op apparaat</td><td>Alleen door apparaateigenaar</td></tr>
+  <tr><td>Transactiegeschiedenis</td><td>On-chain (versleuteld)</td><td>Alleen door transactiepartijen</td></tr>
+</table>
+
+<h3>7.2 Transactieprivacy</h3>
+<p>SPEAQ-transacties worden ondertekend met ML-DSA-65 (FIPS 204) kwantum-resistente handtekeningen. De transactiestroom is ontworpen voor privacy:</p>
+<ul>
+  <li><strong>Soevereine sleutels</strong>: Je ondertekeningssleutels worden op je apparaat gegenereerd en verlaten het nooit</li>
+  <li><strong>Pseudonieme adressen</strong>: Je on-chain adres (SQ1 prefix) is afgeleid van een SHA-256 hash van je publieke sleutel, niet gekoppeld aan je identiteit</li>
+  <li><strong>Geen metadata op relais</strong>: De relay server kan transactiebedragen, afzender of ontvanger niet zien</li>
+  <li><strong>End-to-end ondertekend</strong>: Elke transactie is cryptografisch ondertekend en geverifieerd door het blockchain-netwerk</li>
+</ul>
+<p><em>Geavanceerde transactieprivacyfuncties (ring signatures, stealth addresses, privacy-first proofs) zijn gepland voor een toekomstige protocolupgrade.</em></p>
+
+<div class="divider"></div>
+
+<!-- SECTION 8 -->
+<div class="section-num">Sectie 08</div>
+<h1>Formele Verificatie</h1>
+
+<p>SPEAQ's cryptografische protocollen zijn niet alleen getest, ze zijn wiskundig bewezen.</p>
+<p>Met behulp van ProVerif, een formeel verificatietool voor cryptografische protocollen, hebben we 24 beveiligingseigenschappen bewezen over 7 protocolmodellen:</p>
+
+<table>
+  <tr><th>Model</th><th>Bewezen Eigenschappen</th></tr>
+  <tr><td>Portemonnee Protocol</td><td>Sleutelgeheimhouding (2 TRUE)</td></tr>
+  <tr><td>Transactie Protocol</td><td>Bedrag + sleutelgeheimhouding (2 TRUE)</td></tr>
+  <tr><td>Privacy Protocol</td><td>Bedrag, afzender, ontvanger, verblindingsgeheimhouding (4 TRUE)</td></tr>
+  <tr><td>Blok Protocol</td><td>Validator sleutel + authenticatie (2 TRUE)</td></tr>
+  <tr><td>Consensus Protocol</td><td>Validator sleutels + authenticatie (3 TRUE)</td></tr>
+  <tr><td>Volledig Systeem</td><td>End-to-end: 8 geheimen geverifieerd (8 TRUE)</td></tr>
+  <tr><td>Node Initialisatie</td><td>Sleutelgeheimhouding + adresafleiding (3 TRUE)</td></tr>
+</table>
+
+<p>Bovendien bevat de Rust-implementatie 113 unit tests die de complete blockchain-levenscyclus dekken, van portemonneecreatie tot blokproductie en ketenvalidatie.</p>
+
+<div class="divider divider-teal"></div>
+
+<!-- SECTION 9 -->
+<div class="section-num">Sectie 09</div>
+<h1>Competitief Landschap</h1>
+
+<table>
+  <tr>
+    <th>Mogelijkheid</th><th>Signal</th><th>WhatsApp</th><th>Telegram</th><th>Bitcoin</th><th>Monero</th><th class="speaq-col">SPEAQ</th>
+  </tr>
+  <tr><td>End-to-end versleuteling</td><td class="yes">Ja</td><td class="yes">Ja</td><td class="no">Optioneel</td><td class="no">N.v.t.</td><td class="no">N.v.t.</td><td class="speaq-col">Ja</td></tr>
+  <tr><td>Kwantum-resistente crypto</td><td class="no">Nee</td><td class="no">Nee</td><td class="no">Nee</td><td class="no">Nee</td><td class="no">Nee</td><td class="speaq-col">Ja (3 FIPS)</td></tr>
+  <tr><td>Geen registratie vereist</td><td class="no">Nee (telefoon)</td><td class="no">Nee (telefoon)</td><td class="no">Nee (telefoon)</td><td class="yes">Ja</td><td class="yes">Ja</td><td class="speaq-col">Ja</td></tr>
+  <tr><td>Spraak- & videogesprekken</td><td class="yes">Ja</td><td class="yes">Ja</td><td class="yes">Ja</td><td class="no">Nee</td><td class="no">Nee</td><td class="speaq-col">Ja</td></tr>
+  <tr><td>Native digitale valuta</td><td class="no">Nee</td><td class="no">Nee</td><td class="no">Ja</td><td class="yes">Ja</td><td class="no">Nee</td><td class="speaq-col">Ja (QC)</td></tr>
+  <tr><td>Pseudonieme transacties</td><td class="no">N.v.t.</td><td class="no">N.v.t.</td><td class="no">N.v.t.</td><td class="no">Gedeeltelijk</td><td class="yes">Ja</td><td class="speaq-col">Ja</td></tr>
+  <tr><td>Consensus door bijdrage</td><td class="no">N.v.t.</td><td class="no">N.v.t.</td><td class="no">N.v.t.</td><td class="no">Nee (PoW)</td><td class="no">Nee (PoW)</td><td class="speaq-col">Ja (DPoC)</td></tr>
+  <tr><td>Offline mesh-netwerken</td><td class="no">Nee</td><td class="no">Nee</td><td class="no">Nee</td><td class="no">Nee</td><td class="no">Nee</td><td class="speaq-col">Gepland*</td></tr>
+  <tr><td>Formele wiskundige bewijzen</td><td class="no">Nee</td><td class="no">Nee</td><td class="no">Nee</td><td class="no">Nee</td><td class="no">Nee</td><td class="speaq-col">Ja (24)</td></tr>
+  <tr><td>Goud-gerefereerde valuta</td><td class="no">N.v.t.</td><td class="no">N.v.t.</td><td class="no">N.v.t.</td><td class="no">Nee</td><td class="no">Nee</td><td class="speaq-col">Ja</td></tr>
+</table>
+
+<div class="divider"></div>
+
+<!-- SECTION 10 -->
+<div class="section-num">Sectie 10</div>
+<h1>Platform Status</h1>
+
+<h3>10.1 Wat Vandaag Live Is</h3>
+
+<table>
+  <tr><th>Component</th><th>Versie</th><th>Status</th></tr>
+  <tr><td>PWA (thespeaq.com)</td><td>v110+</td><td class="yes">LIVE</td></tr>
+  <tr><td>Native iOS App</td><td>1.0 (build 2)</td><td>Ingediend bij Apple App Review (april 2026)</td></tr>
+  <tr><td>Blockchain Node</td><td>1.0.0</td><td class="yes">LIVE, verdient</td></tr>
+  <tr><td>Relay Server</td><td>0.1.0</td><td class="yes">LIVE</td></tr>
+  <tr><td>Gold Feed Oracle</td><td>0.1.0</td><td class="yes">LIVE (Cloud Run EU, /v1/price)</td></tr>
+</table>
+
+<p style="margin-top: 1em;"><em>Gold Feed Oracle:</em> de bodem-peg referentie (1 QC = 0.01 gram goud) is verankerd door een publieke, multi-source prijsfeed geïmplementeerd op Google Cloud Run (europe-west1). Drie onafhankelijke upstream bronnen, Yahoo Finance gold futures, Stooq XAUUSD, en optioneel goldapi.io, worden bevraagd, een uitschieter-afgewezen mediaan wordt genomen, en het resultaat wordt blootgesteld als een alleen-lezen JSON-eindpunt dat elke client of validator kan verifiëren. Broncode en architectuurdocumentatie zijn gepubliceerd op <code>github.com/FvBokhorst/speaq-gold-feed</code>.</p>
+
+<h3>10.2 Beschikbare Talen</h3>
+<p>SPEAQ is beschikbaar in 9 talen: Engels, Nederlands, Frans, Spaans, Russisch, Duits, Sloveens, Luganda en Swahili.</p>
+
+<h3>10.3 Live Functies</h3>
+<ul>
+  <li><strong>Berichten:</strong> Tekst, spraakberichten, foto's delen, typindicatoren</li>
+  <li><strong>Portemonnee:</strong> QC verzenden/ontvangen, transactiegeschiedenis, on-chain saldo</li>
+  <li><strong>Soevereine Portemonnee:</strong> ML-DSA-65 sleutels, on-chain transacties met FIPS 204 handtekeningen</li>
+  <li><strong>Netwerkbeloningen:</strong> Server-side Proof of Contribution beloningen</li>
+  <li><strong>Contacten:</strong> QR-code verbinden, SPEAQ ID matching, profielfoto's</li>
+  <li><strong>Beveiliging:</strong> PIN-beveiliging, systeem/donker/licht thema-schakelaar (passend bij PWA en native), versleutelde lokale opslag</li>
+  <li><strong>Goud Oracle Weergave:</strong> Portemonnee toont een live USD/gram snapshot van de publieke speaq-gold-feed dienst naast de protocol's bodem-peg, onafhankelijk verifieerbaar door elke gebruiker</li>
+  <li><strong>Privégroepen:</strong> Anonieme berichten met aliassen, geen ledenlijst zichtbaar</li>
+  <li><strong>Privéopslag:</strong> Versleutelde opslag met verborgen laag (extra privacy-laag), twee PIN's, onzichtbare verborgen laag</li>
+  <li><strong>Getuigenmodus:</strong> Manipulatiebestendig bewijs met SHA-256 cryptografische hash, GPS-locatie en tijdstempel</li>
+  <li><strong>Veiligheidscheck-in:</strong> Automatisch waarschuwingssysteem verbonden met relay server, configureerbare timeout, selectie van ontvanger</li>
+  <li><strong>Groepen:</strong> Versleutelde groepsberichten, elk bericht versleuteld per lid via relais</li>
+  <li><strong>Informatie:</strong> 16-delige "Hoe SPEAQ Werkt" gids, 41-vragen FAQ in 9 talen</li>
+</ul>
+
+<h3>10.4 Roadmap</h3>
+<p><em>Functies gepland voor toekomstige releases:</em></p>
+<ul>
+  <li>Spraak- en videogesprekken (WebRTC)</li>
+  <li>BLE mesh-netwerken voor offline communicatie</li>
+  <li>Geavanceerde transactieprivacy (ring signatures, stealth addresses)</li>
+  <li>Android Google Play distributie (iOS App Store ingediend april 2026)</li>
+  <li>Gold Feed Oracle v1.1: Dilithium-ondertekende koersen, Firestore geschiedenisarchief, validator-side prijsopname in blokheaders</li>
+</ul>
+
+<div class="divider divider-teal"></div>
+
+<!-- SECTION 11 -->
+<div class="section-num">Sectie 11</div>
+<h1>SPEAQ Vrijuit</h1>
+
+<p>SPEAQ is geen bedrijf dat een dienst aanbiedt. Het is een protocol dat een mogelijkheid biedt.</p>
+<p>Het verschil is belangrijk. Een dienst kan worden gewijzigd, beperkt of stopgezet. Een mogelijkheid, eenmaal verspreid, behoort toe aan de mensen die het gebruiken.</p>
+<p>Wanneer je een SPEAQ-node draait, ben je geen klant. Je bent het netwerk. Wanneer je Q-Credits verdient, werk je niet voor iemand. Je bouwt infrastructuur die iedereen dient, inclusief jezelf.</p>
+
+<div class="callout callout-gold">
+  <p>"Door het volk, voor het volk" is geen slogan. Het is de architectuur.</p>
+</div>
+
+<p>Het genesisblok bevat deze woorden niet als decoratie, maar als een verbintenis: dit netwerk bestaat omdat mensen het hebben gebouwd, en het zal blijven bestaan zolang mensen het nuttig vinden.</p>
+<p>Geen toestemming nodig. Geen autoriteit vereist. Geen achterdeur mogelijk.</p>
+<p style="font-family: 'Playfair Display', serif; font-size: 24px; color: var(--voice-gold); margin-top: 32px;"><em>SPEAQ Vrijuit.</em></p>
+
+<div class="divider"></div>
+
+<!-- REFERENCES -->
+<div class="section-num">Referenties</div>
+<h1>Technische Referenties</h1>
+
+<ul>
+  <li>NIST FIPS 203: Module-Lattice-Based Key-Encapsulation Mechanism (ML-KEM / Kyber)</li>
+  <li>NIST FIPS 204: Module-Lattice-Based Digital Signature Algorithm (ML-DSA / Dilithium)</li>
+  <li>NIST FIPS 205: Stateless Hash-Based Digital Signature Algorithm (SLH-DSA / SPHINCS+)</li>
+  <li>libp2p Specificatie: https://libp2p.io</li>
+  <li>ProVerif: Formele verificatie van cryptografische protocollen</li>
+  <li>RocksDB: Persistente key-value opslag door Meta</li>
+  <li>Double Ratchet Algoritme: https://signal.org/docs/specifications/doubleratchet/</li>
+  <li>@noble/post-quantum: JavaScript ML-DSA-65 implementatie</li>
+  <li>fips204 crate: Rust ML-DSA-65 implementatie</li>
+</ul>
+
+<!-- FOOTER -->
+<div class="footer">
+  <img src="/speaq-logo.png" alt="SPEAQ" width="48" height="48" style="border-radius: 50%;" />
+  <p style="margin-top: 16px;">SPEAQ is ontwikkeld door Plexaris Technology Consulting, Nederland.</p>
+  <p>Dit whitepaper beschrijft het SPEAQ-protocol vanaf mei 2026 (v3.1). Wijzigingen sinds v3.0 (april 2026): mediasoup-SFU toegevoegd als het standaard media-routeringspad voor PWA-gesprekken (sectie 3.2.1); privacy-model voor push-inkomende-oproepen gedocumenteerd (sectie 3.2.2); STUN/TURN herpositioneerd als native + backwards-compat pad.</p>
+  <p>Het protocol is open source en onderworpen aan gemeenschapsbestuur.</p>
+  <p>thespeaq.com</p>
+  <div class="motto-footer">"Door het volk, voor het volk."</div>
+</div>
+
+</div>
+</body>
+</html>

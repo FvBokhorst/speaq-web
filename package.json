@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "build:whitepaper": "node ./scripts/build-whitepaper.mjs --vault",
+    "build:whitepaper:translate": "node ./scripts/build-whitepaper.mjs --translate --vault"
   },
   "dependencies": {
     "@noble/post-quantum": "^0.6.1",
