@@ -503,16 +503,21 @@
 </table>
 
 <h3>3.2.1 Voice and Video Calling</h3>
-<p>Calls layer multiple independent encryption mechanisms so a break in any single layer still leaves the others intact. Three media-routing paths are available, chosen automatically based on what the network and platform allow:</p>
+<p>Calls layer multiple independent encryption mechanisms so a break in any single layer still leaves the others intact:</p>
 <table>
   <tr><th>Layer</th><th>What it protects</th><th>Mechanism</th></tr>
   <tr><td>Media stream</td><td>Audio and video bytes between the two devices</td><td>DTLS-SRTP (WebRTC standard, browser-enforced, AES-GCM)</td></tr>
-  <tr><td>Signaling (PWA)</td><td>SDP, ICE candidates (IPs), DTLS fingerprints, SFU room ID</td><td>AES-256-GCM with key = SHA-256(ratchet rootKey || "speaq-call-v1"). The ratchet rootKey is derived from the Kyber-768 shared secret, which the relay does not know - signaling is therefore zero-knowledge against the relay.</td></tr>
-  <tr><td>Direct peer-to-peer</td><td>Used when devices can connect that way (typically same network)</td><td>DTLS-SRTP between the two endpoints; nothing transits any SPEAQ server.</td></tr>
-  <tr><td>STUN / TURN / TURNS</td><td>NAT traversal and relayed media when peer-to-peer fails</td><td>Self-hosted coturn at <code>turn.thespeaq.com</code> (UDP/TCP 3478, TURN-over-TLS on 443 with Let's Encrypt). No Google or third-party STUN. Relayed media is opaque DTLS-SRTP to coturn.</td></tr>
-  <tr><td>Mediasoup-SFU</td><td>Required path for cross-network 2-iPhone Safari PWA calls (iOS WebKit blocks p2p relay-allocate-pairing between two iOS devices on different networks)</td><td>Self-hosted mediasoup at <code>sfu.thespeaq.com</code> (TLS, Let's Encrypt). The SFU forwards encrypted DTLS-SRTP packets between participants without ever decrypting them; it sees only encrypted bytes, never call content. Per-call room IDs are random and exchanged inside the encrypted CALL_OFFER blob.</td></tr>
+  <tr><td>Signaling</td><td>SDP, ICE candidates (IPs), DTLS fingerprints, SFU room ID</td><td>AES-256-GCM with key = SHA-256(ratchet rootKey || "speaq-call-v1"). The ratchet rootKey is derived from the Kyber-768 shared secret, which the relay does not know - signaling is therefore zero-knowledge against the relay.</td></tr>
 </table>
-<p style="font-size: 14px; opacity: 0.8;">Native iOS/Android apps currently transmit signaling over TLS to the relay; bringing native to PWA-parity (encrypted signaling blob and SFU support) is on the immediate roadmap. Media-layer DTLS-SRTP is identical on all platforms.</p>
+
+<p>Three media-routing paths exist, chosen automatically per call based on what the platform and network allow:</p>
+<table>
+  <tr><th>Path</th><th>When used</th><th>Privacy</th></tr>
+  <tr><td>Mediasoup-SFU<br><em>(default for the PWA)</em></td><td>Every call between two SPEAQ PWAs. iOS WebKit blocks reliable peer-to-peer media between two iPhone Safari PWAs on different networks (host or relay-allocate pairing fails), so a server-mediated path is the only consistently-working route. The SFU is therefore the default for all PWA calls, not just iOS.</td><td>Self-hosted mediasoup at <code>sfu.thespeaq.com</code> (TLS, Let's Encrypt). The SFU forwards encrypted DTLS-SRTP packets between participants without ever decrypting them - it sees only IP addresses and encrypted bytes, never call content or who is talking to whom (the random per-call room ID is exchanged inside the encrypted CALL_OFFER blob).</td></tr>
+  <tr><td>Direct peer-to-peer</td><td>Available as a fallback when SFU is unreachable. Native iOS/Android apps still use this as the primary path until they reach SFU-parity (on the immediate roadmap).</td><td>DTLS-SRTP between the two endpoints; nothing transits any SPEAQ server.</td></tr>
+  <tr><td>STUN / TURN / TURNS<br><em>(legacy path, native + backwards-compat)</em></td><td>Used by native iOS/Android apps for NAT traversal and relayed media. Also used as a fallback when an older PWA peer (without SFU support) calls a current PWA peer.</td><td>Self-hosted coturn at <code>turn.thespeaq.com</code> (UDP/TCP 3478, TURN-over-TLS on 443 with Let's Encrypt). No Google or third-party STUN. Relayed media is opaque DTLS-SRTP to coturn.</td></tr>
+</table>
+<p style="font-size: 14px; opacity: 0.8;">Both <code>sfu.thespeaq.com</code> and <code>turn.thespeaq.com</code> are operated by Plexaris on Google Cloud. Neither holds DTLS keys for any call; both see only encrypted bytes. Native iOS/Android apps currently transmit signaling over TLS to the relay (no encrypted-blob layer yet); bringing native to PWA-parity for both signaling-encryption and SFU usage is on the immediate roadmap. Media-layer DTLS-SRTP is identical on all platforms.</p>
 
 <h3>3.2.2 Push Notifications</h3>
 <p>When the SPEAQ PWA is closed or in the background and a message or call arrives, the user receives a push notification. The notification system is designed to leak nothing on the lock screen:</p>
