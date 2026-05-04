@@ -21,7 +21,7 @@ export async function GET(req: Request) {
 
   // Check blockchain node
   try {
-    const res = await fetch(`${NODE_URL}/api/status`, { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    const res = await fetch(`${NODE_URL}/api/status`, { cache: "no-store", signal: AbortSignal.timeout(30000) });
     if (res.ok) {
       const data = await res.json();
       chainHeight = data.chain_height;
@@ -35,7 +35,7 @@ export async function GET(req: Request) {
 
   // Check stats server
   try {
-    const res = await fetch(`${STATS_URL}/stats`, { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    const res = await fetch(`${STATS_URL}/stats`, { cache: "no-store", signal: AbortSignal.timeout(30000) });
     if (res.ok) statsOk = true;
     else issues.push("Stats server error");
   } catch {
@@ -44,7 +44,7 @@ export async function GET(req: Request) {
 
   // Check relay
   try {
-    const res = await fetch(`${RELAY_URL}/api/v1/health`, { cache: "no-store", signal: AbortSignal.timeout(10000) });
+    const res = await fetch(`${RELAY_URL}/api/v1/health`, { cache: "no-store", signal: AbortSignal.timeout(30000) });
     if (res.ok) {
       const data = await res.json();
       relayOk = true;
