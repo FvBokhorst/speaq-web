@@ -4,6 +4,7 @@ const NODE_URL = process.env.SPEAQ_NODE_URL || "http://localhost:9334";
 const STATS_URL = process.env.SPEAQ_STATS_URL || "http://localhost:9335";
 const INCIDENTS_URL = process.env.SPEAQ_INCIDENTS_URL || "http://localhost:9336";
 const RELAY_URL = process.env.SPEAQ_RELAY_URL || "http://localhost:3001";
+const MEDIASOUP_URL = process.env.SPEAQ_MEDIASOUP_URL || "http://localhost:9337";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -18,6 +19,7 @@ export async function GET(req: Request) {
   let statsOk = false;
   let relayOk = false;
   let relayClients = 0;
+  let mediasoupOk = false;
 
   // Check blockchain node
   try {
@@ -56,6 +58,15 @@ export async function GET(req: Request) {
     issues.push("Relay server UNREACHABLE");
   }
 
+  // Check mediasoup SFU
+  try {
+    const res = await fetch(`${MEDIASOUP_URL}/health`, { cache: "no-store", signal: AbortSignal.timeout(30000) });
+    if (res.ok) mediasoupOk = true;
+    else issues.push("Mediasoup SFU error");
+  } catch {
+    issues.push("Mediasoup SFU UNREACHABLE");
+  }
+
   const status = issues.length > 0 ? "ALERT" : "OK";
 
   // Log to incidents server
@@ -67,7 +78,7 @@ export async function GET(req: Request) {
         body: JSON.stringify({
           type: "alert",
           source: "cloud-run-external",
-          services: { node: nodeOk, stats: statsOk, relay: relayOk },
+          services: { node: nodeOk, stats: statsOk, relay: relayOk, mediasoup: mediasoupOk },
           chainHeight,
           relayClients,
           issues: issues.join(", "),
@@ -83,6 +94,7 @@ export async function GET(req: Request) {
         node: nodeOk,
         stats: statsOk,
         relay: relayOk,
+        mediasoup: mediasoupOk,
         chainHeight,
         relayClients,
         status,
@@ -94,7 +106,7 @@ export async function GET(req: Request) {
 
   return NextResponse.json({
     status,
-    services: { node: nodeOk, stats: statsOk, relay: relayOk },
+    services: { node: nodeOk, stats: statsOk, relay: relayOk, mediasoup: mediasoupOk },
     chainHeight,
     relayClients,
     issues: issues.length > 0 ? issues : undefined,
