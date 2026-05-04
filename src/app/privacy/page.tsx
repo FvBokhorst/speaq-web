@@ -23,7 +23,7 @@ export default function PrivacyPage() {
           Privacy Policy
         </h1>
         <p className="text-text-muted text-sm font-[family-name:var(--font-jetbrains)] mb-16">
-          Last updated: April 5, 2026
+          Last updated: May 4, 2026
         </p>
 
         <div className="space-y-10 text-text-secondary text-[16px] leading-relaxed">
@@ -113,6 +113,39 @@ export default function PrivacyPage() {
               message delivery without knowing who is communicating with whom.
               Messages are encrypted before leaving your device and can only be
               decrypted by the intended recipient.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-medium text-text-primary mb-4">
+              Voice and Video Infrastructure
+            </h2>
+            <p className="mb-4">
+              To enable real-time voice and video calls between devices on
+              different networks, SPEAQ operates two relay servers: a TURN
+              server (turn.thespeaq.com) that helps establish peer-to-peer
+              connections, and a Selective Forwarding Unit (sfu.thespeaq.com)
+              that routes encrypted media streams. Both servers:
+            </p>
+            <ul className="list-none space-y-3">
+              {[
+                "Receive only encrypted media packets (DTLS-SRTP), which they cannot decrypt",
+                "See temporary IP addresses of participants while a call is active",
+                "Do not record, store, or analyze any call content",
+                "Hold no logs of who calls whom",
+                "Retain no data after a call ends",
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-voice-gold mt-2.5 shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <p className="mt-4">
+              Call signaling itself (the messages that set up a call) is
+              additionally encrypted with AES-256-GCM using a key derived from
+              the Kyber-768 post-quantum shared secret, making the relay
+              zero-knowledge against signaling content.
             </p>
           </section>
 
