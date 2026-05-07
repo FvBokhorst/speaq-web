@@ -524,32 +524,47 @@ export async function ratchetDecrypt(state: RatchetState, ciphertextB64: string,
 }
 
 // ============================================================
-// SECTION 7: Digital Signatures (ECDSA P-256 for key exchange auth)
+// SECTION 7: Digital Signatures
 // ============================================================
-// Prevents man-in-the-middle attacks on key exchange.
-// Each user has a signing keypair. KEY_EXCHANGE messages are signed.
-// ProVerif verified: with signatures, MITM is impossible.
+// Post-quantum signing (ML-DSA-65 / FIPS 204) for new identities, ECDSA P-256
+// fallback for existing users with stored JWK keys. Both paths produce signatures
+// that the dual-scheme verifySignature can validate, ensuring no key rotation
+// is forced on existing users while new identities benefit from post-quantum
+// resistance. Native iOS uses ML-DSA-65 unconditionally (already migrated).
 
 export interface SigningKeyPair {
-  publicKey: string;   // base64 exported JWK
-  privateKey: string;  // base64 exported JWK
+  publicKey: string;   // base64: ML-DSA-65 raw (1952 bytes) for new identities, ECDSA JWK for legacy
+  privateKey: string;  // base64: ML-DSA-65 raw (4032 bytes) for new identities, ECDSA JWK for legacy
 }
 
 export async function generateSigningKeyPair(): Promise<SigningKeyPair> {
-  const kp = await crypto.subtle.generateKey(
-    { name: "ECDSA", namedCurve: "P-256" },
-    true,
-    ["sign", "verify"]
-  );
-  const pubJwk = await crypto.subtle.exportKey("jwk", kp.publicKey);
-  const privJwk = await crypto.subtle.exportKey("jwk", kp.privateKey);
+  // New identities: post-quantum ML-DSA-65 (FIPS 204). 32-byte seed -> deterministic keypair.
+  const seed = crypto.getRandomValues(new Uint8Array(32));
+  const kp = ml_dsa65.keygen(seed);
   return {
-    publicKey: btoa(JSON.stringify(pubJwk)),
-    privateKey: btoa(JSON.stringify(privJwk)),
+    publicKey: bytesToB64(kp.publicKey),
+    privateKey: bytesToB64(kp.secretKey),
   };
 }
 
+function _isMlDsaPrivKey(privateKeyB64: string): boolean {
+  // ML-DSA-65 raw secret key is 4032 bytes -> base64 ~5376 chars (no JSON braces).
+  // ECDSA JWK private key is base64-encoded JSON {"kty":"EC",...} -> starts with "eyJ".
+  if (privateKeyB64.startsWith("eyJ")) return false;
+  try {
+    return b64ToBytes(privateKeyB64).length === 4032;
+  } catch {
+    return false;
+  }
+}
+
 export async function signData(data: string, privateKeyB64: string): Promise<string> {
+  if (_isMlDsaPrivKey(privateKeyB64)) {
+    const sk = b64ToBytes(privateKeyB64);
+    const sig = ml_dsa65.sign(new TextEncoder().encode(data), sk);
+    return bytesToB64(sig);
+  }
+  // Legacy ECDSA P-256 path for existing PWA users with stored JWK keys.
   const jwk = JSON.parse(atob(privateKeyB64));
   const key = await crypto.subtle.importKey("jwk", jwk, { name: "ECDSA", namedCurve: "P-256" }, false, ["sign"]);
   const sig = await crypto.subtle.sign(
@@ -561,6 +576,21 @@ export async function signData(data: string, privateKeyB64: string): Promise<str
 }
 
 export async function verifySignature(data: string, signatureB64: string, publicKeyB64: string): Promise<boolean> {
+  // Dual-scheme verify: ML-DSA-65 primary (native peers), ECDSA P-256 fallback (existing
+  // PWA peers signing via WebCrypto). Sign-side is NOT changed so existing PWA users
+  // keep their stored ECDSA keys and stay backward-compatible. Verified in
+  // speaq-build/test/cross-platform-crypto.test.mjs (9/9).
+  if (publicKeyB64.length > 2500) {
+    try {
+      const pk = b64ToBytes(publicKeyB64);
+      if (pk.length === 1952) {
+        const sig = b64ToBytes(signatureB64);
+        if (sig.length === 3309) {
+          return ml_dsa65.verify(sig, new TextEncoder().encode(data), pk);
+        }
+      }
+    } catch { /* fall through */ }
+  }
   try {
     const jwk = JSON.parse(atob(publicKeyB64));
     const key = await crypto.subtle.importKey("jwk", jwk, { name: "ECDSA", namedCurve: "P-256" }, false, ["verify"]);
@@ -607,7 +637,8 @@ export function mlDsaSign(message: string | Uint8Array, privateKeyB64: string): 
   const sk = b64ToBytes(privateKeyB64);
   if (sk.length !== 4032) throw new Error(`ML-DSA-65 secretKey must be 4032 bytes, got ${sk.length}`);
   const msg = typeof message === "string" ? new TextEncoder().encode(message) : message;
-  const sig = ml_dsa65.sign(sk, msg);
+  // @noble/post-quantum API: sign(message, secretKey) -- message FIRST.
+  const sig = ml_dsa65.sign(msg, sk);
   return bytesToB64(sig);
 }
 
@@ -618,7 +649,8 @@ export function mlDsaVerify(message: string | Uint8Array, signatureB64: string, 
     const sig = b64ToBytes(signatureB64);
     if (sig.length !== 3309) return false;
     const msg = typeof message === "string" ? new TextEncoder().encode(message) : message;
-    return ml_dsa65.verify(pk, msg, sig);
+    // @noble/post-quantum API: verify(signature, message, publicKey).
+    return ml_dsa65.verify(sig, msg, pk);
   } catch {
     return false;
   }

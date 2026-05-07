@@ -783,6 +783,13 @@ export default function SpeaqApp() {
   const kyberKeys = useRef<KyberKeyPair | null>(null);
   const signingKeys = useRef<SigningKeyPair | null>(null);
   const pendingKeyExchanges = useRef<Record<string, string>>({}); // contactId -> our privateKey for this exchange
+  // Outgoing-message queue keyed by contactId. When a send is attempted before a
+  // ratchet has been established, the plaintext payload is queued here and the
+  // KEY_EXCHANGE_RESPONSE handler flushes it through the ratchet so the message
+  // is delivered with the same forward-secrecy guarantees as every other message.
+  // Each entry has a timeout-key so we can drop stale queue items if the handshake
+  // never completes (otherwise a refused/offline peer would silently leak memory).
+  const pendingOutgoingMessages = useRef<Record<string, Array<{ payload: string; queuedAt: number; timeoutId: ReturnType<typeof setTimeout> }>>>({});
 
   // Video call refs
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
@@ -1123,32 +1130,38 @@ export default function SpeaqApp() {
                   break;
                 } catch { /* not this ratchet, try next */ }
               }
-              // Pass 2: native iOS 1.0.4 has a loadRatchetState bug where each send re-creates
-              // a fresh deterministic-seed ratchet at sendCount=0. Stored advanced PWA state
-              // can't decrypt those messages because chainKeyRecv has advanced past 0. Retry
-              // each candidate with a freshly derived seed-state, accepting messages at #0.
-              if (!fromId && identity) {
-                for (const candidateId of candidates) {
-                  try {
-                    const seedString = [identity.speaqId, candidateId].sort().join(":") + ":speaq-quantum-v1";
-                    const enc = new TextEncoder();
-                    const hash = await crypto.subtle.digest("SHA-256", enc.encode(seedString));
-                    const sharedSecret = Array.from(new Uint8Array(hash)).map((b) => b.toString(16).padStart(2, "0")).join("");
-                    const freshState = await initRatchet(sharedSecret, identity.speaqId < candidateId);
-                    const result = await ratchetDecrypt(freshState, ct, mn);
-                    prediscoveredPlaintext = result.plaintext;
-                    // Save the freshly-advanced state so subsequent stored-state attempts
-                    // also work for messages that DO advance correctly.
-                    saveRatchetState(candidateId, result.state);
-                    fromId = candidateId;
-                    console.log("[SPEAQ] Sealed message decrypted from", candidateId, "(fresh seed retry)");
-                    break;
-                  } catch { /* try next */ }
+              // No deterministic-seed fallback here: that pseudo-pad uses a shared secret
+              // derived solely from the two SPEAQ IDs (sha256(sorted_ids + ":speaq-quantum-v1")),
+              // which is computable by anyone who knows both IDs and therefore breaks forward
+              // secrecy. If Pass 1 cannot decrypt with a stored Kyber-derived ratchet, the
+              // sender has rotated keys (or the ratchet is desynced) -- trigger a fresh
+              // KEY_EXCHANGE so both sides re-establish a Kyber-derived shared secret.
+              if (!fromId) {
+                // Best-effort auto-rekey to all candidates. If sender's identity matches
+                // one of them, the resulting KEY_EXCHANGE_RESPONSE will re-init the ratchet
+                // and subsequent messages will decrypt cleanly.
+                if (kyberKeys.current && signingKeys.current && wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+                  for (const candidateId of candidates) {
+                    try {
+                      const kp = await generateKyberKeyPair();
+                      pendingKeyExchanges.current[candidateId] = kp.privateKey;
+                      const sig = await signData(kp.publicKey, signingKeys.current.privateKey);
+                      wsRef.current.send(JSON.stringify({
+                        type: "KEY_EXCHANGE",
+                        to: candidateId,
+                        blob: kp.publicKey,
+                        kyberPublicKey: kp.publicKey,
+                        from: identity.speaqId,
+                        sig,
+                        signPub: signingKeys.current.publicKey,
+                      }));
+                    } catch { /* skip on per-candidate failure */ }
+                  }
                 }
               }
             }
           } catch { /* malformed sealed blob */ }
-          if (!fromId) { console.warn("[SPEAQ] Sealed message: no ratchet decrypts it"); return; }
+          if (!fromId) { console.warn("[SPEAQ] Sealed message: no ratchet decrypts it - auto-rekey triggered"); return; }
         }
         if (!fromId) { console.warn("[SPEAQ] No from field in message"); return; }
         // Apple Guideline 1.2: drop messages from blocked SPEAQ IDs silently.
@@ -1174,30 +1187,65 @@ export default function SpeaqApp() {
 
         // Skip legacy + ratchet attempts if sealed-discovery already produced plaintext above.
         if (!plaintext) {
-          // Try legacy AES-256-GCM with SHA-256 key derivation (most reliable)
-          try {
-            const key = await deriveKey(identity.speaqId, fromId);
-            plaintext = await decrypt(key, msg.blob);
-            console.log("[SPEAQ] Decrypted OK, plaintext size:", plaintext.length);
-          } catch (e: unknown) {
-            // Try ratchet decrypt as fallback. Accept both PWA-legacy field names
-            // ({mn, ct}) and native/full names ({messageNumber, ciphertext}) so PWA can
-            // ingest messages from native iOS clients.
+          const isRatchetMsg = msg.protocol === "ratchet-v1";
+          // Path 1: protocol explicitly says "ratchet-v1" (or blob parses as a ratchet
+          // envelope with mn/ct). Use the per-contact Double Ratchet state. Do NOT fall
+          // back to legacy decrypt for these messages -- legacy `decrypt(key, blob)` would
+          // call atob() on a JSON envelope and throw "string contains invalid characters",
+          // and a senders-side legacy path no longer exists in this build.
+          let ratchetParsed: { mn?: number; ct?: string; messageNumber?: number; ciphertext?: string } | null = null;
+          try { ratchetParsed = JSON.parse(msg.blob); } catch { ratchetParsed = null; }
+          const looksLikeRatchet =
+            isRatchetMsg ||
+            (!!ratchetParsed && (ratchetParsed.mn !== undefined || ratchetParsed.messageNumber !== undefined) && (ratchetParsed.ct !== undefined || ratchetParsed.ciphertext !== undefined));
+          if (looksLikeRatchet && ratchetParsed) {
+            const mn = ratchetParsed.messageNumber ?? ratchetParsed.mn;
+            const ct = ratchetParsed.ciphertext ?? ratchetParsed.ct;
             const ratchetState = loadRatchetState(fromId);
-            if (ratchetState) {
+            if (ratchetState && mn !== undefined && ct) {
               try {
-                const ratchetMsg = JSON.parse(msg.blob);
-                const mn = ratchetMsg.messageNumber ?? ratchetMsg.mn;
-                const ct = ratchetMsg.ciphertext ?? ratchetMsg.ct;
-                if (mn !== undefined && ct) {
-                  const result = await ratchetDecrypt(ratchetState, ct, mn);
-                  plaintext = result.plaintext;
-                  saveRatchetState(fromId, result.state);
-                  console.log("[SPEAQ] Ratchet decrypted OK");
+                const result = await ratchetDecrypt(ratchetState, ct, mn);
+                plaintext = result.plaintext;
+                saveRatchetState(fromId, result.state);
+                console.log("[SPEAQ] Ratchet decrypted OK");
+              } catch (e) {
+                console.warn("[SPEAQ] Ratchet decrypt failed for", fromId, (e as Error)?.message);
+                return;
+              }
+            } else {
+              // Ratchet not yet established on our side (asymmetric state -- e.g. user
+              // cleared local ratchet but sender still has theirs). Drop the message and
+              // proactively trigger a fresh KEY_EXCHANGE so the next message from this
+              // peer decrypts cleanly. We send signed KE only; no legacy SEND.
+              console.warn("[SPEAQ] Ratchet not yet established for", fromId, "- triggering KEY_EXCHANGE to recover");
+              try {
+                if (kyberKeys.current && signingKeys.current && wsRef.current && wsRef.current.readyState === WebSocket.OPEN && !pendingKeyExchanges.current[fromId]) {
+                  const kp = await generateKyberKeyPair();
+                  pendingKeyExchanges.current[fromId] = kp.privateKey;
+                  const sig = await signData(kp.publicKey, signingKeys.current.privateKey);
+                  wsRef.current.send(JSON.stringify({
+                    type: "KEY_EXCHANGE",
+                    to: fromId,
+                    blob: kp.publicKey,
+                    kyberPublicKey: kp.publicKey,
+                    from: identity.speaqId,
+                    sig,
+                    signPub: signingKeys.current.publicKey,
+                  }));
                 }
-              } catch {}
+              } catch { /* recovery best-effort */ }
+              return;
             }
-            if (!plaintext) { console.warn("[SPEAQ] All decryption failed from", fromId, (e as Error)?.message); return; }
+          } else {
+            // Path 2: no ratchet envelope -> legacy AES-256-GCM (older peers).
+            try {
+              const key = await deriveKey(identity.speaqId, fromId);
+              plaintext = await decrypt(key, msg.blob);
+              console.log("[SPEAQ] Decrypted OK (legacy path), plaintext size:", plaintext.length);
+            } catch (e: unknown) {
+              console.warn("[SPEAQ] Legacy decrypt failed from", fromId, (e as Error)?.message);
+              return;
+            }
           }
         }
 
@@ -1456,10 +1504,13 @@ export default function SpeaqApp() {
               signPub,
             }));
           }
-          // Init Double Ratchet as responder (not initiator)
-          const ratchet = await initRatchet(sharedSecret, false);
+          // Both peers must compute opposite isInitiator via the same string-compare.
+          // Native uses `myId < contactId`; we mirror that here. Hardcoded `false`
+          // broke when pwa_id < contact_id (both sides ended up isInitiator=false).
+          const ratchet = await initRatchet(sharedSecret, identity.speaqId < msg.from);
           saveRatchetState(msg.from, ratchet);
           console.log("[SPEAQ] SIGNED quantum key exchange complete with", msg.from);
+          await flushPendingOutgoingForContact(msg.from);
         } catch (e) {
           console.error("[SPEAQ] Key exchange failed:", e);
         }
@@ -1488,7 +1539,14 @@ export default function SpeaqApp() {
           // Path A: we initiated with an ephemeral keypair (PWA-to-PWA flow).
           const ephemeralPrivateKey = pendingKeyExchanges.current[msg.from];
           let sharedSecret: string | null = null;
-          let isInitiator = true;
+          // Both ratchet peers must compute opposite isInitiator. Native crypto.ts uses
+          // `myId < contactId`; we must use the same comparison so the deterministic
+          // string-compare gives opposite values on the two sides. Hardcoding `true`
+          // here meant when native_id < pwa_id BOTH sides ended up isInitiator=true and
+          // the chainKeySend/chainKeyRecv assignments were identical, causing AES-GCM
+          // to fail because each side encrypted with chainKeyA (the other side's recvK
+          // expected chainKeyB).
+          let isInitiator = identity.speaqId < msg.from;
           if (ephemeralPrivateKey) {
             sharedSecret = await kyberDecapsulate(kxrCiphertext, ephemeralPrivateKey);
             delete pendingKeyExchanges.current[msg.from];
@@ -1510,6 +1568,7 @@ export default function SpeaqApp() {
             const ratchet = await initRatchet(sharedSecret, isInitiator);
             saveRatchetState(msg.from, ratchet);
             console.log("[SPEAQ] SIGNED quantum key exchange complete with", msg.from);
+            await flushPendingOutgoingForContact(msg.from);
           }
         } catch (e) {
           console.error("[SPEAQ] Key exchange response failed:", e);
@@ -1924,6 +1983,42 @@ export default function SpeaqApp() {
     setShowScanner(false);
   };
 
+  /**
+   * After a fresh ratchet has been established with `contactId` (either as
+   * initiator via KEY_EXCHANGE_RESPONSE, or as responder via incoming
+   * KEY_EXCHANGE), drain any queued outgoing plaintext messages for that
+   * contact and send each one through the ratchet. This eliminates the
+   * legacy first-message-lost race: messages typed before the handshake
+   * completes are buffered and delivered in order over the post-quantum
+   * channel as soon as it is up.
+   */
+  const flushPendingOutgoingForContact = async (contactId: string): Promise<void> => {
+    const queue = pendingOutgoingMessages.current[contactId];
+    if (!queue || queue.length === 0) return;
+    if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
+    // Take ownership of the current queue and clear it so re-entrant sends
+    // (e.g. due to RESPONSE arriving while another flush is mid-flight) don't
+    // double-flush the same items.
+    delete pendingOutgoingMessages.current[contactId];
+    for (const item of queue) {
+      clearTimeout(item.timeoutId);
+      const ratchetState = loadRatchetState(contactId);
+      if (!ratchetState) {
+        console.warn("[SPEAQ] flushPendingOutgoing: ratchet missing after handshake for", contactId);
+        return;
+      }
+      const result = await ratchetEncrypt(ratchetState, item.payload);
+      saveRatchetState(contactId, result.state);
+      const blob = JSON.stringify({ messageNumber: result.messageNumber, ciphertext: result.ciphertext });
+      wsRef.current.send(JSON.stringify({
+        type: "SEND",
+        to: contactId,
+        blob,
+        protocol: "ratchet-v1",
+      }));
+    }
+  };
+
   const sendMsg = async () => {
     if (!inputText.trim() || !activeContact || !identity || !wsRef.current) return;
     if (wsRef.current.readyState !== WebSocket.OPEN) return;
@@ -1942,51 +2037,14 @@ export default function SpeaqApp() {
       photoSentThisSession.current.set(activeContact.speaqId, sentCount + 1);
     }
     const plainPayload = JSON.stringify(payload);
-    let blob: string;
 
-    // Check if we have a ratchet (quantum-secure channel) with this contact
+    // Check if we have a ratchet (quantum-secure channel) with this contact.
     const ratchetState = loadRatchetState(activeContact.speaqId);
-    let useSealed = false;
     if (ratchetState) {
       // Ratchet encrypt: unique key per message, forward secrecy preserved.
       const result = await ratchetEncrypt(ratchetState, plainPayload);
       saveRatchetState(activeContact.speaqId, result.state);
-      blob = JSON.stringify({ messageNumber: result.messageNumber, ciphertext: result.ciphertext });
-      useSealed = true;
-    } else {
-      // No ratchet yet. initiate Kyber key exchange AND send with legacy encryption
-      // The key exchange runs in background; future messages will use ratchet
-      if (!pendingKeyExchanges.current[activeContact.speaqId] && kyberKeys.current) {
-        // Generate fresh keypair for this exchange + sign it
-        const kp = await generateKyberKeyPair();
-        pendingKeyExchanges.current[activeContact.speaqId] = kp.privateKey;
-        const sig = signingKeys.current ? await signData(kp.publicKey, signingKeys.current.privateKey) : "";
-        const signPub = signingKeys.current?.publicKey || "";
-        // Native iOS handleKeyExchange checks for `kyberPublicKey` field (speaq.ts:177).
-        // PWA peers traditionally use `blob`. Send both so either client accepts it.
-        wsRef.current.send(JSON.stringify({
-          type: "KEY_EXCHANGE",
-          to: activeContact.speaqId,
-          blob: kp.publicKey,
-          kyberPublicKey: kp.publicKey,
-          from: identity.speaqId,
-          sig,
-          signPub,
-        }));
-        console.log("[SPEAQ] Initiated SIGNED Kyber key exchange with", activeContact.speaqId);
-      }
-      // Send with legacy AES-256-GCM (still encrypted, just not quantum-resistant yet)
-      const key = await deriveKey(identity.speaqId, activeContact.speaqId);
-      blob = await encrypt(key, plainPayload);
-    }
-
-    // For ratchet messages, include protocol marker so native peers route them through
-    // their ratchet decrypt branch (ChatScreen.tsx checks msg.protocol === "ratchet-v1").
-    // We keep frame-type SEND (not SEND_SEALED) because native does not yet handle
-    // RECEIVE_SEALED -- using sealed-sender from PWA would silently drop on native.
-    // Relay must forward `protocol` field on SEND -> RECEIVE; that change ships with
-    // this fix in packages/speaq-relay/src/server.ts.
-    if (useSealed) {
+      const blob = JSON.stringify({ messageNumber: result.messageNumber, ciphertext: result.ciphertext });
       wsRef.current.send(JSON.stringify({
         type: "SEND",
         to: activeContact.speaqId,
@@ -1994,7 +2052,68 @@ export default function SpeaqApp() {
         protocol: "ratchet-v1",
       }));
     } else {
-      wsRef.current.send(JSON.stringify({ type: "SEND", to: activeContact.speaqId, blob }));
+      // No ratchet yet. Queue the plaintext message and trigger a Kyber KEY_EXCHANGE.
+      // The KEY_EXCHANGE_RESPONSE handler flushes the queue through the new ratchet,
+      // so the first message is delivered with the same forward-secrecy guarantees
+      // as every subsequent message. We do NOT fall back to a legacy deterministic
+      // shared-key SEND -- that path lacks forward secrecy and was the cause of
+      // first-message-lost in cross-platform sends (PWA legacy AES-GCM did not match
+      // native legacy CryptoJS AES-CBC, so the SEND was silently dropped on receive).
+      const contactId = activeContact.speaqId;
+      const QUEUE_TIMEOUT_MS = 30_000;
+      const timeoutId = setTimeout(() => {
+        const list = pendingOutgoingMessages.current[contactId];
+        if (!list) return;
+        const idx = list.findIndex((q) => q.timeoutId === timeoutId);
+        if (idx >= 0) list.splice(idx, 1);
+        console.warn("[SPEAQ] Outgoing message timed out for", contactId, "- KEY_EXCHANGE_RESPONSE never arrived");
+      }, QUEUE_TIMEOUT_MS);
+      if (!pendingOutgoingMessages.current[contactId]) pendingOutgoingMessages.current[contactId] = [];
+      pendingOutgoingMessages.current[contactId].push({ payload: plainPayload, queuedAt: Date.now(), timeoutId });
+
+      // Glare-prevention: when both peers send their first message at the same time
+      // they would each initiate a KEY_EXCHANGE in parallel, end up with TWO different
+      // sharedSecrets, and the per-side ratchet would diverge (each writes its own
+      // initiator-derived state on top of the responder-derived state and the chains
+      // no longer match). Resolve deterministically: only the peer with the LOWER
+      // SPEAQ id initiates. The higher-id peer queues silently and lets the incoming
+      // KEY_EXCHANGE handler establish the ratchet, then flushPendingOutgoingForContact
+      // delivers the queued message over the responder-side ratchet.
+      const weShouldInitiate = identity.speaqId < contactId;
+      const sendOurKE = async () => {
+        if (pendingKeyExchanges.current[contactId]) return;
+        if (!kyberKeys.current || !signingKeys.current) return;
+        if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
+        const kp = await generateKyberKeyPair();
+        pendingKeyExchanges.current[contactId] = kp.privateKey;
+        const sig = await signData(kp.publicKey, signingKeys.current.privateKey);
+        const signPub = signingKeys.current.publicKey;
+        wsRef.current.send(JSON.stringify({
+          type: "KEY_EXCHANGE",
+          to: contactId,
+          blob: kp.publicKey,
+          kyberPublicKey: kp.publicKey,
+          from: identity.speaqId,
+          sig,
+          signPub,
+        }));
+        console.log("[SPEAQ] Initiated SIGNED Kyber key exchange with", contactId);
+      };
+      if (weShouldInitiate) {
+        await sendOurKE();
+      } else {
+        // We are the higher-id peer; wait for the lower-id peer to initiate. If
+        // their KEY_EXCHANGE doesn't arrive within FALLBACK_DELAY_MS (peer offline,
+        // network drop, etc.) we initiate anyway so the user's message still gets
+        // delivered. The ratchet may end up "responder-side" on both ends in that
+        // edge case, but that just means one side burns an extra round-trip.
+        const FALLBACK_DELAY_MS = 5000;
+        setTimeout(() => {
+          if (!loadRatchetState(contactId)) {
+            sendOurKE().catch(() => undefined);
+          }
+        }, FALLBACK_DELAY_MS);
+      }
     }
     const newMsg: Message = { id: Date.now().toString(36) + Math.random().toString(36).substring(2, 6), text: inputText.trim(), fromMe: true, timestamp: Date.now() };
     setMessages((prev) => ({ ...prev, [activeContact.speaqId]: [...(prev[activeContact.speaqId] || []), newMsg] }));
