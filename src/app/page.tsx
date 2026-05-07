@@ -613,9 +613,14 @@ export default function Home() {
               <p className="text-text-muted text-sm mb-6">
                 {t("download.appstore", lang)}
               </p>
-              <span className="inline-flex items-center justify-center h-10 px-6 rounded-full bg-voice-gold text-bg-deep font-medium text-sm">
-                {t("download.comingsoon", lang)}
-              </span>
+              <a
+                href="https://apps.apple.com/nl/app/speaq-private-messenger/id6762511502"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center h-10 px-6 rounded-full bg-voice-gold text-bg-deep font-medium text-sm hover:bg-voice-warm transition-colors"
+              >
+                Download
+              </a>
             </div>
 
             {/* Android */}
