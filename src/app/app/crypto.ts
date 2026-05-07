@@ -561,23 +561,6 @@ export async function signData(data: string, privateKeyB64: string): Promise<str
 }
 
 export async function verifySignature(data: string, signatureB64: string, publicKeyB64: string): Promise<boolean> {
-  // 2026-05-07 dual-scheme fix (planned 1 May SPEAQ_PWA_Native_Messaging_Handover,
-  // never merged until tonight): native iOS signs KEY_EXCHANGE with ML-DSA-65
-  // (post-quantum), PWA legacy users sign with ECDSA P-256 via WebCrypto. We
-  // try ML-DSA first (1952-byte raw pubkey, 3309-byte sig), fall back to ECDSA
-  // (JWK-encoded pubkey, 64-byte sig). Without this fallback, native -> PWA
-  // KEY_EXCHANGE is rejected and the resulting ratchet never establishes,
-  // leaving every cross-platform message stuck on "encrypted message".
-  try {
-    const pkRaw = Uint8Array.from(atob(publicKeyB64), (c) => c.charCodeAt(0));
-    if (pkRaw.length === 1952) {
-      const sig = Uint8Array.from(atob(signatureB64), (c) => c.charCodeAt(0));
-      if (sig.length === 3309) {
-        const { ml_dsa65 } = await import("@noble/post-quantum/ml-dsa.js");
-        return ml_dsa65.verify(pkRaw, new TextEncoder().encode(data), sig);
-      }
-    }
-  } catch { /* fall through to ECDSA */ }
   try {
     const jwk = JSON.parse(atob(publicKeyB64));
     const key = await crypto.subtle.importKey("jwk", jwk, { name: "ECDSA", namedCurve: "P-256" }, false, ["verify"]);
