@@ -652,6 +652,7 @@ export default function SpeaqApp() {
   const [txs, setTxs] = useState<Transaction[]>([]);
   const [sendAmount, setSendAmount] = useState("");
   const [sendTo, setSendTo] = useState("");
+  const [sendNote, setSendNote] = useState("");
   const [projects, setProjects] = useState<WalletProject[]>([]);
   const [newProjectName, setNewProjectName] = useState("");
   const [newProjectDesc, setNewProjectDesc] = useState("");
@@ -1250,7 +1251,7 @@ export default function SpeaqApp() {
         }
 
         if (!plaintext) return;
-        let parsed: { type?: string; text?: string; from?: string; senderId?: string; timestamp?: number; photo?: string; audioB64?: string; qc?: boolean; amount?: number; fromName?: string; groupId?: string; name?: string; members?: unknown[]; ownerId?: string; epoch?: number };
+        let parsed: { type?: string; text?: string; from?: string; senderId?: string; timestamp?: number; photo?: string; audioB64?: string; qc?: boolean; amount?: number; fromName?: string; note?: string; groupId?: string; name?: string; members?: unknown[]; ownerId?: string; epoch?: number };
         try { parsed = JSON.parse(plaintext); } catch { parsed = { text: plaintext }; }
 
         // E2-deeper: group_state sync. Sender authoritatively broadcasts member-list +
@@ -1327,12 +1328,16 @@ export default function SpeaqApp() {
             return updated;
           });
           setTxs((cur) => {
+            const senderShort = (parsed.fromName || senderId.substring(0, 8));
+            const senderNote = (typeof parsed.note === "string" && parsed.note.trim()) ? parsed.note.trim() : "";
             const tx: Transaction = {
               id: Date.now().toString(36) + Math.random().toString(36).substring(2, 6),
               type: "receive",
               amount: qcAmount,
               counterparty: senderId,
-              description: `Received from ${senderId.substring(0, 8)}...`,
+              description: senderNote
+                ? `From ${senderShort}: ${senderNote}`
+                : `Received from ${senderId.substring(0, 8)}...`,
               timestamp: Date.now(),
             };
             const updated = [tx, ...cur].slice(0, 500);
@@ -2215,6 +2220,7 @@ export default function SpeaqApp() {
     // (native ChatScreen line 175 checks data.type === "message", line 188
     // checks data.qc) detect this correctly as a payment.
     if (wsRef.current && identity && ratchetState) {
+      const note = sendNote.trim();
       const payload: Record<string, unknown> = {
         type: "message",
         qc: true,
@@ -2228,6 +2234,7 @@ export default function SpeaqApp() {
       if (profilePhoto) {
         try { payload.photo = await compressImage(profilePhoto, 200, 0.3); } catch { /* skip photo */ }
       }
+      if (note) payload.note = note;
       const plainPayload = JSON.stringify(payload);
       const ratchetResult = await ratchetEncrypt(ratchetState, plainPayload);
       saveRatchetState(recipientId, ratchetResult.state);
@@ -2248,6 +2255,7 @@ export default function SpeaqApp() {
     }
     setSendAmount("");
     setSendTo("");
+    setSendNote("");
     setScreen("walletDetail");
   };
 
@@ -3617,6 +3625,12 @@ export default function SpeaqApp() {
             <input type="number" step="0.0001" value={sendAmount} onChange={(e) => setSendAmount(e.target.value)} placeholder="0.0000"
               className="w-full px-4 py-3 rounded-xl bg-bg-card border border-[rgba(100,116,139,0.15)] text-text-primary placeholder:text-text-muted font-mono text-lg focus:outline-none focus:border-voice-gold/50 transition-colors" />
             {sendAmount && <p className="text-xs text-text-muted mt-1">= {qcToGold(parseFloat(sendAmount) || 0).toFixed(4)}g gold (EUR {qcToEur(parseFloat(sendAmount) || 0).toFixed(2)})</p>}
+          </div>
+          <div>
+            <label className="block text-xs font-mono text-text-muted uppercase tracking-wider mb-2">Note (optional)</label>
+            <input type="text" value={sendNote} onChange={(e) => setSendNote(e.target.value)} placeholder="e.g. Thanks for lunch"
+              maxLength={120}
+              className="w-full px-4 py-3 rounded-xl bg-bg-card border border-[rgba(100,116,139,0.15)] text-text-primary placeholder:text-text-muted font-body text-sm focus:outline-none focus:border-voice-gold/50 transition-colors" />
           </div>
           <button onClick={handleSendQC} disabled={!sendAmount || !sendTo || parseFloat(sendAmount) <= 0 || parseFloat(sendAmount) > wallet.balance}
             className="w-full py-3 rounded-xl bg-voice-gold text-bg-deep font-body font-semibold text-base transition-all hover:bg-voice-warm disabled:opacity-40 disabled:cursor-not-allowed min-h-[44px]">
