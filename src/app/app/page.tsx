@@ -3292,15 +3292,40 @@ export default function SpeaqApp() {
                   if (!amountStr) return;
                   const amount = parseFloat(amountStr);
                   if (!amount || amount <= 0 || amount > wallet.balance) { alert("Invalid amount or insufficient balance"); return; }
+                  // Cross-platform crypto: require an established ratchet BEFORE any
+                  // state mutation, otherwise funds + chat UI go out of sync when
+                  // no secure channel exists. Mirrors handleSendQC at line 2196.
+                  const ratchetState = loadRatchetState(activeContact.speaqId);
+                  if (!ratchetState) {
+                    alert("Stuur eerst een gewoon bericht om een secure channel op te zetten, daarna kan QC versturen.");
+                    return;
+                  }
                   setWalletState((w) => { const u = { ...w, balance: w.balance - amount, totalSent: w.totalSent + amount }; saveWallet(u); return u; });
                   setTxs((prev) => { const tx: Transaction = { id: generateId(), type: "send", amount, counterparty: activeContact.speaqId, description: `Sent to ${activeContact.name}`, timestamp: Date.now() }; const updated = [tx, ...prev].slice(0, 500); saveTransactions(updated); return updated; });
-                  const payText = `[Payment: ${amount.toFixed(2)} QC]`;
+                  const payText = `[Payment: ${amount.toFixed(4)} QC]`;
                   const newMsg: Message = { id: generateId(), text: payText, fromMe: true, timestamp: Date.now() };
                   setMessages((prev) => ({ ...prev, [activeContact.speaqId]: [...(prev[activeContact.speaqId] || []), newMsg] }));
-                  deriveKey(identity.speaqId, activeContact.speaqId).then(async (key) => {
-                    const blob = await encrypt(key, JSON.stringify({ qc: true, amount, from: identity.speaqId, fromName: identity.displayName, senderId: identity.speaqId, timestamp: Date.now() }));
-                    wsRef.current!.send(JSON.stringify({ type: "SEND", to: activeContact.speaqId, blob }));
-                  });
+                  (async () => {
+                    const payload: Record<string, unknown> = {
+                      type: "message",
+                      qc: true,
+                      amount,
+                      from: identity.displayName,
+                      senderId: identity.speaqId,
+                      fromName: identity.displayName,
+                      text: payText,
+                      timestamp: Date.now(),
+                    };
+                    const ratchetResult = await ratchetEncrypt(ratchetState, JSON.stringify(payload));
+                    saveRatchetState(activeContact.speaqId, ratchetResult.state);
+                    const blob = JSON.stringify({ messageNumber: ratchetResult.messageNumber, ciphertext: ratchetResult.ciphertext });
+                    wsRef.current!.send(JSON.stringify({
+                      type: "SEND",
+                      to: activeContact.speaqId,
+                      blob,
+                      protocol: "ratchet-v1",
+                    }));
+                  })();
                 }},
               ].map((item) => (
                 <button key={item.label} onClick={item.action} className="w-full px-4 py-3 text-left text-sm font-body text-voice-gold border-b border-[rgba(100,116,139,0.08)] hover:bg-bg-elevated min-h-[44px]">{item.label}</button>
