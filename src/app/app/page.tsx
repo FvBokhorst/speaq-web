@@ -3079,6 +3079,15 @@ export default function SpeaqApp() {
           if (!file || !identity || !wsRef.current || !activeContact) return;
           if (file.size > 10 * 1024 * 1024) { alert("Max 10MB"); return; }
           setShowShareMenu(false);
+          // Cross-platform crypto: photo must travel via ratchet-v1, not legacy
+          // AES, otherwise native receivers cannot decrypt and show "encrypted
+          // message" placeholder. Same fix-pattern as the QC-send fix in
+          // handleSendQC (commit 5bb73cd) and chat Q-button (commit 7aba06a).
+          const ratchetState = loadRatchetState(activeContact.speaqId);
+          if (!ratchetState) {
+            alert("Stuur eerst een gewoon bericht om een secure channel op te zetten, daarna kan foto versturen.");
+            return;
+          }
           try {
             const rawDataUrl = await new Promise<string>((resolve, reject) => {
               const reader = new FileReader();
@@ -3091,10 +3100,16 @@ export default function SpeaqApp() {
             const msgText = `[img]${dataUrl}[/img]`;
             const plainPayload = JSON.stringify({ type: "message", text: msgText, from: identity.displayName, senderId: identity.speaqId, timestamp: Date.now() });
             console.log("[SPEAQ] Payload size:", plainPayload.length);
-            const key = await deriveKey(identity.speaqId, activeContact.speaqId);
-            const encBlob = await encrypt(key, plainPayload);
-            console.log("[SPEAQ] Encrypted blob size:", encBlob.length);
-            const wsMsg = JSON.stringify({ type: "SEND", to: activeContact.speaqId, blob: encBlob });
+            const ratchetResult = await ratchetEncrypt(ratchetState, plainPayload);
+            saveRatchetState(activeContact.speaqId, ratchetResult.state);
+            const blob = JSON.stringify({ messageNumber: ratchetResult.messageNumber, ciphertext: ratchetResult.ciphertext });
+            console.log("[SPEAQ] Encrypted blob size:", blob.length);
+            const wsMsg = JSON.stringify({
+              type: "SEND",
+              to: activeContact.speaqId,
+              blob,
+              protocol: "ratchet-v1",
+            });
             console.log("[SPEAQ] WebSocket message size:", wsMsg.length);
             wsRef.current!.send(wsMsg);
             console.log("[SPEAQ] Photo sent OK");
@@ -3110,15 +3125,28 @@ export default function SpeaqApp() {
           if (!file || !identity || !wsRef.current || !activeContact) return;
           if (file.size > 5 * 1024 * 1024) { alert("Max 5MB"); return; }
           setShowShareMenu(false);
+          // Cross-platform: file via ratchet-v1, same reasoning as photo-send.
+          const ratchetState = loadRatchetState(activeContact.speaqId);
+          if (!ratchetState) {
+            alert("Stuur eerst een gewoon bericht om een secure channel op te zetten, daarna kan bestand versturen.");
+            return;
+          }
           const reader = new FileReader();
           reader.onload = async () => {
             const dataUrl = reader.result as string;
             const msgText = `[file:${file.name}]${dataUrl}[/file]`;
             const newMsg: Message = { id: generateId(), text: msgText, fromMe: true, timestamp: Date.now() };
             setMessages((prev) => ({ ...prev, [activeContact.speaqId]: [...(prev[activeContact.speaqId] || []), newMsg] }));
-            const key = await deriveKey(identity!.speaqId, activeContact.speaqId);
-            const blob = await encrypt(key, JSON.stringify({ type: "message", text: msgText, from: identity!.displayName, senderId: identity!.speaqId, timestamp: Date.now() }));
-            wsRef.current!.send(JSON.stringify({ type: "SEND", to: activeContact.speaqId, blob }));
+            const plainPayload = JSON.stringify({ type: "message", text: msgText, from: identity!.displayName, senderId: identity!.speaqId, timestamp: Date.now() });
+            const ratchetResult = await ratchetEncrypt(ratchetState, plainPayload);
+            saveRatchetState(activeContact.speaqId, ratchetResult.state);
+            const blob = JSON.stringify({ messageNumber: ratchetResult.messageNumber, ciphertext: ratchetResult.ciphertext });
+            wsRef.current!.send(JSON.stringify({
+              type: "SEND",
+              to: activeContact.speaqId,
+              blob,
+              protocol: "ratchet-v1",
+            }));
           };
           reader.readAsDataURL(file);
         }} />
