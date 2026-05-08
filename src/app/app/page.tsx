@@ -3309,17 +3309,32 @@ export default function SpeaqApp() {
                 }},
                 { label: t("chat.location", lang), action: () => {
                   setShowShareMenu(false);
-                  if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(async (pos) => {
-                      if (!identity || !wsRef.current || !activeContact) return;
-                      const locText = `[Location: ${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}]`;
-                      const newMsg: Message = { id: generateId(), text: locText, fromMe: true, timestamp: Date.now() };
-                      setMessages((prev) => ({ ...prev, [activeContact.speaqId]: [...(prev[activeContact.speaqId] || []), newMsg] }));
-                      const key = await deriveKey(identity.speaqId, activeContact.speaqId);
-                      const blob = await encrypt(key, JSON.stringify({ type: "message", text: locText, from: identity.displayName, senderId: identity.speaqId, timestamp: Date.now() }));
-                      wsRef.current!.send(JSON.stringify({ type: "SEND", to: activeContact.speaqId, blob }));
-                    }, () => alert("Could not get location"));
+                  if (!navigator.geolocation) return;
+                  if (!identity || !wsRef.current || !activeContact) return;
+                  // Cross-platform: location via ratchet-v1, same reasoning as
+                  // photo + file. Without ratchet check, native receivers see
+                  // "encrypted message" placeholder.
+                  const ratchetState = loadRatchetState(activeContact.speaqId);
+                  if (!ratchetState) {
+                    alert("Stuur eerst een gewoon bericht om een secure channel op te zetten, daarna kan locatie versturen.");
+                    return;
                   }
+                  navigator.geolocation.getCurrentPosition(async (pos) => {
+                    if (!identity || !wsRef.current || !activeContact) return;
+                    const locText = `[Location: ${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}]`;
+                    const newMsg: Message = { id: generateId(), text: locText, fromMe: true, timestamp: Date.now() };
+                    setMessages((prev) => ({ ...prev, [activeContact.speaqId]: [...(prev[activeContact.speaqId] || []), newMsg] }));
+                    const plainPayload = JSON.stringify({ type: "message", text: locText, from: identity.displayName, senderId: identity.speaqId, timestamp: Date.now() });
+                    const ratchetResult = await ratchetEncrypt(ratchetState, plainPayload);
+                    saveRatchetState(activeContact.speaqId, ratchetResult.state);
+                    const blob = JSON.stringify({ messageNumber: ratchetResult.messageNumber, ciphertext: ratchetResult.ciphertext });
+                    wsRef.current!.send(JSON.stringify({
+                      type: "SEND",
+                      to: activeContact.speaqId,
+                      blob,
+                      protocol: "ratchet-v1",
+                    }));
+                  }, () => alert("Could not get location"));
                 }},
                 { label: t("chat.sendQC", lang), action: () => {
                   setShowShareMenu(false);
