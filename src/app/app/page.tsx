@@ -2196,23 +2196,52 @@ export default function SpeaqApp() {
   const handleSendQC = async () => {
     const amount = parseFloat(sendAmount);
     if (!amount || amount <= 0 || !sendTo.trim()) return;
-    const result = walletSendQC(wallet, txs, amount, sendTo.trim());
+    const recipientId = sendTo.trim();
+    // Cross-platform crypto: require an established ratchet BEFORE deducting funds.
+    // Legacy AES-GCM was incompatible with native CryptoJS AES-CBC and produced
+    // "encrypted message" placeholders + missing balance updates on the receiver.
+    // Mirrors the sendMsg pattern at line 2042 which carries forward secrecy.
+    const ratchetState = wsRef.current && identity ? loadRatchetState(recipientId) : null;
+    if (wsRef.current && identity && !ratchetState) {
+      alert("Stuur eerst een gewoon bericht om een secure channel op te zetten, daarna kan QC versturen.");
+      return;
+    }
+    const result = walletSendQC(wallet, txs, amount, recipientId);
     if (!result) { alert("Insufficient balance"); return; }
     setWalletState(result.wallet);
     setTxs(result.txs);
-    // Send encrypted QC to recipient via WebSocket
-    if (wsRef.current && identity) {
-      const key = await deriveKey(identity.speaqId, sendTo.trim());
-      const payload: Record<string, unknown> = { qc: true, amount, from: identity.speaqId, fromName: identity.displayName, senderId: identity.speaqId, timestamp: Date.now() };
+    // Send encrypted QC to recipient via WebSocket using the ratchet path.
+    // Payload mirrors native sendQCPayment shape so cross-platform receivers
+    // (native ChatScreen line 175 checks data.type === "message", line 188
+    // checks data.qc) detect this correctly as a payment.
+    if (wsRef.current && identity && ratchetState) {
+      const payload: Record<string, unknown> = {
+        type: "message",
+        qc: true,
+        amount,
+        from: identity.displayName,
+        senderId: identity.speaqId,
+        fromName: identity.displayName,
+        text: `[Payment: ${amount.toFixed(4)} QC]`,
+        timestamp: Date.now(),
+      };
       if (profilePhoto) {
         try { payload.photo = await compressImage(profilePhoto, 200, 0.3); } catch { /* skip photo */ }
       }
-      const blob = await encrypt(key, JSON.stringify(payload));
-      wsRef.current.send(JSON.stringify({ type: "SEND", to: sendTo.trim(), blob }));
+      const plainPayload = JSON.stringify(payload);
+      const ratchetResult = await ratchetEncrypt(ratchetState, plainPayload);
+      saveRatchetState(recipientId, ratchetResult.state);
+      const blob = JSON.stringify({ messageNumber: ratchetResult.messageNumber, ciphertext: ratchetResult.ciphertext });
+      wsRef.current.send(JSON.stringify({
+        type: "SEND",
+        to: recipientId,
+        blob,
+        protocol: "ratchet-v1",
+      }));
     }
     // Also submit on-chain transaction (sovereign wallet)
     if (onChainWallet) {
-      sendOnChainTransaction(onChainWallet, sendTo.trim(), amount).then((res) => {
+      sendOnChainTransaction(onChainWallet, recipientId, amount).then((res) => {
         if (res.success) console.log("[SPEAQ] On-chain TX accepted:", res.txId);
         else console.warn("[SPEAQ] On-chain TX failed:", res.error);
       });
