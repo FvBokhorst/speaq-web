@@ -23,8 +23,23 @@ export default function PrivacyPage() {
           Privacy Policy
         </h1>
         <p className="text-text-muted text-sm font-[family-name:var(--font-jetbrains)] mb-16">
-          Last updated: May 4, 2026
+          Last updated: May 10, 2026
         </p>
+
+        <section className="mb-10 p-6 rounded-lg bg-[rgba(212,168,83,0.05)] border border-[rgba(212,168,83,0.2)]">
+          <h2 className="font-[family-name:var(--font-playfair)] text-xl font-medium text-text-primary mb-3">
+            Legal entity
+          </h2>
+          <p className="text-sm text-text-secondary leading-relaxed">
+            <strong className="text-text-primary">QSR2go Operations B.V.</strong>, trading as Plexaris<br />
+            Amsterdam, the Netherlands<br />
+            Chamber of Commerce (KvK): <span className="font-[family-name:var(--font-jetbrains)]">62031619</span><br />
+            Privacy contact: <a href="mailto:privacy@thespeaq.com" className="text-voice-gold underline">privacy@thespeaq.com</a>
+          </p>
+          <p className="text-sm text-text-muted mt-3 leading-relaxed">
+            QSR2go Operations B.V. (h.o.d.n. Plexaris) is the controller for personal data processed in connection with SPEAQ. There is no formally appointed Data Protection Officer because the company remains under the GDPR article 37 thresholds. The CEO performs DPO-light duties.
+          </p>
+        </section>
 
         <div className="space-y-10 text-text-secondary text-[16px] leading-relaxed">
           <section>
@@ -210,13 +225,40 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-medium text-text-primary mb-4">
+              Display name
+            </h2>
+            <p>
+              The display name you choose during account creation is stored unencrypted on our relay so that your contacts can see who is messaging them. If you want to remain pseudonymous, do not enter identifying information (real name, location, employer) as your display name. The first-time setup screen will warn you about this.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-medium text-text-primary mb-4">
+              Push notifications
+            </h2>
+            <p>
+              Push notifications are opt-in. Before the iOS or Android system prompt appears, the app shows a short in-app explanation of what push is used for: incoming messages and calls. The push payload itself contains no message content, only a routing token.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-medium text-text-primary mb-4">
+              Q-Credits wallet activation
+            </h2>
+            <p>
+              The Q-Credits wallet is opt-in. You can use SPEAQ messenger fully without ever activating a wallet. When you choose to activate, an in-app consent screen explains that (1) the SPEAQ-chain ledger is public, (2) blockchain transactions are immutable, and (3) due to immutability, GDPR article 17 right-to-erasure cannot be retroactively applied to chain records. The wallet is created only after you give informed consent.
+          </p>
+          </section>
+
+          <section>
+            <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-medium text-text-primary mb-4">
               Contact
             </h2>
             <p>
-              For privacy-related questions, contact us at privacy@thespeaq.com.
+              For privacy-related questions, contact us at <a href="mailto:privacy@thespeaq.com" className="text-voice-gold underline">privacy@thespeaq.com</a>.
             </p>
             <p className="mt-4 text-text-muted text-sm">
-              SPEAQ is developed by Plexaris Technology Consulting, The Netherlands.
+              SPEAQ is developed by QSR2go Operations B.V., trading as Plexaris (KvK 62031619), Amsterdam, the Netherlands.
             </p>
           </section>
         </div>
