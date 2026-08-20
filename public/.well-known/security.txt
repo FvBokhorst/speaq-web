@@ -1,0 +1,10 @@
+# SPEAQ security contact, per RFC 9116.
+# If you have found a vulnerability, tell us. We will not pursue you for it.
+
+Contact: mailto:security@speaq.id
+Contact: mailto:frank@plexaris.com
+Expires: 2027-08-19T23:59:59.000Z
+Preferred-Languages: en, nl
+Canonical: https://thespeaq.com/.well-known/security.txt
+Canonical: https://speaq.id/.well-known/security.txt
+Policy: https://speaq.id/security
