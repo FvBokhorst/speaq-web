@@ -171,6 +171,35 @@ html.light {
   --color-quantum-dark: #0D9488;
 }
 
+/* Hero-animatie, gelijk aan speaq.id.
+   Het stilstaande beeld ligt onder de video zodat er ook iets staat wanneer de
+   bezoeker beweging heeft uitgezet. De sluier loopt onderaan uit op de
+   achtergrondkleur van de pagina, zodat de sectiegrens niet zichtbaar is. */
+.hero-still {
+  background-image: url("/hero/speaq-hero-poster.jpg");
+  background-size: cover;
+  background-position: center;
+}
+.hero-scrim {
+  background: linear-gradient(
+    180deg,
+    rgba(8, 9, 13, 0.58) 0%,
+    rgba(8, 9, 13, 0.74) 46%,
+    #08090D 100%
+  );
+}
+html.light .hero-still {
+  background-image: url("/hero/speaq-hero-light-poster.jpg");
+}
+html.light .hero-scrim {
+  background: linear-gradient(
+    180deg,
+    rgba(250, 251, 252, 0.30) 0%,
+    rgba(250, 251, 252, 0.52) 46%,
+    #FAFBFC 100%
+  );
+}
+
 html.light body {
   background: #FAFBFC;
   color: #0F172A;

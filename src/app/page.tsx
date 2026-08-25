@@ -6,6 +6,7 @@ import LanguageSwitcher from "./components/LanguageSwitcher";
 import ThemeToggle from "./components/ThemeToggle";
 import ScrollReveal from "./components/ScrollReveal";
 import CookieBanner from "./components/CookieBanner";
+import HeroVideo from "./components/HeroVideo";
 
 export default function Home() {
   const [lang, setLang] = useState<Lang>("en");
@@ -130,7 +131,14 @@ export default function Home() {
       )}
 
       {/* ===== HERO (100vh) ===== */}
-      <section className="relative min-h-screen flex items-center justify-center text-center overflow-hidden pt-14">
+      <section className="hero-still relative min-h-screen flex items-center justify-center text-center overflow-hidden pt-14">
+        {/* Vloeiende achtergrondanimatie. De videobestanden zijn byte-voor-byte
+            dezelfde als op speaq.id. Het stilstaande beeld staat als achtergrond
+            op de sectie, zodat er ook iets te zien is wanneer de bezoeker
+            beweging heeft uitgezet. */}
+        <HeroVideo />
+        <div className="hero-scrim absolute inset-0 pointer-events-none" />
+
         {/* Radial gradient background */}
         <div className="absolute inset-0 pointer-events-none">
           <div
