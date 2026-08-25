@@ -212,6 +212,15 @@ html.light div[class*="bg-bg-surface"] {
   background-color: #FAFBFC !important;
 }
 
+/* De bovenbalk is een <nav> en geen <div>, en viel daardoor buiten de regel
+   hierboven. Bovendien compileert bg-bg-deep/80 door @theme inline naar een
+   vaste kleur (#08090dcc), dus het herdefinieren van de variabele in het
+   lichte thema raakt hem niet. Vandaar een eigen regel, met dezelfde
+   doorzichtigheid van 80 procent zodat de vervaging eronder blijft werken. */
+html.light nav[class*="bg-bg-deep"] {
+  background-color: rgba(250, 251, 252, 0.80) !important;
+}
+
 html.light div[class*="bg-bg-card"],
 html.light .bg-bg-card {
   background-color: #FFFFFF !important;
